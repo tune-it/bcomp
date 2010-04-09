@@ -1,0 +1,20 @@
+/////////////////////////////////////////////////////////////////////////////////////////////
+// –егистр - набор битовых €чеек
+/////////////////////////////////////////////////////////////////////////////////////////////
+public abstract class ERegister implements IRegister // protected?? 
+{  
+	[] data; //type??? // 
+	
+	ERegister(int n)
+	{
+		data = new [n]; // type???
+	}
+	public void PushData()
+	{
+		
+	}
+	public  GetData() // type??
+	{
+		return data;
+	}
+}
