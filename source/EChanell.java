@@ -1,27 +1,30 @@
-/////////////////////////////////////////////////////////////////////////////////////////////
-// Соединение регистр-регистр или регистр-память
-/////////////////////////////////////////////////////////////////////////////////////////////
-abstract class EChanellRegToReg implements IChanell 
+/*-----------------------------------------------------------------------------
+    РљР°РЅР°Р».
+    РћСЃСѓС‰РµСЃС‚РІР»СЏРµС‚ РїРµСЂРµСЃС‹Р»РєСѓ РґР°РЅРЅС‹С… СЂРµРіРёСЃС‚СЂ-СЂРµРіРёСЃС‚СЂ, РїР°РјСЏС‚СЊ-СЂРµРіРёСЃС‚СЂ Рё СЂРµРіРёСЃС‚СЂ-РїР°РјСЏС‚СЊ.
+-----------------------------------------------------------------------------*/
+public class EChanell implements IChanell 
 {
-	IRegister destination;  // Назначение
-	IRegister source;       // Источник
-	boolean visible;        // "Видимость" канала 
-	boolean sending;        // Пересылка
+	private IRegister destination;    // Р РµРіРёСЃС‚СЂ-РїСЂРёРµРјРЅРёРє
+	private IRegister source;         // Р РµРіРёСЃС‚СЂ-РёСЃС‚РѕС‡РЅРёРє
+//	private boolean   visible;        // "Р’РёРґРёРјРѕСЃС‚СЊ" РєР°РЅР°Р»Р° 
+	private boolean   connection;     // "РћС‚РєСЂС‹С‚РѕСЃС‚СЊ" РєР°РЅР°Р»Р°
 	
-	EChanellRegToReg(IRegister dst, IRegister src)
+	EChanell(IRegister destination, IRegister source)
 	{
-		destination = dst;
-		source = src;
+		this.destination = destination;
+		this.source = source;
+		connection = false;
 	}
 	
-	public void Send()
+	public void Open()
 	{
-		
+		destination.GetData(source.SendData());
+		connection = true;
 	}
 	
 	public void Close()
 	{
-		
+		connection = false;
 	}
 	
 }
