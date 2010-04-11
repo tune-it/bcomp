@@ -18,9 +18,15 @@ class EMemory implements IRegister
 	{
 		return null;
 	}
+	
 	public void GetData(boolean[] bits)
 	{
 		//memory[]
+	}
+	
+	public int Width()
+	{
+		return memory_width;
 	}
 	
 	private int         memory_length;   // Длина памяти

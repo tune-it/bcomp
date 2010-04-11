@@ -13,9 +13,15 @@ public class ERegister implements IRegister
 	{
 		return data;
 	}
+	
 	public void GetData(boolean[] bits)
 	{
 		
+	}
+	
+	public int Width()
+	{
+		return register_width;
 	}
 	
 	int       register_width; // Разрядность 
