@@ -1,15 +1,12 @@
 /*-----------------------------------------------------------------------------
-  Регистр - набор битовых ячеек
+  Регистр (битовая ячейка)
 -----------------------------------------------------------------------------*/
 public class ERegister implements IRegister
 {
-	int       register_length;
-	boolean[] data; 
-	
-	ERegister(int n)
+	ERegister(int width)
 	{
-		register_length = n;
-		data = new boolean[n];
+		register_width = width;
+		data = new boolean[width];
 	}
 
 	public boolean[] SendData()
@@ -20,4 +17,7 @@ public class ERegister implements IRegister
 	{
 		
 	}
+	
+	int       register_width; // Разрядность 
+	boolean[] data;           // Массив "битов"
 }

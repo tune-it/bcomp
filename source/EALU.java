@@ -3,14 +3,14 @@
 -----------------------------------------------------------------------------*/
 public class EALU
 {
-	private IRegister  left_input;
-	private IRegister right_input;
-	private ERegister buffer_register;
-	
-	private EALU(IRegister li, IRegister ri, int n)
+	private EALU(IRegister left_input, IRegister right_input, int buffer_length)
 	{
-		left_input = li;
-		right_input = ri;
-		buffer_register = new ERegister(n);
+		this.left_input = left_input;
+		this.right_input = right_input;
+		buffer_register = new ERegister(buffer_length);
 	}
+	
+	private IRegister left_input;      // Левый вход АЛУ (А, РС, РК)
+	private IRegister right_input;     // Правый вход АЛУ (РД, РК, СК)
+	private ERegister buffer_register; // Буферный регистр
 }

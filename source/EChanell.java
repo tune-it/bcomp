@@ -4,11 +4,6 @@
 -----------------------------------------------------------------------------*/
 public class EChanell implements IChanell 
 {
-	private IRegister destination;    // Регистр-приемник
-	private IRegister source;         // Регистр-источник
-//	private boolean   visible;        // "Видимость" канала 
-	private boolean   connection;     // "Открытость" канала
-	
 	EChanell(IRegister destination, IRegister source)
 	{
 		this.destination = destination;
@@ -27,4 +22,8 @@ public class EChanell implements IChanell
 		connection = false;
 	}
 	
+	private IRegister destination;    // Регистр-приемник
+	private IRegister source;         // Регистр-источник
+//	private boolean   visible;        // "Видимость" канала 
+	private boolean   connection;     // "Открытость" канала
 }
