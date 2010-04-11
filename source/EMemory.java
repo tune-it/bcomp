@@ -1,6 +1,5 @@
 /*-----------------------------------------------------------------------------
   Память (программ/микропрограмм).
-  
 -----------------------------------------------------------------------------*/
 class EMemory implements IRegister
 {
@@ -27,6 +26,11 @@ class EMemory implements IRegister
 	public int Width()
 	{
 		return memory_width;
+	}
+	
+	public boolean[] GetAdress()
+	{
+		return null;
 	}
 	
 	private int         memory_length;   // Длина памяти
