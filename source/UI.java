@@ -1,7 +1,7 @@
 
-public abstract class UI 
+public abstract class UI implements IUI
 {
-	private void Frame()
+	private Frame()
 	{
 	UIApp.Frame();
 	UIBasePC.Frame();

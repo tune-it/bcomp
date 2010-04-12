@@ -1,5 +1,5 @@
 
-public class UIApp 
+public class UIApp implements IUIApp
 {
 
 }

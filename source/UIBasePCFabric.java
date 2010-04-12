@@ -1,15 +1,23 @@
 
-public class UIBasePCFabric 
+public class UIBasePCFabric implements IUIBasePCFabric
 {
-	Init()
+	private CreateRegister(...)
 	{
-		IUIBasePCObject.ALU=UIBasePCFabric.CreateALU(...);
-		UIBaseObject.push(alu);
-		//... 
-		//... 
-		for (int t=0; i<size; i++)
-		{
-			IUIChannel[i]=UIBasePCFabric.CreateChannel(...);
-		}
+		return new EUIRegister(...);
+	}
+	
+	private CreateChannel(...)
+	{
+		return new EUIChannel(...);
+	}
+	
+	private CreateMemory(...)
+	{
+		return new EUIMemory(...);
+	}
+	
+	private CreateManagerDevice()
+	{
+		return new EUIManagerDevice(...);
 	}
 }
