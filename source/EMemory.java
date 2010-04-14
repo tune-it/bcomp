@@ -3,7 +3,7 @@
 -----------------------------------------------------------------------------*/
 class EMemory implements IRegister
 {
-	private EMemory(int memory_length, int memory_width,IRegister adress_register)
+	public EMemory(int memory_length, int memory_width,IRegister adress_register)
 	{
 		this.adress_register = adress_register;
 		this.memory_length = memory_length;
@@ -12,15 +12,16 @@ class EMemory implements IRegister
 		{
 			memory[i] = new ERegister(memory_width);
 		}
+		// Обработка исключения - разрядность РА ~ кол-ву ячеек памяти
 	}
 	public boolean[] SendData()
 	{
-		return null;
+		return memory[MakeAdress()].SendData();
 	}
 	
 	public void GetData(boolean[] bits)
 	{
-		//memory[]
+		memory[MakeAdress()].GetData(bits);
 	}
 	
 	public int Width()
@@ -28,9 +29,24 @@ class EMemory implements IRegister
 		return memory_width;
 	}
 	
-	public boolean[] GetAdress()
+//	public boolean[] GetAdress()
+//	{
+//		return null;
+//	}
+	
+	private int MakeAdress()
 	{
-		return null;
+		int adress=0;
+		boolean[] bits = adress_register.SendData();
+		
+		for (int i=0; i < adress_register.Width(); i++)
+		{
+			if( bits[i] )
+			{
+				adress+=Math.pow(2, i);
+			}
+		}
+		return adress;
 	}
 	
 	private int         memory_length;   // Длина памяти
