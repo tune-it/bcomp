@@ -1,24 +1,38 @@
 /*-----------------------------------------------------------------------------
   Флаг (однобитовый регистр)
 -----------------------------------------------------------------------------*/
-public class EFlag extends ERegister
+public class EFlag implements IRegister
 {
 	EFlag()
 	{
-		super.register_width = 1;
-		super.data = new boolean[1];
+		flag = false;
 	}
 	
 	public void ClearFlag()
 	{
-		super.data[0]=false;
+		flag=false;
 	}
 	
 	public void SetFlag()
 	{
-		super.data[0]=true;
+		flag=true;
 	}
-//		
-//	int       register_width; // Разрядность 
-//	boolean[] data;           // Массив "битов"
+
+	public void GetData(boolean[] bits)
+	{
+		flag = bits[0];
+	}
+
+	public boolean[] SendData() {
+		boolean[] data = new boolean[1];
+		data[0] = flag;
+		return data;
+	}
+
+	public int Width()
+	{
+		return 1;
+	}
+	
+	private boolean flag;
 }

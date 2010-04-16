@@ -3,10 +3,10 @@
 -----------------------------------------------------------------------------*/
 class EMemory implements IRegister
 {
-	public EMemory(int memory_length, int memory_width,IRegister adress_register)
+	public EMemory(int memory_width, IRegister adress_register)
 	{
 		this.adress_register = adress_register;
-		this.memory_length = memory_length;
+		this.memory_length = (int) Math.pow(2, adress_register.Width());
 		memory = new ERegister[memory_length];
 		for (int i = 0; i < memory_length; i++)
 		{
@@ -28,11 +28,6 @@ class EMemory implements IRegister
 	{
 		return memory_width;
 	}
-	
-//	public boolean[] GetAdress()
-//	{
-//		return null;
-//	}
 	
 	private int MakeAdress()
 	{

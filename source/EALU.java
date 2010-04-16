@@ -1,3 +1,4 @@
+import java.security.AccessControlContext;
 import java.util.Arrays;
 
 /*-----------------------------------------------------------------------------
@@ -5,17 +6,18 @@ import java.util.Arrays;
 -----------------------------------------------------------------------------*/
 public class EALU
 {
-	EALU(IRegister left_input, IRegister right_input, IRegister buffer_register, EFlag c, EFlag n, EFlag z)
+	EALU(ERegister left_input, ERegister right_input, ERegister buffer_register, ERegister accumulator, EFlag c, EFlag n, EFlag z)
 	{
 		this.left_input = left_input;
 		this.right_input = right_input;                 // Exception?
 		this.buffer_register = buffer_register;
-		left_reverse = false;                            // 
+		this.accumulator = accumulator;
+		left_reverse = false;                           // 
 		right_reverse = false;
 		this.c=c;
 		this.n=n;
 		this.z=z;
-		// Обработка исключений - разрядность входов ~ разрядности БР, разрядность С, N и Z = 1
+		// Обработка исключений - разрядность входов ~ разрядности БР
 	}
 	
 	public void SetRightReverse() // Включить правый инвертор
@@ -54,7 +56,7 @@ public class EALU
 		return data;
 	}
 	
-	public void And() // Логическое умножение
+	public void AND() // Логическое умножение
 	{
 		boolean[] left  = Reverse(left_input,  left_reverse);
 		boolean[] right = Reverse(right_input, right_reverse);
@@ -64,15 +66,21 @@ public class EALU
 		{
 			buf[i] = left[i] && right[i];
 		}
+		
 		buffer_register.GetData(buf);
 	}
 	
-	public void Addition() // Логическое сложение
+	public void ADD() // Логическое сложение
 	{
-		boolean[] left  = Reverse(left_input,  left_reverse);
-		boolean[] right = Reverse(right_input, right_reverse);
-		boolean[] up    = new boolean[buffer_register.Width()]; // - remake
-		boolean[] buf   = new boolean[buffer_register.Width()];
+		boolean[] buf  = Addition(Reverse(left_input, left_reverse), Reverse(right_input, right_reverse));
+		buf = Incremention(buf);
+		buffer_register.GetData(buf);
+	}
+	
+	private boolean[] Addition(boolean[] left, boolean[] right)
+	{
+		boolean[] up    = new boolean[left.length+1]; // - remake
+		boolean[] buf   = new boolean[left.length+1];
 		
 		for (int i=0; i < left.length; i++)
 		{
@@ -115,8 +123,58 @@ public class EALU
 				}
 			}
 		}
-		if (up[buffer_register.Width()-1]) buf[buffer_register.Width()-1]=true;
-		buffer_register.GetData(buf);
+		if (up[up.length-1]) buf[buf.length-1]=true;
+		return buf;
+	}
+	
+	private boolean[] Incremention(boolean[] bits)
+	{
+		if (incrementor)
+		{
+			boolean[] one = new boolean[bits.length];
+			one[0]=true;
+			return Addition(bits, one);
+		}
+		else
+		{
+			return bits;
+		}
+	}
+	
+	public void ROL()
+	{
+		boolean[] bits = Arrays.copyOf(accumulator.SendData(), accumulator.Width()+1);
+		bits[bits.length-1] = c.SendData()[0];
+		boolean p1 = bits[0];
+		boolean p2;
+		
+		for (int i = 1; i < bits.length; i++)
+		{
+			p2 = bits[i];
+			bits[i] = p1;
+			p1 = p2;
+		}
+		bits[0] = p1;
+		
+		buffer_register.GetData(bits);
+	}
+	
+	public void ROR()
+	{
+		boolean[] bits = Arrays.copyOf(accumulator.SendData(), accumulator.Width()+1);
+		bits[bits.length-1] = c.SendData()[0];
+		boolean p1 = bits[bits.length-1];
+		boolean p2;
+		
+		for (int i = bits.length - 2; i >= 0; i--)
+		{
+			p2 = bits[i];
+			bits[i] = p1;
+			p1 = p2;
+		}
+		bits[bits.length-1] = p1;
+		
+		buffer_register.GetData(bits);
 	}
 	
 	public void SetCIfExist() // Перенос 17-го бита БР в С (установка С, если присутствует перенос) 
@@ -160,24 +218,14 @@ public class EALU
 		}
 	}
 	
-//	private int MakeAdress(boolean[] bits)
-//	{
-//		boolean sum = false;
-//		
-//		for (int i=0; i < bits.length; i++)
-//		{
-//			sum = sum || bits[i];
-//		}
-//		return adress;
-//	}
-	
-	private IRegister left_input;      // Левый вход АЛУ (А, РС, КР)
-	private IRegister right_input;     // Правый вход АЛУ (РД, РК, СК)
-	private IRegister buffer_register; // Буферный регистр
+	private ERegister left_input;      // Левый вход АЛУ (А, РС, КР)
+	private ERegister right_input;     // Правый вход АЛУ (РД, РК, СК)
+	private ERegister buffer_register; // Буферный регистр
+	private ERegister accumulator;     // Аккумулятор
 	private boolean   left_reverse;    // Вкл/Откл левый инвертор
 	private boolean   right_reverse;   // Вкл/Откл правый инвертор
 	private boolean   incrementor;     // Вкл/Откл инкрементор
-	private EFlag c;
-	private EFlag n;
-	private EFlag z;
+	private EFlag     c;               // Флаг C
+	private EFlag     n;               // Флаг N 
+	private EFlag     z;               // Флаг Z
 }
