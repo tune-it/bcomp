@@ -1,14 +1,9 @@
 
 public class UIBasePCFabric implements IUIBasePCFabric
 {
-	private CreateBigRegister(...)
+	private CreateRegister(...)
 	{
-		return new EUIBigRegister(...);
-	}
-	
-	private CreateSmallRegister(...)
-	{
-		return new EUISmallRegister(...);
+		return new EUIRegister(...);
 	}
 	
 	private CreateChannel(...)
