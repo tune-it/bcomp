@@ -5,9 +5,9 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
 
-public class EUIBigRegister implements IUIBaseObject
+public class EUIRegister implements IUIBaseObject
 {
-	public EUIBigRegister(ERegister.Width(), double x, double y, String text)
+	public EUIRegister(ERegister.Width(), double x, double y, String text)
 	{
 		lenght = ERegister.Width();
 		leftX = x;
