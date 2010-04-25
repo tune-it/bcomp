@@ -1,55 +1,60 @@
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
 
-public class EUIAcc 
+/*-----------------------------------------------------------------------------
+			Отрисовка регистра с флагом 
+-----------------------------------------------------------------------------*/
+
+public class EUIAcc extends EUIRegister implements IUIBaseObject
 {
-	public EUIAcc(double x, double y, String text)
+	public EUIAcc(ERegister reg, double x, double y, double height, String text)
 	{
-		leftX = x;
-		leftY = y;
-		width = 270;
-		height = 50;
-		messX = (int)x + 80;
-		messY = (int)y + 20;
-		this.text = text;
+		super(reg, x, y, height, text);
+		flag = null;
 	}
 	
-	public void Draw(Graphics g)
+	public EUIAcc(ERegister reg, double x, double y, String text, double height, EFlag flag)
 	{
-		Graphics2D g2 = (Graphics2D) g;
-		
-		Rectangle2D rect = new Rectangle2D.Double(leftX, leftY, width, height);
-		g2.setPaint(Color.GREEN);
-		g2.fill(rect);
-		g2.setPaint(Color.BLACK);
-		g2.draw(rect);
-		
-		Font f = new Font("Courier New", Font.BOLD, 20);
-		g2.setFont(f);
-		g2.drawString(text, messX, messY);
-		g2.drawString("C", leftX+5, messY);
+		super(reg, x, y, height, text);
+		this.flag = flag;
 	}
 	
-	public void LoadReg()
+	public void LoadFlag(Graphics g)	//Отрисовка флага 
 	{
-		String str = "";
-		int[] a = new int[16]; 
-		//...
-		for (int i=0; i<16; i++)
+		Graphics2D rs = (Graphics2D) g;
+				
+		boolean[] array = Arrays.copyOf(flag.SendData(), flag.Width());
+		int[] a = new int[1];
+		for (int i = 0; i < 1; i++)
 		{
-			str = "" + str + a[i];
+			if(array[i])
+			{
+					a[i]=1;
+			}
+			else
+			{
+					a[i]=0;
+			}
 		}
-		g2.drawString((str.substring(0,4) + " " + str.substring(4,8) + " " + str.substring(8,12) + " " + str.substring(12,16)), (int)leftX+30, (int)leftY+45);
+				
+		Rectangle2D rect = new Rectangle2D.Double(super.GetX()-30, super.GetY(), 20, super.GetHeight());
+		rs.setPaint(Color.GREEN);
+		rs.fill(rect);
+		rs.setPaint(Color.BLACK);
+		rs.draw(rect);
+			
+		Font f = new Font("Courier New", Font.BOLD, 20);
+		rs.setFont(f);
+		rs.drawString("C", (int)super.GetX()-20, (int)super.GetY()+20);
+				
+		String str = "" + a[0];
+				 
+		rs.drawString(str, (int)super.GetX()-20, (int)super.GetY()+45);			
 	}
 	
-	public void LoadFlag()
-	{
-		//??
-	}
-	
-	private double leftX;
-	private double leftY;
-	private double width;
-	private double height;
-	private int messX;
-	private int messY;
-	private String text;
+	private EFlag 		flag;	//Флаг
 }

@@ -1,6 +1,7 @@
+import java.awt.Graphics;
 
-abstract interface IUIBaseObject 
+
+interface IUIBaseObject 
 {
- private Draw()
- {}
+	public void Draw(Graphics g);
 }

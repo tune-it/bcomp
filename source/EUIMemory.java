@@ -1,5 +1,5 @@
 
-public class UIMemory implements IUIBaseObject
+public class EUIMemory implements IUIBaseObject
 {
 	UIRender.DrawRect(...);
 	UIRender.DrawText("...");
