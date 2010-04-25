@@ -22,6 +22,12 @@ public class EChanell implements IChanell
 		connection = false;
 	}
 	
+	public boolean GetConnect()
+	{
+		return connection;
+	}
+
+	
 	private IRegister destination;    // Регистр-приемник
 	private IRegister source;         // Регистр-источник
 //	private boolean   visible;        // "Видимость" канала 
