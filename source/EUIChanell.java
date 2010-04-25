@@ -1,4 +1,5 @@
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -20,8 +21,15 @@ public class EUIChanell extends JApplet implements IUIBaseObject
 	{
 		Graphics2D g2 = (Graphics2D) g;
 		
-		//Проверка "открытости" канала
-		
+		if (chanell.GetConnect())
+		{
+			g2.setPaint(Color.RED);
+		}
+		else
+		{
+			g2.setPaint(Color.GRAY);
+		}
+			
 		g2.setStroke(new BasicStroke(8.0f));
 		for (int i = 0; i < points.length; i+=4)
 		{
@@ -33,7 +41,14 @@ public class EUIChanell extends JApplet implements IUIBaseObject
 	{
 		Graphics2D g2 = (Graphics2D) g;
 		
-		//Проверка "открытости" канала
+		if (chanell.GetConnect())
+		{
+			g2.setPaint(Color.RED);
+		}
+		else
+		{
+			g2.setPaint(Color.GRAY);
+		}
 		
 		for (int i = 0; i < points.length; i+=4)
 		{
