@@ -1,7 +1,20 @@
+import java.awt.Graphics;
+import javax.swing.JApplet;
 
-public class EUIMemory implements IUIBaseObject
+
+public class EUIMemory extends JApplet implements IUIBaseObject
 {
-	UIRender.DrawRect(...);
-	UIRender.DrawText("...");
-	//...
+	public EUIMemory (EMemory mem, ERegister[] reg)
+	{
+		
+	}
+	
+	public void Draw(Graphics g)
+	{
+		
+	}
+	
+	private int 		memLength;
+	private int 		memWidth;
+	private ERegister[] reg;
 }
