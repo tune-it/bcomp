@@ -30,6 +30,5 @@ public class EChanell implements IChanell
 	
 	private IRegister destination;    // Регистр-приемник
 	private IRegister source;         // Регистр-источник
-//	private boolean   visible;        // "Видимость" канала 
 	private boolean   connection;     // "Открытость" канала
 }

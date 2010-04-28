@@ -3,7 +3,7 @@
 -----------------------------------------------------------------------------*/
 abstract interface IRegister
 {
-	boolean[] SendData();              // Метод выгрузки данных
-	void      GetData(boolean[] bits); // Метод загрузки данных
-	int       Width();                 // Разрядность регистра
+	int		SendData();              	// Метод выгрузки данных
+	void	GetData(int input); 	// Метод загрузки данных
+	int		Width();                 	// Разрядность регистра
 }

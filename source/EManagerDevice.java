@@ -1,6 +1,6 @@
-import java.util.Arrays;
-
-
+/*-----------------------------------------------------------------------------
+  Устройство управления
+-----------------------------------------------------------------------------*/
 public class EManagerDevice
 {
 	public EManagerDevice(EMemory memory, ERegister instr_counter, ERegister command_register, EChanell[] chanells)
@@ -11,38 +11,51 @@ public class EManagerDevice
 		this.chanells = chanells;
 	}
 	
-	
-	
+	private boolean CheckBit(int bits, int number)
+	{
+		if ((bits & (int) Math.pow(2, number)) != 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	public void TimeStep()
 	{
-		boolean[] command = Arrays.copyOf(command_register.SendData(), command_register.Width());
-		if (command[15])
+		int command = command_register.SendData();
+		if (CheckBit(command, 15))
 		{
-			// Управляющая микрокоманда (УМК)
-			boolean compare_bit = command[14];
+			////////////////////////////////////
+			// Управляющая микрокоманда (УМК) //
+			////////////////////////////////////
+			
+			
+			boolean compare_bit = CheckBit(command, 14);
 			ERegister compare_reg;
 			
 			// РС - проверяемый регистр
-			if (!command[13] && !command[12])
+			if (!CheckBit(command, 13) && !CheckBit(command, 12))
 			{
 				
 			}
 			
 			// РД - проверяемый регистр
-			if (!command[13] && command[12])
+			if (!CheckBit(command, 13) && CheckBit(command, 12))
 			{
 				
 			}
 			
 			// РК - проверяемый регистр
-			if (command[13] && !command[12])
+			if (CheckBit(command, 13) && !CheckBit(command, 12))
 			{
 				
 			}
 			
 			// А - проверяемый регистр
-			if (command[13] && command[12])
+			if (CheckBit(command, 13) && CheckBit(command, 12))
 			{
 				
 			}
@@ -50,7 +63,7 @@ public class EManagerDevice
 		}
 		else
 		{
-			if (command[14])
+			if (CheckBit(command, 14))
 			{
 				// Операционная микрокоманда 0 (ОМК0)
 				
@@ -61,21 +74,6 @@ public class EManagerDevice
 				
 			}
 		}
-	}
-	
-	public int BinToInt(boolean[] bits)
-	{
-		int number = 0;
-		
-		for (int i=0; i < bits.length; i++)
-		{
-			if( bits[i] )
-			{
-				number+=Math.pow(2, i);
-			}
-		}
-		
-		return number;
 	}
 	
 	private EMemory    memory;

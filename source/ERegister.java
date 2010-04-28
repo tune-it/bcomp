@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 /*-----------------------------------------------------------------------------
   Регистр (битовая ячейка)
 -----------------------------------------------------------------------------*/
@@ -8,23 +6,24 @@ public class ERegister implements IRegister
 	ERegister()  // Регистр "по умолчанию" - 16 разрядов
 	{
 		register_width = 16;
-		data = new boolean[16];
+		data = 0;
 	}
 	
 	ERegister(int width)
 	{
 		register_width = width;
-		data = new boolean[width];
+		data = 0;
 	}
 
-	public boolean[] SendData()
+	public int SendData()
 	{
 		return data;
 	}
 	
-	public void GetData(boolean[] bits)
+	public void GetData(int input)
 	{
-		data = Arrays.copyOf(bits, register_width);
+		data = input;
+		ControlWidth();
 	}
 	
 	public int Width()
@@ -32,6 +31,13 @@ public class ERegister implements IRegister
 		return register_width;
 	}
 	
-	int       register_width; // Разрядность 
-	boolean[] data;           // Массив "битов"
+	private void ControlWidth()
+	{
+		int mask = (int)Math.pow(2, register_width);
+		mask--;
+		data = data & mask;
+	}
+	
+	int	register_width; // Разрядность 
+	int	data;           // Массив "битов"
 }

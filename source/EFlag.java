@@ -18,15 +18,28 @@ public class EFlag implements IRegister
 		flag=true;
 	}
 
-	public void GetData(boolean[] bits)
+	public void GetData(int bits)
 	{
-		flag = bits[0];
+		if (bits != 0)
+		{
+			flag = true;
+		}
+		else
+		{
+			flag = false;
+		}
 	}
 
-	public boolean[] SendData() {
-		boolean[] data = new boolean[1];
-		data[0] = flag;
-		return data;
+	public int SendData()
+	{
+		if(flag)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	public int Width()
