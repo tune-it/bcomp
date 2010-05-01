@@ -3,10 +3,10 @@
 -----------------------------------------------------------------------------*/
 public class EManagerDevice
 {
-	public EManagerDevice(EMemory memory, ERegister instr_counter, ERegister command_register, EChanell[] chanells)
+	public EManagerDevice(EMemory memory, ERegister instr_pointer, ERegister command_register, EChanell[] chanells)
 	{
 		this.memory = memory;
-		this.instr_counter = instr_counter;
+		this.instr_pointer = instr_pointer;
 		this.command_register = command_register;
 		this.chanells = chanells;
 	}
@@ -34,30 +34,26 @@ public class EManagerDevice
 			
 			
 			boolean compare_bit = CheckBit(command, 14);
+			
 			ERegister compare_reg;
 			
 			// РС - проверяемый регистр
-			if (!CheckBit(command, 13) && !CheckBit(command, 12))
-			{
-				
-			}
+			if (!CheckBit(command, 13) && !CheckBit(command, 12));
 			
 			// РД - проверяемый регистр
-			if (!CheckBit(command, 13) && CheckBit(command, 12))
-			{
-				
-			}
+			if (!CheckBit(command, 13) && CheckBit(command, 12));
 			
 			// РК - проверяемый регистр
-			if (CheckBit(command, 13) && !CheckBit(command, 12))
-			{
-				
-			}
+			if (CheckBit(command, 13) && !CheckBit(command, 12));
 			
 			// А - проверяемый регистр
-			if (CheckBit(command, 13) && CheckBit(command, 12))
+			if (CheckBit(command, 13) && CheckBit(command, 12));
+			
+			int choose_bit = (int) Math.pow(2, ((command & 0xf00)>>8));
+			
+			if ( CheckBit(compare_reg.SendData(), choose_bit) == compare_bit )
 			{
-				
+				instr_pointer.GetData(command & 0xff);
 			}
 			
 		}
@@ -65,19 +61,34 @@ public class EManagerDevice
 		{
 			if (CheckBit(command, 14))
 			{
-				// Операционная микрокоманда 0 (ОМК0)
+				/////////////////////////////////////
+				// Операционая микрокоманда (ОМК0) //
+				/////////////////////////////////////
 				
+				// Выбираем левый вход
+				
+				// Выбираем правый вход
+				
+				// Обработка исключения - операция || сдвиги || память
+				
+				// Обратный код
+				
+				// Операция/Сдвиги
+				
+				// Работа с памятью
 			}
 			else
 			{
-				// Операционная микрокоманда 1 (ОМК1)
+				/////////////////////////////////////
+				// Операционая микрокоманда (ОМК1) //
+				/////////////////////////////////////
 				
 			}
 		}
 	}
 	
 	private EMemory    memory;
-	private ERegister  instr_counter;
+	private ERegister  instr_pointer;
 	private ERegister  command_register;
 	private EChanell[] chanells;
 }

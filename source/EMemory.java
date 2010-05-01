@@ -35,8 +35,12 @@ class EMemory implements IRegister
 	
 	public int[] GetMemory()
 	{
-		
-		return null;
+		int[] mem = new int[memory_length];
+		for (int i = 0; i < memory_length; i++)
+		{
+			mem[i] = memory[i].SendData();
+		}
+		return mem;
 	}
 	
 	private int			memory_length;   // Длина памяти
