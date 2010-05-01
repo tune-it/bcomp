@@ -11,13 +11,13 @@ import javax.swing.JApplet;
 
 public class EUIChanell extends JApplet implements IUIBaseObject
 {
-	public EUIChanell (EChanell chanell, int[] points)
+public EUIChanell (EChanell chanell, int[][] points)
 	{
 		this.chanell = chanell;
 		this.points = points; 
 	}
 	
-	public void Draw(Graphics g)				//Отрисовка канала
+	public void Draw(Graphics g)				//Отрисовка канала 
 	{
 		Graphics2D g2 = (Graphics2D) g;
 		
@@ -31,9 +31,10 @@ public class EUIChanell extends JApplet implements IUIBaseObject
 		}
 			
 		g2.setStroke(new BasicStroke(8.0f));
-		for (int i = 0; i < points.length; i+=4)
+		int i = 0;
+		for (int j = 0; j < points.length; j+=4)
 		{
-			g2.drawLine(points[i], points[i+1], points[i+2], points[i+3]);
+			g2.drawLine(points[i][j], points[i+1][j], points[i][j+1], points[i+1][j+1]);
 		}
 	}
 	
@@ -50,38 +51,41 @@ public class EUIChanell extends JApplet implements IUIBaseObject
 			g2.setPaint(Color.GRAY);
 		}
 		
-		for (int i = 0; i < points.length; i+=4)
+		
+		g2.setStroke(new BasicStroke(8.0f));
+		for (int j = 0; j<points.length; j+=2)
 		{
-			g2.drawLine(points[i], points[i+1], points[i+2], points[i+3]);
+			g2.drawLine(points[j][0], points[j][1], points[j+1][0], points[j+1][1]);
 		}
 		
 		//Выбор направления стрелки
 		g2.setStroke(new BasicStroke(3.0f));
-		if (points[points.length - 4] == points[points.length - 2] && points[points.length - 3]> points[points.length - 1] ) //Cтрелка вверх
-		{
-			g2.drawLine(points[points.length - 2]-7, points[points.length - 1]+4, points[points.length - 2]-1, points[points.length - 1]-7);
-			g2.drawLine(points[points.length - 2]+7, points[points.length - 1]+4, points[points.length - 2], points[points.length - 1]-7);
+		
+		if (points[points.length - 1][0] == points[points.length - 1][0] && points[points.length - 2][1]> points[points.length - 1][0] ) //Cтрелка вверх
+		{	
+			g2.drawLine(points[points.length - 1][0]-7, points[points.length - 1][1]+4, points[points.length - 1][0]-1, points[points.length - 1][1]-7);
+			g2.drawLine(points[points.length - 1][0]+7, points[points.length - 1][1]+4, points[points.length - 1][0], points[points.length - 1][1]-7);
 		}	
 		
-		if (points[points.length - 3] == points[points.length - 1] && points[points.length - 4]< points[points.length - 2] ) //Cтрелка вправо
+		if (points[points.length - 2][1] == points[points.length - 1][1] && points[points.length - 2][0]< points[points.length - 1][0] ) //Cтрелка вправо
 		{
-			g2.drawLine(points[points.length - 2]-4, points[points.length - 1]-7, points[points.length - 2]+6, points[points.length - 1]-1);
-			g2.drawLine(points[points.length - 2]-4, points[points.length - 1]+7, points[points.length - 2]+6, points[points.length - 1]);
+			g2.drawLine(points[points.length - 1][0]-4, points[points.length - 1][1]-7, points[points.length - 1][0]+6, points[points.length - 1][1]-1);
+			g2.drawLine(points[points.length - 1][0]-4, points[points.length - 1][1]+7, points[points.length - 1][0]+6, points[points.length - 1][1]);
 		}
 		 
-		if (points[points.length - 4] == points[points.length - 2] && points[points.length - 3]< points[points.length - 1] ) //Cтрелка вниз
+		if (points[points.length - 2][0] == points[points.length - 1][0] && points[points.length - 2][1]< points[points.length - 1][1] ) //Cтрелка вниз
 		{
-			g2.drawLine(points[points.length - 2]-7, points[points.length - 1]-5, points[points.length - 2]-1, points[points.length - 1]+7);
-			g2.drawLine(points[points.length - 2]+7, points[points.length - 1]-5, points[points.length - 2], points[points.length - 1]+7);
+			g2.drawLine(points[points.length - 1][0]-7, points[points.length - 1][1]-5, points[points.length - 1][0]-1, points[points.length - 1][1]+7);
+			g2.drawLine(points[points.length - 1][0]+7, points[points.length - 1][1]-5, points[points.length - 1][0], points[points.length - 1][1]+7);
 		}	
 		
-		if (points[points.length - 3] == points[points.length - 1] && points[points.length - 4]> points[points.length - 2] ) //Cтрелка влево
+		if (points[points.length - 2][1] == points[points.length - 1][1] && points[points.length - 2][0]> points[points.length - 1][0] ) //Cтрелка влево
 		{
-			g2.drawLine(points[points.length - 2]+4, points[points.length - 1]+7, points[points.length - 2]-7, points[points.length - 1]-1);
-			g2.drawLine(points[points.length - 2]+4, points[points.length - 1]-7, points[points.length - 2]-7, points[points.length - 1]);
+			g2.drawLine(points[points.length - 1][0]+4, points[points.length - 1][1]+7, points[points.length - 1][0]-7, points[points.length - 1][1]-1);
+			g2.drawLine(points[points.length - 1][0]+4, points[points.length - 1][1]-7, points[points.length - 1][0]-7, points[points.length - 1][1]);
 		}
 	}
 
 	private EChanell	chanell;	//Канал
-	private int[]		points;		//Координаты для отрисовки канала
+	private int[][]		points;		//Координаты для отрисовки канала
 }
