@@ -3,7 +3,7 @@
 -----------------------------------------------------------------------------*/
 public class EManagerDevice
 {
-	public EManagerDevice(EMemory memory, ERegister instr_pointer, ERegister command_register, EChanell[] chanells)
+	public EManagerDevice(EMemory memory, ERegister instr_pointer, ERegister command_register, EChannel[] chanells)
 	{
 		this.memory = memory;
 		this.instr_pointer = instr_pointer;
@@ -90,5 +90,5 @@ public class EManagerDevice
 	private EMemory    memory;
 	private ERegister  instr_pointer;
 	private ERegister  command_register;
-	private EChanell[] chanells;
+	private EChannel[] chanells;
 }
