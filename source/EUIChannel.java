@@ -9,9 +9,9 @@ import javax.swing.JApplet;
 		Отрисовка канала и стрелки
 -----------------------------------------------------------------------------*/
 
-public class EUIChanell extends JApplet implements IUIBaseObject
+public class EUIChannel extends JApplet implements IUIBaseObject
 {
-public EUIChanell (EChanell chanell, int[][] points)
+public EUIChannel (EChannel chanell, int[][] points)
 	{
 		this.chanell = chanell;
 		this.points = points; 
@@ -86,6 +86,6 @@ public EUIChanell (EChanell chanell, int[][] points)
 		}
 	}
 
-	private EChanell	chanell;	//Канал
+	private EChannel	chanell;	//Канал
 	private int[][]		points;		//Координаты для отрисовки канала
 }
