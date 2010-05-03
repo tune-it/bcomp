@@ -3,10 +3,10 @@
 -----------------------------------------------------------------------------*/
 class EMemory implements IRegister
 {
-	public EMemory(int memory_width, IRegister adress_register)
+	public EMemory(int memory_width, ERegisterFactory factory)
 	{
-		this.adress_register = adress_register;
-		this.memory_length = (int) Math.pow(2, adress_register.Width());
+		this.adress_register = factory.GetAdressRegister();
+		this.memory_length = (int) Math.pow(2, factory.GetAdressRegister().Width());
 		memory = new ERegister[memory_length];
 		for (int i = 0; i < memory_length; i++)
 		{
@@ -45,6 +45,6 @@ class EMemory implements IRegister
 	
 	private int			memory_length;   // Длина памяти
 	private int			memory_width;    // Разрядность памяти
-	private IRegister[]	memory;          // 
-	private IRegister	adress_register; // Регистр адреса
+	private ERegister[]	memory;          // 
+	private ERegister	adress_register; // Регистр адреса
 }

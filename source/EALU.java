@@ -3,12 +3,12 @@
 -----------------------------------------------------------------------------*/
 public class EALU
 {
-	EALU(ERegister left_input, ERegister right_input, ERegister buffer_register, ERegister accumulator, EFlag c, EFlag n, EFlag z)
+	EALU(ERegisterFactory factory, EFlag c, EFlag n, EFlag z)
 	{
-		this.left_input = left_input;
-		this.right_input = right_input;                 // Exception?
-		this.buffer_register = buffer_register;
-		this.accumulator = accumulator;
+		this.left_input = factory.GetLeftALUInput();
+		this.right_input = factory.GetLeftALUInput();                 // Exception?
+		this.buffer_register = factory.GetBufferRegister();
+		this.accumulator = factory.GetAccumulator();
 		left_reverse = false;                           // 
 		right_reverse = false;
 		this.c=c;

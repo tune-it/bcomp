@@ -38,6 +38,6 @@ public class ERegister implements IRegister
 		data = data & mask;
 	}
 	
-	int	register_width; // Разрядность 
-	int	data;           // Массив "битов"
+	private int	register_width; // Разрядность 
+	private int	data;           // Массив "битов"
 }
