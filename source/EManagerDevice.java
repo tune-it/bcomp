@@ -3,11 +3,12 @@
 -----------------------------------------------------------------------------*/
 public class EManagerDevice
 {
-	public EManagerDevice(ERegisterFactory reg_factory, EChannel[] chanells)
+	public EManagerDevice(ERegisterFactory reg_factory, EChannel[] chanells, EALU nalu)
 	{
 		this.instr_pointer = reg_factory.GetMicroInstructionPointer();
 		this.reg_factory = reg_factory;
 		this.chanells = chanells;
+		this.alu = alu;
 	}
 	
 	private boolean CheckBit(int bits, int number)
@@ -67,16 +68,96 @@ public class EManagerDevice
 				/////////////////////////////////////
 				
 				// Выбираем левый вход
+				if (!CheckBit(command, 13) && !CheckBit(command, 12)); // На левый вход ноль
+				{
+					
+				}
+				
+				if (!CheckBit(command, 13) && CheckBit(command, 12)); // На левый вход аккумулятор
+				{
+					
+				}
+				
+				if (CheckBit(command, 13) && !CheckBit(command, 12)); // На левый вход регистр состояния
+				{
+					
+				}
+				
+				if (CheckBit(command, 13) && CheckBit(command, 12)); // На левый вход клавишный регистр
+				{
+					
+				}
 				
 				// Выбираем правый вход
+				if (!CheckBit(command, 9) && !CheckBit(command, 8)); // На правый вход ноль
+				{
+					
+				}
 				
-				// Обработка исключения - операция || сдвиги || память
+				if (!CheckBit(command, 9) && CheckBit(command, 8)); // На правый вход регистр данных
+				{
+					
+				}
+				
+				if (!CheckBit(command, 9) && !CheckBit(command, 8)); // На правый вход регистр команд
+				{
+					
+				}
+				
+				if (!CheckBit(command, 9) && !CheckBit(command, 8)); // На правый вход счетчик команд
+				{
+					
+				}
 				
 				// Обратный код
+				if (!CheckBit(command, 7)) // Правый вход
+				{
+					alu.SetRightReverse();
+				}
 				
-				// Операция/Сдвиги
+				if (!CheckBit(command, 6)) // Левый вход
+				{
+					alu.SetLeftReverse();
+				}
+				
+				// Операция
+				if (!CheckBit(command, 5) && !CheckBit(command, 4)) // Лев.вх + Прав.вх
+				{
+					alu.ADD();
+				}
+				
+				if (!CheckBit(command, 5) && CheckBit(command, 4)) // Лев.вх + Прав.вх + 1
+				{
+					alu.SetIncrement();
+					alu.ADD();
+				}
+				
+				if (CheckBit(command, 5) && CheckBit(command, 4)) // Лев.вх & Прав.вх
+				{
+					alu.AND();
+				}
+				
+				//Сдвиги
+				if (!CheckBit(command, 3) && CheckBit(command, 2)) // Сдвиг вправо
+				{
+					alu.ROR();
+				}
+				
+				if (CheckBit(command, 3) && !CheckBit(command, 2)) // Сдвиг влево
+				{
+					alu.ROL();
+				}
 				
 				// Работа с памятью
+				if (!CheckBit(command, 3) && CheckBit(command, 2)) // Чтение
+				{
+					
+				}
+				
+				if (CheckBit(command, 3) && !CheckBit(command, 2)) // Запись
+				{
+					
+				}
 			}
 			else
 			{
@@ -91,4 +172,5 @@ public class EManagerDevice
 	private ERegister			instr_pointer;
 	private ERegisterFactory	reg_factory;
 	private EChannel[]			chanells;
+	private EALU				alu;
 }

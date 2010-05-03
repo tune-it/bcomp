@@ -3,17 +3,15 @@
 -----------------------------------------------------------------------------*/
 public class EALU
 {
-	EALU(ERegisterFactory factory, EFlag c, EFlag n, EFlag z)
+	EALU(ERegisterFactory reg_factory, EFlagFactory flag_factory)
 	{
-		this.left_input = factory.GetLeftALUInput();
-		this.right_input = factory.GetLeftALUInput();                 // Exception?
-		this.buffer_register = factory.GetBufferRegister();
-		this.accumulator = factory.GetAccumulator();
+		this.left_input = reg_factory.GetLeftALUInput();
+		this.right_input = reg_factory.GetLeftALUInput();                 // Exception?
+		this.buffer_register = reg_factory.GetBufferRegister();
+		this.accumulator = reg_factory.GetAccumulator();
 		left_reverse = false;                           // 
 		right_reverse = false;
-		this.c=c;
-		this.n=n;
-		this.z=z;
+		this.flag_factory =flag_factory;
 		// Обработка исключений - разрядность входов ~ разрядности БР
 	}
 	
@@ -58,7 +56,7 @@ public class EALU
 	public void ROL()
 	{
 		int bits = accumulator.SendData();
-		if (c.SendData() != 0)
+		if (flag_factory.GetC().SendData() != 0)
 		{
 			bits = bits | ((int) Math.pow(2, accumulator.Width()));
 		}
@@ -77,7 +75,7 @@ public class EALU
 	public void ROR()
 	{
 		int bits = accumulator.SendData();
-		if (c.SendData() != 0)
+		if (flag_factory.GetC().SendData() != 0)
 		{
 			bits = bits | ((int) Math.pow(2, accumulator.Width()));
 		}
@@ -97,25 +95,25 @@ public class EALU
 	{
 		if ( ( buffer_register.SendData() &(int) Math.pow(2, buffer_register.Width())>>1 ) != 0)
 		{
-			c.SetFlag();
+			flag_factory.GetC().SetFlag();
 		}
 	}
 	
 	public void ClearC() // Очистить С 
 	{
-		c.ClearFlag();
+		flag_factory.GetC().ClearFlag();
 	}
 	
 	public void SetC() // Установить С
 	{
-		c.SetFlag();
+		flag_factory.GetC().SetFlag();
 	}
 	
 	public void SetZ() // Установить Z, если присутствует
 	{
 		if (buffer_register.SendData() == 0)
 		{
-			z.SetFlag();
+			flag_factory.GetZ().SetFlag();
 		}
 	}
 	
@@ -123,18 +121,17 @@ public class EALU
 	{
 		if ( ( buffer_register.SendData() &(int) Math.pow(2, buffer_register.Width())>>2 ) != 0)
 		{
-			n.SetFlag();
+			flag_factory.GetN().SetFlag();
 		}
 	}
 	
-	private ERegister	left_input;			// Левый вход АЛУ (А, РС, КР)
-	private ERegister	right_input;		// Правый вход АЛУ (РД, РК, СК)
-	private ERegister	buffer_register;	// Буферный регистр
-	private ERegister	accumulator;		// Аккумулятор
-	private boolean		left_reverse;		// Вкл/Откл левый инвертор
-	private boolean		right_reverse;		// Вкл/Откл правый инвертор
-	private boolean		incrementor;		// Вкл/Откл инкрементор
-	private EFlag		c;					// Флаг C
-	private EFlag		n;					// Флаг N 
-	private EFlag		z;					// Флаг Z
+	private ERegister		left_input;			// Левый вход АЛУ (А, РС, КР)
+	private ERegister		right_input;		// Правый вход АЛУ (РД, РК, СК)
+	private ERegister		buffer_register;	// Буферный регистр
+	private ERegister		accumulator;		// Аккумулятор
+	private boolean			left_reverse;		// Вкл/Откл левый инвертор
+	private boolean			right_reverse;		// Вкл/Откл правый инвертор
+	private boolean			incrementor;		// Вкл/Откл инкрементор
+	private EFlagFactory	flag_factory;		// Флаг C
+
 }
