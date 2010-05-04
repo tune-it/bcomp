@@ -54,8 +54,9 @@ public EUIChannel (EChannel channel, int[][] points)
 			
 			if (points[points.length - 2][0] == points[points.length - 1][0] && points[points.length - 2][1]> points[points.length - 1][1] ) //Cтрелка вверх
 			{	
-				rs.drawLine(points[points.length - 1][0]-7, points[points.length - 1][1]+4, points[points.length - 1][0]-1, points[points.length - 1][1]-7);
+				rs.drawLine(points[points.length - 1][0]-7, points[points.length - 1][1]+4, points[points.length - 1][0]-1, points[points.length - 1][1]-7);				
 				rs.drawLine(points[points.length - 1][0]+7, points[points.length - 1][1]+4, points[points.length - 1][0], points[points.length - 1][1]-7);
+			
 			}	
 			
 			if (points[points.length - 2][1] == points[points.length - 1][1] && points[points.length - 2][0]< points[points.length - 1][0] ) //Cтрелка вправо
@@ -68,6 +69,7 @@ public EUIChannel (EChannel channel, int[][] points)
 			{
 				rs.drawLine(points[points.length - 1][0]-7, points[points.length - 1][1]-5, points[points.length - 1][0]-1, points[points.length - 1][1]+7);
 				rs.drawLine(points[points.length - 1][0]+7, points[points.length - 1][1]-5, points[points.length - 1][0], points[points.length - 1][1]+7);
+		
 			}	
 			
 			if (points[points.length - 2][1] == points[points.length - 1][1] && points[points.length - 2][0]> points[points.length - 1][0] ) //Cтрелка влево
@@ -79,12 +81,12 @@ public EUIChannel (EChannel channel, int[][] points)
 	}
 	
 	
-	public void EnableArrow()
+	public void EnableArrow()					//Добавить стрелку
 	{
 		arrow = true;
 	}
 	
-	public void DisableArrow()
+	public void DisableArrow()					//Убрать стрелку
 	{
 		arrow = false;
 	}

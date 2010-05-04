@@ -3,30 +3,31 @@ public class EUIBasePCFabric
 {
 	public EUIBasePCFabric()
 	{
+		
 	}
 	
 	public EUIRegister[] CreateRegisters()
 	{
 		ERegister	RD = new ERegister();
-		EUIRegister IRD = new EUIRegister(RD, 180, 85, 50, "Регистр Данных");
+		EUIRegister IRD = new EUIRegister(RD, 180, 85, "Регистр Данных");
 		
 		ERegister RK = new ERegister();
-		EUIRegister IRK = new EUIRegister(RK, 600, 130, 50, "Регистр Команд");
+		EUIRegister IRK = new EUIRegister(RK, 580, 110, "Регистр Команд");
 		
 		ERegister RA = new ERegister(11);
-		EUIRegister IRA = new EUIRegister(RA, 340, 20, 50, "Регистр Адреса");
+		EUIRegister IRA = new EUIRegister(RA, 340, 20, "Регистр Адреса");
 		IRA.SetWidth(187);
 		
 		
 		ERegister SK = new ERegister(11);
-		EUIRegister ISK = new EUIRegister(SK, 340, 150, 50, "Счетчик Команд");
+		EUIRegister ISK = new EUIRegister(SK, 340, 150, "Счетчик Команд");
 		ISK.SetWidth(187);
 		
 		ERegister Acc = new ERegister();
-		EUIRegister IAcc = new EUIRegister(Acc, 350, 400, 50, "Аккумулятор");
+		EUIRegister IAcc = new EUIRegister(Acc, 335, 378, "Аккумулятор");
 		
 		EFlag C = new EFlag();
-		EUIRegister IC = new EUIRegister(C, 320, 400, 50, "C");
+		EUIRegister IC = new EUIRegister(C, 305, 378, 50, "C");
 		IC.SetWidth(30);
 		
 		EUIRegister Registers[] = {IRD, IRK, IRA, ISK, IAcc, IC};
@@ -34,13 +35,19 @@ public class EUIBasePCFabric
 		return Registers;
 	}
 	
+	public EUIMemory CreateMemory()
+	{
+		EUIMemory Imem = new EUIMemory (1, 1, 150, 431, "Память");
+		return Imem;
+	}
+	
 	public EUIAlu CreateAlu()
 	{
-		EUIAlu Alu = new EUIAlu(180,245,"АЛУ");
+		EUIAlu Alu = new EUIAlu(180,235,"АЛУ");
 		return Alu;
 	}
 	
-	public EUIChannel[] CreateChannels()
+	public EUIChannel[] CreateChannels()							
 	{
 		ERegister MEM = new ERegister();
 		ERegister RA = new ERegister(12);
@@ -85,30 +92,30 @@ public class EUIBasePCFabric
 		//Канал из Регистра Данных в АЛУ
 		EChannel RDtoALU = new EChannel(RD, BR);
 		int[][] mass5 = {{290, 140},
-	   					{290, 220},
-	   					{290, 220}, 
-	   		   			{400, 220},
-	   		   			{400, 220},
-	   		   			{400, 236}};
+	   					{290, 210},
+	   					{290, 210}, 
+	   		   			{380, 210},
+	   		   			{380, 210},
+	   		   			{380, 226}};
 		EUIChannel IRDtoALU = new EUIChannel(RDtoALU, mass5);
 		
 		//Канал из АЛУ в Акк
 		EChannel ALUtoAcc = new EChannel(BR, Acc);
-		int[][] mass6 = {{312, 350},
-	   					{312, 373},
-	   					{312, 373}, 
-	   		   			{565, 373},
-	   		   			{565, 373},
-	   		   			{565, 391}};
+		int[][] mass6 = {{295, 330},
+	   					{295, 353},
+	   					{295, 353}, 
+	   		   			{565, 353},
+	   		   			{565, 353},
+	   		   			{565, 369}};
 		EUIChannel IALUtoAcc = new EUIChannel(ALUtoAcc, mass6);
 		
 		//Канал из АЛУ в Cчетчик Команд
 		EChannel ALUtoSK = new EChannel(BR, SK);
-		int[][] mass7 = {{312, 350},
-	   					{312, 373},
-	   					{312, 373}, 
-	   		   			{565, 373},
-	   		   			{565, 373},
+		int[][] mass7 = {{295, 330},
+						{295, 353},
+						{295, 353}, 
+   		   				{565, 353},
+	   		   			{565, 353},
 	   		   			{565, 177},
 	   		   			{565, 177},
 	   		   			{536, 177}};
@@ -116,23 +123,23 @@ public class EUIBasePCFabric
 		
 		//Канал из АЛУ в Регистр Данных
 		EChannel ALUtoRD = new EChannel(BR, RD);
-		int[][] mass8 = {{312, 350},
-	   					{312, 373},
-	   					{312, 373}, 
-	   		   			{565, 373},
-	   		   			{565, 373},
+		int[][] mass8 = {{295, 330},
+						{295, 353},
+						{295, 353}, 
+   		   				{565, 353},
+	   		   			{565, 353},
 	   		   			{565, 110},
 	   		   			{565, 110},
-	   		   			{440, 110}};
+	   		   			{455, 110}};
 		EUIChannel IALUtoRD = new EUIChannel(ALUtoRD, mass8);
 		
 		//Канал из АЛУ в Регистр Адреса
 		EChannel ALUtoRA= new EChannel(BR, RA);
-		int[][] mass9 = {{312, 350},
-	   					{312, 373},
-	   					{312, 373}, 
-	   		   			{565, 373},
-	   		   			{565, 373},
+		int[][] mass9 = {{295, 330},
+						{295, 353},
+						{295, 353}, 
+   		   				{565, 353},
+	   		   			{565, 353},
 	   		   			{565, 45},
 	   		   			{565, 45},
 	   		   			{536, 45}};
@@ -140,28 +147,28 @@ public class EUIBasePCFabric
 		
 		//Канал из Акк в АЛУ
 		EChannel AcctoALU = new EChannel(Acc, BR);
-		int[][] mass10 = {{316, 425},
-	   					{165, 425},
-	   					{165, 425}, 
-	   		   			{165, 220},
-	   		   			{165, 220},
-	   		   			{220, 220},
-	   		   			{220, 220},
-	   		   			{220, 236}};
+		int[][] mass10 = {{301, 403},
+	   					{165, 403},
+	   					{165, 403}, 
+	   		   			{165, 210},
+	   		   			{165, 210},
+	   		   			{210, 210},
+	   		   			{210, 210},
+	   		   			{210, 226}};
 		EUIChannel IAcctoALU = new EUIChannel(AcctoALU, mass10);
 		
 		//Канал из АЛУ в Регистр Команд
 		EChannel ALUtoRK= new EChannel(BR, RK);
-		int[][] mass11 = {{312, 350},
-	   					{312, 373},
-	   					{312, 373}, 
-	   		   			{565, 373},
-	   		   			{565, 373},
+		int[][] mass11 = {{295, 330},
+						{295, 353},
+						{295, 353}, 
+   		   				{565, 353},
+	   		   			{565, 353},
 	   		   			{565, 78},
 	   		   			{565, 78},
 	   		   			{725, 78},
 	   		   			{725, 78},
-	   		   			{725, 121}};
+	   		   			{725, 101}};
 		EUIChannel IALUtoRK = new EUIChannel(ALUtoRK, mass11);
 		
 		

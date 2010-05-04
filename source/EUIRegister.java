@@ -1,3 +1,4 @@
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -16,10 +17,23 @@ public class EUIRegister implements IUIBaseObject
 		length = reg.Width();
 		leftX = x;
 		leftY = y;
-		width = 16*reg.Width() -5;
+		width = 17*reg.Width()-6;
 		this.height = height;
 		messX = (int)x + 10;
-		messY = (int)y + 20;
+		messY = (int)y + 18;
+		this.text = text;	
+	}
+	
+	public EUIRegister(IRegister reg, double x, double y, String text)
+	{
+		this.reg = reg;
+		length = reg.Width();
+		leftX = x;
+		leftY = y;
+		width = 17*reg.Width()-6;
+		height = 50;
+		messX = (int)x + 10;
+		messY = (int)y + 18;
 		this.text = text;	
 	}
 	
@@ -51,6 +65,7 @@ public class EUIRegister implements IUIBaseObject
 		rs.setPaint(new Color(187,249,166));
 		rs.fill(rect);
 		rs.setPaint(Color.BLACK);
+		rs.setStroke(new BasicStroke(1.0f));
 		rs.draw(rect);
 		
 		Font f = new Font("Courier New", Font.BOLD, 20);
@@ -68,7 +83,7 @@ public class EUIRegister implements IUIBaseObject
 		rs.fill(rect);
 		
 		rs.setPaint(Color.BLACK);
-		Font f = new Font("Courier New", Font.BOLD, 20);
+		Font f = new Font("Courier New", Font.BOLD, 21);
 		rs.setFont(f);
 		rs.drawString (str, (int)leftX+10, (int)leftY+42);
 	}
@@ -104,7 +119,6 @@ public class EUIRegister implements IUIBaseObject
 				str = str.substring(1);
 			}
 		}
-			
 			
 		if (length == 16)
 		{

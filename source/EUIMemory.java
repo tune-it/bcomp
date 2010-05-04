@@ -4,8 +4,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-
-import javax.swing.JApplet;
+import java.util.*;
 
 /*-----------------------------------------------------------------------------
 					Отрисовка памяти
@@ -16,66 +15,124 @@ public class EUIMemory implements IUIBaseObject
 	public EUIMemory (EMemory mem, double x, double y, int width, int height, String text)
 	{
 		memory = mem.GetMemory();
-		mem_length = memory.length;
 		mem_width = mem.Width();
+		leftX = x;
+		leftY = y;
+		lineX = (int)leftX+(mem_width/4*16 + 20);
+		frame_width = width;
+		frame_height = height; 
+		banner_height = 30;
+		this.text = text;
+		page = 0;
+	}
+	
+	public EUIMemory (double x, double y, int width, int height, String text)
+	{
+		memory = null;
+		mem_width = 12;
 		leftX = x;
 		leftY = y;
 		frame_width = width;
 		frame_height = height; 
 		this.text = text;
 		page = 0;
+		lineX = (int)leftX+(mem_width/4*16 + 20);
+		banner_height = 30;
 	}
 	
-	public void Draw(Graphics g)			//Отрисовка названия и рамки
+	public void Draw(Graphics g)						//Отрисовка названия и рамки
 	{
 		Graphics2D rs = (Graphics2D) g;
 		
 		Rectangle2D rect = new Rectangle2D.Double(leftX, leftY, frame_width, frame_height);
-		rs.setPaint(Color.GRAY);
+		
+		rs.setPaint(new Color(157, 189, 185));
 		rs.fill(rect);
-		rs.setStroke(new BasicStroke(3.0f));
+		
+		rs.setPaint(new Color(219, 249, 235));
+		rs.fillRect(lineX, (int)leftY+banner_height, frame_width-lineX, frame_height-banner_height);
+		
+		rs.setStroke(new BasicStroke(2.0f));
 		rs.setPaint(Color.BLACK);
 		rs.draw(rect);
 		
-		rs.drawLine((int)leftX+(frame_width/5*2), (int)leftY+30, (int)leftX+(frame_width/5*2), (int)leftY+frame_height);
-		rs.drawLine((int)leftX, (int)leftY+30, (int)leftX+frame_width, (int)leftY+30);
+		rs.drawLine(lineX, (int)leftY+banner_height, lineX, (int)leftY+frame_height);
+		rs.drawLine((int)leftX, (int)leftY+banner_height, (int)leftX+frame_width, (int)leftY+30);
 		
 		Font f = new Font("Courier New", Font.BOLD, 24);
 		rs.setFont(f);
-		rs.drawString(text, (int)leftX+(frame_width/4), (int)leftY+20);
+		rs.drawString(text, (int)leftX+10, (int)banner_height/2+8);
 	}
 	
-	public void LoadMem(Graphics g)			//Отрисовка адресов и содержимого
+	public void LoadMem(Graphics g)						//Отрисовка адресов и содержимого
 
 	{
 		Graphics2D rs = (Graphics2D) g;
 		
-		Font f = new Font("Courier New", Font.BOLD, 20);
+		int memory[] = {1234, 5678, 1234, 3242, 1311, 1245, 1234, 9765, 1234, 5678, 1234, 3242, 1245, 1234, 9765, 1234,1234, 5678, 1234, 3242, 1311, 1245, 1234, 9765, 1234, 5678, 1234, 3242, 1245, 1234, 9765, 1234};
+
+		
+		Font f = new Font("Courier New", Font.BOLD, 24);
 		rs.setFont(f);
 		
 		int a = 10;
 		String adress, data;
 		for (int i=0; i<16; i++)
 		{
-			adress = "" + page*16+i;
-			data = "" + memory[page*16+i];
-			rs.drawString(adress, (int)leftX+5, (int)leftY+40+a);
-			rs.drawString(data, (int)leftX+(frame_width/5*2)+10, (int)leftY+40+a);
+			adress = "" + ConvertAdress(page*16+i);
+			data = "" + ConvertMemory(memory[page*16+i]);
+			rs.drawString(adress, (int)leftX+12, (int)leftY+40+a);
+			rs.drawString(data, lineX+12, (int)leftY+40+a);
 			a+=25;
 		}
 	}
 	
-	public void SetPage(int x) 				//Выбор страницы для отрисовки 
+	public void SetPage(int page) 						//Выбор страницы для отрисовки 
 	{
-		page = x;
+		this.page = page;
 	}
 	
-	public int GetPage()					//Получение номера текущей страницы
+	public int GetPage()								//Получение номера текущей страницы
 	{
 		return page;
 	}
 	
-	private int 		mem_length;		//Количество ячеек памяти
+	public void SetBannerHeight(int banner_height)		//Установка высоты заголовка
+	{
+		this.banner_height = banner_height;
+	}
+	
+	private String ConvertAdress(int adress)			//Преобразование адреса в строку
+	{
+		Formatter fmt = new Formatter();
+		fmt.format("%x", adress);
+		String str = fmt.toString();
+		
+		int y = str.length();
+		if (y < mem_width/4)
+		{
+			for (int i = 0; i < mem_width/4-y; i++) 
+				str = "0" + str;
+		}
+		return str.toUpperCase();
+	}
+	
+	private String ConvertMemory(int content)			//Преобразование памяти в строку
+	{
+		int width = 16;	
+		Formatter fmt = new Formatter();
+		fmt.format("%x", content);
+		String str = fmt.toString();
+		
+		int y = str.length();
+		if (y < width/4)
+		{
+			for (int i = 0; i < width/4-y; i++) 
+				str = "0" + str;
+		}
+		return str.toUpperCase();
+	}
+	
 	private int 		mem_width;		//Разрядность адреса
 	private int			frame_width;	//Ширина рамки
 	private int			frame_height;	//Высота рамки
@@ -84,4 +141,6 @@ public class EUIMemory implements IUIBaseObject
 	private double		leftY;			//Координата Y левого верхнего угла рамки
 	private int			page;			//Номер страницы памяти (по 16 ячеек)
 	private String		text;			//Названия памяти
+	private int			lineX;			//Координата X разделяющей линии
+	private int 		banner_height;	//Высота заголовка		
 }

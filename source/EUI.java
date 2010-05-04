@@ -12,6 +12,7 @@ public class EUI extends JApplet
 		public void run()
 		{
 			add(new EUIBasePC());
+			
 		}
 	});
 	}

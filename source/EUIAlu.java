@@ -19,16 +19,16 @@ public class EUIAlu implements IUIBaseObject
 		leftX = x;
 		leftY = y;
 		this.text = text;
-		messX = x + 100;
-		messY = y + 80;
+		messX = x + 85;
+		messY = y + 70;
 	}
 	
 	public void Draw(Graphics g)	//Отрисовка АЛУ без БР
 	{
 		Graphics2D rs = (Graphics2D) g;
 		
-		int[] x = {leftX, leftX+80, leftX+105, leftX+160, leftX+185, leftX+265, leftX+230, leftX+35, leftX};
-		int[] y = {leftY, leftY, leftY+40, leftY+40, leftY, leftY, leftY+100, leftY+100, leftY};
+		int[] x = {leftX, leftX+60, leftX+90, leftX+140, leftX+170, leftX+230, leftX+180, leftX+50, leftX};
+		int[] y = {leftY, leftY, leftY+30, leftY+30, leftY, leftY, leftY+90, leftY+90, leftY};
 		
 		rs.setPaint(new Color(187,249,166));
 		rs.fillPolygon(x, y, 9);
