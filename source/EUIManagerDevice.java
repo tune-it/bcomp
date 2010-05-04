@@ -1,7 +1,5 @@
 
-public class UIManagerDevice 
+public class EUIManagerDevice 
 {
-	UIRender.DrawRect(...);
-	UIRender.DrawText("...");
-	//...
+
 }

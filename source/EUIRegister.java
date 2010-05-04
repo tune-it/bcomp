@@ -3,13 +3,12 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import javax.swing.JApplet;
 
 /*-----------------------------------------------------------------------------
 				Отрисовка обычного регистра
 -----------------------------------------------------------------------------*/
 
-public class EUIRegister extends JApplet implements IUIBaseObject
+public class EUIRegister implements IUIBaseObject
 {
 	public EUIRegister(IRegister reg, double x, double y, double height, String text)
 	{
@@ -17,9 +16,9 @@ public class EUIRegister extends JApplet implements IUIBaseObject
 		length = reg.Width();
 		leftX = x;
 		leftY = y;
-		width = 16*reg.Width();
+		width = 16*reg.Width() -5;
 		this.height = height;
-		messX = (int)x + 20;
+		messX = (int)x + 10;
 		messY = (int)y + 20;
 		this.text = text;	
 	}
@@ -39,6 +38,11 @@ public class EUIRegister extends JApplet implements IUIBaseObject
 		return height;
 	}
 	
+	public void SetWidth(int w) 			//Установка длины регистра
+	{
+		width = w;
+	}
+
 	public void Draw(Graphics g)			//Отрисовка прямоугольника и текста
 	{
 		Graphics2D rs = (Graphics2D) g;
@@ -61,43 +65,50 @@ public class EUIRegister extends JApplet implements IUIBaseObject
 		
 		Font f = new Font("Courier New", Font.BOLD, 20);
 		rs.setFont(f);
-		rs.drawString (str, (int)leftX+20, (int)leftY+45);
+		rs.drawString (str, (int)leftX+10, (int)leftY+45);
 	}
 	
 	private String Convert(IRegister reg)	//Преобразование в строку
 	{
-		int a = reg.SendData();
-		String str = ""; 
-		boolean flag =true;
-		int lng = 0;
+		int pish = reg.SendData();
+		String str = "";
+		boolean flag = true;
 		
 		while (flag)
 		{
-			str = " " + str;
-			for (int i = 0; i < 4; i++)
+			str = pish%2+str;
+			pish = pish / 2;
+			if (pish == 0 || pish == 1)
 			{
-				str = a%2 + str;
-				a = a / 2;
-				if (a < 2 & i == 3)
-				{
-					flag = false;
-					str = " " + str;
-					str = a + str;
-					break;
-				}
-				lng++;
+				flag = false;
 			}
 		}
-		
-		for (int i = (15 - lng); i != 0; i--)
+		str = pish%2+str;
+			
+		int x = str.length();	
+		if (str.length() < length)
 		{
-			if ((i-1)%4 == 0)
-			{
-				str = " " + str;
-			}
+			for (int i = 0; i < length-x; i++) 
 			str = "0" + str;
 		}
 		
+		if (str.length() > length)
+		{
+			for (int i = 0; i < x-length; i++)
+			{
+				str = str.substring(1);
+			}
+		}
+			
+			
+		if (length == 16)
+		{
+			str = str.substring(0,4) + " " + str.substring(4,8) + " " + str.substring(8,12) + " " + str.substring(12,16);
+		}
+		if (length == 12)
+		{
+			str = str.substring(0,4) + " " + str.substring(4,8) + " " + str.substring(8,12);
+		}
 		return str;
 	}
 	
