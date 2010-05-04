@@ -29,5 +29,9 @@ public void paintComponent(Graphics g)
 	{
 		chns[i].Draw(g2);
 	}
+	
+	EUIAlu alu = ololo.CreateAlu();
+	alu.Draw(g2);
+
 }
 }

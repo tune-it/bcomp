@@ -14,7 +14,5 @@ public class EUI extends JApplet
 			add(new EUIBasePC());
 		}
 	});
-		
-
 	}
 }

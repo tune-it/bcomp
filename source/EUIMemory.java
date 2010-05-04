@@ -11,7 +11,7 @@ import javax.swing.JApplet;
 					Отрисовка памяти
 -----------------------------------------------------------------------------*/
 
-public class EUIMemory extends JApplet implements IUIBaseObject
+public class EUIMemory implements IUIBaseObject
 {
 	public EUIMemory (EMemory mem, double x, double y, int width, int height, String text)
 	{

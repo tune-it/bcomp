@@ -1,3 +1,4 @@
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -11,7 +12,7 @@ import javax.swing.JApplet;
 				Отрисовка АЛУ 
 -----------------------------------------------------------------------------*/
 
-public class EUIAlu extends JApplet implements IUIBaseObject
+public class EUIAlu implements IUIBaseObject
 {
 	public EUIAlu(int x, int y, String text)
 	{
@@ -24,19 +25,20 @@ public class EUIAlu extends JApplet implements IUIBaseObject
 	
 	public void Draw(Graphics g)	//Отрисовка АЛУ без БР
 	{
-		Graphics2D g2 = (Graphics2D) g;
+		Graphics2D rs = (Graphics2D) g;
 		
 		int[] x = {leftX, leftX+80, leftX+105, leftX+160, leftX+185, leftX+265, leftX+230, leftX+35, leftX};
 		int[] y = {leftY, leftY, leftY+40, leftY+40, leftY, leftY, leftY+100, leftY+100, leftY};
 		
-		g2.setPaint(Color.GREEN);
-		g2.fillPolygon(x, y, 9);
-		g2.setPaint(Color.BLACK);
-		g2.drawPolygon(x, y, 9);
+		rs.setPaint(new Color(187,249,166));
+		rs.fillPolygon(x, y, 9);
+		rs.setStroke(new BasicStroke(1.0f));
+		rs.setPaint(Color.BLACK);
+		rs.drawPolygon(x, y, 9);
 		
 		Font f = new Font("Courier New", Font.BOLD, 35);
-		g2.setFont(f);
-		g2.drawString(text, messX, messY);
+		rs.setFont(f);
+		rs.drawString(text, messX, messY);
 	}
 	
 	private int			leftX;	//Координата X левого верхнего угла фигуры

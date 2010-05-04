@@ -48,7 +48,7 @@ public class EUIRegister implements IUIBaseObject
 		Graphics2D rs = (Graphics2D) g;
 		
 		Rectangle2D rect = new Rectangle2D.Double(leftX, leftY, width, height);
-		rs.setPaint(Color.GREEN);
+		rs.setPaint(new Color(187,249,166));
 		rs.fill(rect);
 		rs.setPaint(Color.BLACK);
 		rs.draw(rect);
@@ -63,9 +63,14 @@ public class EUIRegister implements IUIBaseObject
 		Graphics2D rs = (Graphics2D) g;
 		String str = Convert(reg);
 		
+		Rectangle2D rect = new Rectangle2D.Double(leftX+5, leftY+24, width-10, 23);
+		rs.setPaint(new Color(231,236,119));
+		rs.fill(rect);
+		
+		rs.setPaint(Color.BLACK);
 		Font f = new Font("Courier New", Font.BOLD, 20);
 		rs.setFont(f);
-		rs.drawString (str, (int)leftX+10, (int)leftY+45);
+		rs.drawString (str, (int)leftX+10, (int)leftY+42);
 	}
 	
 	private String Convert(IRegister reg)	//Преобразование в строку
@@ -105,10 +110,11 @@ public class EUIRegister implements IUIBaseObject
 		{
 			str = str.substring(0,4) + " " + str.substring(4,8) + " " + str.substring(8,12) + " " + str.substring(12,16);
 		}
-		if (length == 12)
+		if (length == 11)
 		{
-			str = str.substring(0,4) + " " + str.substring(4,8) + " " + str.substring(8,12);
+			str = str.substring(0,3) + " " + str.substring(3,7) + " " + str.substring(7,11);
 		}
+		
 		return str;
 	}
 	
@@ -116,7 +122,7 @@ public class EUIRegister implements IUIBaseObject
 	private double 		leftY;	//Координата Y левой верхней точки
 	private double 		width; 	//Длина 
 	private double 		height;	//Высота
-	private int      	length;	//Разрадность регистра
+	private int      	length;	//Разрядность регистра
 	private int 		messX;	//Координата X положения текста
 	private int       	messY;	//Координата Y положения текста
 	private	String    	text;	//Название регистра

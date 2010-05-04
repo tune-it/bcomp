@@ -14,7 +14,7 @@ public EUIChannel (EChannel channel, int[][] points)
 	{
 		this.channel = channel;
 		this.points = points; 
-		arrow = false;
+		arrow = true;
 	}
 	
 	public void Draw(Graphics g)				//Отрисовка канала 
@@ -35,10 +35,10 @@ public EUIChannel (EChannel channel, int[][] points)
 		{
 			rs.drawLine(points[j][0], points[j][1], points[j+1][0], points[j+1][1]);
 		}
-	}
-	public void DrawArrow(Graphics g)			//Отрисовка содержимого
+	
+	if (arrow)			//Отрисовка содержимого
 		{
-			Graphics2D  rs = (Graphics2D) g;
+			
 			
 			if (channel.GetConnect())
 			{
@@ -76,6 +76,7 @@ public EUIChannel (EChannel channel, int[][] points)
 				rs.drawLine(points[points.length - 1][0]+4, points[points.length - 1][1]-7, points[points.length - 1][0]-7, points[points.length - 1][1]);
 			}
 		}
+	}
 	
 	
 	public void EnableArrow()
