@@ -102,11 +102,13 @@ public class EALU
 	public void ClearC() // Очистить С 
 	{
 		flag_factory.GetC().ClearFlag();
+		flag_factory.RefreshStateCounter();
 	}
 	
 	public void SetC() // Установить С
 	{
 		flag_factory.GetC().SetFlag();
+		flag_factory.RefreshStateCounter();
 	}
 	
 	public void SetZ() // Установить Z, если присутствует
@@ -114,6 +116,7 @@ public class EALU
 		if (buffer_register.SendData() == 0)
 		{
 			flag_factory.GetZ().SetFlag();
+			flag_factory.RefreshStateCounter();
 		}
 	}
 	
@@ -122,6 +125,7 @@ public class EALU
 		if ( ( buffer_register.SendData() &(int) Math.pow(2, buffer_register.Width())>>2 ) != 0)
 		{
 			flag_factory.GetN().SetFlag();
+			flag_factory.RefreshStateCounter();
 		}
 	}
 	
@@ -133,5 +137,4 @@ public class EALU
 	private boolean			right_reverse;		// Вкл/Откл правый инвертор
 	private boolean			incrementor;		// Вкл/Откл инкрементор
 	private EFlagFactory	flag_factory;		// Флаг C
-
 }

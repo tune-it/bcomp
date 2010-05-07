@@ -1,3 +1,5 @@
+import javax.xml.parsers.FactoryConfigurationError;
+
 /*-----------------------------------------------------------------------------
   Устройство управления
 -----------------------------------------------------------------------------*/
@@ -38,7 +40,7 @@ public class EManagerDevice
 			ERegister compare_reg = null;
 			
 			// РС - проверяемый регистр
-			if (!CheckBit(command, 13) && !CheckBit(command, 12));
+			if (!CheckBit(command, 13) && !CheckBit(command, 12)) compare_reg = reg_factory.GetStateCounter();
 			
 			// РД - проверяемый регистр
 			if (!CheckBit(command, 13) && CheckBit(command, 12)) compare_reg = reg_factory.GetDataRegister();
@@ -70,7 +72,7 @@ public class EManagerDevice
 				// Выбираем левый вход
 				if (!CheckBit(command, 13) && !CheckBit(command, 12)); // На левый вход ноль
 				{
-					
+					reg_factory.GetLeftALUInput().GetData(0);
 				}
 				
 				if (!CheckBit(command, 13) && CheckBit(command, 12)); // На левый вход аккумулятор
@@ -91,7 +93,7 @@ public class EManagerDevice
 				// Выбираем правый вход
 				if (!CheckBit(command, 9) && !CheckBit(command, 8)); // На правый вход ноль
 				{
-					
+					reg_factory.GetRightALUInput().GetData(0);
 				}
 				
 				if (!CheckBit(command, 9) && CheckBit(command, 8)); // На правый вход регистр данных
