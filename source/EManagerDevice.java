@@ -1,11 +1,9 @@
-import javax.xml.parsers.FactoryConfigurationError;
-
 /*-----------------------------------------------------------------------------
   Устройство управления
 -----------------------------------------------------------------------------*/
 public class EManagerDevice
 {
-	public EManagerDevice(ERegisterFactory reg_factory, EChannel[] chanells, EALU nalu)
+	public EManagerDevice(ERegisterFactory reg_factory, EChannel[] chanells, EALU alu)
 	{
 		this.instr_pointer = reg_factory.GetMicroInstructionPointer();
 		this.reg_factory = reg_factory;
