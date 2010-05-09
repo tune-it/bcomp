@@ -1,36 +1,30 @@
 
 public class EUIBasePCFabric 
 {
-	public EUIBasePCFabric()
+	public EUIBasePCFabric(ERegisterFactory register_factory)
 	{
-		
+		regfact = register_factory;
 	}
 	
-	public EUIRegister[] CreateRegisters()
+	public EUIRegister[] CreateBinRegisters()
 	{
-		ERegister	RD = new ERegister();
-		EUIRegister IRD = new EUIRegister(RD, 180, 85, "Регистр Данных");
+		EUIRegister RD = new EUIRegister(regfact.GetDataRegister(), 180, 85, "Регистр Данных");
 		
-		ERegister RK = new ERegister();
-		EUIRegister IRK = new EUIRegister(RK, 580, 110, "Регистр Команд");
+		EUIRegister RK = new EUIRegister(regfact.GetCommandRegister(), 580, 110, "Регистр Команд");
 		
-		ERegister RA = new ERegister(11);
-		EUIRegister IRA = new EUIRegister(RA, 340, 20, "Регистр Адреса");
-		IRA.SetWidth(187);
+		EUIRegister RA = new EUIRegister(regfact.GetAdressRegister(), 340, 20, "Регистр Адреса");
+		RA.SetWidth(187);
 		
+		EUIRegister SK = new EUIRegister(regfact.GetInstructionPointer(), 340, 150, "Счетчик Команд");
+		SK.SetWidth(187);
 		
-		ERegister SK = new ERegister(11);
-		EUIRegister ISK = new EUIRegister(SK, 340, 150, "Счетчик Команд");
-		ISK.SetWidth(187);
-		
-		ERegister Acc = new ERegister();
-		EUIRegister IAcc = new EUIRegister(Acc, 335, 378, "Аккумулятор");
+		EUIRegister Acc = new EUIRegister(regfact.GetAccumulator(), 335, 378, "Аккумулятор");
 		
 		EFlag C = new EFlag();
 		EUIRegister IC = new EUIRegister(C, 305, 378, 50, "C");
 		IC.SetWidth(30);
 		
-		EUIRegister Registers[] = {IRD, IRK, IRA, ISK, IAcc, IC};
+		EUIRegister Registers[] = {RD, RK, RA, SK, Acc, IC};
 		
 		return Registers;
 	}
@@ -176,4 +170,5 @@ public class EUIBasePCFabric
 		return Channels;
 	}
 	
+	private ERegisterFactory regfact;
 }

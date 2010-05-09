@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 		Отрисовка канала и стрелки
 -----------------------------------------------------------------------------*/
 
-public class EUIChannel implements IUIBaseObject
+public class EUIChannel
 {
 
 public EUIChannel (EChannel channel, int[][] points)
@@ -36,59 +36,63 @@ public EUIChannel (EChannel channel, int[][] points)
 			rs.drawLine(points[j][0], points[j][1], points[j+1][0], points[j+1][1]);
 		}
 	
-	if (arrow)			//Отрисовка содержимого
-		{
+		if (arrow)			
+		{	
+			//Смещение координат стрелки от линии
+			int shiftX = 9;	
+			int shiftY = 9;
 			
+			//Массивы для отрисовки стрелок
 			
-			if (channel.GetConnect())
-			{
-				rs.setPaint(Color.RED);
-			}
-			else
-			{
-				rs.setPaint(Color.GRAY);
-			}
+			//Вверх
+			int[] x1 = {points[points.length - 1][0] - shiftX, points[points.length - 1][0], points[points.length - 1][0] + shiftX};
+			int[] y1 = {points[points.length - 1][1], points[points.length - 1][1] - shiftY, points[points.length - 1][1]};
+			
+			//Вправо
+			int[] x2 = {points[points.length - 1][0], points[points.length - 1][0] + shiftX, points[points.length - 1][0]};
+			int[] y2 = {points[points.length - 1][1] + shiftY - 1, points[points.length - 1][1], points[points.length - 1][1] - shiftY};
+			
+			//Вниз
+			int[] x3 = {points[points.length - 1][0] - shiftX, points[points.length - 1][0], points[points.length - 1][0] + shiftX};
+			int[] y3 = {points[points.length - 1][1], points[points.length - 1][1] + shiftY, points[points.length - 1][1]};
+			
+			//Влево
+			int[] x4 = {points[points.length - 1][0], points[points.length - 1][0] - shiftX, points[points.length - 1][0]};
+			int[] y4 = {points[points.length - 1][1] + shiftY - 1, points[points.length - 1][1], points[points.length - 1][1] - shiftY};
 			
 			//Выбор направления стрелки
-			rs.setStroke(new BasicStroke(3.0f));
 			
-			if (points[points.length - 2][0] == points[points.length - 1][0] && points[points.length - 2][1]> points[points.length - 1][1] ) //Cтрелка вверх
-			{	
-				rs.drawLine(points[points.length - 1][0]-7, points[points.length - 1][1]+4, points[points.length - 1][0]-1, points[points.length - 1][1]-7);				
-				rs.drawLine(points[points.length - 1][0]+7, points[points.length - 1][1]+4, points[points.length - 1][0], points[points.length - 1][1]-7);
+			//Вверх
+			if (points[points.length - 2][0] == points[points.length - 1][0] && points[points.length - 2][1]> points[points.length - 1][1] )
+				rs.fillPolygon(x1, y1, 3);	
 			
-			}	
-			
-			if (points[points.length - 2][1] == points[points.length - 1][1] && points[points.length - 2][0]< points[points.length - 1][0] ) //Cтрелка вправо
-			{
-				rs.drawLine(points[points.length - 1][0]-4, points[points.length - 1][1]-7, points[points.length - 1][0]+6, points[points.length - 1][1]-1);
-				rs.drawLine(points[points.length - 1][0]-4, points[points.length - 1][1]+7, points[points.length - 1][0]+6, points[points.length - 1][1]);
-			}
+			//Вправо
+			if (points[points.length - 2][1] == points[points.length - 1][1] && points[points.length - 2][0]< points[points.length - 1][0] )
+				rs.fillPolygon(x2, y2, 3);
 			 
-			if (points[points.length - 2][0] == points[points.length - 1][0] && points[points.length - 2][1]< points[points.length - 1][1] ) //Cтрелка вниз
-			{
-				rs.drawLine(points[points.length - 1][0]-7, points[points.length - 1][1]-5, points[points.length - 1][0]-1, points[points.length - 1][1]+7);
-				rs.drawLine(points[points.length - 1][0]+7, points[points.length - 1][1]-5, points[points.length - 1][0], points[points.length - 1][1]+7);
-		
-			}	
+			//Вниз
+			if (points[points.length - 2][0] == points[points.length - 1][0] && points[points.length - 2][1]< points[points.length - 1][1] )
+				rs.fillPolygon(x3, y3, 3);
 			
-			if (points[points.length - 2][1] == points[points.length - 1][1] && points[points.length - 2][0]> points[points.length - 1][0] ) //Cтрелка влево
-			{
-				rs.drawLine(points[points.length - 1][0]+4, points[points.length - 1][1]+7, points[points.length - 1][0]-7, points[points.length - 1][1]-1);
-				rs.drawLine(points[points.length - 1][0]+4, points[points.length - 1][1]-7, points[points.length - 1][0]-7, points[points.length - 1][1]);
-			}
+			//Влево
+			if (points[points.length - 2][1] == points[points.length - 1][1] && points[points.length - 2][0]> points[points.length - 1][0] )
+				rs.fillPolygon(x4, y4, 3);
 		}
 	}
 	
-	
-	public void EnableArrow()					//Добавить стрелку
+	public void EnableArrow()					//Добавлять стрелку
 	{
 		arrow = true;
 	}
 	
-	public void DisableArrow()					//Убрать стрелку
+	public void DisableArrow()					//Убирать стрелку
 	{
 		arrow = false;
+	}
+	
+	public boolean GetConnect()					//"Открытость" канала
+	{
+		return channel.GetConnect();
 	}
 	
 	private boolean		arrow;		//Наличие стрелки

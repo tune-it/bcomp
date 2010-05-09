@@ -12,32 +12,42 @@ import java.util.*;
 
 public class EUIMemory implements IUIBaseObject
 {
-	public EUIMemory (EMemory mem, double x, double y, int width, int height, String text)
-	{
-		memory = mem.GetMemory();
-		mem_width = mem.Width();
-		leftX = x;
-		leftY = y;
-		lineX = (int)leftX+(mem_width/4*16 + 20);
-		frame_width = width;
-		frame_height = height; 
-		banner_height = 30;
-		this.text = text;
-		page = 0;
-	}
-	
 	public EUIMemory (double x, double y, int width, int height, String text)
 	{
 		memory = null;
 		mem_width = 12;
+		
 		leftX = x;
 		leftY = y;
+		
 		frame_width = width;
 		frame_height = height; 
-		this.text = text;
-		page = 0;
+		
 		lineX = (int)leftX+(mem_width/4*16 + 20);
 		banner_height = 30;
+		
+		page = 0;
+		
+		this.text = text;
+	}
+	
+	public EUIMemory (EMemory mem, double x, double y, int width, int height, String text)
+	{
+		memory = mem.GetMemory();
+		mem_width = mem.Width();
+		
+		leftX = x;
+		leftY = y;
+		
+		frame_width = width;
+		frame_height = height;
+		
+		lineX = (int)leftX+(mem_width/4*16 + 20);
+		banner_height = 30;
+		
+		this.text = text;
+		
+		page = 0;
 	}
 	
 	public void Draw(Graphics g)						//Отрисовка названия и рамки
@@ -59,8 +69,7 @@ public class EUIMemory implements IUIBaseObject
 		rs.drawLine(lineX, (int)leftY+banner_height, lineX, (int)leftY+frame_height);
 		rs.drawLine((int)leftX, (int)leftY+banner_height, (int)leftX+frame_width, (int)leftY+30);
 		
-		Font f = new Font("Courier New", Font.BOLD, 24);
-		rs.setFont(f);
+		rs.setFont(new Font("Courier New", Font.BOLD, 24));
 		rs.drawString(text, (int)leftX+10, (int)banner_height/2+8);
 	}
 	
@@ -71,19 +80,19 @@ public class EUIMemory implements IUIBaseObject
 		
 		int memory[] = {1234, 5678, 1234, 3242, 1311, 1245, 1234, 9765, 1234, 5678, 1234, 3242, 1245, 1234, 9765, 1234,1234, 5678, 1234, 3242, 1311, 1245, 1234, 9765, 1234, 5678, 1234, 3242, 1245, 1234, 9765, 1234};
 
+		rs.setFont(new Font("Courier New", Font.BOLD, 24));
 		
-		Font f = new Font("Courier New", Font.BOLD, 24);
-		rs.setFont(f);
+		int a = 20; 		//Расстояние между строкой и рамкой заголовка 
+		int shift = 25;		//Расстояние между строками 
 		
-		int a = 10;
 		String adress, data;
 		for (int i=0; i<16; i++)
 		{
 			adress = "" + ConvertAdress(page*16+i);
 			data = "" + ConvertMemory(memory[page*16+i]);
-			rs.drawString(adress, (int)leftX+12, (int)leftY+40+a);
-			rs.drawString(data, lineX+12, (int)leftY+40+a);
-			a+=25;
+			rs.drawString(adress, (int)leftX+12, (int)leftY+banner_height+a);
+			rs.drawString(data, lineX+12, (int)leftY+banner_height+a);
+			a+=shift;
 		}
 	}
 	
