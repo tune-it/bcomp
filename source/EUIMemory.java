@@ -27,6 +27,7 @@ public class EUIMemory implements IUIBaseObject
 		banner_height = 30;
 		
 		page = 0;
+		page_size = 16;
 		
 		this.text = text;
 	}
@@ -45,9 +46,10 @@ public class EUIMemory implements IUIBaseObject
 		lineX = (int)leftX+(mem_width/4*16 + 20);
 		banner_height = 30;
 		
-		this.text = text;
-		
 		page = 0;
+		page_size = 16;
+		
+		this.text = text;
 	}
 	
 	public void Draw(Graphics g)						//Отрисовка названия и рамки
@@ -78,7 +80,7 @@ public class EUIMemory implements IUIBaseObject
 	{
 		Graphics2D rs = (Graphics2D) g;
 		
-		int memory[] = {1234, 5678, 1234, 3242, 1311, 1245, 1234, 9765, 1234, 5678, 1234, 3242, 1245, 1234, 9765, 1234,1234, 5678, 1234, 3242, 1311, 1245, 1234, 9765, 1234, 5678, 1234, 3242, 1245, 1234, 9765, 1234};
+		int memory[] = {32023, 1, 1234, 242, 1024, 65535, 1234, 6542, 1234, 5678, 1234, 3242, 18, 1234, 52425, 1234,1234, 5678, 1234, 3242, 1311, 1245, 1234, 9765, 1234, 5678, 1234, 3242, 1245, 1234, 9765, 1234};
 
 		rs.setFont(new Font("Courier New", Font.BOLD, 24));
 		
@@ -86,7 +88,7 @@ public class EUIMemory implements IUIBaseObject
 		int shift = 25;		//Расстояние между строками 
 		
 		String adress, data;
-		for (int i=0; i<16; i++)
+		for (int i=0; i<page_size; i++)
 		{
 			adress = "" + ConvertAdress(page*16+i);
 			data = "" + ConvertMemory(memory[page*16+i]);
@@ -106,6 +108,11 @@ public class EUIMemory implements IUIBaseObject
 		return page;
 	}
 	
+	public void SetPageSize(int page_size)				//Установка размера страницы
+	{
+		this.page_size = page_size;
+	}
+	
 	public void SetBannerHeight(int banner_height)		//Установка высоты заголовка
 	{
 		this.banner_height = banner_height;
@@ -123,12 +130,13 @@ public class EUIMemory implements IUIBaseObject
 			for (int i = 0; i < mem_width/4-y; i++) 
 				str = "0" + str;
 		}
+		
 		return str.toUpperCase();
 	}
 	
 	private String ConvertMemory(int content)			//Преобразование памяти в строку
 	{
-		int width = 16;	
+		int width = page_size;	
 		Formatter fmt = new Formatter();
 		fmt.format("%x", content);
 		String str = fmt.toString();
@@ -139,6 +147,7 @@ public class EUIMemory implements IUIBaseObject
 			for (int i = 0; i < width/4-y; i++) 
 				str = "0" + str;
 		}
+		
 		return str.toUpperCase();
 	}
 	
@@ -149,6 +158,7 @@ public class EUIMemory implements IUIBaseObject
 	private double		leftX;			//Координата X левого верхнего угла рамки
 	private double		leftY;			//Координата Y левого верхнего угла рамки
 	private int			page;			//Номер страницы памяти (по 16 ячеек)
+	private int			page_size;		//Количество ячеек на странице
 	private String		text;			//Названия памяти
 	private int			lineX;			//Координата X разделяющей линии
 	private int 		banner_height;	//Высота заголовка		

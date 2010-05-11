@@ -8,9 +8,9 @@ public class EUIBasePCFabric
 	
 	public EUIRegister[] CreateBinRegisters()
 	{
-		EUIRegister RD = new EUIRegister(regfact.GetDataRegister(), 180, 85, "Регистр Данных");
+		EUIRegister RD = new EUIRegister(regfact.GetDataRegister(), 180, 85, 228, 103, "Регистр Данных");
 		
-		EUIRegister RK = new EUIRegister(regfact.GetCommandRegister(), 580, 110, "Регистр Команд");
+		EUIRegister RK = new EUIRegister(regfact.GetCommandRegister(), 580, 110, 628, 128, "Регистр Команд");
 		
 		EUIRegister RA = new EUIRegister(regfact.GetAdressRegister(), 340, 20, "Регистр Адреса");
 		RA.SetWidth(187);
@@ -18,7 +18,7 @@ public class EUIBasePCFabric
 		EUIRegister SK = new EUIRegister(regfact.GetInstructionPointer(), 340, 150, "Счетчик Команд");
 		SK.SetWidth(187);
 		
-		EUIRegister Acc = new EUIRegister(regfact.GetAccumulator(), 335, 378, "Аккумулятор");
+		EUIRegister Acc = new EUIRegister(regfact.GetAccumulator(), 335, 378, 400, 396, "Аккумулятор");
 		
 		EFlag C = new EFlag();
 		EUIRegister IC = new EUIRegister(C, 305, 378, 50, "C");
@@ -160,9 +160,9 @@ public class EUIBasePCFabric
 	   		   			{565, 353},
 	   		   			{565, 78},
 	   		   			{565, 78},
-	   		   			{725, 78},
-	   		   			{725, 78},
-	   		   			{725, 101}};
+	   		   			{714, 78},
+	   		   			{714, 78},
+	   		   			{714, 101}};
 		EUIChannel IALUtoRK = new EUIChannel(ALUtoRK, mass11);
 		
 		
