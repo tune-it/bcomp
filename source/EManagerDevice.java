@@ -3,11 +3,15 @@
 -----------------------------------------------------------------------------*/
 public class EManagerDevice
 {
+<<<<<<< .mine
+	public EManagerDevice(ERegisterFactory reg_factory, EChannelFactory channels, EALU alu)
+=======
 	public EManagerDevice(ERegisterFactory reg_factory, EChannel[] chanells, EALU alu)
+>>>>>>> .r50
 	{
-		this.instr_pointer = reg_factory.GetMicroInstructionPointer();
+		this.instr_pointer = reg_factory.MicroInstructionPointer();
 		this.reg_factory = reg_factory;
-		this.chanells = chanells;
+		this.channels = channels;
 		this.alu = alu;
 	}
 	
@@ -25,7 +29,7 @@ public class EManagerDevice
 	
 	public void TimeStep()
 	{
-		int command = reg_factory.GetCommandRegister().SendData();
+		int command = reg_factory.CommandRegister().SendData();
 		if (CheckBit(command, 15))
 		{
 			////////////////////////////////////
@@ -38,16 +42,16 @@ public class EManagerDevice
 			ERegister compare_reg = null;
 			
 			// РС - проверяемый регистр
-			if (!CheckBit(command, 13) && !CheckBit(command, 12)) compare_reg = reg_factory.GetStateCounter();
+			if (!CheckBit(command, 13) && !CheckBit(command, 12)) compare_reg = reg_factory.StateCounter();
 			
 			// РД - проверяемый регистр
-			if (!CheckBit(command, 13) && CheckBit(command, 12)) compare_reg = reg_factory.GetDataRegister();
+			if (!CheckBit(command, 13) && CheckBit(command, 12)) compare_reg = reg_factory.DataRegister();
 			
 			// РК - проверяемый регистр
-			if (CheckBit(command, 13) && !CheckBit(command, 12)) compare_reg = reg_factory.GetCommandRegister();
+			if (CheckBit(command, 13) && !CheckBit(command, 12)) compare_reg = reg_factory.CommandRegister();
 			
 			// А - проверяемый регистр
-			if (CheckBit(command, 13) && CheckBit(command, 12)) compare_reg = reg_factory.GetAccumulator();
+			if (CheckBit(command, 13) && CheckBit(command, 12)) compare_reg = reg_factory.Accumulator();
 			
 			// Проверяемый бит
 			int choose_bit = (int) Math.pow(2, ((command & 0xf00)>>8));
@@ -63,114 +67,137 @@ public class EManagerDevice
 		{
 			if (CheckBit(command, 14))
 			{
-				/////////////////////////////////////
-				// Операционая микрокоманда (ОМК0) //
-				/////////////////////////////////////
+			/////////////////////////////////////
+			// Операционая микрокоманда (ОМК0) //
+			/////////////////////////////////////
 				
-				// Выбираем левый вход
-				if (!CheckBit(command, 13) && !CheckBit(command, 12)); // На левый вход ноль
-				{
-					reg_factory.GetLeftALUInput().GetData(0);
-				}
+			// Выбираем левый вход
 				
-				if (!CheckBit(command, 13) && CheckBit(command, 12)); // На левый вход аккумулятор
-				{
-					
-				}
+				// На левый вход ноль
+				if (!CheckBit(command, 13) && !CheckBit(command, 12)) reg_factory.LeftALUInput().GetData(0);
 				
-				if (CheckBit(command, 13) && !CheckBit(command, 12)); // На левый вход регистр состояния
-				{
-					
-				}
+				// На левый вход аккумулятор
+				if (!CheckBit(command, 13) && CheckBit(command, 12)) channels.FromAcc().Open();
 				
-				if (CheckBit(command, 13) && CheckBit(command, 12)); // На левый вход клавишный регистр
-				{
-					
-				}
+				// На левый вход регистр состояния
+				if (CheckBit(command, 13) && !CheckBit(command, 12)) channels.FromSC().Open();
 				
-				// Выбираем правый вход
-				if (!CheckBit(command, 9) && !CheckBit(command, 8)); // На правый вход ноль
-				{
-					reg_factory.GetRightALUInput().GetData(0);
-				}
+				// На левый вход клавишный регистр
+				if (CheckBit(command, 13) && CheckBit(command, 12)) channels.FromIR().Open();
 				
-				if (!CheckBit(command, 9) && CheckBit(command, 8)); // На правый вход регистр данных
-				{
-					
-				}
+			// Выбираем правый вход
 				
-				if (!CheckBit(command, 9) && !CheckBit(command, 8)); // На правый вход регистр команд
-				{
-					
-				}
+				// На правый вход ноль
+				if (!CheckBit(command, 9) && !CheckBit(command, 8)) reg_factory.RightALUInput().GetData(0);
 				
-				if (!CheckBit(command, 9) && !CheckBit(command, 8)); // На правый вход счетчик команд
-				{
-					
-				}
+				// На правый вход регистр данных
+				if (!CheckBit(command, 9) && CheckBit(command, 8)) channels.FromDR().Open();
+
+				// На правый вход регистр команд
+				if (!CheckBit(command, 9) && !CheckBit(command, 8)) channels.FromCR().Open();
+
+				// На правый вход счетчик команд
+				if (!CheckBit(command, 9) && !CheckBit(command, 8)) channels.FromIP().Open();
 				
-				// Обратный код
-				if (!CheckBit(command, 7)) // Правый вход
-				{
-					alu.SetRightReverse();
-				}
+			// Обратный код
 				
-				if (!CheckBit(command, 6)) // Левый вход
-				{
-					alu.SetLeftReverse();
-				}
+				// Правый вход
+				if (!CheckBit(command, 7)) alu.SetRightReverse();
+
+				// Левый вход
+				if (!CheckBit(command, 6)) alu.SetLeftReverse();
 				
-				// Операция
-				if (!CheckBit(command, 5) && !CheckBit(command, 4)) // Лев.вх + Прав.вх
-				{
-					alu.ADD();
-				}
+			// Операция
 				
-				if (!CheckBit(command, 5) && CheckBit(command, 4)) // Лев.вх + Прав.вх + 1
+				// Лев.вх + Прав.вх
+				if (!CheckBit(command, 5) && !CheckBit(command, 4)) alu.ADD(); 
+
+				// Лев.вх + Прав.вх + 1
+				if (!CheckBit(command, 5) && CheckBit(command, 4)) 
 				{
 					alu.SetIncrement();
 					alu.ADD();
 				}
 				
-				if (CheckBit(command, 5) && CheckBit(command, 4)) // Лев.вх & Прав.вх
-				{
-					alu.AND();
-				}
+				// Лев.вх & Прав.вх
+				if (CheckBit(command, 5) && CheckBit(command, 4)) alu.AND();
 				
-				//Сдвиги
-				if (!CheckBit(command, 3) && CheckBit(command, 2)) // Сдвиг вправо
-				{
-					alu.ROR();
-				}
+			//Сдвиги
 				
-				if (CheckBit(command, 3) && !CheckBit(command, 2)) // Сдвиг влево
-				{
-					alu.ROL();
-				}
+				// Сдвиг вправо
+				if (!CheckBit(command, 3) && CheckBit(command, 2)) alu.ROR();
 				
-				// Работа с памятью
-				if (!CheckBit(command, 3) && CheckBit(command, 2)) // Чтение
-				{
-					
-				}
+				// Сдвиг влево
+				if (CheckBit(command, 3) && !CheckBit(command, 2)) alu.ROL();
+
+			// Работа с памятью
 				
-				if (CheckBit(command, 3) && !CheckBit(command, 2)) // Запись
-				{
-					
-				}
+				// Чтение
+				if (!CheckBit(command, 3) && CheckBit(command, 2)) channels.ReadFromMem();
+				
+				// Запись
+				if (CheckBit(command, 3) && !CheckBit(command, 2)) channels.WriteToMem();
 			}
 			else
 			{
-				/////////////////////////////////////
-				// Операционая микрокоманда (ОМК1) //
-				/////////////////////////////////////
+			/////////////////////////////////////
+			// Операционая микрокоманда (ОМК1) //
+			/////////////////////////////////////
 				
+			//Управление обмен в ВУ
+				
+			// Регистр C	
+				
+				// Перенос
+				if (!CheckBit(command, 7) && CheckBit(command, 6)) alu.SetCIfExist();
+
+				// Сброс
+				if (CheckBit(command, 7) && !CheckBit(command, 6)) alu.ClearC();
+				
+				 // Установка
+				if (CheckBit(command, 7) && CheckBit(command, 6)) alu.SetC();
+				
+			// Установка регистра N
+				if (CheckBit(command, 5)) alu.SetN();
+				
+			// Установка регистра Z
+				if (CheckBit(command, 4)) alu.SetZ();
+				
+			// Остановка ЭВМ
+				if (CheckBit(command, 3));
+				
+			// Выход АЛУ (Содержимое БР)
+				
+				// в РА
+				if (!CheckBit(command, 2) && !CheckBit(command, 1) && CheckBit(command, 0)) channels.ToAR().Open();
+
+				// в РД
+				if (!CheckBit(command, 2) && CheckBit(command, 1) && !CheckBit(command, 0)) channels.ToDR().Open();
+				
+				// в РК
+				if (!CheckBit(command, 2) && CheckBit(command, 1) && CheckBit(command, 0)) channels.ToCR().Open();
+				
+				// в СК
+				if (CheckBit(command, 2) && !CheckBit(command, 1) && !CheckBit(command, 0)) channels.ToIP().Open();
+
+				// в A
+				if (CheckBit(command, 2) && !CheckBit(command, 1) && CheckBit(command, 0)) channels.ToAcc().Open();
+				
+				// в РА, РД, РК, А
+				if (CheckBit(command, 2) && CheckBit(command, 1) && CheckBit(command, 0)) 
+				{
+					channels.ToAR(). Open();
+					channels.ToDR(). Open();
+					channels.ToCR(). Open();
+					channels.ToIP(). Open();
+					channels.ToAcc().Open();
+				}
 			}
 		}
 	}
 	
 	private ERegister			instr_pointer;
 	private ERegisterFactory	reg_factory;
-	private EChannel[]			chanells;
+	private EChannelFactory		channels;
 	private EALU				alu;
 }

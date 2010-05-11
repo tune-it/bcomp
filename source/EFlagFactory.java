@@ -5,7 +5,7 @@ public class EFlagFactory
 {
 	public EFlagFactory(ERegisterFactory factory)
 	{
-		this.state_counter = factory.GetStateCounter();
+		this.state_counter = factory.StateCounter();
 		
 		this.flags = new EFlag[13];
 		
@@ -13,6 +13,7 @@ public class EFlagFactory
 		{
 			flags[i].ClearFlag();
 		}
+		RefreshStateCounter();
 	}
 	
 	public EFlag GetC()
@@ -93,17 +94,21 @@ public class EFlagFactory
 	private ERegister state_counter;
 	private EFlag[] flags;
 	
-//	0  - Перенос
-//	1  - Нуль
-//	2  - Знак
-//	3  - 0 (для организации безусловных переходов в МПУ)
-//	4  - Разрешение прерывания
-//	5  - Прерывание
-//	6  - Состояние ВУ
-//	7  - Состояние тумблеров РАБОТА/ОСТАНОВ (1 - РАБОТА)
-//	8  - Программа
-//	9  - Выборка команды
-//	10 - Выборка адреса
-//	11 - Исполнение
-//	12 - Ввод-вывод
+	//	0  - Перенос
+	//	1  - Нуль
+	//	2  - Знак
+	
+	//	3  - 0 (для организации безусловных переходов в МПУ)
+	
+	//	4  - Разрешение прерывания
+	//	5  - Прерывание
+	//	6  - Состояние ВУ
+	
+	//	7  - Состояние тумблеров РАБОТА/ОСТАНОВ (1 - РАБОТА)
+	
+	//	8  - Программа
+	//	9  - Выборка команды
+	//	10 - Выборка адреса
+	//	11 - Исполнение
+	//	12 - Ввод-вывод
 }

@@ -5,13 +5,12 @@ public class EALU
 {
 	EALU(ERegisterFactory reg_factory, EFlagFactory flag_factory)
 	{
-		this.left_input = reg_factory.GetLeftALUInput();
-		this.right_input = reg_factory.GetLeftALUInput();                 // Exception?
-		this.buffer_register = reg_factory.GetBufferRegister();
-		this.accumulator = reg_factory.GetAccumulator();
+		this.left_input = reg_factory.LeftALUInput();
+		this.right_input = reg_factory.LeftALUInput();                 // Exception?
+		this.buffer_register = reg_factory.BufferRegister();
+		this.accumulator = reg_factory.Accumulator();
 		left_reverse = false;                           // 
 		right_reverse = false;
-		this.flag_factory =flag_factory;
 		// Обработка исключений - разрядность входов ~ разрядности БР
 	}
 	
@@ -136,5 +135,5 @@ public class EALU
 	private boolean			left_reverse;		// Вкл/Откл левый инвертор
 	private boolean			right_reverse;		// Вкл/Откл правый инвертор
 	private boolean			incrementor;		// Вкл/Откл инкрементор
-	private EFlagFactory	flag_factory;		// Флаг C
+	private EFlagFactory	flag_factory;		// Фабрика флагов
 }
