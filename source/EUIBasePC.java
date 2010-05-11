@@ -36,7 +36,7 @@ public void paintComponent(Graphics g)
 		regs[i].DrawBin(g2);
 	}
 	
-	EUIAlu alu = ololo.CreateAlu();
+	EUIAlu alu = ololo.CreateBinAlu();
 	alu.Draw(g2);
 	
 	EUIMemory mem = ololo.CreateMemory();

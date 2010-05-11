@@ -10,9 +10,11 @@ public class EUI extends JApplet
 		EventQueue.invokeLater(new Runnable()
 		{
 		public void run()
-		{	
+		{	 
 			EUIBasePC ololo = new EUIBasePC();
-			add(ololo);
+			EUIMicroPC olololo = new EUIMicroPC();
+			add(olololo);
+
 		}
 	});
 	}

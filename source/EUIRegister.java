@@ -21,7 +21,7 @@ public class EUIRegister
 		leftY = y;
 		
 		widthBin = 17 * reg.Width() - 6;
-		widthHex = 150;
+		widthHex = 100;
 		height = 50;
 		
 		dataX = (int)leftX+10;
@@ -41,7 +41,7 @@ public class EUIRegister
 		leftY = y;
 		
 		widthBin = 17 * reg.Width() - 6;
-		widthHex = 150;
+		widthHex = 100;
 		this.height = height;
 		
 		dataX = (int)leftX+10;
@@ -61,7 +61,7 @@ public class EUIRegister
 		leftY = y;
 		
 		widthBin = 17 * reg.Width() - 6;
-		widthHex = 150;
+		widthHex = 100;
 		height = 50;
 		
 		dataX = (int)leftX+10;
@@ -81,7 +81,7 @@ public class EUIRegister
 		leftY = y;
 		
 		widthBin = 17 * reg.Width() - 6;
-		widthHex = 150;
+		widthHex = 100;
 		this.height = height;
 		
 		dataX = (int)leftX+10;
@@ -134,9 +134,8 @@ public class EUIRegister
 		rs.drawString(text, messX, messY);
 	
 		String str = ConvertToBin(reg);
-		rs.setPaint(new Color(231,236,119));
+		rs.setPaint(new Color(231,236,119)); 
 		rs.fillRect((int)leftX+5, (int)leftY+24, (int)widthBin-10, 23);
-		
 		rs.setPaint(Color.BLACK);
 		rs.setFont(new Font("Courier New", Font.BOLD, 21));
 		rs.drawString (str, dataX, dataY);

@@ -20,6 +20,7 @@ public class EUIBasePCFabric
 		
 		EUIRegister Acc = new EUIRegister(regfact.GetAccumulator(), 335, 378, 400, 396, "Аккумулятор");
 		
+		
 		EFlag C = new EFlag();
 		EUIRegister IC = new EUIRegister(C, 305, 378, 50, "C");
 		IC.SetWidth(30);
@@ -29,18 +30,55 @@ public class EUIBasePCFabric
 		return Registers;
 	}
 	
+	public EUIRegister[] CreateHexRegisters()
+	{
+		EUIRegister RD = new EUIRegister(regfact.GetDataRegister(), 180, 85, 218, 103, "РД");
+		RD.SetDataPosition((int)(RD.GetX()+24), (int)(RD.GetY()+42));
+		
+		EUIRegister RK = new EUIRegister(regfact.GetCommandRegister(), 350, 20, 388, 38, "РК");
+		RK.SetDataPosition((int)(RK.GetX()+24), (int)(RK.GetY()+42));
+		
+		EUIRegister RA = new EUIRegister(regfact.GetAdressRegister(), 180, 20, 218, 38, "РА");
+		RA.SetDataPosition((int)(RA.GetX()+31), (int)(RA.GetY()+42));
+		
+		EUIRegister SK = new EUIRegister(regfact.GetInstructionPointer(), 350, 85, 388, 103, "СК");
+		SK.SetDataPosition((int)(SK.GetX()+31), (int)(SK.GetY()+42));
+		
+		EUIRegister Acc = new EUIRegister(regfact.GetAccumulator(), 300, 378, 332, 396, "Акк");
+		Acc.SetDataPosition((int)(Acc.GetX()+24), (int)(Acc.GetY()+42));
+		
+		EUIRegister BR = new EUIRegister(regfact.GetBufferRegister(), 265, 195, 303, 216, "БР");
+		BR.SetDataPosition((int)(BR.GetX()+18), (int)(BR.GetY()+42));
+		
+		EUIRegister Registers[] = {RD, RK, RA, SK, Acc, BR};
+		
+		return Registers;		
+	}
+	public EUIRegister CreateStateCounter()
+	{
+		EUIRegister SC = new EUIRegister(regfact.GetStateCounter(), 300, 378, 332, 396, "Рег. Сост.");
+		SC.SetDataPosition((int)(SC.GetX()+24), (int)(SC.GetY()+42));
+		
+		return SC;
+	}
+	
 	public EUIMemory CreateMemory()
 	{
 		EUIMemory Imem = new EUIMemory (1, 1, 150, 431, "Память");
 		return Imem;
 	}
 	
-	public EUIAlu CreateAlu()
+	public EUIAlu CreateBinAlu()
 	{
-		EUIAlu Alu = new EUIAlu(180,235,"АЛУ");
+		EUIAlu Alu = new EUIAlu(180, 235, "АЛУ");
 		return Alu;
 	}
 	
+	public EUIAlu CreateHexAlu()
+	{
+		EUIAlu Alu = new EUIAlu(200, 160, 288, 183, "АЛУ");
+		return Alu;
+	}
 	public EUIChannel[] CreateChannels()							
 	{
 		ERegister MEM = new ERegister();
