@@ -3,11 +3,7 @@
 -----------------------------------------------------------------------------*/
 public class EManagerDevice
 {
-<<<<<<< .mine
 	public EManagerDevice(ERegisterFactory reg_factory, EChannelFactory channels, EALU alu)
-=======
-	public EManagerDevice(ERegisterFactory reg_factory, EChannel[] chanells, EALU alu)
->>>>>>> .r50
 	{
 		this.instr_pointer = reg_factory.MicroInstructionPointer();
 		this.reg_factory = reg_factory;
