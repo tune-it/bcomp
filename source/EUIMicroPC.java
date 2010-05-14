@@ -1,3 +1,4 @@
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -28,6 +29,10 @@ public class EUIMicroPC extends JComponent
 			regs[i].DrawHex(g2);
 		}
 		
+		EUIRegister SC = ololo.CreateStateCounter();
+		SC.DrawBin(g2);
+		g2.setFont(new Font("Courier New", Font.BOLD, 21));
+		g2.drawString("UXAKPWFIEONZC", SC.GetDataX(), SC.GetdDataY()+23);
 		
 		EUIMemory mem = ololo.CreateMemory();
 		mem.Draw(g2);

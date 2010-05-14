@@ -4,6 +4,7 @@ public class EUIBasePCFabric
 	public EUIBasePCFabric(ERegisterFactory register_factory)
 	{
 		regfact = register_factory;
+
 	}
 	
 	public EUIRegister[] CreateBinRegisters()
@@ -20,8 +21,7 @@ public class EUIBasePCFabric
 		
 		EUIRegister Acc = new EUIRegister(regfact.GetAccumulator(), 335, 378, 400, 396, "Аккумулятор");
 		
-		
-		EFlag C = new EFlag();
+		ERegister C = new ERegister();
 		EUIRegister IC = new EUIRegister(C, 305, 378, 50, "C");
 		IC.SetWidth(30);
 		
@@ -44,41 +44,46 @@ public class EUIBasePCFabric
 		EUIRegister SK = new EUIRegister(regfact.GetInstructionPointer(), 350, 85, 388, 103, "СК");
 		SK.SetDataPosition((int)(SK.GetX()+31), (int)(SK.GetY()+42));
 		
-		EUIRegister Acc = new EUIRegister(regfact.GetAccumulator(), 300, 378, 332, 396, "Акк");
+		EUIRegister Acc = new EUIRegister(regfact.GetAccumulator(), 265, 255, 296, 273, "Акк");
 		Acc.SetDataPosition((int)(Acc.GetX()+24), (int)(Acc.GetY()+42));
 		
-		EUIRegister BR = new EUIRegister(regfact.GetBufferRegister(), 265, 195, 303, 216, "БР");
+		EUIRegister BR = new EUIRegister(regfact.GetBufferRegister(), 265, 185, 303, 206, "БР");
 		BR.SetDataPosition((int)(BR.GetX()+18), (int)(BR.GetY()+42));
 		
 		EUIRegister Registers[] = {RD, RK, RA, SK, Acc, BR};
 		
 		return Registers;		
 	}
+	
 	public EUIRegister CreateStateCounter()
 	{
-		EUIRegister SC = new EUIRegister(regfact.GetStateCounter(), 300, 378, 332, 396, "Рег. Сост.");
-		SC.SetDataPosition((int)(SC.GetX()+24), (int)(SC.GetY()+42));
+		EUIRegister StateCounter = new EUIRegister(regfact.GetStateCounter(), 209, 338, 70, 215, 356, "Регистр Состояния");
+		StateCounter.SetDataPosition((int)(StateCounter.GetX()+24), (int)(StateCounter.GetY()+42));
 		
-		return SC;
+		return StateCounter;
 	}
 	
 	public EUIMemory CreateMemory()
 	{
 		EUIMemory Imem = new EUIMemory (1, 1, 150, 431, "Память");
+		
 		return Imem;
 	}
 	
 	public EUIAlu CreateBinAlu()
 	{
 		EUIAlu Alu = new EUIAlu(180, 235, "АЛУ");
+		
 		return Alu;
 	}
 	
 	public EUIAlu CreateHexAlu()
 	{
-		EUIAlu Alu = new EUIAlu(200, 160, 288, 183, "АЛУ");
+		EUIAlu Alu = new EUIAlu(200, 150, 288, 173, "АЛУ");
+		
 		return Alu;
 	}
+	
 	public EUIChannel[] CreateChannels()							
 	{
 		ERegister MEM = new ERegister();
@@ -208,5 +213,6 @@ public class EUIBasePCFabric
 		return Channels;
 	}
 	
-	private ERegisterFactory regfact;
+	private ERegisterFactory 	regfact;
+	private EFlagFactory 		flagfact;
 }

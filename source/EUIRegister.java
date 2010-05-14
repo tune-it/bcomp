@@ -118,6 +118,16 @@ public class EUIRegister
 		this.dataX = dataX;
 		this.dataY = dataY;
 	}
+	
+	public int GetDataX()
+	{
+		return dataX;
+	}
+	
+	public int GetdDataY()
+	{
+		return dataY;
+	}
 
 	public void DrawBin(Graphics g)							//Отрисовка регистра с содержимым в двоичном виде
 	{
