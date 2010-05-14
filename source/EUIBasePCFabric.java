@@ -1,53 +1,52 @@
 
 public class EUIBasePCFabric 
 {
-	public EUIBasePCFabric(ERegisterFactory register_factory)
+	public EUIBasePCFabric(ERegisterFactory register_factory, EFlagFactory flag_factory)
 	{
 		regfact = register_factory;
-
+		flagfact = flag_factory;
 	}
 	
 	public EUIRegister[] CreateBinRegisters()
 	{
-		EUIRegister RD = new EUIRegister(regfact.GetDataRegister(), 180, 85, 228, 103, "Регистр Данных");
+		EUIRegister RD = new EUIRegister(regfact.DataRegister(), 180, 85, 228, 103, "Регистр Данных");
 		
-		EUIRegister RK = new EUIRegister(regfact.GetCommandRegister(), 580, 110, 628, 128, "Регистр Команд");
+		EUIRegister RK = new EUIRegister(regfact.CommandRegister(), 580, 110, 628, 128, "Регистр Команд");
 		
-		EUIRegister RA = new EUIRegister(regfact.GetAdressRegister(), 340, 20, "Регистр Адреса");
+		EUIRegister RA = new EUIRegister(regfact.AdressRegister(), 340, 20, "Регистр Адреса");
 		RA.SetWidth(187);
 		
-		EUIRegister SK = new EUIRegister(regfact.GetInstructionPointer(), 340, 150, "Счетчик Команд");
+		EUIRegister SK = new EUIRegister(regfact.InstructionPointer(), 340, 150, "Счетчик Команд");
 		SK.SetWidth(187);
 		
-		EUIRegister Acc = new EUIRegister(regfact.GetAccumulator(), 335, 378, 400, 396, "Аккумулятор");
+		EUIRegister Acc = new EUIRegister(regfact.Accumulator(), 335, 378, 400, 396, "Аккумулятор");
 		
-		ERegister C = new ERegister();
-		EUIRegister IC = new EUIRegister(C, 305, 378, 50, "C");
-		IC.SetWidth(30);
+		EUIRegister C = new EUIRegister(flagfact.GetC(), 305, 378, 50, "C");
+		C.SetWidth(30);
 		
-		EUIRegister Registers[] = {RD, RK, RA, SK, Acc, IC};
+		EUIRegister Registers[] = {RD, RK, RA, SK, Acc, C};
 		
 		return Registers;
 	}
 	
 	public EUIRegister[] CreateHexRegisters()
 	{
-		EUIRegister RD = new EUIRegister(regfact.GetDataRegister(), 180, 85, 218, 103, "РД");
+		EUIRegister RD = new EUIRegister(regfact.DataRegister(), 180, 85, 218, 103, "РД");
 		RD.SetDataPosition((int)(RD.GetX()+24), (int)(RD.GetY()+42));
 		
-		EUIRegister RK = new EUIRegister(regfact.GetCommandRegister(), 350, 20, 388, 38, "РК");
+		EUIRegister RK = new EUIRegister(regfact.CommandRegister(), 350, 20, 388, 38, "РК");
 		RK.SetDataPosition((int)(RK.GetX()+24), (int)(RK.GetY()+42));
 		
-		EUIRegister RA = new EUIRegister(regfact.GetAdressRegister(), 180, 20, 218, 38, "РА");
+		EUIRegister RA = new EUIRegister(regfact.AdressRegister(), 180, 20, 218, 38, "РА");
 		RA.SetDataPosition((int)(RA.GetX()+31), (int)(RA.GetY()+42));
 		
-		EUIRegister SK = new EUIRegister(regfact.GetInstructionPointer(), 350, 85, 388, 103, "СК");
+		EUIRegister SK = new EUIRegister(regfact.InstructionPointer(), 350, 85, 388, 103, "СК");
 		SK.SetDataPosition((int)(SK.GetX()+31), (int)(SK.GetY()+42));
 		
-		EUIRegister Acc = new EUIRegister(regfact.GetAccumulator(), 265, 255, 296, 273, "Акк");
+		EUIRegister Acc = new EUIRegister(regfact.Accumulator(), 265, 255, 296, 273, "Акк");
 		Acc.SetDataPosition((int)(Acc.GetX()+24), (int)(Acc.GetY()+42));
 		
-		EUIRegister BR = new EUIRegister(regfact.GetBufferRegister(), 265, 185, 303, 206, "БР");
+		EUIRegister BR = new EUIRegister(regfact.BufferRegister(), 265, 185, 303, 206, "БР");
 		BR.SetDataPosition((int)(BR.GetX()+18), (int)(BR.GetY()+42));
 		
 		EUIRegister Registers[] = {RD, RK, RA, SK, Acc, BR};
@@ -57,7 +56,7 @@ public class EUIBasePCFabric
 	
 	public EUIRegister CreateStateCounter()
 	{
-		EUIRegister StateCounter = new EUIRegister(regfact.GetStateCounter(), 209, 338, 70, 215, 356, "Регистр Состояния");
+		EUIRegister StateCounter = new EUIRegister(regfact.StateCounter(), 209, 338, 70, 215, 356, "Регистр Состояния");
 		StateCounter.SetDataPosition((int)(StateCounter.GetX()+24), (int)(StateCounter.GetY()+42));
 		
 		return StateCounter;

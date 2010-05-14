@@ -15,8 +15,11 @@ public void paintComponent(Graphics g)
 {
 	Graphics2D g2 = (Graphics2D) g;
 	
-	ERegisterFactory regfact = new ERegisterFactory(11,16,11,16,16,16,17,16,13);
-	EUIBasePCFabric ololo = new EUIBasePCFabric(regfact);
+	ERegisterFactory regfact = new ERegisterFactory();
+	ERegisterFactory flags = new ERegisterFactory();
+
+	EFlagFactory flagfact = new EFlagFactory(flags);
+	EUIBasePCFabric ololo = new EUIBasePCFabric(regfact, flagfact);
 	EUIRegister[] regs =  ololo.CreateBinRegisters();
 		
 	EUIChannel[] chns =  ololo.CreateChannels();

@@ -11,10 +11,7 @@ public class EUI extends JApplet
 		{
 		public void run()
 		{	 
-			EUIBasePC ololo = new EUIBasePC();
-			EUIMicroPC olololo = new EUIMicroPC();
-		
-			//add(olololo);
+			EUIBasePC ololo = new EUIBasePC();	
 			add(ololo);
 		}
 	});

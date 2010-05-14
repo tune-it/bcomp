@@ -17,8 +17,9 @@ public class EUIMicroPC extends JComponent
 		Graphics2D g2 = (Graphics2D) g;
 		
 		
-		ERegisterFactory regfact = new ERegisterFactory(11,16,11,16,16,16,17,16,13);
-		EUIBasePCFabric ololo = new EUIBasePCFabric(regfact);
+		ERegisterFactory regfact = new ERegisterFactory();
+		EFlagFactory flagfact = new EFlagFactory(regfact);
+		EUIBasePCFabric ololo = new EUIBasePCFabric(regfact, flagfact);
 		EUIRegister[] regs =  ololo.CreateHexRegisters();
 		
 		EUIAlu alu = ololo.CreateHexAlu();
