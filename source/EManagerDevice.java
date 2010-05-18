@@ -25,7 +25,7 @@ public class EManagerDevice
 	
 	public void TimeStep()
 	{
-		channels.MicroCommandToRMC();
+		channels.MicroCommandToRMC().Open();
 		int command = reg_factory.MicroCommandRegister().SendData();
 		if (CheckBit(command, 15))
 		{
@@ -62,7 +62,7 @@ public class EManagerDevice
 		}
 		else
 		{
-			if (CheckBit(command, 14))
+			if (!CheckBit(command, 14))
 			{
 			/////////////////////////////////////
 			// Операционая микрокоманда (ОМК0) //
@@ -91,18 +91,18 @@ public class EManagerDevice
 				if (!CheckBit(command, 9) && CheckBit(command, 8)) channels.FromDR().Open();
 
 				// На правый вход регистр команд
-				if (!CheckBit(command, 9) && !CheckBit(command, 8)) channels.FromCR().Open();
+				if (CheckBit(command, 9) && !CheckBit(command, 8)) channels.FromCR().Open();
 
 				// На правый вход счетчик команд
-				if (!CheckBit(command, 9) && !CheckBit(command, 8)) channels.FromIP().Open();
+				if (CheckBit(command, 9) && CheckBit(command, 8)) channels.FromIP().Open();
 				
 			// Обратный код
 				
 				// Правый вход
-				if (!CheckBit(command, 7)) alu.SetRightReverse();
+				if (CheckBit(command, 7)) alu.SetRightReverse();
 
 				// Левый вход
-				if (!CheckBit(command, 6)) alu.SetLeftReverse();
+				if (CheckBit(command, 6)) alu.SetLeftReverse();
 				
 			// Операция
 				

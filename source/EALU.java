@@ -6,7 +6,7 @@ public class EALU
 	EALU(ERegisterFactory reg_factory, EFlagFactory flag_factory)
 	{
 		this.left_input = reg_factory.LeftALUInput();
-		this.right_input = reg_factory.LeftALUInput();                 // Exception?
+		this.right_input = reg_factory.RightALUInput();                 // Exception?
 		this.buffer_register = reg_factory.BufferRegister();
 		this.accumulator = reg_factory.Accumulator();
 		left_reverse = false;                           // 

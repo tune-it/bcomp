@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------------
   Память (программ/микропрограмм).
 -----------------------------------------------------------------------------*/
-class EMemory implements IRegister
+class EMemory implements IRegister, IMemory
 {
 	public EMemory(ERegisterFactory factory)
 	{
