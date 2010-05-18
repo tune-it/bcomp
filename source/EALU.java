@@ -57,7 +57,7 @@ public class EALU
 		int bits = accumulator.SendData();
 		if (flag_factory.GetC().SendData() != 0)
 		{
-			bits = bits | ((int) Math.pow(2, accumulator.Width()));
+			bits = bits | ((int) StrictMath.pow(2, accumulator.Width()));
 		}
 		
 		int upperbit = bits & ((int) Math.pow(2, accumulator.Width()));

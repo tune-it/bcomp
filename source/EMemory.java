@@ -7,7 +7,7 @@ class EMemory implements IRegister, IMemory
 	{
 		this.adress_register = factory.AdressRegister();
 		this.memory_width = 16;
-		this.memory_length = (int) Math.pow(2, factory.AdressRegister().Width());
+		this.memory_length = (int) StrictMath.pow(2, factory.AdressRegister().Width());
 		memory = new ERegister[memory_length];
 		for (int i = 0; i < memory_length; i++)
 		{

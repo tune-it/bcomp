@@ -13,7 +13,7 @@ public class EManagerDevice
 	
 	private boolean CheckBit(int bits, int number)
 	{
-		if ((bits & (int) Math.pow(2, number)) != 0)
+		if ((bits & (int) StrictMath.pow(2, number)) != 0)
 		{
 			return true;
 		}
@@ -51,7 +51,7 @@ public class EManagerDevice
 			if (CheckBit(command, 13) && CheckBit(command, 12)) compare_reg = reg_factory.Accumulator();
 			
 			// Проверяемый бит
-			int choose_bit = (int) Math.pow(2, ((command & 0xf00)>>8));
+			int choose_bit =(int) StrictMath.pow(2, ((command & 0xf00)>>8));
 			
 			// Сравнение
 			if ( CheckBit(compare_reg.SendData(), choose_bit) == compare_bit )
