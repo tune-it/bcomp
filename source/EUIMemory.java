@@ -12,7 +12,7 @@ import java.util.*;
 
 public class EUIMemory implements IUIBaseObject
 {
-	public EUIMemory (double x, double y, int width, int height, String text)
+	public EUIMemory (double x, double y, int width, int height, int messX, int messY, String text)
 	{
 		memory = null;
 		mem_width = 12;
@@ -23,8 +23,11 @@ public class EUIMemory implements IUIBaseObject
 		frame_width = width;
 		frame_height = height; 
 		
-		lineX = (int)leftX+(mem_width/4*16 + 20);
+		separatorX = (int)leftX+65;
 		banner_height = 30;
+		
+		this.messX = messX;
+		this.messY = messY;  
 		
 		page = 0;
 		page_size = 16;
@@ -32,7 +35,7 @@ public class EUIMemory implements IUIBaseObject
 		this.text = text;
 	}
 	
-	public EUIMemory (EMemory mem, double x, double y, int width, int height, String text)
+	public EUIMemory (EMemory mem, double x, double y, int width, int height, int messX, int messY, String text)
 	{
 		memory = mem.GetMemory();
 		mem_width = mem.Width();
@@ -43,8 +46,11 @@ public class EUIMemory implements IUIBaseObject
 		frame_width = width;
 		frame_height = height;
 		
-		lineX = (int)leftX+(mem_width/4*16 + 20);
+		separatorX = (int)leftX+65;
 		banner_height = 30;
+		
+		this.messX = messX;
+		this.messY = messY; 
 		
 		page = 0;
 		page_size = 16;
@@ -62,25 +68,23 @@ public class EUIMemory implements IUIBaseObject
 		rs.fill(rect);
 		
 		rs.setPaint(new Color(219, 249, 235));
-		rs.fillRect(lineX, (int)leftY+banner_height, frame_width-lineX, frame_height-banner_height);
+		rs.fillRect(separatorX, (int)leftY+banner_height, (int)leftX+frame_width-separatorX, frame_height-banner_height);
 		
 		rs.setStroke(new BasicStroke(2.0f));
 		rs.setPaint(Color.BLACK);
 		rs.draw(rect);
 		
-		rs.drawLine(lineX, (int)leftY+banner_height, lineX, (int)leftY+frame_height);
+		rs.drawLine(separatorX, (int)leftY+banner_height, separatorX, (int)leftY+frame_height);
 		rs.drawLine((int)leftX, (int)leftY+banner_height, (int)leftX+frame_width, (int)leftY+30);
 		
-		rs.setFont(new Font("Courier New", Font.BOLD, 24));
-		rs.drawString(text, (int)leftX+10, (int)banner_height/2+8);
+		rs.setFont(new Font("Courier New", Font.BOLD, 23));
+		rs.drawString(text, messX, messY);
 	}
 	
 	public void LoadMem(Graphics g)						//Отрисовка адресов и содержимого
 
 	{
 		Graphics2D rs = (Graphics2D) g;
-		
-		int memory[] = {32023, 1, 1234, 242, 1024, 65535, 1234, 6542, 1234, 5678, 1234, 3242, 18, 1234, 52425, 1234,1234, 5678, 1234, 3242, 1311, 1245, 1234, 9765, 1234, 5678, 1234, 3242, 1245, 1234, 9765, 1234};
 
 		rs.setFont(new Font("Courier New", Font.BOLD, 24));
 		
@@ -93,7 +97,7 @@ public class EUIMemory implements IUIBaseObject
 			adress = "" + ConvertAdress(page*16+i);
 			data = "" + ConvertMemory(memory[page*16+i]);
 			rs.drawString(adress, (int)leftX+12, (int)leftY+banner_height+a);
-			rs.drawString(data, lineX+12, (int)leftY+banner_height+a);
+			rs.drawString(data, separatorX+12, (int)leftY+banner_height+a);
 			a+=shift;
 		}
 	}
@@ -117,7 +121,21 @@ public class EUIMemory implements IUIBaseObject
 	{
 		this.banner_height = banner_height;
 	}
+
+	public void SetSeparator(int x)
+	{
+		separatorX =(int)leftX + x;
+	}
 	
+	public void SetMemory(int[] x)
+	{
+		memory = x;
+	}
+	
+	public void SetAdressWidth(int x)
+	{
+		mem_width = x;
+	}
 	private String ConvertAdress(int adress)			//Преобразование адреса в строку
 	{
 		Formatter fmt = new Formatter();
@@ -150,6 +168,7 @@ public class EUIMemory implements IUIBaseObject
 		
 		return str.toUpperCase();
 	}
+
 	
 	private int 		mem_width;		//Разрядность адреса
 	private int			frame_width;	//Ширина рамки
@@ -157,9 +176,11 @@ public class EUIMemory implements IUIBaseObject
 	private int[]		memory;			//Содержимое ячеек
 	private double		leftX;			//Координата X левого верхнего угла рамки
 	private double		leftY;			//Координата Y левого верхнего угла рамки
+	private int			messX;			//Координата X заголовка
+	private int			messY;			//Координата Y заголовка
 	private int			page;			//Номер страницы памяти (по 16 ячеек)
 	private int			page_size;		//Количество ячеек на странице
 	private String		text;			//Названия памяти
-	private int			lineX;			//Координата X разделяющей линии
+	private int			separatorX;		//Координата X разделяющей линии
 	private int 		banner_height;	//Высота заголовка		
 }

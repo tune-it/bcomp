@@ -16,13 +16,14 @@ public void paintComponent(Graphics g)
 	Graphics2D g2 = (Graphics2D) g;
 	
 	ERegisterFactory regfact = new ERegisterFactory();
-	ERegisterFactory flags = new ERegisterFactory();
-
-	EFlagFactory flagfact = new EFlagFactory(flags);
+	EFlagFactory flagfact = new EFlagFactory(regfact);
 	EUIBasePCFabric ololo = new EUIBasePCFabric(regfact, flagfact);
-	EUIRegister[] regs =  ololo.CreateBinRegisters();
-		
-	EUIChannel[] chns =  ololo.CreateChannels();
+	EUIRegister[] regs =  ololo.CreateClassicRegisters();
+	
+	regfact.Accumulator().GetData(436);
+	flagfact.GetC().SetFlag();
+	
+	EUIChannel[] chns =  ololo.CreateClassicChannels();
 	for (int i=0; i<chns.length; i++)
 	{
 		if (chns[i].GetConnect() == false)
@@ -36,13 +37,15 @@ public void paintComponent(Graphics g)
 	
 	for (int i=0; i<regs.length; i++)
 	{
-		regs[i].DrawBin(g2);
+		regs[i].Draw(g2);
 	}
 	
 	EUIAlu alu = ololo.CreateBinAlu();
 	alu.Draw(g2);
 	
 	EUIMemory mem = ololo.CreateMemory();
+	int x[] = {32023, 1, 1234, 242, 1024, 65535, 1234, 6542, 1234, 5678, 1234, 3242, 18, 1234, 52425, 1234,1234, 5678, 1234, 3242, 1311, 1245, 1234, 9765, 1234, 5678, 1234, 3242, 1245, 1234, 9765, 1234};
+	mem.SetMemory(x);
 	mem.Draw(g2);
 	mem.LoadMem(g2);
 }

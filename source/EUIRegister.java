@@ -17,6 +17,8 @@ public class EUIRegister
 		this.reg = reg;
 		length = reg.Width();
 		
+		style = false;
+		
 		leftX = x;
 		leftY = y;
 		
@@ -36,6 +38,8 @@ public class EUIRegister
 	{
 		this.reg = reg;
 		length = reg.Width();
+		
+		style = false;
 		
 		leftX = x;
 		leftY = y;
@@ -57,6 +61,8 @@ public class EUIRegister
 		this.reg = reg;
 		length = reg.Width();
 		
+		style = false;
+		
 		leftX = x;
 		leftY = y;
 		
@@ -76,6 +82,8 @@ public class EUIRegister
 	{
 		this.reg = reg;
 		length = reg.Width();
+		
+		style = false;
 		
 		leftX = x;
 		leftY = y;
@@ -128,52 +136,59 @@ public class EUIRegister
 	{
 		return dataY;
 	}
+	
+	public void SetStyle(boolean x)
+	{
+		style = x;
+	}
 
-	public void DrawBin(Graphics g)							//Отрисовка регистра с содержимым в двоичном виде
+	public void Draw(Graphics g)							//Отрисовка регистра с содержимым в двоичном виде
 	{
 		Graphics2D rs = (Graphics2D) g;
 		
-		Rectangle2D rect = new Rectangle2D.Double(leftX, leftY, widthBin, height);
-		rs.setPaint(new Color(187,249,166));
-		rs.fill(rect);
-		rs.setPaint(Color.BLACK);
-		rs.setStroke(new BasicStroke(1.0f));
-		rs.draw(rect);
+		if (style==false)
+		{
+			
+			Rectangle2D rect = new Rectangle2D.Double(leftX, leftY, widthBin, height);
+			rs.setPaint(new Color(187,249,166));
+			rs.fill(rect);
+			rs.setPaint(Color.BLACK);
+			rs.setStroke(new BasicStroke(1.0f));
+			rs.draw(rect);
+			
+			rs.setFont(new Font("Courier New", Font.BOLD, 20));
+			rs.drawString(text, messX, messY);
 		
-		rs.setFont(new Font("Courier New", Font.BOLD, 20));
-		rs.drawString(text, messX, messY);
-	
-		String str = ConvertToBin(reg);
-		rs.setPaint(new Color(231,236,119)); 
-		rs.fillRect((int)leftX+5, (int)leftY+24, (int)widthBin-10, 23);
-		rs.setPaint(Color.BLACK);
-		rs.setFont(new Font("Courier New", Font.BOLD, 21));
-		rs.drawString (str, dataX, dataY);
+			String str = ConvertToBin(reg);
+			rs.setPaint(new Color(231,236,119)); 
+			rs.fillRect((int)leftX+5, (int)leftY+24, (int)widthBin-10, 23);
+			rs.setPaint(Color.BLACK);
+			rs.setFont(new Font("Courier New", Font.BOLD, 21));
+			rs.drawString (str, dataX, dataY);
+		}
+		
+		if(style)
+		{
+			
+			Rectangle2D rect = new Rectangle2D.Double(leftX, leftY, widthHex, height);
+			rs.setPaint(new Color(187,249,166));
+			rs.fill(rect);
+			rs.setPaint(Color.BLACK);
+			rs.setStroke(new BasicStroke(1.0f));
+			rs.draw(rect);
+			
+			rs.setFont(new Font("Courier New", Font.BOLD, 20));
+			rs.drawString(text, messX, messY);
+		
+			String str = ConvertToHex(reg);
+			rs.setPaint(new Color(231,236,119));
+			rs.fillRect((int)leftX+5, (int)leftY+24, (int)widthHex-10, 23);
+			
+			rs.setPaint(Color.BLACK);
+			rs.setFont(new Font("Courier New", Font.BOLD, 21));
+			rs.drawString (str, dataX, dataY);
+		}	
 	}
-	
-	public void DrawHex(Graphics g)							//Отрисовка регистра с содержимым в шестнадцатеричном виде
-	{
-		Graphics2D rs = (Graphics2D) g;
-		
-		Rectangle2D rect = new Rectangle2D.Double(leftX, leftY, widthHex, height);
-		rs.setPaint(new Color(187,249,166));
-		rs.fill(rect);
-		rs.setPaint(Color.BLACK);
-		rs.setStroke(new BasicStroke(1.0f));
-		rs.draw(rect);
-		
-		rs.setFont(new Font("Courier New", Font.BOLD, 20));
-		rs.drawString(text, messX, messY);
-	
-		String str = ConvertToHex(reg);
-		rs.setPaint(new Color(231,236,119));
-		rs.fillRect((int)leftX+5, (int)leftY+24, (int)widthHex-10, 23);
-		
-		rs.setPaint(Color.BLACK);
-		rs.setFont(new Font("Courier New", Font.BOLD, 21));
-		rs.drawString (str, dataX, dataY);
-	}
-	
 	private String ConvertToBin(IRegister reg)				//Преобразование в двоичный вид
 	{
 		int pish = reg.SendData();
@@ -208,9 +223,15 @@ public class EUIRegister
 		{
 			str = str.substring(0,4) + " " + str.substring(4,8) + " " + str.substring(8,12) + " " + str.substring(12,16);
 		}
+		
 		if (length == 11)
 		{
 			str = str.substring(0,3) + " " + str.substring(3,7) + " " + str.substring(7,11);
+		}
+		
+		if (length == 8)
+		{
+			str = str.substring(0,4) + " " + str.substring(4,8);
 		}
 		
 		return str;
@@ -232,6 +253,7 @@ public class EUIRegister
 	}
 	
 	private IRegister 	reg;		//Регистр
+	private boolean		style;		//16ый вид
 	private int      	length;		//Разрядность регистра
 	private double		leftX; 		//Координата X левой верхней точки
 	private double 		leftY;		//Координата Y левой верхней точки
@@ -243,7 +265,6 @@ public class EUIRegister
 	private int 		messX;		//Координата X положения текста	
 	private int       	messY;		//Координата Y положения текста
 	private	String    	text;		//Название регистра
-	
 }
 
 

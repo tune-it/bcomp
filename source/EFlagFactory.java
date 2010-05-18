@@ -11,6 +11,11 @@ public class EFlagFactory
 		
 		for (int i = 0; i < 13; i++)
 		{
+			flags[i] = new EFlag();
+		}
+		
+		for (int i = 0; i < 13; i++)
+		{
 			flags[i].ClearFlag();
 		}
 		RefreshStateCounter();

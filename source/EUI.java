@@ -1,6 +1,6 @@
 import java.awt.EventQueue;
-
 import javax.swing.JApplet;
+
 
 
 public class EUI extends JApplet
@@ -11,8 +11,12 @@ public class EUI extends JApplet
 		{
 		public void run()
 		{	 
-			EUIBasePC ololo = new EUIBasePC();	
-			add(ololo);
+
+			EUIBasePC BasePC = new EUIBasePC();	
+			EUIMicroPC MicroPC = new EUIMicroPC();
+			add(MicroPC);
+			
+			
 		}
 	});
 	}

@@ -14,6 +14,7 @@ class EMemory implements IRegister
 			memory[i] = new ERegister();
 		}
 	}
+	
 	public int SendData()
 	{
 		return memory[MakeAdress()].SendData();

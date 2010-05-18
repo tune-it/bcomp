@@ -18,8 +18,8 @@ public class ERegisterFactory
 		this.registers[7]  = new ERegister();
 		this.registers[8]  = new ERegister(13);
 		
-		this.registers[9]  = new ERegister();
-		this.registers[10] = new ERegister(8);
+		this.registers[9]  = new ERegister(8);
+		this.registers[10] = new ERegister();
 		
 		this.registers[11] = new ERegister();
 	}
