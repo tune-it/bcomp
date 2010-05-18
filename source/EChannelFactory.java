@@ -3,9 +3,9 @@
 -----------------------------------------------------------------------------*/
 public class EChannelFactory 
 {
-	public EChannelFactory(ERegisterFactory factory, EMemory memory)
+	public EChannelFactory(ERegisterFactory factory, EMemory memory, EMicrocommandMemory microcommand_memory)
 	{
-		this.channels = new EChannel[13];
+		this.channels = new EChannel[14];
 		
 		this.channels[0] = new EChannel(factory.RightALUInput(), factory.DataRegister());
 		this.channels[1] = new EChannel(factory.RightALUInput(), factory.CommandRegister());
@@ -23,6 +23,7 @@ public class EChannelFactory
 		
 		this.channels[11] = new EChannel(factory.DataRegister(), memory);
 		this.channels[12] = new EChannel(memory, factory.DataRegister());
+		this.channels[13] = new EChannel(factory.MicroCommandRegister(), microcommand_memory);
 	}
 	
 	public EChannel FromDR()
@@ -99,6 +100,11 @@ public class EChannelFactory
 		return channels[12];
 	}
 	
+	public EChannel MicroCommandToRMC()
+	{
+		return channels[13];
+	}
+	
 	/*-----------------------------------------------------------------------------
 	-----------------------------------------------------------------------------*/
 	
@@ -118,6 +124,8 @@ public class EChannelFactory
 	
 	// 11 - Память -> РД
 	// 12 - РД -> Память
+	
+	// 13 - Память МК -> РМК
 	
 	EChannel[] channels;
 }
