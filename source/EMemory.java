@@ -57,6 +57,11 @@ class EMemory implements IRegister, IMemory
 		return mem;
 	}
 	
+	public void SetValue(int bits, int adr)
+	{
+		memory[adr].GetData(bits);
+	}
+	
 	private int			memory_length;   // Длина памяти
 	private int			memory_width;    // Разрядность памяти
 	private ERegister[]	memory;          // Память

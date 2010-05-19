@@ -25,6 +25,8 @@ public class EManagerDevice
 	
 	public void TimeStep()
 	{
+		reg_factory.MicroInstructionPointer().GetData(reg_factory.MicroInstructionPointer().SendData()+1);
+		
 		channels.MicroCommandToRMC().Open();
 		int command = reg_factory.MicroCommandRegister().SendData();
 		if (CheckBit(command, 15))
