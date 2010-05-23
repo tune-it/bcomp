@@ -6,7 +6,7 @@ package Machine;
 -----------------------------------------------------------------------------*/
 public class EChannel implements IChannel 
 {
-	EChannel(IRegister destination, IRegister source)
+	public EChannel(IRegister destination, IRegister source)
 	{
 		this.destination = destination;
 		this.source = source;

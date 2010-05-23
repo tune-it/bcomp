@@ -3,14 +3,17 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.util.*;
+import Machine.*;
 
 /*-----------------------------------------------------------------------------
 					Отрисовка памяти
 -----------------------------------------------------------------------------*/
 
-public class EUIMemory implements IUIBaseObject
+public class EUIMemory implements ActionListener
 {
 	public EUIMemory (double x, double y, int width, int height, int messX, int messY, String text)
 	{
@@ -35,7 +38,7 @@ public class EUIMemory implements IUIBaseObject
 		this.text = text;
 	}
 	
-	public EUIMemory (EMemory mem, double x, double y, int width, int height, int messX, int messY, String text)
+	public EUIMemory (IMemory mem, double x, double y, int width, int height, int messX, int messY, String text)
 	{
 		memory = mem.GetMemory();
 		mem_width = mem.Width();
@@ -56,6 +59,11 @@ public class EUIMemory implements IUIBaseObject
 		page_size = 16;
 		
 		this.text = text;
+	}
+	
+	public void actionPerformed(ActionEvent event) 
+	{
+		
 	}
 	
 	public void Draw(Graphics g)						//Отрисовка названия и рамки
@@ -122,20 +130,21 @@ public class EUIMemory implements IUIBaseObject
 		this.banner_height = banner_height;
 	}
 
-	public void SetSeparator(int x)
+	public void SetSeparator(int x)						//Установка координаты Х линии-разделителя
 	{
 		separatorX =(int)leftX + x;
 	}
 	
-	public void SetMemory(int[] x)
+	public void SetMemory(int[] x)						//Загрузка содержимого
 	{
 		memory = x;
 	}
 	
-	public void SetAdressWidth(int x)
+	public void SetAdressWidth(int x)					//Установка разрядности адреса
 	{
 		mem_width = x;
 	}
+	
 	private String ConvertAdress(int adress)			//Преобразование адреса в строку
 	{
 		Formatter fmt = new Formatter();
@@ -183,4 +192,5 @@ public class EUIMemory implements IUIBaseObject
 	private String		text;			//Названия памяти
 	private int			separatorX;		//Координата X разделяющей линии
 	private int 		banner_height;	//Высота заголовка		
+
 }

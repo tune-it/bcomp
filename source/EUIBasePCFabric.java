@@ -1,13 +1,15 @@
+import Machine.*;
 
 public class EUIBasePCFabric 
 {
-	public EUIBasePCFabric(ERegisterFactory register_factory, EFlagFactory flag_factory)
+	public EUIBasePCFabric(ERegisterFactory register_factory, EFlagFactory flag_factory, EChannelFactory channel_factory)
 	{
 		regfact = register_factory;
 		flagfact = flag_factory;
+		channfact = channel_factory;
 	}
 	
-	public EUIRegister[] CreateClassicRegisters()
+	public EUIRegister[] CreateClassicRegisters() 					//Создание регистров для режима "Базовая ЭВМ"
 	{
 		EUIRegister RD = new EUIRegister(regfact.DataRegister(), 180, 85, 228, 103, "Регистр Данных");
 		
@@ -21,15 +23,45 @@ public class EUIBasePCFabric
 		
 		EUIRegister Acc = new EUIRegister(regfact.Accumulator(), 335, 378, 400, 396, "Аккумулятор");
 		
-		EUIRegister IC = new EUIRegister(flagfact.GetC(), 305, 378, 50, "C");
-		IC.SetWidth(30);
+		EUIRegister C = new EUIRegister(flagfact.GetC(), 305, 378, "C");
+		C.SetWidth(30);
 		
-		EUIRegister Registers[] = {RD, RK, RA, SK, Acc, IC};
+		EUIRegister Registers[] = {RD, RK, RA, SK, Acc, C};
 		
 		return Registers;
 	}
 	
-	public EUIRegister[] CreateMicroRegisters()
+	public EUIRegister[] CreateOutputRegisters()
+	{
+		EUIRegister RD = new EUIRegister(regfact.DataRegister(), 205, 70, 243, 88, "РД");
+		RD.SetDataPosition((int)(RD.GetX()+24), (int)(RD.GetY()+42));
+		RD.SetStyle(true);
+		
+		EUIRegister RA = new EUIRegister(regfact.AdressRegister(), 205, 140, 243, 158, "РА");
+		RA.SetDataPosition((int)(RA.GetX()+31), (int)(RA.GetY()+42));
+		RA.SetStyle(true);
+		
+		EUIRegister SK = new EUIRegister(regfact.InstructionPointer(), 205, 210, 243, 228, "СК");
+		SK.SetDataPosition((int)(SK.GetX()+31), (int)(SK.GetY()+42));
+		SK.SetStyle(true);
+		
+		EUIRegister RK = new EUIRegister(regfact.CommandRegister(), 205, 280, 243, 298, "РК");
+		RK.SetDataPosition((int)(RK.GetX()+24), (int)(RK.GetY()+42));
+		RK.SetStyle(true);
+		
+		EUIRegister Acc = new EUIRegister(regfact.Accumulator(), 205, 350, 236, 368, "Акк");
+		Acc.SetDataPosition((int)(Acc.GetX()+24), (int)(Acc.GetY()+42));
+		Acc.SetStyle(true);
+		
+		EUIRegister C = new EUIRegister(flagfact.GetC(), 175, 350, "C");
+		C.SetWidth(30);
+		
+		EUIRegister Registers[] = {RD, RA, SK, RK, Acc, C};
+		
+		return Registers;
+	}
+	
+	public EUIRegister[] CreateMicroRegisters()						//Создание регистров для режима "Работа с МК"
 	{
 		EUIRegister RD = new EUIRegister(regfact.DataRegister(), 165, 85, 203, 103, "РД");
 		RD.SetDataPosition((int)(RD.GetX()+24), (int)(RD.GetY()+42));
@@ -47,20 +79,20 @@ public class EUIBasePCFabric
 		SK.SetDataPosition((int)(SK.GetX()+31), (int)(SK.GetY()+42));
 		SK.SetStyle(true);
 		
-		EUIRegister Acc = new EUIRegister(regfact.Accumulator(), 250, 255, 281, 273, "Акк");
+		EUIRegister Acc = new EUIRegister(regfact.Accumulator(), 240, 255, 271, 273, "Акк");
 		Acc.SetDataPosition((int)(Acc.GetX()+24), (int)(Acc.GetY()+42));
 		Acc.SetStyle(true);
 		
-		EUIRegister BR = new EUIRegister(regfact.BufferRegister(), 250, 185, 288, 206, "БР");
+		EUIRegister BR = new EUIRegister(regfact.BufferRegister(), 240, 185, 278, 206, "БР");
 		BR.SetDataPosition((int)(BR.GetX()+18), (int)(BR.GetY()+42));
 		BR.SetStyle(true);
 		
-		EUIRegister SC = new EUIRegister(regfact.StateCounter(), 194, 338, 70, 200, 356, "Регистр Состояния");
+		EUIRegister SC = new EUIRegister(regfact.StateCounter(), 184, 338, 70, 190, 356, "Регистр Состояния");
 		SC.SetDataPosition((int)(SC.GetX()+24), (int)(SC.GetY()+42));
 		
 		EUIRegister MCR = new EUIRegister(regfact.MicroCommandRegister(), 430, 85, 449, 103, "Регистр Микрокоманд");
 		
-		EUIRegister MIP = new EUIRegister(regfact.MicroInstructionPointer(), 490, 358, 497, 376, "Счетчик МК");
+		EUIRegister MIP = new EUIRegister(regfact.MicroInstructionPointer(), 528, 358, 535, 376, "Счетчик МК");
 		MIP.SetWidth(135);
 		
 		EUIRegister Registers[] = {RD, RK, RA, SK, Acc, BR, SC, MCR, MIP};
@@ -68,98 +100,84 @@ public class EUIBasePCFabric
 		return Registers;		
 	}
 	
-	public EUIMemory CreateMemory()
+	public EUIMemory CreateСlassicMemory()							//??
 	{
-		EUIMemory Imem = new EUIMemory (1, 1, 150, 431, 33, 23, "Память");
+		EUIMemory memory = new EUIMemory (1, 1, 150, 431, 33, 23, "Память");
 		
-		return Imem;
+		return memory;
 	}
 	
-	public EUIMemory CreateMicroMemory()
+	public EUIMemory CreateMicroMemory()							//??
 	{
-		EUIMemory Imem = new EUIMemory (711, 1, 135, 431, 715, 23, "Память МК");
+		EMicrocommandMemory mmem = new EMicrocommandMemory(regfact);
+		EUIMemory memory = new EUIMemory (mmem, 711, 1, 135, 431, 715, 23, "Память МК");
 		
-		return Imem;
+		return memory;
 	}
 	
-	public EUIAlu CreateBinAlu()
-	{
-		EUIAlu Alu = new EUIAlu(180, 235, "АЛУ");
-		
-		return Alu;
+	public EUIAlu CreateClassicAlu()								//Создание АЛУ для режима "Базовая ЭВМ"
+	{		
+		return new EUIAlu(180, 235, "АЛУ");
 	}
 	
-	public EUIAlu CreateHexAlu()
-	{
-		EUIAlu Alu = new EUIAlu(185, 150, 273, 173, "АЛУ");
-		
-		return Alu;
+	public EUIAlu CreateMicroAlu()									//Создание АЛУ для режима "Работа с МК"
+	{		
+		return new EUIAlu(175, 150, 263, 173, "АЛУ");
 	}
 	
-	public EUIChannel[] CreateClassicChannels()							
-	{
-		ERegister MEM = new ERegister();
-		ERegister RA = new ERegister(12);
-		ERegister RD = new ERegister();
-		ERegister SK = new ERegister(12);
-		ERegister BR = new ERegister();
-		ERegister Acc = new ERegister();
-		ERegister RK = new ERegister();
-		
-		//Канал от Регистра Адреса к Памяти
-		EChannel RAtoMEM = new EChannel(RA, MEM);		
+	public EUIChannel[] CreateClassicChannels()						//Создание каналов для режима "Базовая ЭВМ"
+	{	
+		//Канал от Рестира Адреса к Памяти
 		int[][] mass1 = {{336, 45}, 
 			   			{160, 45}};	
-		EUIChannel IRAtoMEM = new EUIChannel(RAtoMEM, mass1);
+		EUIChannel RAtoMEM = new EUIChannel(channfact.AdressRegToMem(), mass1);
 		
 		//Канал от Регистра Данных к Памяти
-		EChannel RDtoMEM = new EChannel(RD, MEM);	
 		int[][] mass2 = {{220, 140}, 
 			   			{220, 150},
 			   			{220, 150},
 			   			{160, 150}};	
-		EUIChannel IRDtoMEM = new EUIChannel(RDtoMEM, mass2);
+		EUIChannel RDtoMEM = new EUIChannel(channfact.WriteToMem(), mass2);
 		
 		//Канал от Памяти в Регистр Данных
-		EChannel MEMtoRD = new EChannel(MEM, RD);
 		int[][] mass3 = {{156, 71},
 	   					{220, 71},
 	   					{220, 71}, 
 	   		   			{220, 81}};
-		EUIChannel IMEMtoRD = new EUIChannel(MEMtoRD, mass3);
-		IMEMtoRD.DisableArrow();
+		EUIChannel MEMtoRD = new EUIChannel(channfact.ReadFromMem(), mass3);
+		MEMtoRD.DisableArrow();
 		
-		//Канал из Регистра Данных в Счетчик Команд
-		EChannel RDtoSK = new EChannel(RD, SK);
-		int[][] mass4 = {{290, 140},
+		//Канал из Счетчика Команд в АЛУ
+		channfact.FromIP().Open();
+		int[][] mass4 = {{336, 177},
 	   					{290, 177},
 	   					{290, 177}, 
-	   		   			{336, 177}};
-		EUIChannel IRDtoSK = new EUIChannel(RDtoSK, mass4);
-		IRDtoSK.DisableArrow();
+	   		   			{290, 210},
+	   		   			{290, 210}, 
+	   		   			{380, 210},
+	   		   			{380, 210},
+	   		   			{380, 226}};
+		EUIChannel RDtoSK = new EUIChannel(channfact.FromIP(), mass4);
 		
 		//Канал из Регистра Данных в АЛУ
-		EChannel RDtoALU = new EChannel(RD, BR);
 		int[][] mass5 = {{290, 140},
 	   					{290, 210},
 	   					{290, 210}, 
 	   		   			{380, 210},
 	   		   			{380, 210},
 	   		   			{380, 226}};
-		EUIChannel IRDtoALU = new EUIChannel(RDtoALU, mass5);
+		EUIChannel RDtoALU = new EUIChannel(channfact.FromDR(), mass5);
 		
 		//Канал из АЛУ в Акк
-		EChannel ALUtoAcc = new EChannel(BR, Acc);
 		int[][] mass6 = {{295, 330},
 	   					{295, 353},
 	   					{295, 353}, 
 	   		   			{565, 353},
 	   		   			{565, 353},
 	   		   			{565, 369}};
-		EUIChannel IALUtoAcc = new EUIChannel(ALUtoAcc, mass6);
+		EUIChannel ALUtoAcc = new EUIChannel(channfact.ToAcc(), mass6);
 		
 		//Канал из АЛУ в Cчетчик Команд
-		EChannel ALUtoSK = new EChannel(BR, SK);
 		int[][] mass7 = {{295, 330},
 						{295, 353},
 						{295, 353}, 
@@ -168,10 +186,9 @@ public class EUIBasePCFabric
 	   		   			{565, 177},
 	   		   			{565, 177},
 	   		   			{536, 177}};
-		EUIChannel IALUtoSK = new EUIChannel(ALUtoSK, mass7);
-		
+		EUIChannel ALUtoSK = new EUIChannel(channfact.ToIP(), mass7);
+	
 		//Канал из АЛУ в Регистр Данных
-		EChannel ALUtoRD = new EChannel(BR, RD);
 		int[][] mass8 = {{295, 330},
 						{295, 353},
 						{295, 353}, 
@@ -180,10 +197,9 @@ public class EUIBasePCFabric
 	   		   			{565, 110},
 	   		   			{565, 110},
 	   		   			{455, 110}};
-		EUIChannel IALUtoRD = new EUIChannel(ALUtoRD, mass8);
+		EUIChannel ALUtoRD = new EUIChannel(channfact.ToDR(), mass8);
 		
 		//Канал из АЛУ в Регистр Адреса
-		EChannel ALUtoRA= new EChannel(BR, RA);
 		int[][] mass9 = {{295, 330},
 						{295, 353},
 						{295, 353}, 
@@ -192,10 +208,9 @@ public class EUIBasePCFabric
 	   		   			{565, 45},
 	   		   			{565, 45},
 	   		   			{536, 45}};
-		EUIChannel IALUtoRA = new EUIChannel(ALUtoRA, mass9);
+		EUIChannel ALUtoRA = new EUIChannel(channfact.ToAR(), mass9);
 		
 		//Канал из Акк в АЛУ
-		EChannel AcctoALU = new EChannel(Acc, BR);
 		int[][] mass10 = {{301, 403},
 	   					{165, 403},
 	   					{165, 403}, 
@@ -204,10 +219,9 @@ public class EUIBasePCFabric
 	   		   			{210, 210},
 	   		   			{210, 210},
 	   		   			{210, 226}};
-		EUIChannel IAcctoALU = new EUIChannel(AcctoALU, mass10);
+		EUIChannel AcctoALU = new EUIChannel(channfact.FromAcc(), mass10);
 		
 		//Канал из АЛУ в Регистр Команд
-		EChannel ALUtoRK= new EChannel(BR, RK);
 		int[][] mass11 = {{295, 330},
 						{295, 353},
 						{295, 353}, 
@@ -218,32 +232,54 @@ public class EUIBasePCFabric
 	   		   			{714, 78},
 	   		   			{714, 78},
 	   		   			{714, 101}};
-		EUIChannel IALUtoRK = new EUIChannel(ALUtoRK, mass11);
+		EUIChannel ALUtoRK = new EUIChannel(channfact.ToCR(), mass11);
 		
+		EUIChannel Channels[] = {RAtoMEM, RDtoMEM, MEMtoRD, RDtoSK, RDtoALU, ALUtoAcc, ALUtoSK, ALUtoRD, ALUtoRA, AcctoALU, ALUtoRK};
 		
-		EUIChannel Channels[] = {IRAtoMEM, IRDtoMEM, IMEMtoRD, IRDtoSK, IRDtoALU, IALUtoAcc, IALUtoSK, IALUtoRD, IALUtoRA, IAcctoALU, IALUtoRK};
 		return Channels;
 	}
 	
 	public EUIChannel[] CreateMicroChannels()
 	{
-		ERegister RMK = new ERegister();
-		ERegister DMK = new ERegister();
-		ERegister SMK = new ERegister(8);
-		ERegister MEM = new ERegister();
-
-		//Канал из Памяти МК в РМК
-		EChannel MEMtoRMK= new EChannel(MEM, RMK);
-		int[][] mass11 = {{711, 16},
-						{563, 16},
-						{563, 16}, 
-   		   				{563, 76}};
-		EUIChannel IMEMtoRMK = new EUIChannel(MEMtoRMK, mass11);
+		EChannel empty_channel = new EChannel(null, null);			
 		
-		EUIChannel[] channels = {IMEMtoRMK};
+		//Канал из Памяти МК в РМК
+		int[][] mass1 = {{711, 43},
+						{563, 43},
+						{563, 43}, 
+   		   				{563, 76}};
+		EUIChannel MEMtoMCR = new EUIChannel(channfact.MicroCommandToRMC(), mass1);
+		
+		//Канал из РМК в Дешифратор МК
+		int[][] mass2 =	{{563, 116}, 
+						{563, 176}};
+		EUIChannel MCRtoDEC = new EUIChannel(empty_channel, mass2);
+		
+		//Канал из Дешифратора МК в СМК
+		int[][] mass3 =	{{628, 216}, 
+						{628, 349}};
+		EUIChannel DECtoMIP = new EUIChannel(empty_channel, mass3);
+		
+		//Первый управляющий
+		int[][] mass4 =	{{502, 216}, 
+						{502, 280},
+						{502, 280},
+						{443, 280}};
+		EUIChannel fake_channel1 = new EUIChannel(empty_channel, mass4);
+		
+		//Последний управляющий
+		int[][] mass5 =	{{543, 216}, 
+						{543, 320},
+						{543, 320},
+						{443, 320}};
+		EUIChannel fake_channel2 = new EUIChannel(empty_channel, mass5);
+		
+		EUIChannel[] channels = {MEMtoMCR, MCRtoDEC, DECtoMIP, fake_channel1, fake_channel2};
+		
 		return channels;	
 	}
 	
 	private ERegisterFactory 	regfact;
 	private EFlagFactory 		flagfact;
+	private EChannelFactory		channfact;
 }

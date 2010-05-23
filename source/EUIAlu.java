@@ -33,10 +33,10 @@ public class EUIAlu
 		Graphics2D rs = (Graphics2D) g;
 		
 		//Массивы координат для отрисовки (рядом с кординатами левой верхней точки указаны смещения от нее)
-		int[] x = {leftX, leftX+60, leftX+90, leftX+140, leftX+170, leftX+230, leftX+180, leftX+50, leftX};
-		int[] y = {leftY, leftY, leftY+30, leftY+30, leftY, leftY, leftY+90, leftY+90, leftY};
+		int[] x = {leftX, leftX + 60, leftX + 90, leftX + 140, leftX + 170, leftX + 230, leftX + 180, leftX + 50, leftX};
+		int[] y = {leftY, leftY, leftY + 30, leftY + 30, leftY, leftY, leftY + 90, leftY + 90, leftY};
 		
-		rs.setPaint(new Color(187,249,166));
+		rs.setPaint(new Color(187, 249, 166));
 		rs.fillPolygon(x, y, 9);
 		rs.setStroke(new BasicStroke(1.0f));
 		rs.setPaint(Color.BLACK);

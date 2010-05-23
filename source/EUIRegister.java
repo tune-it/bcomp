@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Formatter;
+import Machine.*;
 
 /*-----------------------------------------------------------------------------
 				Отрисовка обычного регистра
@@ -127,17 +128,17 @@ public class EUIRegister
 		this.dataY = dataY;
 	}
 	
-	public int GetDataX()
+	public int GetDataX()									//Получение координаты Х положения текста
 	{
 		return dataX;
 	}
 	
-	public int GetdDataY()
+	public int GetdDataY()									//Получение координаты У положения текста
 	{
 		return dataY;
 	}
 	
-	public void SetStyle(boolean x)
+	public void SetStyle(boolean x)							//Установка вида содержимого (16ый/2ый true/false)
 	{
 		style = x;
 	}
@@ -146,30 +147,35 @@ public class EUIRegister
 	{
 		Graphics2D rs = (Graphics2D) g;
 		
-		if (style==false)
+		//Проверка вида содержмимого (2ый или 16ый) и отрисовка
+		if (style==false) //2ый вид
 		{
-			
-			Rectangle2D rect = new Rectangle2D.Double(leftX, leftY, widthBin, height);
+			//Отрисовка прямоугольника и контура
+			Rectangle2D rect = new Rectangle2D.Double(leftX, leftY, widthBin, height);	
 			rs.setPaint(new Color(187,249,166));
 			rs.fill(rect);
 			rs.setPaint(Color.BLACK);
 			rs.setStroke(new BasicStroke(1.0f));
 			rs.draw(rect);
 			
+			//Отрисовка Названия
 			rs.setFont(new Font("Courier New", Font.BOLD, 20));
 			rs.drawString(text, messX, messY);
-		
-			String str = ConvertToBin(reg);
+			
+			//Отрисовка фона для содержимого
 			rs.setPaint(new Color(231,236,119)); 
 			rs.fillRect((int)leftX+5, (int)leftY+24, (int)widthBin-10, 23);
+			
+			//Отрисовка содержимого
+			String str = ConvertToBin(reg);
 			rs.setPaint(Color.BLACK);
 			rs.setFont(new Font("Courier New", Font.BOLD, 21));
 			rs.drawString (str, dataX, dataY);
 		}
 		
-		if(style)
+		if(style) //16ый вид
 		{
-			
+			//Отрисовка прямоугольника и контура
 			Rectangle2D rect = new Rectangle2D.Double(leftX, leftY, widthHex, height);
 			rs.setPaint(new Color(187,249,166));
 			rs.fill(rect);
@@ -177,13 +183,16 @@ public class EUIRegister
 			rs.setStroke(new BasicStroke(1.0f));
 			rs.draw(rect);
 			
+			//Отрисовка Названия
 			rs.setFont(new Font("Courier New", Font.BOLD, 20));
 			rs.drawString(text, messX, messY);
 		
-			String str = ConvertToHex(reg);
+			//Отрисовка фона для содержимого
 			rs.setPaint(new Color(231,236,119));
 			rs.fillRect((int)leftX+5, (int)leftY+24, (int)widthHex-10, 23);
 			
+			//Отрисовка содержимого
+			String str = ConvertToHex(reg);
 			rs.setPaint(Color.BLACK);
 			rs.setFont(new Font("Courier New", Font.BOLD, 21));
 			rs.drawString (str, dataX, dataY);
@@ -209,16 +218,17 @@ public class EUIRegister
 		int x = str.length();	
 		if (str.length() < length)					//
 		{											//
-			for (int i = 0; i < length-x; i++) 		//Добавление значащих нулей в начало строки
+			for (int i = 0; i < length - x; i++) 	//Добавление значащих нулей в начало строки
 			str = "0" + str;						//
 		}											//
 		
 		if (str.length() > length)					//
 		{											//
-			for (int i = 0; i < x-length; i++)		//Удаление лишних нулей в начале строки
+			for (int i = 0; i < x - length; i++)	//Удаление лишних нулей в начале строки
 				str = str.substring(1);				//											
 		}											//
-			
+		
+		//Добавление пробелов между тетрадами для регистров различной разрядности	
 		if (length == 16)
 		{
 			str = str.substring(0,4) + " " + str.substring(4,8) + " " + str.substring(8,12) + " " + str.substring(12,16);
