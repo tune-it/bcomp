@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import Machine.*;
 import javax.swing.JComponent;
@@ -28,6 +30,18 @@ public class EUIMicroPC extends JComponent
 		EUIBasePCFabric ololo = new EUIBasePCFabric(regfact, flagfact, channfact);
 		EUIRegister[] regs =  ololo.CreateMicroRegisters();
 		EUIChannel[] channels = ololo.CreateMicroChannels();
+		
+		ERegister input = new ERegister();
+		final EUIInputRegister inputreg = new EUIInputRegister(input, 1, 460, 60, 33, 478, "Клавишный Регистр");
+		inputreg.Draw(g2);
+		inputreg.DrawPointer(g2);
+		addKeyListener(new KeyAdapter() {
+        public void keyReleased(KeyEvent e) 
+        {
+        	if (e.getKeyCode() == KeyEvent.VK_DOWN)
+            inputreg.SetPointerPosition(inputreg.GetPointerPosition()+1);
+        }
+	         });
 		
 		for (int i=0; i<channels.length; i++)
 		{
@@ -69,9 +83,7 @@ public class EUIMicroPC extends JComponent
 		mem.LoadMem(g2);
 		
 		EUIMemory micromem = ololo.CreateMicroMemory();
-		//int x1[] = {123, 3442, 32000, 125, 1, 23, 22345, 9564, 4321, 1234, 0, 11187, 2, 1415, 1354, 1863};
 		micromem.SetAdressWidth(8);
-		//micromem.SetMemory(x1);
 		micromem.SetSeparator(53);
 		micromem.Draw(g2);
 		micromem.LoadMem(g2);

@@ -133,7 +133,7 @@ public class EUIRegister
 		return dataX;
 	}
 	
-	public int GetdDataY()									//Получение координаты У положения текста
+	public int GetDataY()									//Получение координаты У положения текста
 	{
 		return dataY;
 	}
