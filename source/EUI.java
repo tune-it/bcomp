@@ -19,26 +19,20 @@ public class EUI extends JApplet
 		{	 
 			
 			EUIMicroPC MicroPC = new EUIMicroPC();
-			MicroPC.addKeyListener(new KeyAdapter() {
-		        public void keyReleased(KeyEvent e) 
-		        {
-		        	//if (e.getKeyCode() == KeyEvent.VK_DOWN)
-		            // inputreg.SetPointerPosition(inputreg.GetPointerPosition()+1);
-		        }
-			         });
-			
 			
 			EUIBasePC BasePC = new EUIBasePC();
 			EUIOutputPC OutputPC = new EUIOutputPC();
 			
-			JPanel finalpanel = new JPanel();
+			final JPanel finalpanel = new JPanel();
 			finalpanel.setLayout(null);
 			
-			JTabbedPane tabbedPane = new JTabbedPane();
+			
+			final JTabbedPane tabbedPane = new JTabbedPane();
 			tabbedPane.addTab("Базовая ЭВМ", BasePC);
 			tabbedPane.addTab("Ввод/Вывод", OutputPC);
 	        tabbedPane.addTab("Работа с МК", MicroPC);
 	        tabbedPane.setSize(852, 550);
+	        tabbedPane.setFocusable(true);
 	        finalpanel.add(tabbedPane);
 	        
 	        finalpanel.setBackground(Color.WHITE);
@@ -56,6 +50,15 @@ public class EUI extends JApplet
 	        
 	        MicroPC.setFocusable(true);
 	        add(finalpanel);
+	        
+	        	tabbedPane.addKeyListener(new KeyAdapter() {
+		        public void keyPressed(KeyEvent e) 
+		        {
+		        	if (e.getKeyCode() == KeyEvent.VK_DOWN)
+		             tabbedPane.setVisible(false);	
+		     
+		        }
+			         });	        
 
 		}
 	});

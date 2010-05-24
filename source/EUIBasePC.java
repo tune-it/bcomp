@@ -1,3 +1,5 @@
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import Machine.*;
@@ -12,7 +14,7 @@ public EUIBasePC ()
 }
 
 public void paintComponent(Graphics g) 
-{
+{	
 	Graphics2D g2 = (Graphics2D) g;
 	
 	ERegisterFactory regfact = new ERegisterFactory();
@@ -38,6 +40,12 @@ public void paintComponent(Graphics g)
 		chns[i].Draw(g2);
 	}
 	
+	g2.setColor(Color.GRAY);
+	g2.fillRect(713, 160, 40, 20);
+	int[] mass1 = {703, 733, 763};
+	int[] mass2 = {180, 210, 180};
+	g2.fillPolygon(mass1, mass2, 3);
+	
 	for (int i=0; i<regs.length; i++)
 	{
 		regs[i].Draw(g2);
@@ -51,5 +59,8 @@ public void paintComponent(Graphics g)
 	mem.SetMemory(x);
 	mem.Draw(g2);
 	mem.LoadMem(g2);
+	
+	EUIManagerDevice memdev = ololo.CreateManagerDevice();
+	memdev.Draw(g2);
 }
 }

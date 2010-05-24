@@ -35,13 +35,6 @@ public class EUIMicroPC extends JComponent
 		final EUIInputRegister inputreg = new EUIInputRegister(input, 1, 460, 60, 33, 478, "Клавишный Регистр");
 		inputreg.Draw(g2);
 		inputreg.DrawPointer(g2);
-		addKeyListener(new KeyAdapter() {
-        public void keyReleased(KeyEvent e) 
-        {
-        	if (e.getKeyCode() == KeyEvent.VK_DOWN)
-            inputreg.SetPointerPosition(inputreg.GetPointerPosition()+1);
-        }
-	         });
 		
 		for (int i=0; i<channels.length; i++)
 		{
@@ -73,7 +66,6 @@ public class EUIMicroPC extends JComponent
 		g2.drawString("...", 504, 250);
 		
 		g2.setStroke(new BasicStroke(4.0f));
-		g2.setColor(Color.BLACK);
 		g2.drawLine(423, 1, 423, 432);
 		
 		EUIMemory mem = ololo.CreateСlassicMemory();

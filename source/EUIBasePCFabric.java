@@ -100,6 +100,11 @@ public class EUIBasePCFabric
 		return Registers;		
 	}
 	
+	public EUIManagerDevice CreateManagerDevice()
+	{
+		return new EUIManagerDevice(flagfact, 620, 210);
+	}
+	
 	public EUIMemory CreateСlassicMemory()							//??
 	{
 		EUIMemory memory = new EUIMemory (1, 1, 150, 431, 33, 23, "Память");
