@@ -12,18 +12,24 @@ public class EMicrocommandMemory extends EMemory {
 		int[] programm = new int[256];
 		int i = 1;
 		
+		
+		// Цикл выборки команды
 		programm[i++]=0x0300;
 		programm[i++]=0x4001;
 		programm[i++]=0x0311;
 		programm[i++]=0x4004;
 		programm[i++]=0x0100;
 		programm[i++]=0x4003;
+			// Определение типа команды
 		programm[i++]=0xAF0C;
 		programm[i++]=0xAE0C;
 		programm[i++]=0xAD0C;
 		programm[i++]=0xEC5E;
-		programm[i++]=0x83BE;
+		programm[i++]=0x838E;
+			// Определение вида адресации
 		programm[i++]=0xAB1D;
+		
+		// Цикл выборки операнда
 		programm[i++]=0x0100;
 		programm[i++]=0x4001;
 		programm[i++]=0x0001;
@@ -40,6 +46,9 @@ public class EMicrocommandMemory extends EMemory {
 		programm[i++]=0x0002;
 		programm[i++]=0x0140;
 		programm[i++]=0x4002;
+		
+		// Цикл исполнения адресных команд
+			// Декодирование адресных команд
 		programm[i++]=0xEF2D;
 		programm[i++]=0x0100;
 		programm[i++]=0x4001;
@@ -64,6 +73,7 @@ public class EMicrocommandMemory extends EMemory {
 		programm[i++]=0x834E;
 		programm[i++]=0xAC46;
 		programm[i++]=0x834A;
+			// Исполнение адресных команд
 		programm[i++]=0x1120;
 		programm[i++]=0x4035;
 		programm[i++]=0x838F;
@@ -105,6 +115,9 @@ public class EMicrocommandMemory extends EMemory {
 		programm[i++]=0x0202;
 		programm[i++]=0x4004;
 		programm[i++]=0x838F;
+		
+		// Продолжение цикла выборки команды
+		// Декодирование и исполнение безадресных команд
 		programm[i++]=0xAB61;
 		programm[i++]=0xAA6C;
 		programm[i++]=0x83E0;
@@ -153,7 +166,11 @@ public class EMicrocommandMemory extends EMemory {
 		programm[i++]=0x8301;
 		programm[i++]=0x4400;
 		programm[i++]=0x8301;
+		
+		// Продолжение выборки команды
+		// Декодирование и исполнение команд ввода-вывода
 		programm[i++]=0x4100;
+			// Цикл прерывания
 		programm[i++]=0x8788;
 		programm[i++]=0x8501;
 		programm[i++]=0x0020;
@@ -164,14 +181,19 @@ public class EMicrocommandMemory extends EMemory {
 		programm[i++]=0x4004;
 		programm[i++]=0x4400;
 		programm[i++]=0x8301;
+		
+		// Пультовые операции
+			// Ввод адреса
 		programm[i++]=0x3000;
 		programm[i++]=0x4004;
 		programm[i++]=0x838F;
+			// Чтение
 		programm[i++]=0x0300;
 		programm[i++]=0x4001;
 		programm[i++]=0x0311;
 		programm[i++]=0x4004;
 		programm[i++]=0x838F;
+			// Запись
 		programm[i++]=0x0300;
 		programm[i++]=0x4001;
 		programm[i++]=0x3000;
@@ -179,6 +201,7 @@ public class EMicrocommandMemory extends EMemory {
 		programm[i++]=0x0312;
 		programm[i++]=0x4004;
 		programm[i++]=0x838F;
+			// Пуск
 		programm[i++]=0x0020;
 		programm[i++]=0x4077;
 		programm[i++]=0x4200;
