@@ -3,64 +3,59 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import Machine.*;
+
 import javax.swing.JComponent;
 
 
 public class EUIBasePC extends JComponent
 {
-public EUIBasePC ()
-{
-	
-}
-
-public void paintComponent(Graphics g) 
-{	
-	Graphics2D g2 = (Graphics2D) g;
-	
-	ERegisterFactory regfact = new ERegisterFactory();
-	EFlagFactory flagfact = new EFlagFactory(regfact);
-	EMemory Mem = new EMemory(regfact);
-	EMicrocommandMemory micromem = new EMicrocommandMemory(regfact);
-	EChannelFactory channfact = new EChannelFactory(regfact, Mem, micromem);
-	EUIBasePCFabric ololo = new EUIBasePCFabric(regfact, flagfact, channfact);
-	EUIRegister[] regs =  ololo.CreateClassicRegisters();
-	
-	regfact.Accumulator().GetData(436);
-	flagfact.GetC().SetFlag();
-	
-	EUIChannel[] chns =  ololo.CreateClassicChannels();
-	for (int i=0; i<chns.length; i++)
+	public EUIBasePC (EUIBasePCFactory factory)
 	{
-		if (chns[i].GetConnect() == false)
-		chns[i].Draw(g2);
-	}
-	for (int i=0; i<chns.length; i++)
-	{
-		if (chns[i].GetConnect())
-		chns[i].Draw(g2);
+		registers = factory.CreateClassicRegisters();
+		channels = factory.CreateClassicChannels();
+		memory = factory.CreateСlassicMemory();
+		manager_device = factory.CreateManagerDevice();
+		alu = factory.CreateClassicAlu();
 	}
 	
-	g2.setColor(Color.GRAY);
-	g2.fillRect(713, 160, 40, 20);
-	int[] mass1 = {703, 733, 763};
-	int[] mass2 = {180, 210, 180};
-	g2.fillPolygon(mass1, mass2, 3);
+	public void paintComponent(Graphics g) 
+	{	
+		Graphics2D g2 = (Graphics2D) g;
 	
-	for (int i=0; i<regs.length; i++)
-	{
-		regs[i].Draw(g2);
+		//Отрисовка каналов (сначала открытые)
+		for (int i=0; i<channels.length; i++)
+		{
+			if (channels[i].GetConnect() == false)
+				channels[i].Draw(g2);
+		}
+		for (int i=0; i<channels.length; i++)
+		{
+			if (channels[i].GetConnect())
+				channels[i].Draw(g2);
+		}
+		
+		//Отрисовка канала в устройство управления
+		g2.setColor(Color.GRAY);
+		g2.fillRect(713, 160, 40, 20);
+		int[] mass1 = {703, 733, 763};
+		int[] mass2 = {180, 210, 180};
+		g2.fillPolygon(mass1, mass2, 3);
+		
+		//Отрисовка регистров
+		for (int i=0; i<registers.length; i++)
+		{
+			registers[i].Draw(g2);
+		}
+		
+		alu.Draw(g2);				//Отрисовка АЛУ
+		memory.Draw(g2);			//Отрисовка Памяти
+		memory.LoadMem(g2);
+		manager_device.Draw(g2);	//Отрисовка Устройства Управления
 	}
 	
-	EUIAlu alu = ololo.CreateClassicAlu();
-	alu.Draw(g2);
-	
-	EUIMemory mem = ololo.CreateСlassicMemory();
-	int x[] = {32023, 1, 1234, 242, 1024, 65535, 1234, 6542, 1234, 5678, 1234, 3242, 18, 1234, 52425, 1234,1234, 5678, 1234, 3242, 1311, 1245, 1234, 9765, 1234, 5678, 1234, 3242, 1245, 1234, 9765, 1234};
-	mem.SetMemory(x);
-	mem.Draw(g2);
-	mem.LoadMem(g2);
-	
-	EUIManagerDevice memdev = ololo.CreateManagerDevice();
-	memdev.Draw(g2);
-}
+	private EUIRegister[]				registers;					//Массив регистров
+	private EUIChannel[] 				channels;					//Массив каналов
+	private	EUIMemory					memory;						//Память
+	private EUIManagerDevice			manager_device;				//Устройство Управления
+	private	EUIAlu						alu;						//АЛУ
 }

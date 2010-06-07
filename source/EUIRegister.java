@@ -254,7 +254,7 @@ public class EUIRegister
 		String str = fmt.toString();
 		
 		int y = str.length();
-		if (y < length / 4)										//
+		if (y <= length / 4 )									//
 		{														//
 			for (int i = 0; i < (double)length / 4 - y; i++) 	//Добавление значащих нулей в начало строки
 				str = "0" + str;								//

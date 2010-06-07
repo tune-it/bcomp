@@ -10,36 +10,31 @@ import Machine.ERegisterFactory;
 
 public class EUIOutputPC extends JComponent
 {
-	public EUIOutputPC ()
+	public EUIOutputPC (EUIBasePCFactory factory)
 	{
-		
+		registers = factory.CreateOutputRegisters();
+		memory = factory.CreateСlassicMemory();
 	}
 	
 	public void paintComponent(Graphics g) 
 	{
 		Graphics2D g2 = (Graphics2D) g;
-		
-		ERegisterFactory regfact = new ERegisterFactory();
-		EFlagFactory flagfact = new EFlagFactory(regfact);
-		EMemory Mem = new EMemory(regfact);
-		EMicrocommandMemory Micromem = new EMicrocommandMemory(regfact);
-		EChannelFactory channfact = new EChannelFactory(regfact, Mem, Micromem);
-		EUIBasePCFabric ololo = new EUIBasePCFabric(regfact, flagfact, channfact);
-		EUIRegister[] regs =  ololo.CreateOutputRegisters();
 	
-		for (int i=0; i<regs.length; i++)
+		//Отрисовка Регистров
+		for (int i=0; i<registers.length; i++)
 		{
-			regs[i].Draw(g2);
+			registers[i].Draw(g2);
 		}
 		
-		EUIMemory mem = ololo.CreateСlassicMemory();
-		int x[] = {32023, 1, 1234, 242, 1024, 65535, 1234, 6542, 1234, 5678, 1234, 3242, 18, 1234, 52425, 1234,1234, 5678, 1234, 3242, 1311, 1245, 1234, 9765, 1234, 5678, 1234, 3242, 1245, 1234, 9765, 1234};
-		mem.SetMemory(x);
-		mem.Draw(g2);
-		mem.LoadMem(g2);
+		memory.Draw(g2);			//Отрисовка Памяти
+		memory.LoadMem(g2);
 		
+		//Отрисовка заголовка
 		g2.setFont(new Font("Courier New", Font.BOLD, 25));
 		g2.drawString("Регистры", 197, 25);
 		g2.drawString("процессора", 183, 50);
 	}
-}
+	
+	private EUIRegister[]				registers;					//Массив регистров
+	private	EUIMemory					memory;						//Память
+	}

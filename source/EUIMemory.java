@@ -3,8 +3,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.util.*;
 import Machine.*;
@@ -13,35 +11,14 @@ import Machine.*;
 					Отрисовка памяти
 -----------------------------------------------------------------------------*/
 
-public class EUIMemory implements ActionListener
-{
-	public EUIMemory (double x, double y, int width, int height, int messX, int messY, String text)
-	{
-		memory = null;
-		mem_width = 12;
-		
-		leftX = x;
-		leftY = y;
-		
-		frame_width = width;
-		frame_height = height; 
-		
-		separatorX = (int)leftX+65;
-		banner_height = 30;
-		
-		this.messX = messX;
-		this.messY = messY;  
-		
-		page = 0;
-		page_size = 16;
-		
-		this.text = text;
-	}
-	
-	public EUIMemory (IMemory mem, double x, double y, int width, int height, int messX, int messY, String text)
+public class EUIMemory
+{	
+	public EUIMemory (IMemory mem, ERegister reg, int mem_width, double x, double y, int width, int height, int messX, int messY, String text)
 	{
 		memory = mem.GetMemory();
-		mem_width = mem.Width();
+		this.mem_width = mem_width;
+		
+		reg_data = reg.SendData(); 
 		
 		leftX = x;
 		leftY = y;
@@ -59,11 +36,6 @@ public class EUIMemory implements ActionListener
 		page_size = 16;
 		
 		this.text = text;
-	}
-	
-	public void actionPerformed(ActionEvent event) 
-	{
-		
 	}
 	
 	public void Draw(Graphics g)						//Отрисовка названия и рамки
@@ -96,8 +68,9 @@ public class EUIMemory implements ActionListener
 
 		rs.setFont(new Font("Courier New", Font.BOLD, 24));
 		
-		int a = 20; 		//Расстояние между строкой и рамкой заголовка 
-		int shift = 25;		//Расстояние между строками 
+		int a = 20; 					//Расстояние между строкой и рамкой заголовка 
+		int shift = 25;					//Расстояние между строками 
+		page = reg_data/page_size;		//Текущая страница
 		
 		String adress, data;
 		for (int i=0; i<page_size; i++)
@@ -152,9 +125,10 @@ public class EUIMemory implements ActionListener
 		String str = fmt.toString();
 		
 		int y = str.length();
+		
 		if (y < mem_width/4)
 		{
-			for (int i = 0; i < mem_width/4-y; i++) 
+			for (int i = 0; i <= mem_width/4-y-1; i++) 
 				str = "0" + str;
 		}
 		
@@ -171,14 +145,14 @@ public class EUIMemory implements ActionListener
 		int y = str.length();
 		if (y < width/4)
 		{
-			for (int i = 0; i < width/4-y; i++) 
+			for (int i = 0; i <= width/4-y-1; i++) 
 				str = "0" + str;
 		}
 		
 		return str.toUpperCase();
 	}
 
-	
+	private	int			reg_data;		//Содержимое регистра
 	private int 		mem_width;		//Разрядность адреса
 	private int			frame_width;	//Ширина рамки
 	private int			frame_height;	//Высота рамки
