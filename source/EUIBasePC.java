@@ -12,6 +12,7 @@ public class EUIBasePC extends JComponent
 	public EUIBasePC (EUIBasePCFactory factory)
 	{
 		registers = factory.CreateClassicRegisters();
+		input_register = factory.CreateInputRegister();
 		channels = factory.CreateClassicChannels();
 		memory = factory.CreateСlassicMemory();
 		manager_device = factory.CreateManagerDevice();
@@ -20,40 +21,66 @@ public class EUIBasePC extends JComponent
 	
 	public void paintComponent(Graphics g) 
 	{	
-		Graphics2D g2 = (Graphics2D) g;
+		Graphics2D rs = (Graphics2D) g;
 	
 		//Отрисовка каналов (сначала открытые)
 		for (int i=0; i<channels.length; i++)
 		{
 			if (channels[i].GetConnect() == false)
-				channels[i].Draw(g2);
+				channels[i].Draw(rs);
 		}
 		for (int i=0; i<channels.length; i++)
 		{
 			if (channels[i].GetConnect())
-				channels[i].Draw(g2);
+				channels[i].Draw(rs);
 		}
 		
 		//Отрисовка канала в устройство управления
-		g2.setColor(Color.GRAY);
-		g2.fillRect(713, 160, 40, 20);
-		int[] mass1 = {703, 733, 763};
-		int[] mass2 = {180, 210, 180};
-		g2.fillPolygon(mass1, mass2, 3);
+		rs.setColor(Color.GRAY);
+		rs.fillRect(713, 160, 40, 20);
+		int[] mass1 = {703, 733, 763};		//Координаты x
+		int[] mass2 = {180, 210, 180};		//Координаты у
+		rs.fillPolygon(mass1, mass2, 3);
 		
 		//Отрисовка регистров
 		for (int i=0; i<registers.length; i++)
 		{
-			registers[i].Draw(g2);
+			registers[i].Draw(rs);
 		}
 		
-		alu.Draw(g2);				//Отрисовка АЛУ
-		memory.Draw(g2);			//Отрисовка Памяти
-		memory.LoadMem(g2);
-		manager_device.Draw(g2);	//Отрисовка Устройства Управления
+		input_register.Draw(rs);
+		input_register.DrawPointer(rs);
+		
+		alu.Draw(rs);				//Отрисовка АЛУ
+		memory.Draw(rs);			//Отрисовка Памяти
+		manager_device.Draw(rs);	//Отрисовка Устройства Управления
+		
+		String str = "" + input_register.GetPointerPosition() + " " + input_register.GetContent() + " ";
+		rs.drawString(str, 300, 500);
+	}
+	
+	public void SetPointerPosition(int x)
+	{
+		input_register.SetPointerPosition(x);
+	}
+	
+	public int GetPointerPosition()
+	{
+		return input_register.GetPointerPosition();
+	}
+	
+	public void SetBit()
+	{
+		input_register.SetBit();
+	}
+	
+	public void SetBit(boolean bit)
+	{
+		input_register.SetBit(bit);
 	}
 	
 	private EUIRegister[]				registers;					//Массив регистров
+	private EUIInputRegister			input_register;				//Клавишный регистр
 	private EUIChannel[] 				channels;					//Массив каналов
 	private	EUIMemory					memory;						//Память
 	private EUIManagerDevice			manager_device;				//Устройство Управления

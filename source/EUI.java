@@ -23,7 +23,7 @@ public class EUI extends JApplet
 			final EMachine machine = new EMachine();
 			EUIBasePCFactory factory = new EUIBasePCFactory(machine);
 			
-			EUIBasePC BasePC = new EUIBasePC(factory);
+			final EUIBasePC BasePC = new EUIBasePC(factory);
 			EUIOutputPC OutputPC = new EUIOutputPC(factory);
 			final EUIMicroPC MicroPC = new EUIMicroPC(factory);
 			
@@ -35,27 +35,47 @@ public class EUI extends JApplet
 			tabbedPane.addTab("Ввод/Вывод", OutputPC);
 	        tabbedPane.addTab("Работа с МК", MicroPC);
 	        tabbedPane.setSize(852, 550);
+	        tabbedPane.setFocusable(false);
 	        finalpanel.add(tabbedPane);
-	        
+	        finalpanel.setFocusable(true);
+       
 	        finalpanel.setBackground(Color.WHITE);
 	        add(finalpanel);
 	        
-	        tabbedPane.addKeyListener(new KeyAdapter() {
-		        public void keyPressed(KeyEvent e) 
-		        {
-		        	if (e.getKeyCode() == KeyEvent.VK_DOWN)
-		        		{
-			        		machine.Start();
-			        		tabbedPane.repaint();
-		        		}
-		        	if (e.getKeyCode() == KeyEvent.VK_UP)
+	        finalpanel.addKeyListener(new KeyAdapter() {
+	        	public void keyPressed(KeyEvent e) 
+		        {     
+			        if (e.getKeyCode() == KeyEvent.VK_RIGHT)
 	        		{
-	        		machine.Continue();
-	        		tabbedPane.repaint();
+		        		BasePC.SetPointerPosition(BasePC.GetPointerPosition() + 1);
+		        		tabbedPane.repaint();
 	        		}
-
-		        		}
-			         });	        
+			       
+			        if (e.getKeyCode() == KeyEvent.VK_LEFT)
+	        		{
+		        		BasePC.SetPointerPosition(BasePC.GetPointerPosition() - 1);
+		        		tabbedPane.repaint();
+	        		}
+			        
+			        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN)
+	        		{
+		        		BasePC.SetBit();
+		        		tabbedPane.repaint();
+	        		}
+			        
+			        if (e.getKeyCode() == KeyEvent.VK_0)
+	        		{
+		        		BasePC.SetBit(false);
+		        		tabbedPane.repaint();
+	        		}
+			        
+			        if (e.getKeyCode() == KeyEvent.VK_1)
+	        		{
+		        		BasePC.SetBit(true);
+		        		tabbedPane.repaint();
+	        		}
+		        }
+			});	        
 
 		}
 	});

@@ -11,7 +11,7 @@ import Machine.*;
 public class EUIChannel
 {
 
-public EUIChannel (EChannel channel, int[][] points)
+	public EUIChannel (EChannel channel, int[][] points)
 	{
 		this.channel = channel;
 		this.points = points; 
@@ -32,7 +32,7 @@ public EUIChannel (EChannel channel, int[][] points)
 		}
 			
 		rs.setStroke(new BasicStroke(8.0f));
-		for (int j = 0; j<points.length; j+=2)
+		for (int j = 0; j < points.length; j += 2)
 		{
 			rs.drawLine(points[j][0], points[j][1], points[j+1][0], points[j+1][1]);
 		}

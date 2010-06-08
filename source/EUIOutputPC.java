@@ -27,7 +27,6 @@ public class EUIOutputPC extends JComponent
 		}
 		
 		memory.Draw(g2);			//Отрисовка Памяти
-		memory.LoadMem(g2);
 		
 		//Отрисовка заголовка
 		g2.setFont(new Font("Courier New", Font.BOLD, 25));

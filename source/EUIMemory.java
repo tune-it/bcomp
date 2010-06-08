@@ -26,7 +26,7 @@ public class EUIMemory
 		frame_width = width;
 		frame_height = height;
 		
-		separatorX = (int)leftX+65;
+		separatorX = (int)leftX + 65;
 		banner_height = 30;
 		
 		this.messX = messX;
@@ -44,42 +44,41 @@ public class EUIMemory
 		
 		Rectangle2D rect = new Rectangle2D.Double(leftX, leftY, frame_width, frame_height);
 		
+		//Отрисовка фона памяти
 		rs.setPaint(new Color(157, 189, 185));
 		rs.fill(rect);
 		
+		//Отрисовка колонки адресов
 		rs.setPaint(new Color(219, 249, 235));
 		rs.fillRect(separatorX, (int)leftY+banner_height, (int)leftX+frame_width-separatorX, frame_height-banner_height);
 		
+		//Отрисовка рамки
 		rs.setStroke(new BasicStroke(2.0f));
 		rs.setPaint(Color.BLACK);
 		rs.draw(rect);
 		
-		rs.drawLine(separatorX, (int)leftY+banner_height, separatorX, (int)leftY+frame_height);
-		rs.drawLine((int)leftX, (int)leftY+banner_height, (int)leftX+frame_width, (int)leftY+30);
+		rs.drawLine(separatorX, (int)leftY + banner_height, separatorX, (int)leftY + frame_height);			//Разделитель
+		rs.drawLine((int)leftX, (int)leftY + banner_height, (int)leftX + frame_width, (int)leftY + 30);		//Шапка
 		
+		//Заголовок
 		rs.setFont(new Font("Courier New", Font.BOLD, 23));
 		rs.drawString(text, messX, messY);
-	}
-	
-	public void LoadMem(Graphics g)						//Отрисовка адресов и содержимого
 
-	{
-		Graphics2D rs = (Graphics2D) g;
-
-		rs.setFont(new Font("Courier New", Font.BOLD, 24));
+		rs.setFont(new Font("Courier New", Font.BOLD, 25));		//Шрифт содержимого
 		
-		int a = 20; 					//Расстояние между строкой и рамкой заголовка 
-		int shift = 25;					//Расстояние между строками 
-		page = reg_data/page_size;		//Текущая страница
+		int a = 20; 						//Расстояние между строкой и рамкой заголовка 
+		int shift = 25;						//Расстояние между строками 
+		page = reg_data / page_size;		//Текущая страница
+		String adress, data;			
 		
-		String adress, data;
-		for (int i=0; i<page_size; i++)
+		//Форматирование и вывод адресов и содержимого
+		for (int i = 0; i < page_size; i++)
 		{
-			adress = "" + ConvertAdress(page*16+i);
-			data = "" + ConvertMemory(memory[page*16+i]);
-			rs.drawString(adress, (int)leftX+12, (int)leftY+banner_height+a);
-			rs.drawString(data, separatorX+12, (int)leftY+banner_height+a);
-			a+=shift;
+			adress = "" + ConvertAdress(page * 16 + i);
+			data = "" + ConvertMemory(memory[page * 16 + i]);
+			rs.drawString(adress, (int)leftX + 9, (int)leftY+ banner_height + a);
+			rs.drawString(data, separatorX + 12, (int)leftY+ banner_height + a);
+			a += shift;
 		}
 	}
 	
