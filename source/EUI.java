@@ -74,6 +74,18 @@ public class EUI extends JApplet
 		        		BasePC.SetBit(true);
 		        		tabbedPane.repaint();
 	        		}
+			        
+			        if (e.getKeyCode() == KeyEvent.VK_F4)
+			        {
+		        		machine.Adress();
+		        		tabbedPane.repaint();
+	        		}
+			        if (e.getKeyCode() == KeyEvent.VK_F8)
+			        {
+		        		machine.Continue();
+		        		tabbedPane.repaint();
+	        		}
+
 		        }
 			});	        
 

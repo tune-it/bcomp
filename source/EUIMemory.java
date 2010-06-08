@@ -57,8 +57,8 @@ public class EUIMemory
 		rs.setPaint(Color.BLACK);
 		rs.draw(rect);
 		
-		rs.drawLine(separatorX, (int)leftY + banner_height, separatorX, (int)leftY + frame_height);			//Разделитель
-		rs.drawLine((int)leftX, (int)leftY + banner_height, (int)leftX + frame_width, (int)leftY + 30);		//Шапка
+		rs.drawLine(separatorX, (int)leftY + banner_height, separatorX, (int)leftY + frame_height);						//Разделитель
+		rs.drawLine((int)leftX, (int)leftY + banner_height, (int)leftX + frame_width, (int)leftY + banner_height);		//Шапка
 		
 		//Заголовок
 		rs.setFont(new Font("Courier New", Font.BOLD, 23));
