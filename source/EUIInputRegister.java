@@ -2,6 +2,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import Machine.IRegister;
 
+/*-----------------------------------------------------------------------------
+		Отрисовка обычного регистра. Изменяет значение
+		клавишного регистра машинной части программы.
+-----------------------------------------------------------------------------*/
+
 public class EUIInputRegister extends EUIRegister
 {
 	public EUIInputRegister(IRegister reg, double x, double y, double height, int messX, int messY, String text)
@@ -10,9 +15,10 @@ public class EUIInputRegister extends EUIRegister
 			
 		register = reg;
 		pointer_position = 0;
+		movement = false;
 	}
 	
-	public void DrawPointer(Graphics g)
+	public void DrawPointer(Graphics g)				//Отрисовка указателя
 	{
 		Graphics2D rs = (Graphics2D) g;
 		
@@ -42,17 +48,22 @@ public class EUIInputRegister extends EUIRegister
 		rs.drawPolygon(mass1, mass2, 4);
 	}
 	
-	public int GetPointerPosition()			
+	public int GetPointerPosition()					//Получение позиции указателя
 	{
 		return pointer_position;
 	}
 	
-	public void SetPointerPosition(int x)
+	public void SetPointerPosition(int position)			//Установка позиции указателя
 	{
-		pointer_position = x;
+		pointer_position = position;
 	}
 	
-	public void SetBit()
+	public void SetMovement(boolean x)
+	{
+		movement = x;	
+	}
+	
+	public void SetBit()							//Инверсия бита
 	{
 		String content = super.GetContent();				//Содержимого регистра
 		int posit = GetPointerPosition();					//Позиция указателя
@@ -68,9 +79,12 @@ public class EUIInputRegister extends EUIRegister
 			content = content.substring(0, posit) + "0" + content.substring (posit + 1);
 	
 		register.GetData((int)ConvertToDec(content));
+		
+		if(movement)
+			SetPointerPosition(GetPointerPosition() + 1);
 	}
 	
-	public void SetBit(boolean bit)
+	public void SetBit(boolean bit)					//Установка бита
 	{
 		String content = super.GetContent();		//Содержимого регистра
 		int posit = GetPointerPosition();			//Позиция указателя
@@ -84,9 +98,12 @@ public class EUIInputRegister extends EUIRegister
 			content = content.substring(0, posit) + "0" + content.substring (posit + 1);
 		
 		register.GetData((int)ConvertToDec(content));
+		
+		if(movement)
+			SetPointerPosition(GetPointerPosition() + 1);
 	}
 	
-	private double ConvertToDec(String content)
+	private double ConvertToDec(String content)		//Преобразование в десятичную систему
 	{
 		double data = 0;
 		for (int i = 0; i < 16; i++ )
@@ -97,8 +114,8 @@ public class EUIInputRegister extends EUIRegister
 		
 		return data;
 	}
-	
-		
+			
 	private IRegister	register;				//Регистр
 	private int			pointer_position;		//Позиция указателя
+	private boolean		movement;				//Сдвигание указателя после изменения бита
 }

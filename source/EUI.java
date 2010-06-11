@@ -80,6 +80,19 @@ public class EUI extends JApplet
 		        		machine.Adress();
 		        		tabbedPane.repaint();
 	        		}
+			        
+			        if (e.getKeyCode() == KeyEvent.VK_F5)
+			        {
+		        		machine.Record();
+		        		tabbedPane.repaint();
+	        		}
+
+			        if (e.getKeyCode() == KeyEvent.VK_F7)
+			        {
+		        		machine.StopWork();
+		        		tabbedPane.repaint();
+	        		}
+			        
 			        if (e.getKeyCode() == KeyEvent.VK_F8)
 			        {
 		        		machine.Continue();

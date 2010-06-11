@@ -13,12 +13,12 @@ import Machine.*;
 
 public class EUIMemory
 {	
-	public EUIMemory (IMemory mem, ERegister reg, int mem_width, double x, double y, int width, int height, int messX, int messY, String text)
+	public EUIMemory (IMemory mem, IRegister reg, int mem_width, double x, double y, int width, int height, int messX, int messY, String text)
 	{
 		memory = mem.GetMemory();
 		this.mem_width = mem_width;
 		
-		reg_data = reg.SendData(); 
+		register = reg;
 		
 		leftX = x;
 		leftY = y;
@@ -66,9 +66,9 @@ public class EUIMemory
 
 		rs.setFont(new Font("Courier New", Font.BOLD, 25));		//Шрифт содержимого
 		
-		int a = 20; 						//Расстояние между строкой и рамкой заголовка 
-		int shift = 25;						//Расстояние между строками 
-		page = reg_data / page_size;		//Текущая страница
+		int a = 20; 								//Расстояние между строкой и рамкой заголовка 
+		int shift = 25;								//Расстояние между строками 
+		page = register.SendData() / page_size;		//Текущая страница
 		String adress, data;			
 		
 		//Форматирование и вывод адресов и содержимого
@@ -90,11 +90,6 @@ public class EUIMemory
 	public int GetPage()								//Получение номера текущей страницы
 	{
 		return page;
-	}
-	
-	public void SetPageSize(int page_size)				//Установка размера страницы
-	{
-		this.page_size = page_size;
 	}
 	
 	public void SetBannerHeight(int banner_height)		//Установка высоты заголовка
@@ -150,20 +145,20 @@ public class EUIMemory
 		
 		return str.toUpperCase();
 	}
-
-	private	int			reg_data;		//Содержимое регистра
-	private int 		mem_width;		//Разрядность адреса
-	private int			frame_width;	//Ширина рамки
-	private int			frame_height;	//Высота рамки
-	private int[]		memory;			//Содержимое ячеек
-	private double		leftX;			//Координата X левого верхнего угла рамки
-	private double		leftY;			//Координата Y левого верхнего угла рамки
-	private int			messX;			//Координата X заголовка
-	private int			messY;			//Координата Y заголовка
-	private int			page;			//Номер страницы памяти (по 16 ячеек)
-	private int			page_size;		//Количество ячеек на странице
-	private String		text;			//Названия памяти
-	private int			separatorX;		//Координата X разделяющей линии
-	private int 		banner_height;	//Высота заголовка		
+	
+	private IRegister		register;		//Регистр		
+	private int 			mem_width;		//Разрядность адреса
+	private int				frame_width;	//Ширина рамки
+	private int				frame_height;	//Высота рамки
+	private int[]			memory;			//Содержимое ячеек
+	private double			leftX;			//Координата X левого верхнего угла рамки
+	private double			leftY;			//Координата Y левого верхнего угла рамки
+	private int				messX;			//Координата X заголовка
+	private int				messY;			//Координата Y заголовка
+	private int				page;			//Номер страницы памяти (по 16 ячеек)
+	private final int		page_size;		//Количество ячеек на странице
+	private String			text;			//Названия памяти
+	private int				separatorX;		//Координата X разделяющей линии
+	private int 			banner_height;	//Высота заголовка		
 
 }
