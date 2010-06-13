@@ -130,18 +130,3 @@ class MachineRunnable implements Runnable
 	}
 	private EMachine machine;
 }
-
-
-
-
-
-<<<<<<< .mine
-
-
-
-=======
-
-
-
-
->>>>>>> .theirs
