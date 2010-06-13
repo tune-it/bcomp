@@ -40,10 +40,43 @@ public class EMachine {
 	{
 		man_dev.TimeStep();
 		ctrl.Repaint();
+		
+		if (ctrl.GetTact())
+		{
+			// Выполнение по тактам
+			
+			while (flags.GetStateOfTumbler().SendData() != 0)
+			do
+			{
+				man_dev.TimeStep();
+				ctrl.Repaint();
+			}
+			while (flags.GetStateOfTumbler().SendData() != 0);
+		}
+		else
+		{
+			// Выполнение по командам
+			
+			do
+			{
+				do
+				{
+					man_dev.TimeStep();
+					ctrl.Repaint();
+				}
+				while (reg_factory.MicroInstructionPointer().SendData() != 1);
+			}
+			while (flags.GetStateOfTumbler().SendData() != 0);
+		}
+			
+			
 		while (flags.GetStateOfTumbler().SendData() != 0)
 		{
 			man_dev.TimeStep();
-			ctrl.Repaint();
+			if ((reg_factory.MicroInstructionPointer().SendData() == 1) || ctrl.GetTact())
+			{
+				ctrl.Repaint();
+			}
 		}
 		
 	}

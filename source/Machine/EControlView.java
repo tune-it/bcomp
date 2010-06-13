@@ -7,6 +7,7 @@ public class EControlView
 	public EControlView(JTabbedPane p)
 	{
 		jtp = p;
+		tact = false;
 	}
 	
 	public void SetTact()

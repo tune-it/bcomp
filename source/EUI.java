@@ -2,8 +2,6 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ResourceBundle.Control;
-
 import javax.swing.JApplet;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -23,7 +21,6 @@ public class EUI extends JApplet
 			final JTabbedPane tabbedPane = new JTabbedPane();
 			
 			EControlView c = new EControlView(tabbedPane);
-			
 			final EMachine machine = new EMachine(c);
 			
 			EUIBasePCFactory factory = new EUIBasePCFactory(machine);
