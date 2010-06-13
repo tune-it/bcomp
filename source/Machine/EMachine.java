@@ -39,6 +39,10 @@ public class EMachine {
 	public void Continue()
 	{
 		man_dev.TimeStep();
+		while (flags.GetStateOfTumbler().SendData() != 0)
+		{
+			man_dev.TimeStep();	
+		}
 	}
 	
 	public void Adress()
