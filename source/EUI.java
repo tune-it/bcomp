@@ -6,7 +6,8 @@ import javax.swing.JApplet;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import Machine.*;
+import Machine.EControlView;
+import Machine.EMachine;
 
 public class EUI extends JApplet
 {	
@@ -21,6 +22,7 @@ public class EUI extends JApplet
 			final JTabbedPane tabbedPane = new JTabbedPane();
 			
 			EControlView c = new EControlView(tabbedPane);
+			c.SetTact();
 			final EMachine machine = new EMachine(c);
 			
 			EUIBasePCFactory factory = new EUIBasePCFactory(machine);
@@ -133,3 +135,13 @@ class MachineRunnable implements Runnable
 
 
 
+<<<<<<< .mine
+
+
+
+=======
+
+
+
+
+>>>>>>> .theirs
