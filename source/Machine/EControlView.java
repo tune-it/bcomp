@@ -32,6 +32,12 @@ public class EControlView
 		jtp.repaint();
 	}
 	
+	public int GetSleep()
+	{
+		return sleep;
+	}
+	
 	private JTabbedPane jtp;
 	private boolean tact;
+	private int sleep;
 }
