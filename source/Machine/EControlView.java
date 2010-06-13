@@ -53,7 +53,7 @@ public class EControlView
 		micro_com_work = true;
 	}
 	
-	public void GetMicroWork()
+	public void ClearMicroWork()
 	{
 		micro_com_work = false;
 	}
