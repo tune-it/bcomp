@@ -1,21 +1,18 @@
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.ButtonGroup;
+import java.util.ResourceBundle.Control;
+
 import javax.swing.JApplet;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 
-import Machine.EMachine;
-import Machine.ERegister;
+import Machine.*;
 
 public class EUI extends JApplet
 {	
 	//final EMachine machine = new EMachine();
-	
 	public void init ()
 	{
 		
@@ -23,7 +20,12 @@ public class EUI extends JApplet
 		{
 		public void run()
 		{	 
-			final EMachine machine = new EMachine();
+			final JTabbedPane tabbedPane = new JTabbedPane();
+			
+			EControlView c = new EControlView(tabbedPane);
+			
+			final EMachine machine = new EMachine(c);
+			
 			EUIBasePCFactory factory = new EUIBasePCFactory(machine);
 			
 			final EUIBasePC BasePC = new EUIBasePC(factory);
@@ -33,7 +35,9 @@ public class EUI extends JApplet
 			final JPanel finalpanel = new JPanel();
 			finalpanel.setLayout(null);
 			
-			final JTabbedPane tabbedPane = new JTabbedPane();
+			
+			
+			
 			tabbedPane.addTab("Базовая ЭВМ", BasePC);
 			tabbedPane.addTab("Ввод/Вывод", OutputPC);
 	        tabbedPane.addTab("Работа с МК", MicroPC);
@@ -45,8 +49,7 @@ public class EUI extends JApplet
 	        finalpanel.setBackground(Color.WHITE);
 	        add(finalpanel);
 	        
-	        Runnable r = new MachineRunnable(machine);
-	        final Thread t = new Thread(r);
+	        
 	        
 	        finalpanel.addKeyListener(new KeyAdapter() {
 	        	public void keyPressed(KeyEvent e) 
@@ -101,7 +104,8 @@ public class EUI extends JApplet
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_F8)
 			        {
-
+				        Runnable r = new MachineRunnable(machine);
+				        final Thread t = new Thread(r);
 			        	t.start();
 		        		tabbedPane.repaint();
 	        		}
@@ -121,8 +125,14 @@ class MachineRunnable implements Runnable
 		machine = m;
 	}
 	
-	public void run() {
+	public void run()
+	{
 		machine.Continue();
 	}
 	private EMachine machine;
 }
+
+
+
+
+

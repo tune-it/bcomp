@@ -4,8 +4,10 @@ package Machine;
 	Базовая ЭВМ (управление работой)
 -----------------------------------------------------------------------------*/
 public class EMachine {
-	public EMachine()
+	public EMachine(EControlView ctrl)
 	{
+		this.ctrl=ctrl;
+		
 		// Фабрика регистров
 		reg_factory = new ERegisterFactory();
 		
@@ -26,8 +28,6 @@ public class EMachine {
 		
 		// Устройство управления
 		man_dev = new EManagerDevice(reg_factory, channels, alu, flags);
-		
-		tact = false;
 	}
 	
 	public void Start()
@@ -39,10 +39,13 @@ public class EMachine {
 	public void Continue()
 	{
 		man_dev.TimeStep();
+		ctrl.Repaint();
 		while (flags.GetStateOfTumbler().SendData() != 0)
 		{
-			man_dev.TimeStep();	
+			man_dev.TimeStep();
+			ctrl.Repaint();
 		}
+		
 	}
 	
 	public void Adress()
@@ -113,5 +116,5 @@ public class EMachine {
 	private EALU				alu;
 	private EManagerDevice		man_dev;
 	
-	private boolean tact; 
+	private EControlView ctrl;
 }
