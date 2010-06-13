@@ -8,10 +8,11 @@ import java.util.Formatter;
 import Machine.*;
 
 /*-----------------------------------------------------------------------------
-				Отрисовка обычного регистра
+				Отрисовка обычного регистра. По умолчанию
+				отображает содержимое в двоичном виде.
 -----------------------------------------------------------------------------*/
 
-public class EUIRegister 
+public class EUIRegister
 {
 	public EUIRegister(IRegister reg, double x, double y, String text)
 	{
@@ -155,8 +156,7 @@ public class EUIRegister
 	
 	public String GetContent()								//Получение содержимого регистра
 	{
-		String str = content.substring(0,4) + content.substring(5,9) + content.substring(10,14) + content.substring (15);
-		return str;
+		return content.substring(0,4) + content.substring(5,9) + content.substring(10,14) + content.substring (15);
 	}
 
 	public void Draw(Graphics g)							//Отрисовка регистра

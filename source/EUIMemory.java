@@ -38,19 +38,19 @@ public class EUIMemory
 		this.text = text;
 	}
 	
-	public void Draw(Graphics g)						//Отрисовка названия и рамки
+	public void Draw(Graphics g)						//Отрисовка
 	{
 		Graphics2D rs = (Graphics2D) g;
 		
 		Rectangle2D rect = new Rectangle2D.Double(leftX, leftY, frame_width, frame_height);
 		
 		//Отрисовка фона памяти
-		rs.setPaint(new Color(157, 189, 185));
+		rs.setPaint(new Color(157, 189, 165));
 		rs.fill(rect);
 		
-		//Отрисовка колонки адресов
+		//Отрисовка фона колонки содержимого ячеек
 		rs.setPaint(new Color(219, 249, 235));
-		rs.fillRect(separatorX, (int)leftY+banner_height, (int)leftX+frame_width-separatorX, frame_height-banner_height);
+		rs.fillRect(separatorX, (int)leftY + banner_height, (int)leftX + frame_width - separatorX, frame_height - banner_height);
 		
 		//Отрисовка рамки
 		rs.setStroke(new BasicStroke(2.0f));
@@ -66,7 +66,7 @@ public class EUIMemory
 
 		rs.setFont(new Font("Courier New", Font.BOLD, 25));		//Шрифт содержимого
 		
-		int a = 20; 								//Расстояние между строкой и рамкой заголовка 
+		int a = 21; 								//Расстояние между строкой и рамкой заголовка 
 		int shift = 25;								//Расстояние между строками 
 		page = register.SendData() / page_size;		//Текущая страница
 		String adress, data;			
@@ -74,8 +74,8 @@ public class EUIMemory
 		//Форматирование и вывод адресов и содержимого
 		for (int i = 0; i < page_size; i++)
 		{
-			adress = "" + ConvertAdress(page * 16 + i);
-			data = "" + ConvertMemory(memory[page * 16 + i]);
+			adress = "" + Convert(page * 16 + i, mem_width);
+			data = "" + Convert(memory[page * 16 + i], page_size);
 			rs.drawString(adress, (int)leftX + 9, (int)leftY+ banner_height + a);
 			rs.drawString(data, separatorX + 12, (int)leftY+ banner_height + a);
 			a += shift;
@@ -112,7 +112,7 @@ public class EUIMemory
 		mem_width = x;
 	}
 	
-	private String ConvertAdress(int adress)			//Преобразование адреса в строку
+	private String Convert(int adress, int width)		//Преобразование адреса/cодержимого в строку
 	{
 		Formatter fmt = new Formatter();
 		fmt.format("%x", adress);
@@ -120,23 +120,6 @@ public class EUIMemory
 		
 		int y = str.length();
 		
-		if (y < mem_width/4)
-		{
-			for (int i = 0; i <= mem_width/4-y-1; i++) 
-				str = "0" + str;
-		}
-		
-		return str.toUpperCase();
-	}
-	
-	private String ConvertMemory(int content)			//Преобразование памяти в строку
-	{
-		int width = page_size;	
-		Formatter fmt = new Formatter();
-		fmt.format("%x", content);
-		String str = fmt.toString();
-		
-		int y = str.length();
 		if (y < width/4)
 		{
 			for (int i = 0; i <= width/4-y-1; i++) 

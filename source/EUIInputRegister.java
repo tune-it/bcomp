@@ -15,7 +15,7 @@ public class EUIInputRegister extends EUIRegister
 			
 		register = reg;
 		pointer_position = 0;
-		movement = false;
+		movement = true;
 	}
 	
 	public void DrawPointer(Graphics g)				//Отрисовка указателя
@@ -72,9 +72,7 @@ public class EUIInputRegister extends EUIRegister
 		
 		//Изменение бита на который показывает указатель
 		if (bit.equals("0"))
-			{
 			content = content.substring(0, posit) + "1" + content.substring (posit + 1);
-			}
 		else
 			content = content.substring(0, posit) + "0" + content.substring (posit + 1);
 	
@@ -91,9 +89,7 @@ public class EUIInputRegister extends EUIRegister
 		
 		//Изменение бита на который показывает указатель
 		if (bit)
-			{
 			content = content.substring(0, posit) + "1" + content.substring (posit + 1);
-			}
 		else
 			content = content.substring(0, posit) + "0" + content.substring (posit + 1);
 		

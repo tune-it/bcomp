@@ -23,19 +23,13 @@ public class EUIChannel
 		Graphics2D rs = (Graphics2D) g;
 		
 		if (channel.GetConnect())
-		{
 			rs.setPaint(Color.RED);
-		}
 		else
-		{
 			rs.setPaint(Color.GRAY);
-		}
 			
 		rs.setStroke(new BasicStroke(8.0f));
 		for (int j = 0; j < points.length; j += 2)
-		{
 			rs.drawLine(points[j][0], points[j][1], points[j+1][0], points[j+1][1]);
-		}
 	
 		if (arrow)			
 		{	

@@ -1,8 +1,6 @@
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import Machine.*;
 
 import javax.swing.JComponent;
 
@@ -44,9 +42,7 @@ public class EUIBasePC extends JComponent
 		
 		//Отрисовка регистров
 		for (int i=0; i<registers.length; i++)
-		{
 			registers[i].Draw(rs);
-		}
 		
 		input_register.Draw(rs);
 		input_register.DrawPointer(rs);
