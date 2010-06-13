@@ -8,7 +8,8 @@ import java.util.*;
 import Machine.*;
 
 /*-----------------------------------------------------------------------------
-					Отрисовка памяти
+				Отрисовка памяти. Соединяется с машинным регистром
+				для динамического пролистывания страниц
 -----------------------------------------------------------------------------*/
 
 public class EUIMemory
@@ -70,12 +71,11 @@ public class EUIMemory
 		int shift = 25;								//Расстояние между строками 
 		page = register.SendData() / page_size;		//Текущая страница
 		String adress, data;			
+		int mem[] = memory.GetMemory();				//Содержимое ячеек
 		
-		int mem[];
 		//Форматирование и вывод адресов и содержимого
 		for (int i = 0; i < page_size; i++)
 		{	
-			mem = memory.GetMemory();
 			adress = "" + Convert(page * 16 + i, mem_width);
 			data = "" + Convert(mem[page * 16 + i], page_size);
 			rs.drawString(adress, (int)leftX + 9, (int)leftY+ banner_height + a);
@@ -127,10 +127,10 @@ public class EUIMemory
 	}
 	
 	private IRegister		register;		//Регистр		
+	private IMemory			memory;			//Память ячеек
 	private int 			mem_width;		//Разрядность адреса
 	private int				frame_width;	//Ширина рамки
 	private int				frame_height;	//Высота рамки
-	private IMemory			memory;			//Содержимое ячеек
 	private double			leftX;			//Координата X левого верхнего угла рамки
 	private double			leftY;			//Координата Y левого верхнего угла рамки
 	private int				messX;			//Координата X заголовка

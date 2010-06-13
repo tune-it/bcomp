@@ -10,30 +10,34 @@ import Machine.ERegisterFactory;
 
 public class EUIOutputPC extends JComponent
 {
-	public EUIOutputPC (EUIBasePCFactory factory)
+	public EUIOutputPC (EUIBasePCFactory factory, EUIInputRegister input_register)
 	{
 		registers = factory.CreateOutputRegisters();
+		this.input_register = input_register;		
 		memory = factory.CreateСlassicMemory();
 	}
 	
 	public void paintComponent(Graphics g) 
 	{
-		Graphics2D g2 = (Graphics2D) g;
+		Graphics2D rs = (Graphics2D) g;
 	
 		//Отрисовка Регистров
 		for (int i=0; i<registers.length; i++)
-		{
-			registers[i].Draw(g2);
-		}
+			registers[i].Draw(rs);
 		
-		memory.Draw(g2);			//Отрисовка Памяти
+		memory.Draw(rs);			//Отрисовка Памяти
+		
+		//Отрисовка клавишного регистра
+		input_register.Draw(rs);
+		input_register.DrawPointer(rs);
 		
 		//Отрисовка заголовка
-		g2.setFont(new Font("Courier New", Font.BOLD, 25));
-		g2.drawString("Регистры", 197, 25);
-		g2.drawString("процессора", 183, 50);
+		rs.setFont(new Font("Courier New", Font.BOLD, 25));
+		rs.drawString("Регистры", 197, 25);
+		rs.drawString("процессора", 183, 50);
 	}
 	
 	private EUIRegister[]				registers;					//Массив регистров
+	private EUIInputRegister			input_register;				//Клавишный регистр
 	private	EUIMemory					memory;						//Память
 	}

@@ -1,16 +1,19 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
 import javax.swing.JComponent;
 
+/*-----------------------------------------------------------------------------
+				Компонент "Базовая ЭВМ". Вызывает методы отрисовки
+							необходимых элементов.
+-----------------------------------------------------------------------------*/	
 
 public class EUIBasePC extends JComponent
 {
-	public EUIBasePC (EUIBasePCFactory factory)
+	public EUIBasePC (EUIBasePCFactory factory, EUIInputRegister input_register)
 	{
 		registers = factory.CreateClassicRegisters();
-		input_register = factory.CreateInputRegister();
+		this.input_register = input_register;
 		channels = factory.CreateClassicChannels();
 		memory = factory.CreateСlassicMemory();
 		manager_device = factory.CreateManagerDevice();
@@ -23,15 +26,11 @@ public class EUIBasePC extends JComponent
 	
 		//Отрисовка каналов (сначала открытые)
 		for (int i=0; i<channels.length; i++)
-		{
 			if (channels[i].GetConnect() == false)
 				channels[i].Draw(rs);
-		}
 		for (int i=0; i<channels.length; i++)
-		{
 			if (channels[i].GetConnect())
 				channels[i].Draw(rs);
-		}
 		
 		//Отрисовка канала в устройство управления
 		rs.setColor(Color.GRAY);
@@ -44,36 +43,16 @@ public class EUIBasePC extends JComponent
 		for (int i=0; i<registers.length; i++)
 			registers[i].Draw(rs);
 		
+		//Отрисовка клавишного регистра
 		input_register.Draw(rs);
 		input_register.DrawPointer(rs);
 		
 		alu.Draw(rs);				//Отрисовка АЛУ
 		memory.Draw(rs);			//Отрисовка Памяти
 		manager_device.Draw(rs);	//Отрисовка Устройства Управления
-		
-		String str = "" + input_register.GetPointerPosition() + " " + input_register.GetContent() + " ";
-		rs.drawString(str, 300, 500);
 	}
 	
-	public void SetPointerPosition(int x)
-	{
-		input_register.SetPointerPosition(x);
-	}
 	
-	public int GetPointerPosition()
-	{
-		return input_register.GetPointerPosition();
-	}
-	
-	public void SetBit()
-	{
-		input_register.SetBit();
-	}
-	
-	public void SetBit(boolean bit)
-	{
-		input_register.SetBit(bit);
-	}
 	
 	private EUIRegister[]				registers;					//Массив регистров
 	private EUIInputRegister			input_register;				//Клавишный регистр

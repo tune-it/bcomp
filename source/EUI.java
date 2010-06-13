@@ -5,16 +5,13 @@ import java.awt.event.KeyEvent;
 import javax.swing.JApplet;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-
 import Machine.EControlView;
 import Machine.EMachine;
 
 public class EUI extends JApplet
 {	
-	//final EMachine machine = new EMachine();
 	public void init ()
 	{
-		
 		EventQueue.invokeLater(new Runnable()
 		{
 		public void run()
@@ -26,11 +23,11 @@ public class EUI extends JApplet
 			final EMachine machine = new EMachine(c);
 			
 			EUIBasePCFactory factory = new EUIBasePCFactory(machine);
+			input_register = new EUIInputRegister(machine.GetRegFac().InputRegister(), 1, 460, 60, 32, 478, "Клавишный Регистр");
 			
-			final EUIBasePC BasePC = new EUIBasePC(factory);
-			EUIOutputPC OutputPC = new EUIOutputPC(factory);
-			final EUIMicroPC MicroPC = new EUIMicroPC(factory);
-			
+			final EUIBasePC BasePC = new EUIBasePC(factory, input_register);
+			final EUIOutputPC OutputPC = new EUIOutputPC(factory,  input_register);
+			final EUIMicroPC MicroPC = new EUIMicroPC(factory,  input_register);
 			final JPanel finalpanel = new JPanel();
 			finalpanel.setLayout(null);
 			
@@ -55,30 +52,32 @@ public class EUI extends JApplet
 		        {     
 			        if (e.getKeyCode() == KeyEvent.VK_RIGHT)
 	        		{
-		        		BasePC.SetPointerPosition(BasePC.GetPointerPosition() + 1);
+			        	input_register.SetPointerPosition(input_register.GetPointerPosition() + 1);
 		        		tabbedPane.repaint();
 	        		}
 			       
 			        if (e.getKeyCode() == KeyEvent.VK_LEFT)
 	        		{
-		        		BasePC.SetPointerPosition(BasePC.GetPointerPosition() - 1);
+			        	input_register.SetPointerPosition(input_register.GetPointerPosition() - 1);
 		        		tabbedPane.repaint();
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN)
 	        		{
-		        		BasePC.SetBit();
+			        	input_register.SetBit();
 		        		tabbedPane.repaint();
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_0)
 	        		{
-		        		BasePC.SetBit(false);
+			        	input_register.SetBit(false);
+		        		tabbedPane.repaint();
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_1)
 	        		{
-		        		BasePC.SetBit(true);
+			        	input_register.SetBit(true);
+		        		tabbedPane.repaint();
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_F4)
@@ -109,13 +108,15 @@ public class EUI extends JApplet
 		}
 	});
 	}
+	
+	EUIInputRegister input_register;
 }
 
 class MachineRunnable implements Runnable
 {
-	public MachineRunnable(EMachine m)
+	public MachineRunnable(EMachine machine)
 	{
-		machine = m;
+		this.machine = machine;
 	}
 	
 	public void run()

@@ -6,12 +6,17 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JComponent;
 
+/*-----------------------------------------------------------------------------
+				Компонент "Работа с МПУ". Вызывает методы отрисовки
+							необходимых элементов.
+-----------------------------------------------------------------------------*/	
 
 public class EUIMicroPC extends JComponent
 {
-	public EUIMicroPC (EUIBasePCFactory factory)
+	public EUIMicroPC (EUIBasePCFactory factory, EUIInputRegister input_register)
 	{
 		registers = factory.CreateMicroRegisters();
+		this.input_register = input_register;
 		channels = factory.CreateMicroChannels();
 		memory = factory.CreateСlassicMemory();
 		micro_memory = factory.CreateMicroMemory();
@@ -24,27 +29,27 @@ public class EUIMicroPC extends JComponent
 		
 		//Отрисовка каналов (сначала открытые)
 		for (int i=0; i<channels.length; i++)
-		{
 			if (channels[i].GetConnect() == false)
 				channels[i].Draw(rs);
-		}
 		for (int i=0; i<channels.length; i++)
-		{
 			if (channels[i].GetConnect())
 				channels[i].Draw(rs);
-		}
 		
 		alu.Draw(rs);				//Отрисовка Алу
 		memory.Draw(rs);			//Отрисовка Памяти
+		
+		//Отрисовка Памяти МК
 		micro_memory.SetSeparator(50);
-		micro_memory.Draw(rs);		//Отрисовка Памяти МК
+		micro_memory.Draw(rs);		
 		
 		//Отрисовка регистров
 		for (int i=0; i<registers.length; i++)
-		{
 			registers[i].Draw(rs);
-		}
-	
+		
+		//Отрисовка клавишного регистра
+		input_register.Draw(rs);
+		input_register.DrawPointer(rs);
+		
 		//Отрисовка названий флагов в регистре состояния
 		rs.setFont(new Font("Courier New", Font.BOLD, 21));
 		rs.drawString("UXAKPWFIEONZC", 207, 403);
@@ -69,10 +74,10 @@ public class EUIMicroPC extends JComponent
 		//Отрисовка разделительной линии
 		rs.setStroke(new BasicStroke(4.0f));
 		rs.drawLine(423, 1, 423, 432);
-		
 	}
 	
 	private EUIRegister[]				registers;					//Массив регистров
+	private EUIInputRegister			input_register;				//Клавишный регистр
 	private EUIChannel[] 				channels;					//Массив каналов
 	private	EUIMemory					memory;						//Память
 	private EUIMemory					micro_memory;				//Память МК

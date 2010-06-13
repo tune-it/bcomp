@@ -68,7 +68,7 @@ public class EUIBasePCFactory
 		return Registers;
 	}
 	
-	public EUIRegister[] CreateMicroRegisters()						//Создание регистров для режима "Работа с МК"
+	public EUIRegister[] CreateMicroRegisters()						//Создание регистров для режима "Работа с МПУ"
 	{
 		EUIRegister RD = new EUIRegister(regfact.DataRegister(), 165, 85, 203, 103, "РД");
 		RD.SetDataPosition((int)(RD.GetX()+24), (int)(RD.GetY()+42));
@@ -107,11 +107,6 @@ public class EUIBasePCFactory
 		return Registers;		
 	}
 	
-	public EUIInputRegister CreateInputRegister()					//Клавишный регистр
-	{
-		return new EUIInputRegister(regfact.InputRegister(), 1, 460, 60, 32, 478, "Клавишный Регистр");
-	}
-	
 	public EUIManagerDevice CreateManagerDevice()					//Создание устройства управления
 	{
 		return new EUIManagerDevice(flagfact, 620, 210);
@@ -132,7 +127,7 @@ public class EUIBasePCFactory
 		return new EUIAlu(180, 235, "АЛУ");
 	}
 	
-	public EUIAlu CreateMicroAlu()									//Создание АЛУ для режима "Работа с МК"
+	public EUIAlu CreateMicroAlu()									//Создание АЛУ для режима "Работа с МПУ"
 	{		
 		return new EUIAlu(175, 150, 263, 173, "АЛУ");
 	}

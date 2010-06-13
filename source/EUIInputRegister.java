@@ -15,7 +15,7 @@ public class EUIInputRegister extends EUIRegister
 			
 		register = reg;
 		pointer_position = 0;
-		movement = true;
+		movement = false;
 	}
 	
 	public void DrawPointer(Graphics g)				//Отрисовка указателя
@@ -79,7 +79,7 @@ public class EUIInputRegister extends EUIRegister
 		register.GetData((int)ConvertToDec(content));
 		
 		if(movement)
-			SetPointerPosition(GetPointerPosition() + 1);
+			pointer_position ++;
 	}
 	
 	public void SetBit(boolean bit)					//Установка бита
@@ -96,7 +96,7 @@ public class EUIInputRegister extends EUIRegister
 		register.GetData((int)ConvertToDec(content));
 		
 		if(movement)
-			SetPointerPosition(GetPointerPosition() + 1);
+			pointer_position ++;
 	}
 	
 	private double ConvertToDec(String content)		//Преобразование в десятичную систему
