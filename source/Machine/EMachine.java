@@ -42,7 +42,6 @@ public class EMachine {
 		{
 			// Выполнение по тактам
 			
-			while (flags.GetStateOfTumbler().SendData() != 0)
 			do
 			{
 				man_dev.TimeStep();
@@ -89,6 +88,8 @@ public class EMachine {
 			flags.GetStateOfTumbler().GetData(0);
 		}
 		flags.RefreshStateCounter();
+		
+		ctrl.Repaint();
 	}
 	
 	public ERegisterFactory GetRegFac()
