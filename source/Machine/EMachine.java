@@ -38,9 +38,6 @@ public class EMachine {
 	
 	public void Continue()
 	{
-		man_dev.TimeStep();
-		ctrl.Repaint();
-		
 		if (ctrl.GetTact())
 		{
 			// Выполнение по тактам
@@ -56,7 +53,6 @@ public class EMachine {
 		else
 		{
 			// Выполнение по командам
-			
 			do
 			{
 				do
@@ -67,18 +63,7 @@ public class EMachine {
 				while (reg_factory.MicroInstructionPointer().SendData() != 1);
 			}
 			while (flags.GetStateOfTumbler().SendData() != 0);
-		}
-			
-			
-		while (flags.GetStateOfTumbler().SendData() != 0)
-		{
-			man_dev.TimeStep();
-			if ((reg_factory.MicroInstructionPointer().SendData() == 1) || ctrl.GetTact())
-			{
-				ctrl.Repaint();
-			}
-		}
-		
+		}		
 	}
 	
 	public void Adress()
