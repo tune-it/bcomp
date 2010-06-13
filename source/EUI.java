@@ -62,43 +62,36 @@ public class EUI extends JApplet
 			        if (e.getKeyCode() == KeyEvent.VK_LEFT)
 	        		{
 		        		BasePC.SetPointerPosition(BasePC.GetPointerPosition() - 1);
-		        		tabbedPane.repaint();
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN)
 	        		{
 		        		BasePC.SetBit();
-		        		tabbedPane.repaint();
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_0)
 	        		{
 		        		BasePC.SetBit(false);
-		        		tabbedPane.repaint();
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_1)
 	        		{
 		        		BasePC.SetBit(true);
-		        		tabbedPane.repaint();
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_F4)
 			        {
 		        		machine.Adress();
-		        		tabbedPane.repaint();
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_F5)
 			        {
 		        		machine.Record();
-		        		tabbedPane.repaint();
 	        		}
 
 			        if (e.getKeyCode() == KeyEvent.VK_F7)
 			        {
 		        		machine.StopWork();
-		        		tabbedPane.repaint();
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_F8)
@@ -106,7 +99,6 @@ public class EUI extends JApplet
 				        Runnable r = new MachineRunnable(machine);
 				        final Thread t = new Thread(r);
 			        	t.start();
-		        		tabbedPane.repaint();
 	        		}
 
 		        }
