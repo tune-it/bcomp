@@ -62,11 +62,13 @@ public class EUI extends JApplet
 			        if (e.getKeyCode() == KeyEvent.VK_LEFT)
 	        		{
 		        		BasePC.SetPointerPosition(BasePC.GetPointerPosition() - 1);
+		        		tabbedPane.repaint();
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN)
 	        		{
 		        		BasePC.SetBit();
+		        		tabbedPane.repaint();
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_0)

@@ -15,7 +15,7 @@ public class EUIMemory
 {	
 	public EUIMemory (IMemory mem, IRegister reg, int mem_width, double x, double y, int width, int height, int messX, int messY, String text)
 	{
-		memory = mem.GetMemory();
+		memory = mem;
 		this.mem_width = mem_width;
 		
 		register = reg;
@@ -71,11 +71,13 @@ public class EUIMemory
 		page = register.SendData() / page_size;		//Текущая страница
 		String adress, data;			
 		
+		int mem[];
 		//Форматирование и вывод адресов и содержимого
 		for (int i = 0; i < page_size; i++)
-		{
+		{	
+			mem = memory.GetMemory();
 			adress = "" + Convert(page * 16 + i, mem_width);
-			data = "" + Convert(memory[page * 16 + i], page_size);
+			data = "" + Convert(mem[page * 16 + i], page_size);
 			rs.drawString(adress, (int)leftX + 9, (int)leftY+ banner_height + a);
 			rs.drawString(data, separatorX + 12, (int)leftY+ banner_height + a);
 			a += shift;
@@ -100,11 +102,6 @@ public class EUIMemory
 	public void SetSeparator(int x)						//Установка координаты Х линии-разделителя
 	{
 		separatorX =(int)leftX + x;
-	}
-	
-	public void SetMemory(int[] x)						//Загрузка содержимого
-	{
-		memory = x;
 	}
 	
 	public void SetAdressWidth(int x)					//Установка разрядности адреса
@@ -133,7 +130,7 @@ public class EUIMemory
 	private int 			mem_width;		//Разрядность адреса
 	private int				frame_width;	//Ширина рамки
 	private int				frame_height;	//Высота рамки
-	private int[]			memory;			//Содержимое ячеек
+	private IMemory			memory;			//Содержимое ячеек
 	private double			leftX;			//Координата X левого верхнего угла рамки
 	private double			leftY;			//Координата Y левого верхнего угла рамки
 	private int				messX;			//Координата X заголовка
