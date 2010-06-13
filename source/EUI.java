@@ -14,8 +14,11 @@ import Machine.ERegister;
 
 public class EUI extends JApplet
 {	
+	//final EMachine machine = new EMachine();
+	
 	public void init ()
 	{
+		
 		EventQueue.invokeLater(new Runnable()
 		{
 		public void run()
@@ -41,6 +44,9 @@ public class EUI extends JApplet
        
 	        finalpanel.setBackground(Color.WHITE);
 	        add(finalpanel);
+	        
+	        Runnable r = new MachineRunnable(machine);
+	        final Thread t = new Thread(r);
 	        
 	        finalpanel.addKeyListener(new KeyAdapter() {
 	        	public void keyPressed(KeyEvent e) 
@@ -95,7 +101,8 @@ public class EUI extends JApplet
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_F8)
 			        {
-		        		machine.Continue();
+
+			        	t.start();
 		        		tabbedPane.repaint();
 	        		}
 
@@ -105,4 +112,17 @@ public class EUI extends JApplet
 		}
 	});
 	}
+}
+
+class MachineRunnable implements Runnable
+{
+	public MachineRunnable(EMachine m)
+	{
+		machine = m;
+	}
+	
+	public void run() {
+		machine.Continue();
+	}
+	private EMachine machine;
 }
