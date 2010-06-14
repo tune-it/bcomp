@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 
 /*-----------------------------------------------------------------------------
@@ -10,20 +11,25 @@ import javax.swing.JComponent;
 
 public class EUIBasePC extends JComponent
 {
-	public EUIBasePC (EUIBasePCFactory factory, EUIInputRegister input_register)
+	public EUIBasePC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check)
 	{
 		registers = factory.CreateClassicRegisters();
-		this.input_register = input_register;
 		channels = factory.CreateClassicChannels();
 		memory = factory.CreateСlassicMemory();
 		manager_device = factory.CreateManagerDevice();
 		alu = factory.CreateClassicAlu();
+		
+		this.input_register = input_register;
+		this.movement_check = movement_check;
 	}
 	
 	public void paintComponent(Graphics g) 
 	{	
 		Graphics2D rs = (Graphics2D) g;
-	
+		
+		//Создания чекбокса
+		add(movement_check);
+		
 		//Отрисовка каналов (сначала открытые)
 		for (int i=0; i<channels.length; i++)
 			if (channels[i].GetConnect() == false)
@@ -50,6 +56,7 @@ public class EUIBasePC extends JComponent
 		alu.Draw(rs);				//Отрисовка АЛУ
 		memory.Draw(rs);			//Отрисовка Памяти
 		manager_device.Draw(rs);	//Отрисовка Устройства Управления
+		
 	}
 	
 	
@@ -60,4 +67,6 @@ public class EUIBasePC extends JComponent
 	private	EUIMemory					memory;						//Память
 	private EUIManagerDevice			manager_device;				//Устройство Управления
 	private	EUIAlu						alu;						//АЛУ
+	private JCheckBox					movement_check;				//Чекбокс установки сдвига указателя
+
 }

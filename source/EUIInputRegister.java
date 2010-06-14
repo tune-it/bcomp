@@ -63,6 +63,11 @@ public class EUIInputRegister extends EUIRegister
 		movement = x;	
 	}
 	
+	public boolean GetMovement()
+	{
+		return movement;
+	}
+	
 	public void SetBit()							//Инверсия бита
 	{
 		String content = super.GetContent();				//Содержимого регистра

@@ -4,6 +4,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 
 /*-----------------------------------------------------------------------------
@@ -13,19 +15,25 @@ import javax.swing.JComponent;
 
 public class EUIMicroPC extends JComponent
 {
-	public EUIMicroPC (EUIBasePCFactory factory, EUIInputRegister input_register)
+	public EUIMicroPC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check)
 	{
 		registers = factory.CreateMicroRegisters();
-		this.input_register = input_register;
 		channels = factory.CreateMicroChannels();
 		memory = factory.CreateСlassicMemory();
 		micro_memory = factory.CreateMicroMemory();
 		alu = factory.CreateMicroAlu();
+		
+		this.input_register = input_register;
+		this.movement_check = movement_check;
+		
 	}
 
 	public void paintComponent(Graphics g) 
 	{
 		Graphics2D rs = (Graphics2D) g;
+		
+		//Создания чекбокса проверки сдвига
+		add(movement_check);
 		
 		//Отрисовка каналов (сначала открытые)
 		for (int i=0; i<channels.length; i++)
@@ -82,4 +90,5 @@ public class EUIMicroPC extends JComponent
 	private	EUIMemory					memory;						//Память
 	private EUIMemory					micro_memory;				//Память МК
 	private	EUIAlu						alu;						//АЛУ
+	private JCheckBox					movement_check;				//Чекбокс установки сдвига указателя
 }

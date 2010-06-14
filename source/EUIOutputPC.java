@@ -1,26 +1,32 @@
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import Machine.EChannelFactory;
-import Machine.EFlagFactory;
-import Machine.EMemory;
-import Machine.EMicrocommandMemory;
-import Machine.ERegisterFactory;
+
+/*-----------------------------------------------------------------------------
+			Компонент "Работа с ВУ". Вызывает методы отрисовки
+						необходимых элементов.
+-----------------------------------------------------------------------------*/	
 
 public class EUIOutputPC extends JComponent
 {
-	public EUIOutputPC (EUIBasePCFactory factory, EUIInputRegister input_register)
+	public EUIOutputPC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check)
 	{
 		registers = factory.CreateOutputRegisters();
-		this.input_register = input_register;		
 		memory = factory.CreateСlassicMemory();
+		
+		this.input_register = input_register;
+		this.movement_check = movement_check;
 	}
 	
 	public void paintComponent(Graphics g) 
 	{
 		Graphics2D rs = (Graphics2D) g;
-	
+			
+		//Создания чекбокса
+		add(movement_check);
+		
 		//Отрисовка Регистров
 		for (int i=0; i<registers.length; i++)
 			registers[i].Draw(rs);
@@ -40,4 +46,6 @@ public class EUIOutputPC extends JComponent
 	private EUIRegister[]				registers;					//Массив регистров
 	private EUIInputRegister			input_register;				//Клавишный регистр
 	private	EUIMemory					memory;						//Память
+	private JCheckBox					movement_check;				//Чекбокс установки сдвига указателя
+
 	}

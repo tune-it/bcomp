@@ -38,7 +38,7 @@ public class EUIBasePCFactory
 		return Registers;
 	}
 	
-	public EUIRegister[] CreateOutputRegisters()					//Создание регистров для режима "Ввод/вывод"
+	public EUIRegister[] CreateOutputRegisters()					//Создание регистров для режима "Работа с ВУ"
 	{
 		EUIRegister RD = new EUIRegister(regfact.DataRegister(), 205, 70, 243, 88, "РД");
 		RD.SetDataPosition((int)(RD.GetX()+24), (int)(RD.GetY()+42));
@@ -245,7 +245,7 @@ public class EUIBasePCFactory
 		return Channels;
 	}
 	
-	public EUIChannel[] CreateMicroChannels()						//Создание каналов для режима "Работа с МК"
+	public EUIChannel[] CreateMicroChannels()						//Создание каналов для режима "Работа с МПУ"
 	{
 		EChannel empty_channel = new EChannel(null, null);			
 		
