@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JCheckBox;
@@ -11,7 +12,7 @@ import javax.swing.JComponent;
 
 public class EUIBasePC extends JComponent
 {
-	public EUIBasePC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check)
+	public EUIBasePC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check, JCheckBox tact)
 	{
 		registers = factory.CreateClassicRegisters();
 		channels = factory.CreateClassicChannels();
@@ -21,6 +22,7 @@ public class EUIBasePC extends JComponent
 		
 		this.input_register = input_register;
 		this.movement_check = movement_check;
+		this.tact = tact;
 	}
 	
 	public void paintComponent(Graphics g) 
@@ -50,12 +52,26 @@ public class EUIBasePC extends JComponent
 		input_register.Draw(rs);
 		input_register.DrawPointer(rs);
 		
+		//Отрисовка номера бита
+		rs.setFont(new Font("Courier New", Font.BOLD, 32));
+		rs.setPaint(new Color(231,236,119)); 
+		rs.fillRect(274, 465, 48, 50);
+		rs.setColor(Color.BLACK);
+		rs.drawRect(274, 465, 48, 50);
+		if(15 - input_register.GetPointerPosition() >= 10)
+			rs.drawString("" + (15 - input_register.GetPointerPosition()), 278, 500);
+		else
+			rs.drawString("" + (15 - input_register.GetPointerPosition()), 287, 500);
+
 		alu.Draw(rs);				//Отрисовка АЛУ
 		memory.Draw(rs);			//Отрисовка Памяти
 		manager_device.Draw(rs);	//Отрисовка Устройства Управления
 		
-		//Создания чекбокса проверки сдвига
-		add(movement_check);
+		//Добавление чекбоксов и рамок
+		add(movement_check);		//Проверка сдвига
+		add(tact);					//"Такт"
+		rs.drawRect(1, 436, 301, 20);
+		rs.drawRect(329, 465, 101, 50);
 		
 	}
 	
@@ -68,5 +84,5 @@ public class EUIBasePC extends JComponent
 	private EUIManagerDevice			manager_device;				//Устройство Управления
 	private	EUIAlu						alu;						//АЛУ
 	private JCheckBox					movement_check;				//Чекбокс установки сдвига указателя
-
+	private JCheckBox					tact;						//Чекбокс режима "Такт"
 }

@@ -15,7 +15,7 @@ import javax.swing.JComponent;
 
 public class EUIMicroPC extends JComponent
 {
-	public EUIMicroPC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check)
+	public EUIMicroPC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check, JCheckBox tact)
 	{
 		registers = factory.CreateMicroRegisters();
 		channels = factory.CreateMicroChannels();
@@ -25,6 +25,7 @@ public class EUIMicroPC extends JComponent
 		
 		this.input_register = input_register;
 		this.movement_check = movement_check;
+		this.tact = tact;
 		
 	}
 
@@ -55,8 +56,22 @@ public class EUIMicroPC extends JComponent
 		input_register.Draw(rs);
 		input_register.DrawPointer(rs);
 		
-		//Создания чекбокса проверки сдвига
-		add(movement_check);
+		//Добавление чекбоксов и рамок
+		add(movement_check);		//Проверка сдвига
+		add(tact);					//"Такт"
+		rs.drawRect(1, 436, 301, 20);
+		rs.drawRect(329, 465, 101, 50);
+		
+		//Отрисовка номера бита
+		rs.setFont(new Font("Courier New", Font.BOLD, 32));
+		rs.setPaint(new Color(231,236,119)); 
+		rs.fillRect(274, 465, 48, 50);
+		rs.setColor(Color.BLACK);
+		rs.drawRect(274, 465, 48, 50);
+		if(15 - input_register.GetPointerPosition() >= 10)
+			rs.drawString("" + (15 - input_register.GetPointerPosition()), 278, 500);
+		else
+			rs.drawString("" + (15 - input_register.GetPointerPosition()), 287, 500);
 		
 		//Отрисовка названий флагов в регистре состояния
 		rs.setFont(new Font("Courier New", Font.BOLD, 21));
@@ -91,4 +106,5 @@ public class EUIMicroPC extends JComponent
 	private EUIMemory					micro_memory;				//Память МК
 	private	EUIAlu						alu;						//АЛУ
 	private JCheckBox					movement_check;				//Чекбокс установки сдвига указателя
+	private JCheckBox					tact;						//Чекбокс для режима "Такт"
 }

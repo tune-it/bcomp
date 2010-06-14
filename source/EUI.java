@@ -1,12 +1,11 @@
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.PopupMenu;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JApplet;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -21,16 +20,30 @@ public class EUI extends JApplet
 		{
 		public void run()
 		{	 
-			final JTabbedPane tabbedPane = new JTabbedPane();
-			
-			EControlView control = new EControlView(tabbedPane);
-			control.SetTact();
+			final JTabbedPane tabbedPane = new JTabbedPane();		
+			control = new EControlView(tabbedPane);
 			final EMachine machine = new EMachine(control);
 			
 			EUIBasePCFactory factory = new EUIBasePCFactory(machine);
 			input_register = new EUIInputRegister(machine.GetRegFac().InputRegister(), 1, 460, 60, 32, 478, "Клавишный Регистр");
 			
-			//Слушатель нажатия для чекбокса
+			//Создания чекбокса проверки сдвига
+			JCheckBox movement_check = new JCheckBox("Сдвиг указателя при установке бита");
+			movement_check.setBackground(new Color(231,236,119));
+			movement_check.setBounds(2, 437, 300, 19);
+			movement_check.setFocusable(false);
+			movement_check.setForeground(Color.BLACK);
+			movement_check.setFont(new Font("Courier New", Font.PLAIN, 13));
+			
+			//Создания чекбокса "Такт"
+			JCheckBox tact = new JCheckBox("Такт");
+			tact.setBackground(new Color(231,236,119));
+			tact.setBounds(330, 466, 100, 49);
+			tact.setFocusable(false);
+			tact.setForeground(Color.BLACK);
+			tact.setFont(new Font("Courier New", Font.PLAIN, 30));
+			
+			//Слушатель нажатия для чекбокса проверки сдвига
 			ActionListener movement_listener = new ActionListener()
 			{
 				public void actionPerformed(ActionEvent event)
@@ -41,18 +54,24 @@ public class EUI extends JApplet
 						input_register.SetMovement(true);
 				}
 			};
-			
-			//Создания чекбокса
-			JCheckBox check_box = new JCheckBox("Сдвиг указателя при установке бита");
-			check_box.setBackground(new Color(231,236,119));
-			check_box.setBounds(1, 437, 240, 19);
-			check_box.setFocusable(false);
-			check_box.addActionListener(movement_listener);
-			
-			
-			final EUIBasePC BasePC = new EUIBasePC(factory, input_register, check_box);
-			final EUIOutputPC OutputPC = new EUIOutputPC(factory,  input_register, check_box);
-			final EUIMicroPC MicroPC = new EUIMicroPC(factory,  input_register, check_box);
+			movement_check.addActionListener(movement_listener);
+
+			//Слушатель нажатия для чекбокса "Такт"
+			ActionListener tact_listener = new ActionListener()
+			{
+				public void actionPerformed(ActionEvent event)
+				{	
+					if(control.GetTact())
+						control.ClearTact();
+					else
+						control.SetTact();
+				}
+			};
+			tact.addActionListener(tact_listener);
+
+			final EUIBasePC BasePC = new EUIBasePC(factory, input_register, movement_check, tact);
+			final EUIOutputPC OutputPC = new EUIOutputPC(factory,  input_register, movement_check, tact);
+			final EUIMicroPC MicroPC = new EUIMicroPC(factory,  input_register, movement_check, tact);
 			final JPanel finalpanel = new JPanel();
 			finalpanel.setLayout(null);
 			
@@ -131,6 +150,7 @@ public class EUI extends JApplet
 	});
 	}
 	
+	private	EControlView 			control;
 	private EUIInputRegister 		input_register;
 }
 
