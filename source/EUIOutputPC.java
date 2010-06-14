@@ -23,9 +23,6 @@ public class EUIOutputPC extends JComponent
 	public void paintComponent(Graphics g) 
 	{
 		Graphics2D rs = (Graphics2D) g;
-			
-		//Создания чекбокса
-		add(movement_check);
 		
 		//Отрисовка Регистров
 		for (int i=0; i<registers.length; i++)
@@ -36,6 +33,9 @@ public class EUIOutputPC extends JComponent
 		//Отрисовка клавишного регистра
 		input_register.Draw(rs);
 		input_register.DrawPointer(rs);
+		
+		//Создания чекбокса проверки сдвига
+		add(movement_check);
 		
 		//Отрисовка заголовка
 		rs.setFont(new Font("Courier New", Font.BOLD, 25));

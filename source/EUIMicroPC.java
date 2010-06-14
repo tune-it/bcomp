@@ -32,9 +32,6 @@ public class EUIMicroPC extends JComponent
 	{
 		Graphics2D rs = (Graphics2D) g;
 		
-		//Создания чекбокса проверки сдвига
-		add(movement_check);
-		
 		//Отрисовка каналов (сначала открытые)
 		for (int i=0; i<channels.length; i++)
 			if (channels[i].GetConnect() == false)
@@ -57,6 +54,9 @@ public class EUIMicroPC extends JComponent
 		//Отрисовка клавишного регистра
 		input_register.Draw(rs);
 		input_register.DrawPointer(rs);
+		
+		//Создания чекбокса проверки сдвига
+		add(movement_check);
 		
 		//Отрисовка названий флагов в регистре состояния
 		rs.setFont(new Font("Courier New", Font.BOLD, 21));

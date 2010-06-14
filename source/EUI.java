@@ -56,10 +56,6 @@ public class EUI extends JApplet
 			final JPanel finalpanel = new JPanel();
 			finalpanel.setLayout(null);
 			
-
-			tabbedPane.add(new PopupMenu());
-			
-			
 			tabbedPane.addTab("Базовая ЭВМ", BasePC);
 			tabbedPane.addTab("Работа с ВУ", OutputPC);
 	        tabbedPane.addTab("Работа с МПУ", MicroPC);

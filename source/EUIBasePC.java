@@ -27,9 +27,6 @@ public class EUIBasePC extends JComponent
 	{	
 		Graphics2D rs = (Graphics2D) g;
 		
-		//Создания чекбокса
-		add(movement_check);
-		
 		//Отрисовка каналов (сначала открытые)
 		for (int i=0; i<channels.length; i++)
 			if (channels[i].GetConnect() == false)
@@ -56,6 +53,9 @@ public class EUIBasePC extends JComponent
 		alu.Draw(rs);				//Отрисовка АЛУ
 		memory.Draw(rs);			//Отрисовка Памяти
 		manager_device.Draw(rs);	//Отрисовка Устройства Управления
+		
+		//Создания чекбокса проверки сдвига
+		add(movement_check);
 		
 	}
 	
