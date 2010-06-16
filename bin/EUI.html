@@ -1,3 +1,271 @@
-
-<applet code="EUI.class" width="852" height="600">
-</applet>
+﻿<head>
+	<title>Базовая ЭВМ</title>
+</head>
+<script language=JavaScript>
+			function show_hide_div()
+			{
+			   var obj = document.getElementById("hiddendiv");
+			   if (obj.style.display == "none") obj.style.display = "";
+			   else obj.style.display = "none";
+			   return false;
+			}
+			
+			function show_hide_div1()
+			{
+			   var obj = document.getElementById("hiddendiv1");
+			   if (obj.style.display == "none") obj.style.display = "";
+			   else obj.style.display = "none";
+			   return false;
+			}
+			</script>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<body>
+	<table cellpadding="3">
+		<tr>
+			<td>
+				<applet code="EUI.class" width="852" height="550"></applet>
+			</td>
+			<td valign="top">
+				<a class="header1" href="#" onClick="return show_hide_div1()">Hot Keys</a>
+				<div id="hiddendiv1" style="display:none">
+					<table cellpadding="2">
+						<tr>
+							<td class="element1">Ввод адреса</td><td class="element">F4</td>
+						</tr>
+						<tr>
+							<td class="element1">Запись</td><td class="element">F5</td>
+						</tr>
+						<tr>
+							<td class="element1">Чтение</td><td class="element">F6</td>
+						</tr>
+						<tr>
+							<td class="element1">Пуск</td><td class="element">F7</td>
+						</tr>
+						<tr>
+							<td class="element1">Продолжение</td><td class="element">F8</td>
+						</tr>
+						<tr>
+							<td class="element1">Работа/Останов</td><td class="element">F9</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<a class="header1" href="#" onClick="return show_hide_div()">Cистема команд БЭВМ </a>
+				<div id="hiddendiv" style="display:none">
+					<table cellpadding="2">
+						<tr>
+							<td class="header2">Имя</td>
+							<td class="header2">Мнемоника</td>
+							<td class="header2">Код</td>
+							<td class="header2">Описание</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="element3">Адресные команды</td>
+						</tr>
+						<tr>
+							<td class="element1">Лог. умножение</td>
+							<td class="element">and M</td>
+							<td class="element">1XXX</td>
+							<td class="element">(M)&(A)→ A</td>
+						</tr>
+						<tr>
+							<td class="element1">Пересылка</td>
+							<td class="element">mov M</td>
+							<td class="element">3XXX</td>
+							<td class="element">(A)→ M</td>
+						</tr>
+						<tr>
+							<td class="element1">Сложение</td>
+							<td class="element">add M</td>
+							<td class="element">4XXX</td>
+							<td class="element">(M)+(A)→ A</td>
+						</tr>
+						<tr>
+							<td class="element1">Сложение с<br>переносом</td>
+							<td class="element">adс M</td>
+							<td class="element">5XXX</td>
+							<td class="element">(M)+(A)+(С)→ A</td>
+						</tr>
+						<tr>
+							<td class="element1">Вычитание</td>
+							<td class="element">sub M</td>
+							<td class="element">6XXX</td>
+							<td class="element">(A)-(M)→ A</td>
+						</tr>
+						<tr>
+							<td class="element1">Вычитание</td>
+							<td class="element">sub M</td>
+							<td class="element">6XXX</td>
+							<td class="element">(A)-(M)→ A</td>
+						</tr>
+						<tr><td colspan="4" style="font-size: 1pt; "><hr></td></tr>
+						<tr>
+							<td class="element1">Переход, если перенос</td>
+							<td class="element">bsc M</td>
+							<td class="element">8XXX</td>
+							<td class="element">Если(С)=1, то(M)→ СК</td>
+						</tr>
+						<tr>
+							<td class="element1">Переход, если плюс</td>
+							<td class="element">bpl M</td>
+							<td class="element">9XXX</td>
+							<td class="element">Если(A)≥0, то(M)→ СК</td>
+						</tr>
+						<tr>
+							<td class="element1">Переход, если минус</td>
+							<td class="element">bmi M</td>
+							<td class="element">AXXX</td>
+							<td class="element">Если(A)<0, то(M)→ СК</td>
+						</tr>
+						<tr>
+							<td class="element1">Переход, если ноль</td>
+							<td class="element">beq M</td>
+							<td class="element">BXXX</td>
+							<td class="element">Если(A)=0, то(M)→ СК</td>
+						</tr>
+						<tr>
+							<td class="element1">Безусловный переход</td>
+							<td class="element">br M</td>
+							<td class="element">CXXX</td>
+							<td class="element">(M)→ СК</td>
+						</tr>
+						<tr>
+							<td class="element1">Приращение и пропуск</td>
+							<td class="element">isz M</td>
+							<td class="element">0XXX</td>
+							<td class="element">(M)+1→ M, если (M)≥0, то(СК)+1→ СК</td>
+						</tr>
+						<tr><td colspan="4" style="font-size: 1pt; "><hr></td></tr>
+						<tr>
+							<td class="element1">Обращение к подпрограмме</td>
+							<td class="element">jsr M</td>
+							<td class="element">2XXX</td>
+							<td class="element">(СК)→ M, М+1→ СК</td>
+						</tr>
+						<tr><td colspan="4" style="font-size: 1pt; "><hr></td></tr>
+						<tr>
+							<td colspan="4" class="element3">Безадресные команды</td>
+						</tr>
+						<tr>
+							<td class="element1">Очистка аккумулятора</td>
+							<td class="element">cla</td>
+							<td class="element">F200</td>
+							<td class="element">0→ A</td>
+						</tr>
+						<tr>
+							<td class="element1">Очистка регистра переноса</td>
+							<td class="element">clс</td>
+							<td class="element">F300</td>
+							<td class="element">0→ С</td>
+						</tr>
+						<tr>
+							<td class="element1">Инверсия аккумулятора</td>
+							<td class="element">cma</td>
+							<td class="element">F400</td>
+							<td class="element">(!A)→ A</td>
+						</tr>
+						<tr>
+							<td class="element1">Инверсия регистра переноса</td>
+							<td class="element">cmc</td>
+							<td class="element">F500</td>
+							<td class="element">(!C)→ C</td>
+						</tr>
+						<tr>
+							<td class="element1">Циклический сдвиг<br>влево на 1 разряд</td>
+							<td class="element">rol</td>
+							<td class="element">F600</td>
+							<td class="element">Содержимое A и C сдвигается влево,<br>A(15)→ C, C→ A(0)</td>
+						</tr>
+						<tr>
+							<td class="element1">Циклический сдвиг<br>вправо на 1 разряд</td>
+							<td class="element">rol</td>
+							<td class="element">F600</td>
+							<td class="element">Содержимое A и C сдвигается право,<br>A(0)→ C, C→ A(15)</td>
+						</tr>
+						<tr>
+							<td class="element1">Инкремент аккумулятора</td>
+							<td class="element">inc</td>
+							<td class="element">F800</td>
+							<td class="element">(A)+1→ C</td>
+						</tr>
+						<tr>
+							<td class="element1">Декремент аккумулятора</td>
+							<td class="element">dec</td>
+							<td class="element">F900</td>
+							<td class="element">(A)-1→ C</td>
+						</tr>
+						<tr><td colspan="4" style="font-size: 1pt; "><hr></td></tr>
+						<tr>
+							<td class="element1">Останов</td>
+							<td class="element">hlt</td>
+							<td class="element">F000</td>
+							<td class="element"></td>
+						</tr>
+						<tr>
+							<td class="element1">Нет операции</td>
+							<td class="element">nop M</td>
+							<td class="element">F000</td>
+							<td class="element"></td>
+						</tr>
+						<tr>
+							<td class="element1">Разрешение прерывания</td>
+							<td class="element">ei</td>
+							<td class="element">FA00</td>
+							<td class="element"></td>
+						</tr>
+						<tr>
+							<td class="element1">Запрещение прерывания</td>
+							<td class="element">di</td>
+							<td class="element">FB00</td>
+							<td class="element"></td>
+						</tr>
+						<tr><td colspan="4" style="font-size: 1pt; "><hr></td></tr>
+						<tr>
+							<td colspan="4" class="element3">Команды ввода/вывода</td>
+						</tr>
+						<tr>
+							<td class="element1">Очистка флага</td>
+							<td class="element">clf В</td>
+							<td class="element">E0XX</td>
+							<td class="element">0→ флаг устройства В</td>
+						</tr>
+						<tr>
+							<td class="element1">Опрос флага</td>
+							<td class="element">tsf В</td>
+							<td class="element">E1XX</td>
+							<td class="element">Если(флаг устройства В = 1), то (СК)+1→ СК</td>
+						</tr>
+						<tr>
+							<td class="element1">Ввод</td>
+							<td class="element">in В</td>
+							<td class="element">E2XX</td>
+							<td class="element">(B)→ A</td>
+						</tr>
+						<tr>
+							<td class="element1">Вывод</td>
+							<td class="element">out В</td>
+							<td class="element">E3XX</td>
+							<td class="element">(A)→ B</td>
+						</tr>
+						<tr><td colspan="4" style="font-size: 1pt; "><hr></td></tr>
+						<tr>
+							<td colspan="4" class="element3">Примечания:</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="element1">(М) - содержимое ячейки с адресом M</td></tr><tr>
+							<td colspan="4" class="element1">(A) - содержимое аккумулятора</td></tr><tr>
+							<td colspan="4" class="element1">(СК) - содержимое счетчика команд</td></tr><tr>
+							<td colspan="4" class="element1">(С) - содержимое регистра переноса</td></tr><tr>
+							<td colspan="4" class="element1">(В) - содержимое регистра данных устройства В</td></tr><tr>
+							<td colspan="4" class="element1">XXX - адрес ячейки памяти</td></tr><tr>
+							<td colspan="4" class="element1">ХХ - адрес устройства ввода/вывода</td></tr><tr>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>		
+	</table>
+</body>
