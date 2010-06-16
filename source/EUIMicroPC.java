@@ -15,7 +15,7 @@ import javax.swing.JComponent;
 
 public class EUIMicroPC extends JComponent
 {
-	public EUIMicroPC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check, JCheckBox tact)
+	public EUIMicroPC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check, JCheckBox tact, JCheckBox memory_check)
 	{
 		registers = factory.CreateMicroRegisters();
 		channels = factory.CreateMicroChannels();
@@ -26,6 +26,8 @@ public class EUIMicroPC extends JComponent
 		this.input_register = input_register;
 		this.movement_check = movement_check;
 		this.tact = tact;
+		this.memory_check = memory_check;				
+
 		
 	}
 
@@ -59,8 +61,10 @@ public class EUIMicroPC extends JComponent
 		//Добавление чекбоксов и рамок
 		add(movement_check);		//Проверка сдвига
 		add(tact);					//"Такт"
+		add(memory_check);			//"Работа с памятью МК"
 		rs.drawRect(1, 436, 301, 20);
 		rs.drawRect(329, 465, 101, 50);
+		rs.drawRect(436, 465, 296, 50);
 		
 		//Отрисовка номера бита
 		rs.setFont(new Font("Courier New", Font.BOLD, 32));
@@ -107,4 +111,6 @@ public class EUIMicroPC extends JComponent
 	private	EUIAlu						alu;						//АЛУ
 	private JCheckBox					movement_check;				//Чекбокс установки сдвига указателя
 	private JCheckBox					tact;						//Чекбокс для режима "Такт"
+	private JCheckBox					memory_check;				//Чекбокс "Работа с памятью МК"
+
 }

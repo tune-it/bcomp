@@ -58,10 +58,11 @@ public class EUIBasePC extends JComponent
 		rs.fillRect(274, 465, 48, 50);
 		rs.setColor(Color.BLACK);
 		rs.drawRect(274, 465, 48, 50);
-		if(15 - input_register.GetPointerPosition() >= 10)
-			rs.drawString("" + (15 - input_register.GetPointerPosition()), 278, 500);
+		int bit_number = 15 - input_register.GetPointerPosition();
+		if(bit_number >= 10)
+			rs.drawString("" + bit_number, 278, 500);
 		else
-			rs.drawString("" + (15 - input_register.GetPointerPosition()), 287, 500);
+			rs.drawString("" + bit_number, 287, 500);
 
 		alu.Draw(rs);				//Отрисовка АЛУ
 		memory.Draw(rs);			//Отрисовка Памяти
