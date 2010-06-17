@@ -33,6 +33,50 @@ public class EManagerDevice
 		channels.CloseAllChannels(); // Закрыть все каналы
 		
 		channels.MicroCommandToRMC().Open(); // Пересылаем микрокоманду в регистр микрокоманд
+		
+		int n = reg_factory.MicroInstructionPointer().SendData();
+		
+		if (n <= 0xC)
+		{
+			flag_factory.GetAdressSelection().ClearFlag();
+			flag_factory.GetInstructionFetch().SetFlag();
+			flag_factory.GetExecution().ClearFlag();
+			flag_factory.GetInputOutput().ClearFlag();
+		}
+		else
+		{
+			if (n <= 0x1C)
+			{
+				flag_factory.GetAdressSelection().SetFlag();
+				flag_factory.GetInstructionFetch().ClearFlag();
+				flag_factory.GetExecution().ClearFlag();
+				flag_factory.GetInputOutput().ClearFlag();
+			}
+			else
+			{
+				if (n <= 0x8D)
+				{
+					flag_factory.GetAdressSelection().ClearFlag();
+					flag_factory.GetInstructionFetch().ClearFlag();
+					flag_factory.GetExecution().SetFlag();
+					flag_factory.GetInputOutput().ClearFlag();
+				}
+				else
+				{
+					if (n == 0x8E)
+					{
+						flag_factory.GetAdressSelection().ClearFlag();
+						flag_factory.GetInstructionFetch().ClearFlag();
+						flag_factory.GetExecution().ClearFlag();
+						flag_factory.GetInputOutput().SetFlag();
+					}
+				}
+			}
+		}
+			
+		
+		flag_factory.RefreshStateCounter();
+		
 		reg_factory.MicroInstructionPointer().GetData(reg_factory.MicroInstructionPointer().SendData()+1);
 		int command = reg_factory.MicroCommandRegister().SendData();
 		if (CheckBit(command, 15))
@@ -149,6 +193,7 @@ public class EManagerDevice
 			/////////////////////////////////////
 				
 			//Управление обмен в ВУ
+				
 				
 			// Регистр C	
 				
