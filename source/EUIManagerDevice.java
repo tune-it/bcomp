@@ -46,9 +46,10 @@ public class EUIManagerDevice
 	
 		//Вывод заголовка
 		rs.setFont(new Font("Courier New", Font.BOLD, 23));
-		rs.drawString("Устройство", messX+35, messY+2);
-		rs.drawString("управления", messX+34, messY+25);
-			
+		rs.drawString("Устройство", messX + 35, messY + 2);
+		rs.drawString("управления", messX + 34, messY + 25);
+		rs.drawString(""+flag_factory.GetProgram().SendData(), messX + 50, messY + 40);
+		
 		//Вызов методов отрисовки строк
 		rs.setFont(new Font("Courier New", Font.BOLD, 17));
 		DrawMode(rs, flag_factory.GetInstructionFetch(), 1, "Выборка команды");
@@ -59,6 +60,8 @@ public class EUIManagerDevice
 		DrawMode(rs, flag_factory.GetStateOfExternalDevice(), 6, "Состояние ВУ");
 		DrawMode(rs, flag_factory.GetInterruptEnable(), 7, "Разрешение прерывания");
 		DrawMode(rs, flag_factory.GetProgram(), 8, "Программа");
+		
+		rs.setPaint(Color.BLACK);
 	}
 	
 	private void DrawMode(Graphics g, EFlag flag, int line_number, String mode_name) 	//Определяет состояние режима и выводит его названия 
