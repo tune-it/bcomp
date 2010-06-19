@@ -9,7 +9,7 @@ public class DeviceFactory
 		dev[2] = new InputDevice(reg_factory);
 	}
 	
-	public InternalDevice OutputDevice()
+	public InternalDevice getOutputDevice()
 	{
 		return dev[0];
 	}
