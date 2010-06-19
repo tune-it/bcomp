@@ -5,13 +5,14 @@ package Machine;
 -----------------------------------------------------------------------------*/
 public class EManagerDevice
 {
-	public EManagerDevice(ERegisterFactory reg_factory, EChannelFactory channels, EALU alu, EFlagFactory flag_factory)
+	public EManagerDevice(ERegisterFactory reg_factory, EChannelFactory channels, EALU alu, EFlagFactory flag_factory, DeviceFactory dev)
 	{
 		this.instr_pointer = reg_factory.MicroInstructionPointer();
 		this.reg_factory = reg_factory;
 		this.flag_factory = flag_factory;
 		this.channels = channels;
 		this.alu = alu;
+		this.dev = dev;
 	}
 	
 	private boolean CheckBit(int bits, int number)
@@ -192,8 +193,64 @@ public class EManagerDevice
 			// Операционая микрокоманда (ОМК1) //
 			/////////////////////////////////////
 				
-			//Управление обмен в ВУ
+			//Управление обменом с ВУ
 				
+				// Разрешение прерывания
+				if (CheckBit(command, 11))
+				{
+					flag_factory.GetInterruptEnable().SetFlag();
+					flag_factory.RefreshStateCounter();
+				}
+				
+				// Запрещение прерывания
+				if (CheckBit(command, 10))
+				{
+					flag_factory.GetInterruptEnable().ClearFlag();
+					flag_factory.RefreshStateCounter();
+				}
+				
+				// Сброс флагов ВУ
+				if (CheckBit(command, 9)) dev.clearAllFlags();
+				
+				// Организация связей с ВУ
+				if (CheckBit(command, 8))
+				{
+					int cmd = reg_factory.CommandRegister().SendData()&0x0f00;
+					int dev_adr = reg_factory.CommandRegister().SendData()&0x00ff;
+					
+					switch(cmd)
+					{
+						case 0:
+							// clf B
+							if (dev.getDeviceByAdress(dev_adr) != null) dev.getDeviceByAdress(dev_adr).getStateFlag().ClearFlag();
+							break;
+						case 1:
+							// tsf B
+							if (dev.getDeviceByAdress(dev_adr) != null)
+							{
+								if ( dev.getDeviceByAdress(dev_adr).getStateFlag().SendData() == 1)
+								{
+									reg_factory.MicroInstructionPointer().GetData(reg_factory.MicroInstructionPointer().SendData()+1);
+								}
+							}
+							break;
+						case 2:
+							// in B
+							if ( dev_adr == 1)
+							{
+								dev.getDeviceByAdress(dev_adr).getChannel().Open();
+							}
+							break;
+						case 3:
+							// out B
+							if ( (dev_adr == 2) || (dev_adr == 3))
+							{
+								dev.getDeviceByAdress(dev_adr).getChannel().Open();
+							}
+							break;
+						default: break;
+					}	
+				}
 				
 			// Регистр C	
 				
@@ -254,4 +311,5 @@ public class EManagerDevice
 	private EChannelFactory		channels;
 	private EALU				alu;
 	private EFlagFactory		flag_factory;
+	private DeviceFactory		dev;
 }

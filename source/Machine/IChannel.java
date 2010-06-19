@@ -5,6 +5,7 @@ package Machine;
 -----------------------------------------------------------------------------*/
 interface IChannel
 {
-	void Open();	// Открыть канал
-	void Close();	// Закрыть канал
+	void Open();					// Открыть канал
+	void Close();					// Закрыть канал
+	public boolean GetConnect();	// Состояние канала
 }

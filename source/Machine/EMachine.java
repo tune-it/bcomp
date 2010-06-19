@@ -3,7 +3,8 @@ package Machine;
 /*-----------------------------------------------------------------------------
 	Базовая ЭВМ (управление работой)
 -----------------------------------------------------------------------------*/
-public class EMachine {
+public class EMachine
+{
 	public EMachine(EControlView ctrl)
 	{
 		this.ctrl=ctrl;
@@ -26,8 +27,11 @@ public class EMachine {
 		// АЛУ
 		alu = new EALU(reg_factory, flags);
 		
+		// Устройства ввода/вывода
+		dev = new DeviceFactory(reg_factory);
+		
 		// Устройство управления
-		man_dev = new EManagerDevice(reg_factory, channels, alu, flags);
+		man_dev = new EManagerDevice(reg_factory, channels, alu, flags, dev);
 	}
 	
 	public void Start()
@@ -134,6 +138,7 @@ public class EMachine {
 	private EChannelFactory		channels;
 	private EALU				alu;
 	private EManagerDevice		man_dev;
+	private DeviceFactory dev;
 	
 	private EControlView ctrl;
 }
