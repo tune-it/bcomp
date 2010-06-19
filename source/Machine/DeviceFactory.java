@@ -4,6 +4,7 @@ public class DeviceFactory
 {
 	public DeviceFactory(ERegisterFactory reg_factory)
 	{
+		dev = new InternalDevice[3];
 		dev[0] = new OutputDevice(reg_factory);
 		dev[1] = new InputDevice(reg_factory);
 		dev[2] = new InputDevice(reg_factory);

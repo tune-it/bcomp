@@ -9,14 +9,7 @@ public class OutputDevice implements InternalDevice
 	{
 		data_reg = new ERegister();
 		state_flag = new EFlag();
-		channel = new EIOChannel(data_reg,reg_factory.Accumulator());
-	}
-	
-	public OutputDevice(int width, ERegisterFactory reg_factory)
-	{
-		data_reg = new ERegister(width);
-		state_flag = new EFlag();
-		channel = new EIOChannel(reg_factory.Accumulator(), data_reg);
+		channel = new EIOChannel(data_reg, reg_factory.Accumulator());
 	}
 
 	public EFlag getStateFlag()
