@@ -25,16 +25,13 @@ public class EUI extends JApplet
 			final EMachine machine = new EMachine(control);
 			
 			EUIBasePCFactory factory = new EUIBasePCFactory(machine);
-			input_register = new EUIInputRegister(machine.GetRegFac().InputRegister(), 1, 460, 60, 32, 478, "Клавишный Регистр");
+			
+			
+			input_register = factory.CreateInputRegister();
 			
 			//Создания чекбокса проверки сдвига
-			JCheckBox movement_check = new JCheckBox("Сдвиг указателя при установке бита");
-			movement_check.setBackground(new Color(231,236,119));
-			movement_check.setBounds(2, 437, 300, 19);
-			movement_check.setFocusable(false);
-			movement_check.setForeground(Color.BLACK);
-			movement_check.setFont(new Font("Courier New", Font.PLAIN, 13));
-			
+			JCheckBox movement_check = factory.CreateMovementCheckBox();
+
 			//Создания чекбокса "Такт"
 			JCheckBox tact = new JCheckBox("Такт");
 			tact.setBackground(new Color(231,236,119));

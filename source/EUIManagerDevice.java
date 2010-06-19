@@ -48,7 +48,6 @@ public class EUIManagerDevice
 		rs.setFont(new Font("Courier New", Font.BOLD, 23));
 		rs.drawString("Устройство", messX + 35, messY + 2);
 		rs.drawString("управления", messX + 34, messY + 25);
-		rs.drawString(""+flag_factory.GetProgram().SendData(), messX + 50, messY + 40);
 		
 		//Вызов методов отрисовки строк
 		rs.setFont(new Font("Courier New", Font.BOLD, 17));

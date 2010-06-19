@@ -1,3 +1,8 @@
+import java.awt.Color;
+import java.awt.Font;
+
+import javax.swing.JCheckBox;
+
 import Machine.*;
 
 /*-----------------------------------------------------------------------------
@@ -105,6 +110,11 @@ public class EUIBasePCFactory
 		EUIRegister Registers[] = {RD, RK, RA, SK, Acc, BR, SC, MCR, MIP};
 		
 		return Registers;		
+	}
+	
+	public EUIInputRegister CreateInputRegister()
+	{
+		return new EUIInputRegister(regfact.InputRegister(), 1, 460, 60, 32, 478, "Клавишный Регистр");
 	}
 	
 	public EUIManagerDevice CreateManagerDevice()					//Создание устройства управления
@@ -285,6 +295,31 @@ public class EUIBasePCFactory
 		return channels;	
 	}
 	
+	public JCheckBox CreateMovementCheckBox()
+	{
+		JCheckBox movement_check = new JCheckBox("Сдвиг указателя при установке бита");
+		
+		movement_check.setBackground(new Color(231,236,119));
+		movement_check.setBounds(2, 437, 300, 19);
+		movement_check.setFocusable(false);
+		movement_check.setForeground(Color.BLACK);
+		movement_check.setFont(new Font("Courier New", Font.PLAIN, 13));
+		
+		return movement_check;
+	}
+	
+	public JCheckBox CreateTactCheckBox()
+	{
+		JCheckBox tact = new JCheckBox("Такт");
+		
+		tact.setBackground(new Color(231,236,119));
+		tact.setBounds(330, 466, 100, 49);
+		tact.setFocusable(false);
+		tact.setForeground(Color.BLACK);
+		tact.setFont(new Font("Courier New", Font.PLAIN, 30));
+		
+		return tact;
+	}
 	private ERegisterFactory 	regfact;					//Регистры
 	private EFlagFactory 		flagfact;					//Флаги
 	private EChannelFactory		channfact;					//Каналы
