@@ -15,7 +15,7 @@ import javax.swing.JComponent;
 
 public class EUIMicroPC extends JComponent
 {
-	public EUIMicroPC (EUIBasePCFactory factory, EUIInputRegister input_register)
+	public EUIMicroPC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check, JCheckBox tact, JCheckBox memory_check)
 	{
 		registers = factory.CreateMicroRegisters();
 		channels = factory.CreateMicroChannels();
@@ -24,9 +24,9 @@ public class EUIMicroPC extends JComponent
 		alu = factory.CreateMicroAlu();
 		
 		this.input_register = input_register;
-		movement_check = factory.CreateMovementCheckBox();
-		tact = factory.CreateTactCheckBox();		
-		memory_check = factory.CreateMemoryCheckBox();
+		this.movement_check = movement_check ;
+		this.tact = tact;	
+		this.memory_check = memory_check;
 
 		
 	}

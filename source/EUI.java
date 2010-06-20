@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JApplet;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import Machine.EControlView;
@@ -25,6 +26,10 @@ public class EUI extends JApplet
 			EUIBasePCFactory factory = new EUIBasePCFactory(machine);	
 			input_register = factory.CreateInputRegister();
 			
+			JCheckBox movement_check = factory.CreateMovementCheckBox();
+			JCheckBox tact_check = factory.CreateTactCheckBox();
+			JCheckBox memory_check = factory.CreateMemoryCheckBox();
+			
 			//Слушатель нажатия для чекбокса проверки сдвига
 			ActionListener movement_listener = new ActionListener()
 			{
@@ -36,7 +41,7 @@ public class EUI extends JApplet
 						input_register.SetMovement(true);
 				}
 			};
-			factory.CreateMovementCheckBox().addActionListener(movement_listener);
+			movement_check.addActionListener(movement_listener);
 
 			//Слушатель нажатия для чекбокса "Такт"
 			ActionListener tact_listener = new ActionListener()
@@ -49,7 +54,7 @@ public class EUI extends JApplet
 						control.SetTact();
 				}
 			};
-			factory.CreateTactCheckBox().addActionListener(tact_listener);
+			tact_check.addActionListener(tact_listener);
 			
 			//Слушатель нажатия для чекбокса "Работа с памятью МК"
 			ActionListener memory_listener = new ActionListener()
@@ -62,11 +67,11 @@ public class EUI extends JApplet
 						control.SetMicroWork();
 				}
 			};
-			factory.CreateMemoryCheckBox().addActionListener(memory_listener);
+			memory_check.addActionListener(memory_listener);
 
-			final EUIBasePC BasePC = new EUIBasePC(factory, input_register);
-			final EUIOutputPC OutputPC = new EUIOutputPC(factory,  input_register);
-			final EUIMicroPC MicroPC = new EUIMicroPC(factory,  input_register);
+			final EUIBasePC BasePC = new EUIBasePC(factory, input_register, movement_check, tact_check);
+			final EUIOutputPC OutputPC = new EUIOutputPC(factory,  input_register, movement_check, tact_check);
+			final EUIMicroPC MicroPC = new EUIMicroPC(factory,  input_register,  movement_check, tact_check, memory_check);
 			final JPanel finalpanel = new JPanel();
 			finalpanel.setLayout(null);
 			
@@ -80,7 +85,6 @@ public class EUI extends JApplet
        
 	        finalpanel.setBackground(Color.WHITE);
 	        add(finalpanel);
-	        
 	        
 	        
 	        finalpanel.addKeyListener(new KeyAdapter() {
