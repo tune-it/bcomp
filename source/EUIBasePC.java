@@ -12,7 +12,7 @@ import javax.swing.JComponent;
 
 public class EUIBasePC extends JComponent
 {
-	public EUIBasePC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox tact)
+	public EUIBasePC (EUIBasePCFactory factory, EUIInputRegister input_register)
 	{
 		registers = factory.CreateClassicRegisters();
 		channels = factory.CreateClassicChannels();
@@ -20,10 +20,7 @@ public class EUIBasePC extends JComponent
 		manager_device = factory.CreateManagerDevice();
 		alu = factory.CreateClassicAlu();
 		movement_check = factory.CreateMovementCheckBox();
-		
-		this.input_register = input_register;
-		this.movement_check = movement_check;
-		this.tact = tact;
+		tact = factory.CreateTactCheckBox();
 	}
 	
 	public void paintComponent(Graphics g) 

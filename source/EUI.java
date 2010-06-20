@@ -1,12 +1,10 @@
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JApplet;
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import Machine.EControlView;
@@ -24,29 +22,8 @@ public class EUI extends JApplet
 			control = new EControlView(tabbedPane);
 			final EMachine machine = new EMachine(control);
 			
-			EUIBasePCFactory factory = new EUIBasePCFactory(machine);
-			
-			
+			EUIBasePCFactory factory = new EUIBasePCFactory(machine);	
 			input_register = factory.CreateInputRegister();
-			
-			//Создания чекбокса проверки сдвига
-			JCheckBox movement_check = factory.CreateMovementCheckBox();
-
-			//Создания чекбокса "Такт"
-			JCheckBox tact = new JCheckBox("Такт");
-			tact.setBackground(new Color(231,236,119));
-			tact.setBounds(330, 466, 100, 49);
-			tact.setFocusable(false);
-			tact.setForeground(Color.BLACK);
-			tact.setFont(new Font("Courier New", Font.PLAIN, 30));
-			
-			//Создание чекбокса "Работа с памятью МК"
-			JCheckBox memory_check = new JCheckBox("Работа с памятью МК");
-			memory_check.setBackground(new Color(231,236,119));
-			memory_check.setBounds(437, 466, 295, 49);
-			memory_check.setFocusable(false);
-			memory_check.setForeground(Color.BLACK);
-			memory_check.setFont(new Font("Courier New", Font.PLAIN, 24));
 			
 			//Слушатель нажатия для чекбокса проверки сдвига
 			ActionListener movement_listener = new ActionListener()
@@ -59,7 +36,7 @@ public class EUI extends JApplet
 						input_register.SetMovement(true);
 				}
 			};
-			movement_check.addActionListener(movement_listener);
+			factory.CreateMovementCheckBox().addActionListener(movement_listener);
 
 			//Слушатель нажатия для чекбокса "Такт"
 			ActionListener tact_listener = new ActionListener()
@@ -72,7 +49,7 @@ public class EUI extends JApplet
 						control.SetTact();
 				}
 			};
-			tact.addActionListener(tact_listener);
+			factory.CreateTactCheckBox().addActionListener(tact_listener);
 			
 			//Слушатель нажатия для чекбокса "Работа с памятью МК"
 			ActionListener memory_listener = new ActionListener()
@@ -85,11 +62,11 @@ public class EUI extends JApplet
 						control.SetMicroWork();
 				}
 			};
-			memory_check.addActionListener(memory_listener);
+			factory.CreateMemoryCheckBox().addActionListener(memory_listener);
 
-			final EUIBasePC BasePC = new EUIBasePC(factory, input_register, movement_check, tact);
-			final EUIOutputPC OutputPC = new EUIOutputPC(factory,  input_register, movement_check, tact);
-			final EUIMicroPC MicroPC = new EUIMicroPC(factory,  input_register, movement_check, tact, memory_check);
+			final EUIBasePC BasePC = new EUIBasePC(factory, input_register);
+			final EUIOutputPC OutputPC = new EUIOutputPC(factory,  input_register);
+			final EUIMicroPC MicroPC = new EUIMicroPC(factory,  input_register);
 			final JPanel finalpanel = new JPanel();
 			finalpanel.setLayout(null);
 			

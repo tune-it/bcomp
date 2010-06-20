@@ -320,6 +320,19 @@ public class EUIBasePCFactory
 		
 		return tact;
 	}
+	
+	public JCheckBox CreateMemoryCheckBox()
+	{
+		JCheckBox memory_check = new JCheckBox("Работа с памятью МК");
+		
+		memory_check.setBackground(new Color(231,236,119));
+		memory_check.setBounds(437, 466, 295, 49);
+		memory_check.setFocusable(false);
+		memory_check.setForeground(Color.BLACK);
+		memory_check.setFont(new Font("Courier New", Font.PLAIN, 24));
+		
+		return memory_check;
+	}
 	private ERegisterFactory 	regfact;					//Регистры
 	private EFlagFactory 		flagfact;					//Флаги
 	private EChannelFactory		channfact;					//Каналы

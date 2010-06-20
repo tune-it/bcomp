@@ -12,14 +12,14 @@ import javax.swing.JComponent;
 
 public class EUIOutputPC extends JComponent
 {
-	public EUIOutputPC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check, JCheckBox tact)
+	public EUIOutputPC (EUIBasePCFactory factory, EUIInputRegister input_register)
 	{
 		registers = factory.CreateOutputRegisters();
 		memory = factory.CreateСlassicMemory();
 		
 		this.input_register = input_register;
-		this.movement_check = movement_check;
-		this.tact = tact;
+		movement_check = factory.CreateMovementCheckBox();
+		tact = factory.CreateTactCheckBox();
 
 	}
 	
