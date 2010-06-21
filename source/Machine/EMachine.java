@@ -131,6 +131,11 @@ public class EMachine
 		return man_dev;
 	}
 	
+	public DeviceFactory GetDeviceFactory()
+	{
+		return dev;
+	}
+	
 	private ERegisterFactory	reg_factory;
 	private EMemory				memory;
 	private EMicrocommandMemory	micro_mem;
