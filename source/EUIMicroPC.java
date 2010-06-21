@@ -16,6 +16,10 @@ import javax.swing.JLabel;
 
 public class EUIMicroPC extends JComponent
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7550509246525120254L;
 	public EUIMicroPC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check, JCheckBox tact, JCheckBox memory_check, JLabel work)
 	{
 		registers = factory.CreateMicroRegisters();

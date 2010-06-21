@@ -19,6 +19,10 @@ import Machine.EMachine;
 
 public class EUI extends JApplet
 {	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 102886848843642743L;
 	public void init ()
 	{
 		EventQueue.invokeLater(new Runnable()

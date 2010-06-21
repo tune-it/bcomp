@@ -14,6 +14,10 @@ import javax.swing.JLabel;
 
 public class EUIBasePC extends JComponent
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5587342628170024770L;
 	public EUIBasePC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check, JCheckBox tact, JLabel work)
 	{
 		registers = factory.CreateClassicRegisters();

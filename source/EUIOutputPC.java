@@ -14,6 +14,10 @@ import javax.swing.JRadioButton;
 
 public class EUIOutputPC extends JComponent
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8961830539948032030L;
 	public EUIOutputPC (EUIBasePCFactory factory, EUIInputRegister[] input_registers, JCheckBox movement_check, JCheckBox tact, JLabel work, JRadioButton[] register_check)
 	{
 		registers = factory.CreateOutputRegisters();
