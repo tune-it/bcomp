@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -10,7 +9,6 @@ import java.awt.event.MouseListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JApplet;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -255,9 +253,7 @@ public class EUI extends JApplet
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_F8)
 			        {
-				        Runnable r = new MachineRunnable(machine);
-				        final Thread t = new Thread(r);
-			        	t.start();
+				        machine.Continue();
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_F9)
@@ -276,19 +272,4 @@ public class EUI extends JApplet
 	private EUIInputRegister[]		input_registers;
 	private EUIInputRegister 		inp1_register; 
 	private EUIInputRegister 		inp2_register;
-}
-
-class MachineRunnable implements Runnable
-{
-	public MachineRunnable(EMachine machine)
-	{
-		this.machine = machine;
-	}
-	
-	public void run()
-	{
-		machine.Continue();
-	}
-	
-	private EMachine 				machine;
 }

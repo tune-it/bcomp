@@ -1,5 +1,7 @@
 package Machine;
 
+//import MachineRunnable;
+
 /*-----------------------------------------------------------------------------
 	Базовая ЭВМ (управление работой)
 -----------------------------------------------------------------------------*/
@@ -42,31 +44,9 @@ public class EMachine
 	
 	public void Continue()
 	{
-		if (ctrl.GetTact())
-		{
-			// Выполнение по тактам
-			
-			do
-			{
-				man_dev.TimeStep();
-				ctrl.Repaint();
-			}
-			while (flags.GetStateOfTumbler().SendData() != 0);
-		}
-		else
-		{
-			// Выполнение по командам
-			do
-			{
-				do
-				{
-					man_dev.TimeStep();
-					ctrl.Repaint();
-				}
-				while (reg_factory.MicroInstructionPointer().SendData() != 1);
-			}
-			while (flags.GetStateOfTumbler().SendData() != 0);
-		}		
+		Runnable r = new MachineRunnable(reg_factory, flags, man_dev, ctrl);
+        final Thread t = new Thread(r);
+    	t.start();		
 	}
 	
 	public void Adress()
@@ -145,5 +125,49 @@ public class EMachine
 	private EManagerDevice		man_dev;
 	private DeviceFactory dev;
 	
+	private EControlView ctrl;
+}
+
+class MachineRunnable implements Runnable
+{
+	public MachineRunnable(ERegisterFactory reg_factory, EFlagFactory flags, EManagerDevice man_dev, EControlView ctrl)
+	{
+		this.ctrl = ctrl;
+		this.flags = flags;
+		this.man_dev = man_dev;
+		this.reg_factory = reg_factory;
+	}
+	
+	public void run()
+	{
+		if (ctrl.GetTact())
+		{
+			// Выполнение по тактам
+			do
+			{
+				man_dev.TimeStep();
+				ctrl.Repaint();
+			}
+			while (flags.GetStateOfTumbler().SendData() != 0);
+		}
+		else
+		{
+			// Выполнение по командам
+			do
+			{
+				do
+				{
+					man_dev.TimeStep();
+					ctrl.Repaint();
+				}
+				while (reg_factory.MicroInstructionPointer().SendData() != 1);
+			}
+			while (flags.GetStateOfTumbler().SendData() != 0);
+		}
+	}
+	
+	private ERegisterFactory	reg_factory;;
+	private EFlagFactory		flags;
+	private EManagerDevice		man_dev;
 	private EControlView ctrl;
 }

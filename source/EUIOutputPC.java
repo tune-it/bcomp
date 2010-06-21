@@ -2,15 +2,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 
 /*-----------------------------------------------------------------------------
-			Компонент "Работа с ВУ". Вызывает методы отрисовки
-						необходимых элементов.
+	Компонент "Работа с ВУ". Вызывает методы отрисовки
+	необходимых элементов.
 -----------------------------------------------------------------------------*/	
 
 public class EUIOutputPC extends JComponent

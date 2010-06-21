@@ -5,14 +5,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 /*-----------------------------------------------------------------------------
-				Компонент "Работа с МПУ". Вызывает методы отрисовки
-							необходимых элементов.
+	Компонент "Работа с МПУ". Вызывает методы отрисовки
+	необходимых элементов.
 -----------------------------------------------------------------------------*/	
 
 public class EUIMicroPC extends JComponent
