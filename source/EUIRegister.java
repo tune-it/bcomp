@@ -156,7 +156,14 @@ public class EUIRegister
 	
 	public String GetContent()								//Получение содержимого регистра
 	{
-		return content.substring(0,4) + content.substring(5,9) + content.substring(10,14) + content.substring (15);
+		String str = "";
+		
+		if(content.length() == 19)
+			str = content.substring(0,4) + content.substring(5,9) + content.substring(10,14) + content.substring (15);
+		if(content.length() == 9)
+			str = content.substring(0,4) + content.substring(5,9);
+		
+		return str;
 	}
 
 	public void Draw(Graphics g)							//Отрисовка регистра

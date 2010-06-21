@@ -2,8 +2,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 
 /*-----------------------------------------------------------------------------
 				Компонент "Базовая ЭВМ". Вызывает методы отрисовки
@@ -12,7 +15,7 @@ import javax.swing.JComponent;
 
 public class EUIBasePC extends JComponent
 {
-	public EUIBasePC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check, JCheckBox tact)
+	public EUIBasePC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check, JCheckBox tact, JLabel work)
 	{
 		registers = factory.CreateClassicRegisters();
 		channels = factory.CreateClassicChannels();
@@ -22,8 +25,9 @@ public class EUIBasePC extends JComponent
 		
 		this.movement_check = movement_check;
 		this.tact = tact;
+		this.work = work;
 		
-		this.input_register = input_register;
+		this.key_register = input_register;
 	}
 	
 	public void paintComponent(Graphics g) 
@@ -50,8 +54,8 @@ public class EUIBasePC extends JComponent
 			registers[i].Draw(rs);
 		
 		//Отрисовка клавишного регистра
-		input_register.Draw(rs);
-		input_register.DrawPointer(rs);
+		key_register.Draw(rs);
+		key_register.DrawPointer(rs);
 		
 		//Отрисовка номера бита
 		rs.setFont(new Font("Courier New", Font.BOLD, 32));
@@ -59,7 +63,7 @@ public class EUIBasePC extends JComponent
 		rs.fillRect(274, 465, 48, 50);
 		rs.setColor(Color.BLACK);
 		rs.drawRect(274, 465, 48, 50);
-		int bit_number = 15 - input_register.GetPointerPosition();
+		int bit_number = 15 - key_register.GetPointerPosition();
 		if(bit_number >= 10)
 			rs.drawString("" + bit_number, 278, 500);
 		else
@@ -75,16 +79,19 @@ public class EUIBasePC extends JComponent
 		rs.drawRect(1, 436, 301, 20);
 		rs.drawRect(329, 465, 101, 50);
 		
+		work.setLocation(437, 465);
+		add(work);
 	}
 	
 	
 	
 	private EUIRegister[]				registers;					//Массив регистров
-	private EUIInputRegister			input_register;				//Клавишный регистр
+	private EUIInputRegister			key_register;				//Клавишный регистр
 	private EUIChannel[] 				channels;					//Массив каналов
 	private	EUIMemory					memory;						//Память
 	private EUIManagerDevice			manager_device;				//Устройство Управления
 	private	EUIAlu						alu;						//АЛУ
 	private JCheckBox					movement_check;				//Чекбокс установки сдвига указателя
 	private JCheckBox					tact;						//Чекбокс режима "Такт"
+	private JLabel						work;						//Лэйбл "Работа/Остановка"
 }

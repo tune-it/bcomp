@@ -2,8 +2,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 
 /*-----------------------------------------------------------------------------
 			Компонент "Работа с ВУ". Вызывает методы отрисовки
@@ -12,15 +15,19 @@ import javax.swing.JComponent;
 
 public class EUIOutputPC extends JComponent
 {
-	public EUIOutputPC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check, JCheckBox tact)
+	public EUIOutputPC (EUIBasePCFactory factory, EUIInputRegister[] input_registers, JCheckBox movement_check, JCheckBox tact, JLabel work, JRadioButton[] register_check)
 	{
 		registers = factory.CreateOutputRegisters();
 		memory = factory.CreateСlassicMemory();
+				
+		this.input_registers = input_registers;
+		key_register = input_registers[0];
 		
-		this.input_register = input_register;
-		
-		this.movement_check = movement_check ;
+		this.movement_check = movement_check;
 		this.tact = tact;
+		this.work = work;
+		this.register_check = register_check;
+		
 
 	}
 	
@@ -34,15 +41,23 @@ public class EUIOutputPC extends JComponent
 		
 		memory.Draw(rs);			//Отрисовка Памяти
 		
-		//Отрисовка клавишного регистра
-		input_register.Draw(rs);
-		input_register.DrawPointer(rs);
-		
+		//Отрисовка устройств вывода
+		for (int i=0; i<input_registers.length; i++)
+		{
+			input_registers[i].Draw(rs);
+			input_registers[i].DrawPointer(rs);
+		}
+
 		//Добавление чекбоксов и рамок
 		add(movement_check);		//Проверка сдвига
 		add(tact);					//"Такт"
 		rs.drawRect(1, 436, 301, 20);
 		rs.drawRect(329, 465, 101, 50);
+		
+		//Добавление панели выбора регистра и отрисовка рамки
+		for (int i=0; i<register_check.length; i++)
+			add(register_check[i]);
+		rs.drawRect(437, 439, 175, 76);
 		
 		//Отрисовка номера бита
 		rs.setFont(new Font("Courier New", Font.BOLD, 32));
@@ -50,10 +65,10 @@ public class EUIOutputPC extends JComponent
 		rs.fillRect(274, 465, 48, 50);
 		rs.setColor(Color.BLACK);
 		rs.drawRect(274, 465, 48, 50);
-		if(15 - input_register.GetPointerPosition() >= 10)
-			rs.drawString("" + (15 - input_register.GetPointerPosition()), 278, 500);
+		if(15 - key_register.GetPointerPosition() >= 10)
+			rs.drawString("" + (15 - key_register.GetPointerPosition()), 278, 500);
 		else
-			rs.drawString("" + (15 - input_register.GetPointerPosition()), 287, 500);
+			rs.drawString("" + (15 - key_register.GetPointerPosition()), 287, 500);
 		
 		//Отрисовка заголовка
 		rs.setFont(new Font("Courier New", Font.BOLD, 25));
@@ -62,8 +77,11 @@ public class EUIOutputPC extends JComponent
 	}
 	
 	private EUIRegister[]				registers;					//Массив регистров
-	private EUIInputRegister			input_register;				//Клавишный регистр
+	private EUIInputRegister			key_register;				//Клавишный регистр
+	private EUIInputRegister[]			input_registers;			//Устройства вывода + клавишный регистр
 	private	EUIMemory					memory;						//Память
 	private JCheckBox					movement_check;				//Чекбокс установки сдвига указателя
 	private JCheckBox					tact;						//Чекбокс режима "Такт"
+	private JLabel						work;						//Кнопка "Работа/Остановка"
+	private JRadioButton[]				register_check;				//Кнопки выбора активного регистра
 }

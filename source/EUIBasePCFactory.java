@@ -1,7 +1,11 @@
 import java.awt.Color;
 import java.awt.Font;
 
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 
 import Machine.*;
 
@@ -17,8 +21,10 @@ public class EUIBasePCFactory
 		regfact = machine.GetRegFac();
 		flagfact = machine.GetFlagFac();
 		channfact = machine.GetChannelFac();
+		devfact = machine.GetDeviceFactory();
 		memory = machine.GetMemory();
 		micro_memory = machine.GetMicroMem();
+
 	}
 	
 	public EUIRegister[] CreateClassicRegisters() 					//Создание регистров для режима "Базовая ЭВМ"
@@ -68,7 +74,10 @@ public class EUIBasePCFactory
 		EUIRegister C = new EUIRegister(flagfact.GetC(), 175, 350, "C");
 		C.SetWidth(30);
 		
-		EUIRegister Registers[] = {RD, RA, SK, RK, Acc, C};
+		EUIRegister OutDev = new EUIRegister(devfact.getOutputDevice().getDataRegister(), 400, 310, 445, 328, "ВУ 1");
+		OutDev.SetWidth(135);
+		
+		EUIRegister Registers[] = {RD, RA, SK, RK, Acc, C, OutDev};
 		
 		return Registers;
 	}
@@ -112,9 +121,28 @@ public class EUIBasePCFactory
 		return Registers;		
 	}
 	
-	public EUIInputRegister CreateInputRegister()
+	public EUIInputRegister CreateKeyRegister()
 	{
-		return new EUIInputRegister(regfact.InputRegister(), 1, 460, 60, 32, 478, "Клавишный Регистр");
+		EUIInputRegister key_register = new EUIInputRegister(regfact.InputRegister(), 1, 460, 60, 32, 478, "Клавишный Регистр");
+		key_register.SetActive(true);
+		
+		return key_register;
+	}
+	
+	public EUIInputRegister CreateInputRegister1()
+	{
+		EUIInputRegister InpDev1 = new EUIInputRegister(devfact.getInputDevice1().getDataRegister(), 550, 310, 60, 595, 328, "ВУ 2");
+		InpDev1.SetWidth(135);
+		
+		return InpDev1;
+	}
+	
+	public EUIInputRegister CreateInputRegister2()
+	{
+		EUIInputRegister InpDev2 = new EUIInputRegister(devfact.getInputDevice2().getDataRegister(), 700, 310, 60, 745, 328, "ВУ 3");
+		InpDev2.SetWidth(135);
+				
+		return InpDev2;
 	}
 	
 	public EUIManagerDevice CreateManagerDevice()					//Создание устройства управления
@@ -326,16 +354,58 @@ public class EUIBasePCFactory
 		JCheckBox memory_check = new JCheckBox("Работа с памятью МК");
 		
 		memory_check.setBackground(new Color(231,236,119));
-		memory_check.setBounds(437, 466, 295, 49);
+		memory_check.setBounds(438, 466, 295, 49);
 		memory_check.setFocusable(false);
 		memory_check.setForeground(Color.BLACK);
 		memory_check.setFont(new Font("Courier New", Font.PLAIN, 24));
 		
 		return memory_check;
 	}
+	
+	public JLabel CreateWorkLabel()
+	{
+		JLabel work = new JLabel("Работа");
+		work.setBackground(new Color(231,236,119));
+		work.setSize(107, 51);
+		work.setForeground(Color.BLACK);
+		work.setFont(new Font("Courier New", Font.PLAIN, 20));
+		
+		return work;
+	}
+	
+	public JRadioButton[] CreateRegisterRadioButtons()
+	{
+
+		JRadioButton key_check = new JRadioButton("Ввод в КР", true);
+		key_check.setBackground(new Color(231,236,119));
+		key_check.setBounds(438, 440, 174, 25);
+		key_check.setFocusable(false);
+		key_check.setForeground(Color.BLACK);
+		key_check.setFont(new Font("Courier New", Font.PLAIN, 22));
+		
+		JRadioButton inp1_check = new JRadioButton("Ввод в ВУ 2");
+		inp1_check.setBackground(new Color(231,236,119));
+		inp1_check.setBounds(438, 465, 174, 25);
+		inp1_check.setFocusable(false);
+		inp1_check.setForeground(Color.BLACK);
+		inp1_check.setFont(new Font("Courier New", Font.PLAIN, 22));
+
+		JRadioButton inp2_check = new JRadioButton("Ввод в ВУ 3");
+		inp2_check.setBackground(new Color(231,236,119));
+		inp2_check.setBounds(438, 490, 174, 25);
+		inp2_check.setFocusable(false);
+		inp2_check.setForeground(Color.BLACK);
+		inp2_check.setFont(new Font("Courier New", Font.PLAIN, 22));
+		
+		JRadioButton[] Buttons = {key_check, inp1_check, inp2_check};
+		
+		return Buttons;
+	}
+	
 	private ERegisterFactory 	regfact;					//Регистры
 	private EFlagFactory 		flagfact;					//Флаги
 	private EChannelFactory		channfact;					//Каналы
+	private DeviceFactory		devfact;					//Устройства ввода-вывода
 	private EMemory				memory;						//Память
 	private EMemory				micro_memory;				//Память микрокомманд
 }

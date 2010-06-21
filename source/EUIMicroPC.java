@@ -5,8 +5,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 
 /*-----------------------------------------------------------------------------
 				Компонент "Работа с МПУ". Вызывает методы отрисовки
@@ -15,7 +17,7 @@ import javax.swing.JComponent;
 
 public class EUIMicroPC extends JComponent
 {
-	public EUIMicroPC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check, JCheckBox tact, JCheckBox memory_check)
+	public EUIMicroPC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check, JCheckBox tact, JCheckBox memory_check, JLabel work)
 	{
 		registers = factory.CreateMicroRegisters();
 		channels = factory.CreateMicroChannels();
@@ -23,12 +25,13 @@ public class EUIMicroPC extends JComponent
 		micro_memory = factory.CreateMicroMemory();
 		alu = factory.CreateMicroAlu();
 		
-		this.input_register = input_register;
+		this.key_register = input_register;
+		
 		this.movement_check = movement_check ;
 		this.tact = tact;	
 		this.memory_check = memory_check;
+		this.work = work;
 
-		
 	}
 
 	public void paintComponent(Graphics g) 
@@ -55,8 +58,8 @@ public class EUIMicroPC extends JComponent
 			registers[i].Draw(rs);
 		
 		//Отрисовка клавишного регистра
-		input_register.Draw(rs);
-		input_register.DrawPointer(rs);
+		key_register.Draw(rs);
+		key_register.DrawPointer(rs);
 		
 		//Добавление чекбоксов и рамок
 		add(movement_check);		//Проверка сдвига
@@ -64,7 +67,10 @@ public class EUIMicroPC extends JComponent
 		add(memory_check);			//"Работа с памятью МК"
 		rs.drawRect(1, 436, 301, 20);
 		rs.drawRect(329, 465, 101, 50);
-		rs.drawRect(436, 465, 296, 50);
+		rs.drawRect(437, 465, 296, 50);		
+		
+		work.setLocation(740, 466);
+		add(work);
 		
 		//Отрисовка номера бита
 		rs.setFont(new Font("Courier New", Font.BOLD, 32));
@@ -72,10 +78,10 @@ public class EUIMicroPC extends JComponent
 		rs.fillRect(274, 465, 48, 50);
 		rs.setColor(Color.BLACK);
 		rs.drawRect(274, 465, 48, 50);
-		if(15 - input_register.GetPointerPosition() >= 10)
-			rs.drawString("" + (15 - input_register.GetPointerPosition()), 278, 500);
+		if(15 - key_register.GetPointerPosition() >= 10)
+			rs.drawString("" + (15 - key_register.GetPointerPosition()), 278, 500);
 		else
-			rs.drawString("" + (15 - input_register.GetPointerPosition()), 287, 500);
+			rs.drawString("" + (15 - key_register.GetPointerPosition()), 287, 500);
 		
 		//Отрисовка названий флагов в регистре состояния
 		rs.setFont(new Font("Courier New", Font.BOLD, 21));
@@ -104,7 +110,7 @@ public class EUIMicroPC extends JComponent
 	}
 	
 	private EUIRegister[]				registers;					//Массив регистров
-	private EUIInputRegister			input_register;				//Клавишный регистр
+	private EUIInputRegister			key_register;				//Клавишный регистр
 	private EUIChannel[] 				channels;					//Массив каналов
 	private	EUIMemory					memory;						//Память
 	private EUIMemory					micro_memory;				//Память МК
@@ -112,5 +118,6 @@ public class EUIMicroPC extends JComponent
 	private JCheckBox					movement_check;				//Чекбокс установки сдвига указателя
 	private JCheckBox					tact;						//Чекбокс для режима "Такт"
 	private JCheckBox					memory_check;				//Чекбокс "Работа с памятью МК"
+	private JLabel						work;						//Кнопка "работа/остановка"
 
 }

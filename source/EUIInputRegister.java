@@ -16,39 +16,53 @@ public class EUIInputRegister extends EUIRegister
 		register = reg;
 		pointer_position = 0;
 		movement = false;
+		active = false;
 	}
 	
 	public void DrawPointer(Graphics g)				//Отрисовка указателя
 	{
-		Graphics2D rs = (Graphics2D) g;
-		
-		//Условия для зацикливания установки позиций указателя
-		if (GetPointerPosition() == -1)
-			SetPointerPosition(15);
-		if (GetPointerPosition() == 16)
-			SetPointerPosition(0);
-		
-		int	position = GetPointerPosition();	//Текущая позиция
-		int shift = 0;							//Смещение от первого символа содержимого регистра
-		
-		//Условия для перемещения указателя через пробелы
-		if (position >= 0 && position < 4)
-			shift = position * 13;
-		if (position >= 4 && position < 8)
-			shift = position * 13 + 13;
-		if (position >= 8 && position < 12)
-			shift = position * 13 + 13 * 2;
-		if (position >= 12 && position < 16)
-			shift = position * 13 + 13 * 3;
-
-		//Отрисовка указателя		
-		int[] mass1 = {super.GetDataX() + shift, super.GetDataX() + shift + 5, super.GetDataX() + shift + 6, super.GetDataX() + shift + 11};
-		int[] mass2 = {super.GetDataY() + 15, super.GetDataY() + 6, super.GetDataY() + 6, super.GetDataY() + 15};
-		rs.fillPolygon(mass1, mass2, 4);
-		rs.drawPolygon(mass1, mass2, 4);
+		if(active)
+		{
+			Graphics2D rs = (Graphics2D) g;
+			
+			//Условия для зацикливания установки позиций указателя
+			if (super.GetContent().length() == 16)
+			{	
+				if (GetPointerPosition() == -1)
+					SetPointerPosition(15);
+				if (GetPointerPosition() == 16)
+					SetPointerPosition(0);
+			}
+			if (super.GetContent().length() == 8)
+			{	
+				if (GetPointerPosition() == -1)
+					SetPointerPosition(7);
+				if (GetPointerPosition() == 8)
+					SetPointerPosition(0);
+			}
+			
+			int	position = GetPointerPosition();	//Текущая позиция
+			int shift = 0;							//Смещение от первого символа содержимого регистра
+			
+			//Условия для перемещения указателя через пробелы
+			if (position >= 0 && position < 4)
+				shift = position * 13;
+			if (position >= 4 && position < 8)
+				shift = position * 13 + 13;
+			if (position >= 8 && position < 12)
+				shift = position * 13 + 13 * 2;
+			if (position >= 12 && position < 16)
+				shift = position * 13 + 13 * 3;
+	
+			//Отрисовка указателя		
+			int[] mass1 = {super.GetDataX() + shift, super.GetDataX() + shift + 5, super.GetDataX() + shift + 6, super.GetDataX() + shift + 11};
+			int[] mass2 = {super.GetDataY() + 15, super.GetDataY() + 6, super.GetDataY() + 6, super.GetDataY() + 15};
+			rs.fillPolygon(mass1, mass2, 4);
+			rs.drawPolygon(mass1, mass2, 4);
+		}
 	}
 	
-	public int GetPointerPosition()					//Получение позиции указателя
+	public int GetPointerPosition()							//Получение позиции указателя
 	{
 		return pointer_position;
 	}
@@ -58,17 +72,27 @@ public class EUIInputRegister extends EUIRegister
 		pointer_position = position;
 	}
 	
-	public void SetMovement(boolean x)
+	public void SetMovement(boolean x)						//Вкл/выкл смещение указателя после изменения бита
 	{
 		movement = x;	
 	}
 	
-	public boolean GetMovement()
+	public boolean isMovement()								//Передача текущего состояния смещяемости
 	{
 		return movement;
 	}
 	
-	public void SetBit()							//Инверсия бита
+	public void SetActive(boolean x)						//Активировать регистр (выводить указатель)
+	{
+		active = x;
+	}
+	
+	public boolean isActive()								//Передача текущего состояния активности
+	{
+		return active;
+	}
+	
+	public void SetBit()									//Инверсия бита
 	{
 		String content = super.GetContent();				//Содержимого регистра
 		int posit = GetPointerPosition();					//Позиция указателя
@@ -107,10 +131,10 @@ public class EUIInputRegister extends EUIRegister
 	private double ConvertToDec(String content)		//Преобразование в десятичную систему
 	{
 		double data = 0;
-		for (int i = 0; i < 16; i++ )
+		for (int i = 0; i < content.length(); i++ )
 		{
 			if(content.substring(i, i+1).equals("1"))
-				data = data + Math.pow(2, 15-i);
+				data = data + Math.pow(2, content.length() - 1 - i);
 		}
 		
 		return data;
@@ -119,4 +143,5 @@ public class EUIInputRegister extends EUIRegister
 	private IRegister	register;				//Регистр
 	private int			pointer_position;		//Позиция указателя
 	private boolean		movement;				//Сдвигание указателя после изменения бита
+	private boolean		active;					//Активность регистра
 }
