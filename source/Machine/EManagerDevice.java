@@ -32,6 +32,7 @@ public class EManagerDevice
 		alu.ResetALU(); // Отключение инверторов и инкрементора
 		
 		channels.CloseAllChannels(); // Закрыть все каналы
+		dev.closeAllChannels(); // Закрыть все каналы ВУ
 		
 		channels.MicroCommandToRMC().Open(); // Пересылаем микрокоманду в регистр микрокоманд
 		
@@ -228,6 +229,7 @@ public class EManagerDevice
 							// tsf B
 							if (dev.getDeviceByAdress(dev_adr) != null)
 							{
+								dev.getDeviceByAdress(dev_adr).getStateFlagChannel().Open();
 								if ( dev.getDeviceByAdress(dev_adr).getStateFlag().SendData() == 1)
 								{
 									reg_factory.MicroInstructionPointer().GetData(reg_factory.MicroInstructionPointer().SendData()+1);
@@ -238,6 +240,14 @@ public class EManagerDevice
 							// in B
 							if ( dev_adr == 1)
 							{
+								dev.getDeviceByAdress(1).getAdressChannel().Open();
+								dev.getDeviceByAdress(1).getIORequestChannel().Open();
+								dev.getDeviceByAdress(2).getAdressChannel().Open();
+								dev.getDeviceByAdress(2).getIORequestChannel().Open();
+								dev.getDeviceByAdress(3).getAdressChannel().Open();
+								dev.getDeviceByAdress(3).getIORequestChannel().Open();
+								
+								
 								dev.getDeviceByAdress(dev_adr).getDataChannel().Open();
 							}
 							break;
@@ -245,6 +255,13 @@ public class EManagerDevice
 							// out B
 							if ( (dev_adr == 2) || (dev_adr == 3))
 							{
+								dev.getDeviceByAdress(1).getAdressChannel().Open();
+								dev.getDeviceByAdress(1).getIORequestChannel().Open();
+								dev.getDeviceByAdress(2).getAdressChannel().Open();
+								dev.getDeviceByAdress(2).getIORequestChannel().Open();
+								dev.getDeviceByAdress(3).getAdressChannel().Open();
+								dev.getDeviceByAdress(3).getIORequestChannel().Open();
+								
 								dev.getDeviceByAdress(dev_adr).getDataChannel().Open();
 							}
 							break;

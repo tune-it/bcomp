@@ -43,12 +43,23 @@ public class DeviceFactory
 	
 	public void clearAllFlags()
 	{
-		for(InternalDevice x : dev) x.getStateFlag().ClearFlag();
+		for(InternalDevice x : dev)
+		{
+			x.getStateFlag().ClearFlag();
+		}
 	}
 	
 	public void closeAllChannels()
 	{
-		for (InternalDevice x : dev) x.getDataChannel().Close();
+		for (InternalDevice x : dev)
+		{
+				x.getDataChannel().Close();
+				
+				x.getAdressChannel().Close();
+				x.getInterruptionRequestChannel().Close();
+				x.getIORequestChannel().Close();
+				x.getStateFlagChannel().Close();
+		}
 	}
 	
 	private InternalDevice dev[];
