@@ -1,5 +1,8 @@
 package Machine;
 
+/*-----------------------------------------------------------------------------
+	Фабрика устройств ввода/вывода
+-----------------------------------------------------------------------------*/
 public class DeviceFactory
 {
 	public DeviceFactory(ERegisterFactory reg_factory)
@@ -43,6 +46,10 @@ public class DeviceFactory
 		for(InternalDevice x : dev) x.getStateFlag().ClearFlag();
 	}
 	
-	private InternalDevice dev[];
+	public void closeAllChannels()
+	{
+		for (InternalDevice x : dev) x.getDataChannel().Close();
+	}
 	
+	private InternalDevice dev[];
 }

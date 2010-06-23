@@ -238,14 +238,14 @@ public class EManagerDevice
 							// in B
 							if ( dev_adr == 1)
 							{
-								dev.getDeviceByAdress(dev_adr).getChannel().Open();
+								dev.getDeviceByAdress(dev_adr).getDataChannel().Open();
 							}
 							break;
 						case 3:
 							// out B
 							if ( (dev_adr == 2) || (dev_adr == 3))
 							{
-								dev.getDeviceByAdress(dev_adr).getChannel().Open();
+								dev.getDeviceByAdress(dev_adr).getDataChannel().Open();
 							}
 							break;
 						default: break;
