@@ -41,7 +41,11 @@ public class IOUnitUI extends JComponent
 		
 		//Отрисовка каналов
 		for (int i=0; i<channels.length; i++)
-			channels[i].draw(rs);
+			if (channels[i].isConnect() == false)
+				channels[i].draw(rs);
+		for (int i=0; i<channels.length; i++)
+			if (channels[i].isConnect())
+				channels[i].draw(rs);
 		
 		//Отрисовка флагов 
 		for (int i=0; i<flags.length; i++)

@@ -299,7 +299,7 @@ public class ObjectFactoryUI
 						{468, 160},
 						{468, 160},
 						{468, 190}};
-		ChannelUI request1 = new ChannelUI(empty_channel, mass1);
+		ChannelUI request1 = new ChannelUI(devfact.getOutputDevice().getInterruptionRequestChannel(), mass1);
 		
 		int [][] mass2 = {{369, 160},
 						{618, 160},
