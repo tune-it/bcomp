@@ -18,8 +18,8 @@ public class EChannel implements IChannel
 		if ((source != null) && (destination != null))
 		{
 			destination.GetData(source.SendData());
-			connection = true;
 		}
+		connection = true;
 	}
 	
 	public void Close()
