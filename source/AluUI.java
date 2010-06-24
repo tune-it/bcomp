@@ -8,9 +8,9 @@ import java.awt.Graphics2D;
 				Отрисовка АЛУ 
 -----------------------------------------------------------------------------*/
 
-public class EUIAlu
+public class AluUI
 {
-	public EUIAlu(int x, int y, String text)
+	public AluUI(int x, int y, String text)
 	{
 		leftX = x;
 		leftY = y;
@@ -19,7 +19,7 @@ public class EUIAlu
 		messY = y + 70;
 	}
 	
-	public EUIAlu(int x, int y, int messX, int messY, String text)
+	public AluUI(int x, int y, int messX, int messY, String text)
 	{
 		leftX = x;
 		leftY = y;
@@ -28,7 +28,7 @@ public class EUIAlu
 		this.messY = messY;
 	}
 	
-	public void Draw(Graphics g)	//Отрисовка АЛУ без БР
+	public void draw(Graphics g)	//Отрисовка АЛУ без БР
 	{
 		Graphics2D rs = (Graphics2D) g;
 		

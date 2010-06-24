@@ -12,15 +12,15 @@ import Machine.*;
 				отображает содержимое в двоичном виде.
 -----------------------------------------------------------------------------*/
 
-public class EUIRegister
+public class RegisterUI
 {
-	public EUIRegister(IRegister reg, double x, double y, String text)
+	public RegisterUI(IRegister reg, double x, double y, String text)
 	{
 		this.reg = reg;
 		length = reg.Width();
 		
 		style = false;
-		content = ConvertToBin(reg);
+		content = convertToBin(reg);
 		
 		leftX = x;
 		leftY = y;
@@ -28,21 +28,21 @@ public class EUIRegister
 		width = 17 * reg.Width() - 6;
 		height = 50;
 		
-		dataX = (int)leftX+10;
-		dataY = (int)leftY+42;
+		contentX = (int)leftX+10;
+		contentY = (int)leftY+42;
 		
 		messX = (int)x + 10;
 		messY = (int)y + 18;	
 		this.text = text;	
 	}
 
-	public EUIRegister(IRegister reg, double x, double y, double height, String text)
+	public RegisterUI(IRegister reg, double x, double y, double height, String text)
 	{
 		this.reg = reg;
 		length = reg.Width();
 		
 		style = false;
-		content = ConvertToBin(reg);
+		content = convertToBin(reg);
 		
 		leftX = x;
 		leftY = y;
@@ -50,21 +50,21 @@ public class EUIRegister
 		width = 17 * reg.Width() - 6;
 		this.height = height;
 		
-		dataX = (int)leftX+10;
-		dataY = (int)leftY+42;
+		contentX = (int)leftX+10;
+		contentY = (int)leftY+42;
 		
 		messX = (int)x + 10;
 		messY = (int)y + 18;
 		this.text = text;		
 	}
 	
-	public EUIRegister(IRegister reg, double x, double y, int messX, int messY, String text)
+	public RegisterUI(IRegister reg, double x, double y, int messX, int messY, String text)
 	{
 		this.reg = reg;
 		length = reg.Width();
 		
 		style = false;
-		content = ConvertToBin(reg);	
+		content = convertToBin(reg);	
 		
 		leftX = x;
 		leftY = y;
@@ -72,21 +72,21 @@ public class EUIRegister
 		width = 17 * reg.Width() - 6;
 		height = 50;
 		
-		dataX = (int)leftX+10;
-		dataY = (int)leftY+42;
+		contentX = (int)leftX+10;
+		contentY = (int)leftY+42;
 		
 		this.messX = messX;
 		this.messY = messY;
 		this.text = text;	
 	}
 	
-	public EUIRegister(IRegister reg, double x, double y, double height, int messX, int messY, String text)
+	public RegisterUI(IRegister reg, double x, double y, double height, int messX, int messY, String text)
 	{
 		this.reg = reg;
 		length = reg.Width();
 		
 		style = false;
-		content = ConvertToBin(reg);
+		content = convertToBin(reg);
 		
 		leftX = x;
 		leftY = y;
@@ -94,67 +94,67 @@ public class EUIRegister
 		width = 17 * reg.Width() - 6;
 		this.height = height;
 		
-		dataX = (int)leftX+10;
-		dataY = (int)leftY+42;
+		contentX = (int)leftX+10;
+		contentY = (int)leftY+42;
 		
 		this.messX = messX;
 		this.messY = messY;
 		this.text = text;	
 	}
 		
-	public double GetX()									//Получение координаты X левого верхнего угла
+	public double getX()									//Получение координаты X левого верхнего угла
 	{
 		return leftX;
 	}
 	
-	public double GetY()									//Получение координаты Y левого верхнего угла
+	public double getY()									//Получение координаты Y левого верхнего угла
 	{
 		return leftY;
 	}
 	
-	public double GetHeight()								//Получение высоты регистра
+	public double getHeight()								//Получение высоты регистра
 	{
 		return height;
 	}
 	
-	public void SetWidth(int x) 							//Установка длины регистра
+	public void setWidth(int x) 							//Установка длины регистра
 	{
 		width = x;
 	}
 	
-	public void SetDataPosition(int dataX, int dataY)		//Установка положение содержимого регистра
+	public void setContentPosition(int dataX, int dataY)		//Установка положение содержимого регистра
 	{
-		this.dataX = dataX;
-		this.dataY = dataY;
+		this.contentX = dataX;
+		this.contentY = dataY;
 	}
 	
-	public int GetDataX()									//Получение координаты Х положения текста
+	public int getDataX()									//Получение координаты Х положения текста
 	{
-		return dataX;
+		return contentX;
 	}
 	
-	public int GetDataY()									//Получение координаты У положения текста
+	public int getDataY()									//Получение координаты У положения текста
 	{
-		return dataY;
+		return contentY;
 	}
 	
-	public void SetStyle(boolean x)							//Установка вида содержимого (16ый/2ый true/false)
+	public void setStyle(boolean x)							//Установка вида содержимого (16ый/2ый true/false)
 	{
 		style = x;
 		
 		if (style == false)
 		{
-			content = ConvertToBin(reg);
+			content = convertToBin(reg);
 			width = 17 * reg.Width() - 6;
 		}
 		else
 		{
-			content = ConvertToHex(reg);
+			content = convertToHex(reg);
 			width = 100;
 		}
 	}
 	
-	public String GetContent()								//Получение содержимого регистра
+	public String getContent()								//Получение содержимого регистра
 	{
 		String str = "";
 		
@@ -166,15 +166,15 @@ public class EUIRegister
 		return str;
 	}
 
-	public void Draw(Graphics g)							//Отрисовка регистра
+	public void draw(Graphics g)							//Отрисовка регистра
 	{
 		Graphics2D rs = (Graphics2D) g;
 
 		//Обновление содержимого
 		if (style == false)
-			content = ConvertToBin(reg);
+			content = convertToBin(reg);
 		else
-			content = ConvertToHex(reg);
+			content = convertToHex(reg);
 		
 		//Отрисовка прямоугольника и контура
 		Rectangle2D rect = new Rectangle2D.Double(leftX, leftY, width, height);	
@@ -195,10 +195,10 @@ public class EUIRegister
 		//Отрисовка содержимого	
 		rs.setPaint(Color.BLACK);
 		rs.setFont(new Font("Courier New", Font.BOLD, 21));
-		rs.drawString (content, dataX, dataY);
+		rs.drawString (content, contentX, contentY);
 	}
 	
-	private String ConvertToBin(IRegister reg)				//Преобразование в двоичный вид
+	private String convertToBin(IRegister reg)				//Преобразование в двоичный вид
 	{
 		int pish = reg.SendData();
 		String str = "";
@@ -245,7 +245,7 @@ public class EUIRegister
 		return str;
 	}
 	
-	private String ConvertToHex(IRegister reg)				//Преобразование в шестнадцатеричный вид
+	private String convertToHex(IRegister reg)				//Преобразование в шестнадцатеричный вид
 	{
 		Formatter fmt = new Formatter();
 		fmt.format("%x", reg.SendData());
@@ -268,8 +268,8 @@ public class EUIRegister
 	private double 		leftY;		//Координата Y левой верхней точки
 	private double 		width; 		//Длина регистра
 	private double 		height;		//Высота
-	private int			dataX;		//Координата X положения содержимого регистра
-	private int			dataY;		//Координата Y положения содержимого регистра		
+	private int			contentX;		//Координата X положения содержимого регистра
+	private int			contentY;		//Координата Y положения содержимого регистра		
 	private int 		messX;		//Координата X положения текста	
 	private int       	messY;		//Координата Y положения текста
 	private	String    	text;		//Название регистра

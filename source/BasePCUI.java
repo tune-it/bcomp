@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -12,19 +12,15 @@ import javax.swing.JLabel;
 							необходимых элементов.
 -----------------------------------------------------------------------------*/	
 
-public class EUIBasePC extends JComponent
+public class BasePCUI extends JComponent
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5587342628170024770L;
-	public EUIBasePC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check, JCheckBox tact, JLabel work)
+	public BasePCUI (ObjectFactoryUI factory, InputRegisterUI input_register, JCheckBox movement_check, JCheckBox tact, JButton work)
 	{
-		registers = factory.CreateClassicRegisters();
-		channels = factory.CreateClassicChannels();
-		memory = factory.CreateСlassicMemory();
-		manager_device = factory.CreateManagerDevice();
-		alu = factory.CreateClassicAlu();
+		registers = factory.createClassicRegisters();
+		channels = factory.createClassicChannels();
+		memory = factory.createСlassicMemory();
+		manager_device = factory.createManagerDevice();
+		alu = factory.createClassicAlu();
 		
 		this.movement_check = movement_check;
 		this.tact = tact;
@@ -39,11 +35,11 @@ public class EUIBasePC extends JComponent
 		
 		//Отрисовка каналов (сначала открытые)
 		for (int i=0; i<channels.length; i++)
-			if (channels[i].GetConnect() == false)
-				channels[i].Draw(rs);
+			if (channels[i].isConnect() == false)
+				channels[i].draw(rs);
 		for (int i=0; i<channels.length; i++)
-			if (channels[i].GetConnect())
-				channels[i].Draw(rs);
+			if (channels[i].isConnect())
+				channels[i].draw(rs);
 		
 		//Отрисовка канала в устройство управления
 		rs.setColor(Color.GRAY);
@@ -54,11 +50,11 @@ public class EUIBasePC extends JComponent
 		
 		//Отрисовка регистров
 		for (int i=0; i<registers.length; i++)
-			registers[i].Draw(rs);
+			registers[i].draw(rs);
 		
 		//Отрисовка клавишного регистра
-		key_register.Draw(rs);
-		key_register.DrawPointer(rs);
+		key_register.draw(rs);
+		key_register.drawPointer(rs);
 		
 		//Отрисовка номера бита
 		rs.setFont(new Font("Courier New", Font.BOLD, 32));
@@ -66,35 +62,33 @@ public class EUIBasePC extends JComponent
 		rs.fillRect(274, 465, 48, 50);
 		rs.setColor(Color.BLACK);
 		rs.drawRect(274, 465, 48, 50);
-		int bit_number = 15 - key_register.GetPointerPosition();
+		int bit_number = 15 - key_register.getPointerPosition();
 		if(bit_number >= 10)
 			rs.drawString("" + bit_number, 278, 500);
 		else
 			rs.drawString("" + bit_number, 287, 500);
 
-		alu.Draw(rs);				//Отрисовка АЛУ
-		memory.Draw(rs);			//Отрисовка Памяти
-		manager_device.Draw(rs);	//Отрисовка Устройства Управления
+		alu.draw(rs);				//Отрисовка АЛУ
+		memory.draw(rs);			//Отрисовка Памяти
+		manager_device.draw(rs);	//Отрисовка Устройства Управления
 		
 		//Добавление чекбоксов и рамок
 		add(movement_check);		//Проверка сдвига
-		add(tact);					//"Такт"
 		rs.drawRect(1, 436, 301, 20);
+		add(tact);					//"Такт"
 		rs.drawRect(329, 465, 101, 50);
 		
 		work.setLocation(437, 465);
 		add(work);
 	}
 	
-	
-	
-	private EUIRegister[]				registers;					//Массив регистров
-	private EUIInputRegister			key_register;				//Клавишный регистр
-	private EUIChannel[] 				channels;					//Массив каналов
-	private	EUIMemory					memory;						//Память
-	private EUIManagerDevice			manager_device;				//Устройство Управления
-	private	EUIAlu						alu;						//АЛУ
+	private RegisterUI[]				registers;					//Массив регистров
+	private InputRegisterUI				key_register;				//Клавишный регистр
+	private ChannelUI[] 				channels;					//Массив каналов
+	private	MemoryUI					memory;						//Память
+	private ManagerDeviceUI				manager_device;				//Устройство Управления
+	private	AluUI						alu;						//АЛУ
 	private JCheckBox					movement_check;				//Чекбокс установки сдвига указателя
 	private JCheckBox					tact;						//Чекбокс режима "Такт"
-	private JLabel						work;						//Лэйбл "Работа/Остановка"
+	private JButton						work;						//Лэйбл "Работа/Остановка"
 }

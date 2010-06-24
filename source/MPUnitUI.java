@@ -4,33 +4,28 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 
 /*-----------------------------------------------------------------------------
-	Компонент "Работа с МПУ". Вызывает методы отрисовки
-	необходимых элементов.
+				Компонент "Работа с МПУ". Вызывает методы отрисовки
+							необходимых элементов.
 -----------------------------------------------------------------------------*/	
 
-public class EUIMicroPC extends JComponent
+public class MPUnitUI extends JComponent
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7550509246525120254L;
-	public EUIMicroPC (EUIBasePCFactory factory, EUIInputRegister input_register, JCheckBox movement_check, JCheckBox tact, JCheckBox memory_check, JLabel work)
+	public MPUnitUI (ObjectFactoryUI factory, InputRegisterUI input_register, JCheckBox movement_check, JCheckBox tact, JCheckBox memory_check, JButton work)
 	{
-		registers = factory.CreateMicroRegisters();
-		channels = factory.CreateMicroChannels();
-		memory = factory.CreateСlassicMemory();
-		micro_memory = factory.CreateMicroMemory();
-		alu = factory.CreateMicroAlu();
+		registers = factory.createMPURegisters();
+		channels = factory.createMPUChannels();
+		memory = factory.createСlassicMemory();
+		micro_memory = factory.createMCMemory();
+		alu = factory.createMPUAlu();
 		
 		this.key_register = input_register;
 		
-		this.movement_check = movement_check ;
+		this.movement_check = movement_check;
 		this.tact = tact;	
 		this.memory_check = memory_check;
 		this.work = work;
@@ -43,37 +38,41 @@ public class EUIMicroPC extends JComponent
 		
 		//Отрисовка каналов (сначала открытые)
 		for (int i=0; i<channels.length; i++)
-			if (channels[i].GetConnect() == false)
-				channels[i].Draw(rs);
+			if (channels[i].isConnect() == false)
+				channels[i].draw(rs);
 		for (int i=0; i<channels.length; i++)
-			if (channels[i].GetConnect())
-				channels[i].Draw(rs);
+			if (channels[i].isConnect())
+				channels[i].draw(rs);
 		
-		alu.Draw(rs);				//Отрисовка Алу
-		memory.Draw(rs);			//Отрисовка Памяти
+		alu.draw(rs);				//Отрисовка Алу
+		memory.draw(rs);			//Отрисовка Памяти
 		
 		//Отрисовка Памяти МК
-		micro_memory.SetSeparator(50);
-		micro_memory.Draw(rs);		
+		micro_memory.setSeparator(50);
+		micro_memory.draw(rs);		
 		
 		//Отрисовка регистров
 		for (int i=0; i<registers.length; i++)
-			registers[i].Draw(rs);
+			registers[i].draw(rs);
 		
 		//Отрисовка клавишного регистра
-		key_register.Draw(rs);
-		key_register.DrawPointer(rs);
+		key_register.draw(rs);
+		key_register.drawPointer(rs);
 		
 		//Добавление чекбоксов и рамок
-		add(movement_check);		//Проверка сдвига
-		add(tact);					//"Такт"
-		add(memory_check);			//"Работа с памятью МК"
+		add(movement_check);			//Проверка сдвига
 		rs.drawRect(1, 436, 301, 20);
+		add(tact);						//"Такт"
 		rs.drawRect(329, 465, 101, 50);
-		rs.drawRect(437, 465, 296, 50);		
-		
-		work.setLocation(740, 466);
+		add(memory_check);				//"Работа с памятью МК"
+		rs.drawRect(437, 465, 276, 50);		
+		work.setLocation(720, 465);		//Работа/Останов.
 		add(work);
+		
+		movement_check.repaint();
+		tact.repaint();
+		memory_check.repaint();
+		work.repaint();
 		
 		//Отрисовка номера бита
 		rs.setFont(new Font("Courier New", Font.BOLD, 32));
@@ -81,10 +80,10 @@ public class EUIMicroPC extends JComponent
 		rs.fillRect(274, 465, 48, 50);
 		rs.setColor(Color.BLACK);
 		rs.drawRect(274, 465, 48, 50);
-		if(15 - key_register.GetPointerPosition() >= 10)
-			rs.drawString("" + (15 - key_register.GetPointerPosition()), 278, 500);
+		if(15 - key_register.getPointerPosition() >= 10)
+			rs.drawString("" + (15 - key_register.getPointerPosition()), 278, 500);
 		else
-			rs.drawString("" + (15 - key_register.GetPointerPosition()), 287, 500);
+			rs.drawString("" + (15 - key_register.getPointerPosition()), 287, 500);
 		
 		//Отрисовка названий флагов в регистре состояния
 		rs.setFont(new Font("Courier New", Font.BOLD, 21));
@@ -112,15 +111,15 @@ public class EUIMicroPC extends JComponent
 		rs.drawLine(423, 1, 423, 432);
 	}
 	
-	private EUIRegister[]				registers;					//Массив регистров
-	private EUIInputRegister			key_register;				//Клавишный регистр
-	private EUIChannel[] 				channels;					//Массив каналов
-	private	EUIMemory					memory;						//Память
-	private EUIMemory					micro_memory;				//Память МК
-	private	EUIAlu						alu;						//АЛУ
+	private RegisterUI[]				registers;					//Массив регистров
+	private InputRegisterUI			key_register;				//Клавишный регистр
+	private ChannelUI[] 				channels;					//Массив каналов
+	private	MemoryUI					memory;						//Память
+	private MemoryUI					micro_memory;				//Память МК
+	private	AluUI						alu;						//АЛУ
 	private JCheckBox					movement_check;				//Чекбокс установки сдвига указателя
 	private JCheckBox					tact;						//Чекбокс для режима "Такт"
 	private JCheckBox					memory_check;				//Чекбокс "Работа с памятью МК"
-	private JLabel						work;						//Кнопка "работа/остановка"
+	private JButton						work;						//Кнопка "работа/остановка"
 
 }

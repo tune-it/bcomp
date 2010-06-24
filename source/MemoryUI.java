@@ -12,9 +12,9 @@ import Machine.*;
 				для динамического пролистывания страниц
 -----------------------------------------------------------------------------*/
 
-public class EUIMemory
+public class MemoryUI
 {	
-	public EUIMemory (IMemory mem, IRegister reg, int mem_width, double x, double y, int width, int height, int messX, int messY, String text)
+	public MemoryUI (IMemory mem, IRegister reg, int mem_width, double x, double y, int width, int height, int messX, int messY, String text)
 	{
 		memory = mem;
 		this.mem_width = mem_width;
@@ -39,7 +39,7 @@ public class EUIMemory
 		this.text = text;
 	}
 	
-	public void Draw(Graphics g)						//Отрисовка
+	public void draw(Graphics g)						//Отрисовка
 	{
 		Graphics2D rs = (Graphics2D) g;
 		
@@ -67,49 +67,49 @@ public class EUIMemory
 
 		rs.setFont(new Font("Courier New", Font.BOLD, 25));		//Шрифт содержимого
 		
+		String adress, data;
 		int a = 21; 								//Расстояние между строкой и рамкой заголовка 
 		int shift = 25;								//Расстояние между строками 
 		page = register.SendData() / page_size;		//Текущая страница
-		String adress, data;			
 		int mem[] = memory.GetMemory();				//Содержимое ячеек
 		
 		//Форматирование и вывод адресов и содержимого
 		for (int i = 0; i < page_size; i++)
 		{	
-			adress = "" + Convert(page * 16 + i, mem_width);
-			data = "" + Convert(mem[page * 16 + i], page_size);
+			adress = "" + convertToString(page * 16 + i, mem_width);
+			data = "" + convertToString(mem[page * 16 + i], page_size);
 			rs.drawString(adress, (int)leftX + 9, (int)leftY+ banner_height + a);
 			rs.drawString(data, separatorX + 12, (int)leftY+ banner_height + a);
 			a += shift;
 		}
 	}
 	
-	public void SetPage(int page) 						//Выбор страницы для отрисовки 
+	public void setPage(int page) 						//Выбор страницы для отрисовки 
 	{
 		this.page = page;
 	}
 	
-	public int GetPage()								//Получение номера текущей страницы
+	public int getPage()								//Получение номера текущей страницы
 	{
 		return page;
 	}
 	
-	public void SetBannerHeight(int banner_height)		//Установка высоты заголовка
+	public void setBannerHeight(int banner_height)		//Установка высоты заголовка
 	{
 		this.banner_height = banner_height;
 	}
 
-	public void SetSeparator(int x)						//Установка координаты Х линии-разделителя
+	public void setSeparator(int x)						//Установка координаты Х линии-разделителя
 	{
 		separatorX =(int)leftX + x;
 	}
 	
-	public void SetAdressWidth(int x)					//Установка разрядности адреса
+	public void setAdressWidth(int x)					//Установка разрядности адреса
 	{
 		mem_width = x;
 	}
 	
-	private String Convert(int adress, int width)		//Преобразование адреса/cодержимого в строку
+	private String convertToString(int adress, int width)		//Преобразование адреса/cодержимого в строку
 	{
 		Formatter fmt = new Formatter();
 		fmt.format("%x", adress);
@@ -137,7 +137,7 @@ public class EUIMemory
 	private int				messY;			//Координата Y заголовка
 	private int				page;			//Номер страницы памяти (по 16 ячеек)
 	private final int		page_size;		//Количество ячеек на странице
-	private String			text;			//Названия памяти
+	private String			text;			//Название памяти
 	private int				separatorX;		//Координата X разделяющей линии
 	private int 			banner_height;	//Высота заголовка		
 

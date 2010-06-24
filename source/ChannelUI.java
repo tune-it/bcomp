@@ -8,17 +8,17 @@ import Machine.*;
 		Отрисовка канала и стрелки
 -----------------------------------------------------------------------------*/
 
-public class EUIChannel
+public class ChannelUI
 {
 
-	public EUIChannel (EChannel channel, int[][] points)
+	public ChannelUI (EChannel channel, int[][] points)
 	{
 		this.channel = channel;
 		this.points = points; 
 		arrow = true;
 	}
 	
-	public void Draw(Graphics g)				//Отрисовка канала 
+	public void draw(Graphics g)				//Отрисовка канала 
 	{
 		Graphics2D rs = (Graphics2D) g;
 		
@@ -26,7 +26,8 @@ public class EUIChannel
 			rs.setPaint(Color.RED);
 		else
 			rs.setPaint(Color.GRAY);
-			
+		
+		//Отрисовка линии канала
 		rs.setStroke(new BasicStroke(8.0f));
 		for (int j = 0; j < points.length; j += 2)
 			rs.drawLine(points[j][0], points[j][1], points[j+1][0], points[j+1][1]);
@@ -75,17 +76,17 @@ public class EUIChannel
 		}
 	}
 	
-	public void EnableArrow()					//Добавлять стрелку
+	public void enableArrow()					//Добавлять стрелку
 	{
 		arrow = true;
 	}
 	
-	public void DisableArrow()					//Убирать стрелку
+	public void disableArrow()					//Убирать стрелку
 	{
 		arrow = false;
 	}
 	
-	public boolean GetConnect()					//"Открытость" канала
+	public boolean isConnect()					//"Открытость" канала
 	{
 		return channel.GetConnect();
 	}

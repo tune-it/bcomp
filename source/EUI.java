@@ -6,6 +6,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JApplet;
@@ -32,163 +34,39 @@ public class EUI extends JApplet
 			final JTabbedPane tabbedPane = new JTabbedPane();		
 			control = new EControlView(tabbedPane);
 			final EMachine machine = new EMachine(control);
+			ObjectFactoryUI factory = new ObjectFactoryUI(machine);
 			
-			EUIBasePCFactory factory = new EUIBasePCFactory(machine);	
-			key_register = factory.CreateKeyRegister();
-			inp1_register = factory.CreateInputRegister1();
-			inp2_register = factory.CreateInputRegister2();
+			key_register = factory.createKeyRegister();
+			inp1_register = factory.createInputRegister1();
+			inp2_register = factory.createInputRegister2();
 			
-			EUIInputRegister[] inpregs = {key_register, inp1_register, inp2_register};
+			InputRegisterUI[] inpregs = {key_register, inp1_register, inp2_register};
 			input_registers = inpregs;
 			
-			JCheckBox movement_check = factory.CreateMovementCheckBox();
-			JCheckBox tact_check = factory.CreateTactCheckBox();
-			JCheckBox memory_check = factory.CreateMemoryCheckBox();
-			JLabel work = factory.CreateWorkLabel();
-			JRadioButton[] register_check = factory.CreateRegisterRadioButtons();
-			
+			JCheckBox movement_check = factory.createMovementCheckBox();
+			JCheckBox tact_check = factory.createTactCheckBox();
+			JCheckBox memory_check = factory.createMemoryCheckBox();
+			work = factory.createWorkButton();
+			register_check = factory.createRegisterRadioButtons();
 			
 			ButtonGroup group = new ButtonGroup();
 			for (int i=0; i<register_check.length; i++)
 				group.add(register_check[i]);
-				
-			//Слушатель нажатия для чекбокса проверки сдвига
-			ActionListener movement_listener = new ActionListener()
-			{
-				public void actionPerformed(ActionEvent event)
-				{	
-		        	for(int i =0; i<input_registers.length; i++)
-		        		if(input_registers[i].isMovement())
-		        			input_registers[i].SetMovement(false);
-		        		else
-		        			input_registers[i].SetMovement(true);
-					
-					tabbedPane.repaint();
-				}
-			};
-			movement_check.addActionListener(movement_listener);
 
-			//Слушатель нажатия для чекбокса "Такт"
-			ActionListener tact_listener = new ActionListener()
-			{
-				public void actionPerformed(ActionEvent event)
-				{	
-					if(control.GetTact())
-						control.ClearTact();
-					else
-						control.SetTact();
-					tabbedPane.repaint();
-				}
-			};
-			tact_check.addActionListener(tact_listener);
-			
-			//Слушатель нажатия для чекбокса "Работа с памятью МК"
-			ActionListener memory_listener = new ActionListener()
-			{
-				public void actionPerformed(ActionEvent event)
-				{	
-					if(control.MicroWork())
-						control.ClearMicroWork();
-					else
-						control.SetMicroWork();
-					tabbedPane.repaint();
-				}
-			};
-			memory_check.addActionListener(memory_listener);
-			
-			//Слушатель нажатия кнопки "Ввод в КР"
-			ActionListener key_listener = new ActionListener()
-			{
-				public void actionPerformed(ActionEvent event)
-				{	
-					key_register.SetActive(true);
-					inp1_register.SetActive(false); 
-					inp2_register.SetActive(false);
-					tabbedPane.repaint();
-				}
-			};
-			register_check[0].addActionListener(key_listener);
-			
-			
-			//Слушатель нажатия кнопки "Ввод в КР"
-			MouseListener tab_listener = new MouseListener()
-			{
-				public void mouseClicked(MouseEvent e) 
-				{
-					key_register.SetActive(true);
-					inp1_register.SetActive(false); 
-					inp2_register.SetActive(false);
-					tabbedPane.repaint();	
-				}
-
-				@Override
-				public void mouseEntered(MouseEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
-
-				@Override
-				public void mousePressed(MouseEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
-
-				@Override
-				public void mouseReleased(MouseEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
-			};
-			register_check[0].addActionListener(key_listener);
-			tabbedPane.addMouseListener(tab_listener);
-			
-			//Слушатель нажатия кнопки "Ввод в ВУ 2"
-			ActionListener inp1_listener = new ActionListener()
-			{
-				public void actionPerformed(ActionEvent event)
-				{	
-					key_register.SetActive(false);
-					inp1_register.SetActive(true); 
-					inp2_register.SetActive(false);
-					tabbedPane.repaint();
-				}
-			};
-			register_check[1].addActionListener(inp1_listener);
-			
-			//Слушатель нажатия кнопки "Ввод в ВУ 3"
-			ActionListener inp2_listener = new ActionListener()
-			{
-				public void actionPerformed(ActionEvent event)
-				{	
-					key_register.SetActive(false);
-					inp1_register.SetActive(false); 
-					inp2_register.SetActive(true);
-					tabbedPane.repaint();
-				}
-			};
-			register_check[2].addActionListener(inp2_listener);
-			
-			final EUIBasePC BasePC = new EUIBasePC(factory, key_register, movement_check, tact_check, work);
-			final EUIOutputPC OutputPC = new EUIOutputPC(factory,  input_registers, movement_check, tact_check, work, register_check);
-			final EUIMicroPC MicroPC = new EUIMicroPC(factory,  key_register,  movement_check, tact_check, memory_check, work);
-			final JPanel finalpanel = new JPanel();
-			finalpanel.setLayout(null);
-			
+			final BasePCUI BasePC = new BasePCUI(factory, key_register, movement_check, tact_check, work);
+			final IOUnitUI OutputPC = new IOUnitUI(factory, input_registers, movement_check, tact_check, work, register_check);
+			final MPUnitUI MicroPC = new MPUnitUI(factory,  key_register,  movement_check, tact_check, memory_check, work);
 			
 			tabbedPane.addTab("Базовая ЭВМ", BasePC);
 			tabbedPane.addTab("Работа с ВУ", OutputPC);
 	        tabbedPane.addTab("Работа с МПУ", MicroPC);
 	        tabbedPane.setSize(852, 550);
 	        tabbedPane.setFocusable(false);
+	        
+	        final JPanel finalpanel = new JPanel();
+			finalpanel.setLayout(null);
 	        finalpanel.add(tabbedPane);
 	        finalpanel.setFocusable(true);
-       
 	        finalpanel.setBackground(Color.WHITE);
 	        add(finalpanel);
 	        
@@ -199,7 +77,7 @@ public class EUI extends JApplet
 	        		{	
 			        	for(int i =0; i<input_registers.length; i++)
 			        		if(input_registers[i].isActive())
-			        			input_registers[i].SetPointerPosition(input_registers[i].GetPointerPosition() + 1);
+			        			input_registers[i].setPointerPosition(input_registers[i].getPointerPosition() + 1);
 		        		
 			        	tabbedPane.repaint();
 	        		}
@@ -208,7 +86,7 @@ public class EUI extends JApplet
 	        		{
 			        	for(int i =0; i<input_registers.length; i++)
 			        		if(input_registers[i].isActive())
-			        			input_registers[i].SetPointerPosition(input_registers[i].GetPointerPosition() - 1);
+			        			input_registers[i].setPointerPosition(input_registers[i].getPointerPosition() - 1);
 		        		
 			        	tabbedPane.repaint();
 	        		}
@@ -217,7 +95,7 @@ public class EUI extends JApplet
 	        		{
 			        	for(int i =0; i<input_registers.length; i++)
 			        		if(input_registers[i].isActive())
-			        			input_registers[i].SetBit();
+			        			input_registers[i].setBit();
 		        		
 			        	tabbedPane.repaint();
 	        		}
@@ -226,7 +104,7 @@ public class EUI extends JApplet
 	        		{
 			        	for(int i =0; i<input_registers.length; i++)
 			        		if(input_registers[i].isActive())
-			        			input_registers[i].SetBit(false);
+			        			input_registers[i].setBit(false);
 		        		
 			        	tabbedPane.repaint();
 	        		}
@@ -235,7 +113,7 @@ public class EUI extends JApplet
 	        		{
 			        	for(int i =0; i<input_registers.length; i++)
 			        		if(input_registers[i].isActive())
-			        			input_registers[i].SetBit(true);
+			        			input_registers[i].setBit(true);
 		        	
 			        	tabbedPane.repaint();
 	        		}
@@ -251,8 +129,8 @@ public class EUI extends JApplet
 	        		}
 
 			        if (e.getKeyCode() == KeyEvent.VK_F7)
-			        {
-		        		machine.Start();
+			        {	
+			        	machine.Start();
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_F8)
@@ -262,18 +140,160 @@ public class EUI extends JApplet
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_F9)
 			        {
+			        	if (work.getText() == "Работа")
+						{
+							work.setForeground(Color.BLACK);
+							work.setText("Останов.");
+						}
+						else
+						{
+							work.setForeground(Color.RED);
+							work.setText("Работа");
+						}
+			        	
 		        		machine.StopWork();
 	        		}
 		        }
-			});	        
+			});
+	        
+	      //Слушатель нажатия для чекбокса проверки сдвига
+			ActionListener movement_listener = new ActionListener()
+			{
+				public void actionPerformed(ActionEvent event)
+				{	
+		        	for(int i =0; i<input_registers.length; i++)
+		        		if(input_registers[i].isMovement())
+		        			input_registers[i].setMovement(false);
+		        		else
+		        			input_registers[i].setMovement(true);
+					
+		        	tabbedPane.repaint();
+				}
+			};
+			movement_check.addActionListener(movement_listener);
 
+			//Слушатель нажатия для чекбокса "Такт"
+			ActionListener tact_listener = new ActionListener()
+			{
+				public void actionPerformed(ActionEvent event)
+				{	
+					if(control.GetTact())
+						control.ClearTact();
+					else
+						control.SetTact();
+					
+					tabbedPane.repaint();
+				}
+			};
+			tact_check.addActionListener(tact_listener);
+			
+			//Слушатель нажатия для чекбокса "Работа с памятью МК"
+			ActionListener memory_listener = new ActionListener()
+			{
+				public void actionPerformed(ActionEvent event)
+				{	
+					if(control.MicroWork())
+						control.ClearMicroWork();
+					else
+						control.SetMicroWork();
+					
+					tabbedPane.repaint();
+				}
+			};
+			memory_check.addActionListener(memory_listener);
+			
+			//Слушатель нажатия кнопки "Ввод в КР"
+			ActionListener key_listener = new ActionListener()
+			{
+				public void actionPerformed(ActionEvent event)
+				{	
+					key_register.setActive(true);
+					inp1_register.setActive(false); 
+					inp2_register.setActive(false);
+					
+					tabbedPane.repaint();
+				}
+			};
+			register_check[0].addActionListener(key_listener);
+				
+			//Слушатель нажатия щелчка по панели
+			MouseListener tab_listener = new MouseListener()
+			{
+				public void mouseClicked(MouseEvent e) 
+				{
+					key_register.setActive(true);
+					inp1_register.setActive(false); 
+					inp2_register.setActive(false);
+					register_check[0].setSelected(true);
+					
+					tabbedPane.repaint();	
+				}
+
+				public void mouseEntered(MouseEvent e) {}
+				public void mouseExited(MouseEvent e) {}
+				public void mousePressed(MouseEvent e) {}
+				public void mouseReleased(MouseEvent e) {}
+			};
+			tabbedPane.addMouseListener(tab_listener);
+			
+			//Слушатель нажатия кнопки "Ввод в ВУ 2"
+			ActionListener inp1_listener = new ActionListener()
+			{
+				public void actionPerformed(ActionEvent event)
+				{	
+					key_register.setActive(false);
+					inp1_register.setActive(true); 
+					inp2_register.setActive(false);
+					
+					tabbedPane.repaint();
+				}
+			};
+			register_check[1].addActionListener(inp1_listener);
+			
+			//Слушатель нажатия кнопки "Ввод в ВУ 3"
+			ActionListener inp2_listener = new ActionListener()
+			{
+				public void actionPerformed(ActionEvent event)
+				{	
+					key_register.setActive(false);
+					inp1_register.setActive(false); 
+					inp2_register.setActive(true);
+					
+					tabbedPane.repaint();
+				}
+			};
+			register_check[2].addActionListener(inp2_listener);
+			
+			//Слушатель нажатия кнопки "Работа"
+			ActionListener work_listener = new ActionListener() 
+			{
+				public void actionPerformed(ActionEvent e) 
+				{
+					if (work.getText() == "Работа")
+					{
+						work.setForeground(Color.BLACK);
+						work.setText("Останов.");
+					}
+					else
+					{
+						work.setForeground(Color.RED);
+						work.setText("Работа");
+					}
+						
+	        		machine.StopWork();
+				}
+			};
+			work.addActionListener(work_listener);
 		}
 	});
 	}
 	
 	private	EControlView 			control;
-	private EUIInputRegister 		key_register;
-	private EUIInputRegister[]		input_registers;
-	private EUIInputRegister 		inp1_register; 
-	private EUIInputRegister 		inp2_register;
+	private InputRegisterUI 		key_register;
+	private InputRegisterUI 		inp1_register; 
+	private InputRegisterUI 		inp2_register;
+	private InputRegisterUI[]		input_registers;
+	private JButton 				work;
+	private JRadioButton[]			register_check;
+
 }

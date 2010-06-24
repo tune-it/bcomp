@@ -11,9 +11,9 @@ import Machine.EFlagFactory;
 		Отрисовка устройства управления
 -----------------------------------------------------------------------------*/
 
-public class EUIManagerDevice 
+public class ManagerDeviceUI 
 {
-	public EUIManagerDevice(EFlagFactory flag_factory, double x, double y)
+	public ManagerDeviceUI(EFlagFactory flag_factory, double x, double y)
 	{
 		this.flag_factory = flag_factory;
 		
@@ -29,7 +29,7 @@ public class EUIManagerDevice
 		messY = (int)leftY + 18;
 	}
 	
-	public void Draw(Graphics g) 			//Отрисовка рамки и вызов методов отрисовки состояния режимов 
+	public void draw(Graphics g) 			//Отрисовка рамки и вызов методов отрисовки состояния режимов 
 	{
 		Graphics2D rs = (Graphics2D) g;
 		
@@ -51,19 +51,19 @@ public class EUIManagerDevice
 		
 		//Вызов методов отрисовки строк
 		rs.setFont(new Font("Courier New", Font.BOLD, 17));
-		DrawMode(rs, flag_factory.GetInstructionFetch(), 1, "Выборка команды");
-		DrawMode(rs, flag_factory.GetAdressSelection(), 2, "Выборка aдреса");
-		DrawMode(rs, flag_factory.GetExecution(), 3, "Исполнение");
-		DrawMode(rs, flag_factory.GetInterruption(), 4, "Прерывание");
-		DrawMode(rs, flag_factory.GetInputOutput(), 5, "Ввод/вывод");
-		DrawMode(rs, flag_factory.GetStateOfExternalDevice(), 6, "Состояние ВУ");
-		DrawMode(rs, flag_factory.GetInterruptEnable(), 7, "Разрешение прерывания");
-		DrawMode(rs, flag_factory.GetProgram(), 8, "Программа");
+		drawMode(rs, flag_factory.GetInstructionFetch(), 1, "Выборка команды");
+		drawMode(rs, flag_factory.GetAdressSelection(), 2, "Выборка aдреса");
+		drawMode(rs, flag_factory.GetExecution(), 3, "Исполнение");
+		drawMode(rs, flag_factory.GetInterruption(), 4, "Прерывание");
+		drawMode(rs, flag_factory.GetInputOutput(), 5, "Ввод/вывод");
+		drawMode(rs, flag_factory.GetStateOfExternalDevice(), 6, "Состояние ВУ");
+		drawMode(rs, flag_factory.GetInterruptEnable(), 7, "Разрешение прерывания");
+		drawMode(rs, flag_factory.GetProgram(), 8, "Программа");
 		
 		rs.setPaint(Color.BLACK);
 	}
 	
-	private void DrawMode(Graphics g, EFlag flag, int line_number, String mode_name) 	//Определяет состояние режима и выводит его названия 
+	private void drawMode(Graphics g, EFlag flag, int line_number, String mode_name) 	//Определяет состояние режима и выводит его названия 
 	{
 		Graphics2D rs = (Graphics2D) g;
 		int shift = line_number*20;			//Расстояние от линии разделителя
