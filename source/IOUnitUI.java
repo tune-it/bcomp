@@ -15,6 +15,10 @@ import javax.swing.JRadioButton;
 
 public class IOUnitUI extends JComponent
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public IOUnitUI (ObjectFactoryUI factory, InputRegisterUI[] input_registers, FlagUI[] flags, JCheckBox movement_check, JCheckBox tact, JButton work, JRadioButton[] register_check)
 	{
 		registers = factory.createIORegisters();

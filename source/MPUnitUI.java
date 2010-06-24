@@ -15,6 +15,10 @@ import javax.swing.JComponent;
 
 public class MPUnitUI extends JComponent
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public MPUnitUI (ObjectFactoryUI factory, InputRegisterUI input_register, JCheckBox movement_check, JCheckBox tact, JCheckBox memory_check, JButton work)
 	{
 		registers = factory.createMPURegisters();

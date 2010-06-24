@@ -22,47 +22,54 @@ public class EUI extends JApplet
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 102886848843642743L;
-	public void init ()
+	private static final long serialVersionUID = 1L;
 	{
 		EventQueue.invokeLater(new Runnable()
 		{
 		public void run()
 		{	 
-			final JTabbedPane tabbedPane = new JTabbedPane();		
-			control = new EControlView(tabbedPane);
-			machine = new EMachine(control);
-			factory = new ObjectFactoryUI(machine);
+			//Инициализация основных элементов
+			tabbedPane = new JTabbedPane();				//Панель закладок
+			control = new EControlView(tabbedPane);		//Контроль отрисовки и режимов
+			machine = new EMachine(control);			//Машинные объекты
+			factory = new ObjectFactoryUI(machine);		//Объекты интерфейса
 			
-			key_register = factory.createKeyRegister();
-			inp1_register = factory.createInputRegister1();
-			inp2_register = factory.createInputRegister2();
+			//Инициализация регистров ввода
+			key_register = factory.createKeyRegister();			//Клавишный регистр
+			inp1_register = factory.createInputRegister1();		//ВУ 1
+			inp2_register = factory.createInputRegister2();		//ВУ 2
 			
+			//Добавление всех регистров ввода в один массив
 			InputRegisterUI[] inpregs = {key_register, inp1_register, inp2_register};
 			input_registers = inpregs;
 			
-			flags = factory.createIOFlags();
+			flags = factory.createIOFlags();		//Инициализация флагов		
 			
-			JCheckBox movement_check = factory.createMovementCheckBox();
-			JCheckBox tact_check = factory.createTactCheckBox();
-			JCheckBox memory_check = factory.createMemoryCheckBox();
-			work = factory.createWorkButton();
-			register_check = factory.createRegisterRadioButtons();
+			//Инициализация управляющих компонентов 
+			JCheckBox movement_check = factory.createMovementCheckBox();	//Чекбокс сдвигов
+			JCheckBox tact_check = factory.createTactCheckBox();			//Чевбокс "Такт"
+			JCheckBox memory_check = factory.createMemoryCheckBox();		//Чекбокс "Работа с Памятью МК"
+			work = factory.createWorkButton();								//Кнопка "Работа/Останов."
+			register_check = factory.createRegisterRadioButtons();			//Кнопки выбора регистра
 			
+			//Добавление кнопок выбора регистра в группу
 			ButtonGroup group = new ButtonGroup();
 			for (int i=0; i<register_check.length; i++)
 				group.add(register_check[i]);
 
+			//Инициализация компонентов Базовой ЭВМ (Базовая ЭВМ, Работа с ВУ, Работа с МПУ соотв.) 
 			final BasePCUI BasePC = new BasePCUI(factory, key_register, movement_check, tact_check, work);
 			final IOUnitUI OutputPC = new IOUnitUI(factory, input_registers, flags, movement_check, tact_check, work, register_check);
 			final MPUnitUI MicroPC = new MPUnitUI(factory,  key_register,  movement_check, tact_check, memory_check, work);
 			
+			//Добавление компонентов Базовой ЭВМ на панель закладок
 			tabbedPane.addTab("Базовая ЭВМ", BasePC);
 			tabbedPane.addTab("Работа с ВУ", OutputPC);
 	        tabbedPane.addTab("Работа с МПУ", MicroPC);
 	        tabbedPane.setSize(852, 550);
 	        tabbedPane.setFocusable(false);
 	        
+	        //Создание главной панели и размещение на ней панели закладок (для красивого отображения в браузере)
 	        final JPanel finalpanel = new JPanel();
 			finalpanel.setLayout(null);
 	        finalpanel.add(tabbedPane);
@@ -70,9 +77,11 @@ public class EUI extends JApplet
 	        finalpanel.setBackground(Color.WHITE);
 	        add(finalpanel);
 	        
+	        //Создание и добавление слушателей к главной панели
 	        finalpanel.addKeyListener(new KeyAdapter() {
 	        	public void keyPressed(KeyEvent e) 
-		        {    	        		
+		        {    
+	        		//Сдвиг указателя выбранного регистра вправо
 			        if (e.getKeyCode() == KeyEvent.VK_RIGHT)
 	        		{	
 			        	for(int i =0; i<input_registers.length; i++)
@@ -82,6 +91,7 @@ public class EUI extends JApplet
 			        	tabbedPane.repaint();
 	        		}
 			       
+	        		//Сдвиг указателя выбранного регистра влево
 			        if (e.getKeyCode() == KeyEvent.VK_LEFT)
 	        		{
 			        	for(int i =0; i<input_registers.length; i++)
@@ -91,6 +101,7 @@ public class EUI extends JApplet
 			        	tabbedPane.repaint();
 	        		}
 			        
+	        		//Изменение бита в выбранном регистре
 			        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN)
 	        		{
 			        	for(int i =0; i<input_registers.length; i++)
@@ -100,6 +111,7 @@ public class EUI extends JApplet
 			        	tabbedPane.repaint();
 	        		}
 			        
+			    	//Изменение бита в выбранном регистре на 0
 			        if (e.getKeyCode() == KeyEvent.VK_0)
 	        		{
 			        	for(int i =0; i<input_registers.length; i++)
@@ -109,6 +121,7 @@ public class EUI extends JApplet
 			        	tabbedPane.repaint();
 	        		}
 			        
+			    	//Изменение бита в выбранном регистре на 1
 			        if (e.getKeyCode() == KeyEvent.VK_1)
 	        		{
 			        	for(int i =0; i<input_registers.length; i++)
@@ -118,44 +131,57 @@ public class EUI extends JApplet
 			        	tabbedPane.repaint();
 	        		}
 			        
+			    	//Установка флага "Готовность ВУ 1"
 			        if (e.getKeyCode() == KeyEvent.VK_F1)
 			        {
 			        	flags[0].setFlag();
 			        	tabbedPane.repaint();
 	        		}
 			        
+			        //Установка флага "Готовность ВУ 2"
 			        if (e.getKeyCode() == KeyEvent.VK_F2)
 			        {
 			        	flags[1].setFlag();
 			        	tabbedPane.repaint();
 	        		}
 			        
+			        //Установка флага "Готовность ВУ 3"
 			        if (e.getKeyCode() == KeyEvent.VK_F3)
 			        {
 			        	flags[2].setFlag();
 			        	tabbedPane.repaint();
 	        		}
 			        
+			        //Ввод адреса
 			        if (e.getKeyCode() == KeyEvent.VK_F4)
 			        {		        	        		
 		        		machine.Adress();
 	        		}
 			        
+			        //Запись
 			        if (e.getKeyCode() == KeyEvent.VK_F5)
 			        {		        		
 		        		machine.Record();
 	        		}
-
+			        
+			        //Чтение
+			        if (e.getKeyCode() == KeyEvent.VK_F6)
+			        {		        		
+	        		}
+			        
+			        //Пуск
 			        if (e.getKeyCode() == KeyEvent.VK_F7)
 			        {				        					        	
 			        	machine.Start();  	
 	        		}
 			        
+			        //Продолжение
 			        if (e.getKeyCode() == KeyEvent.VK_F8)
 			        {
 				        machine.Continue();
 	        		}
 			        
+			        //Работа/Остановка
 			        if (e.getKeyCode() == KeyEvent.VK_F9)
 			        {			        			        		
 			        	if (machine.GetFlagFac().GetStateOfTumbler().SendData() == 0)
@@ -311,6 +337,7 @@ public class EUI extends JApplet
 	});
 	}
 	
+	private JTabbedPane				tabbedPane;
 	private	EControlView 			control;
 	private EMachine				machine;
 	private ObjectFactoryUI 		factory;

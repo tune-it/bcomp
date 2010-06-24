@@ -13,6 +13,10 @@ import javax.swing.JComponent;
 
 public class BasePCUI extends JComponent
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public BasePCUI (ObjectFactoryUI factory, InputRegisterUI input_register, JCheckBox movement_check, JCheckBox tact, JButton work)
 	{
 		registers = factory.createClassicRegisters();
