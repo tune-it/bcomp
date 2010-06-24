@@ -121,9 +121,6 @@ public class IOUnitUI extends JComponent
 		rs.drawString("Состояние флагов ВУ", 365, 256);
 		rs.drawString("Шина ввода", 365, 278);
 		rs.drawString("Шина вывода", 365, 413);
-
-		//rs.drawString("Приказ на ввод/вывод", 365, 15);
-		//rs.drawString("Приказ на ввод/вывод", 365, 15);
 	}
 	
 	private RegisterUI[]				registers;					//Массив регистров
