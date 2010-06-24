@@ -11,6 +11,7 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JApplet;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
