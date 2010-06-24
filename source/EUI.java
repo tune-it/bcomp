@@ -1,19 +1,16 @@
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
@@ -34,8 +31,8 @@ public class EUI extends JApplet
 		{	 
 			final JTabbedPane tabbedPane = new JTabbedPane();		
 			control = new EControlView(tabbedPane);
-			final EMachine machine = new EMachine(control);
-			ObjectFactoryUI factory = new ObjectFactoryUI(machine);
+			machine = new EMachine(control);
+			factory = new ObjectFactoryUI(machine);
 			
 			key_register = factory.createKeyRegister();
 			inp1_register = factory.createInputRegister1();
@@ -43,6 +40,8 @@ public class EUI extends JApplet
 			
 			InputRegisterUI[] inpregs = {key_register, inp1_register, inp2_register};
 			input_registers = inpregs;
+			
+			flags = factory.createIOFlags();
 			
 			JCheckBox movement_check = factory.createMovementCheckBox();
 			JCheckBox tact_check = factory.createTactCheckBox();
@@ -55,7 +54,7 @@ public class EUI extends JApplet
 				group.add(register_check[i]);
 
 			final BasePCUI BasePC = new BasePCUI(factory, key_register, movement_check, tact_check, work);
-			final IOUnitUI OutputPC = new IOUnitUI(factory, input_registers, movement_check, tact_check, work, register_check);
+			final IOUnitUI OutputPC = new IOUnitUI(factory, input_registers, flags, movement_check, tact_check, work, register_check);
 			final MPUnitUI MicroPC = new MPUnitUI(factory,  key_register,  movement_check, tact_check, memory_check, work);
 			
 			tabbedPane.addTab("Базовая ЭВМ", BasePC);
@@ -119,19 +118,37 @@ public class EUI extends JApplet
 			        	tabbedPane.repaint();
 	        		}
 			        
-			        if (e.getKeyCode() == KeyEvent.VK_F4)
+			        if (e.getKeyCode() == KeyEvent.VK_F1)
 			        {
+			        	flags[0].setFlag();
+			        	tabbedPane.repaint();
+	        		}
+			        
+			        if (e.getKeyCode() == KeyEvent.VK_F2)
+			        {
+			        	flags[1].setFlag();
+			        	tabbedPane.repaint();
+	        		}
+			        
+			        if (e.getKeyCode() == KeyEvent.VK_F3)
+			        {
+			        	flags[2].setFlag();
+			        	tabbedPane.repaint();
+	        		}
+			        
+			        if (e.getKeyCode() == KeyEvent.VK_F4)
+			        {		        	        		
 		        		machine.Adress();
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_F5)
-			        {
+			        {		        		
 		        		machine.Record();
 	        		}
 
 			        if (e.getKeyCode() == KeyEvent.VK_F7)
-			        {	
-			        	machine.Start();
+			        {				        					        	
+			        	machine.Start();  	
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_F8)
@@ -140,18 +157,20 @@ public class EUI extends JApplet
 	        		}
 			        
 			        if (e.getKeyCode() == KeyEvent.VK_F9)
-			        {
-			        	if (work.getText() == "Работа")
+			        {			        			        		
+			        	if (machine.GetFlagFac().GetStateOfTumbler().SendData() == 0)
 						{
 							work.setForeground(Color.BLACK);
-							work.setText("Останов.");
+							work.setFont(new Font("Courier New", Font.PLAIN, 17));
+							work.setText("Остановка");
 						}
 						else
 						{
 							work.setForeground(Color.RED);
+							work.setFont(new Font("Courier New", Font.PLAIN, 24));
 							work.setText("Работа");
 						}
-			        	
+		        		
 		        		machine.StopWork();
 	        		}
 		        }
@@ -265,22 +284,25 @@ public class EUI extends JApplet
 			};
 			register_check[2].addActionListener(inp2_listener);
 			
-			//Слушатель нажатия кнопки "Работа"
+			//Слушатель нажатия кнопки "Работа/Остановка"
 			ActionListener work_listener = new ActionListener() 
 			{
 				public void actionPerformed(ActionEvent e) 
 				{
-					if (work.getText() == "Работа")
+	        		
+	        		if (machine.GetFlagFac().GetStateOfTumbler().SendData() == 0)
 					{
 						work.setForeground(Color.BLACK);
-						work.setText("Останов.");
+						work.setFont(new Font("Courier New", Font.PLAIN, 17));
+						work.setText("Остановка");
 					}
 					else
 					{
 						work.setForeground(Color.RED);
+						work.setFont(new Font("Courier New", Font.PLAIN, 24));
 						work.setText("Работа");
 					}
-						
+	        		
 	        		machine.StopWork();
 				}
 			};
@@ -290,9 +312,12 @@ public class EUI extends JApplet
 	}
 	
 	private	EControlView 			control;
+	private EMachine				machine;
+	private ObjectFactoryUI 		factory;
 	private InputRegisterUI 		key_register;
 	private InputRegisterUI 		inp1_register; 
 	private InputRegisterUI 		inp2_register;
+	private FlagUI[]				flags;
 	private InputRegisterUI[]		input_registers;
 	private JButton 				work;
 	private JRadioButton[]			register_check;

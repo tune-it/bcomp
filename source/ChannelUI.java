@@ -11,7 +11,7 @@ import Machine.*;
 public class ChannelUI
 {
 
-	public ChannelUI (EChannel channel, int[][] points)
+	public ChannelUI (IChannel channel, int[][] points)
 	{
 		this.channel = channel;
 		this.points = points; 
@@ -31,7 +31,9 @@ public class ChannelUI
 		rs.setStroke(new BasicStroke(8.0f));
 		for (int j = 0; j < points.length; j += 2)
 			rs.drawLine(points[j][0], points[j][1], points[j+1][0], points[j+1][1]);
-	
+		
+		rs.setStroke(new BasicStroke(1.0f));
+
 		if (arrow)			
 		{	
 			//Смещение координат стрелки от линии
@@ -92,6 +94,6 @@ public class ChannelUI
 	}
 	
 	private boolean		arrow;		//Наличие стрелки
-	private EChannel	channel;	//Канал
+	private IChannel	channel;	//Канал
 	private int[][]		points;		//Координаты для отрисовки канала
 }

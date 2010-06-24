@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 
 /*-----------------------------------------------------------------------------
 				Компонент "Базовая ЭВМ". Вызывает методы отрисовки

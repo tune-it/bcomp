@@ -117,6 +117,18 @@ public class ObjectFactoryUI
 		return registers;		
 	}
 	
+	public FlagUI[] createIOFlags()
+	{
+		FlagUI OutFlag = new FlagUI(devfact.getOutputDevice().getStateFlag(), 450, 180);
+		FlagUI InpFlag1 = new FlagUI(devfact.getInputDevice1().getStateFlag(), 600, 180);
+		FlagUI InpFlag2 = new FlagUI(devfact.getInputDevice2().getStateFlag(), 750, 180);
+		
+		FlagUI[] flags = {OutFlag, InpFlag1, InpFlag2};
+		
+		return flags;
+		
+	}
+	
 	public InputRegisterUI createKeyRegister()
 	{
 		InputRegisterUI key_register = new InputRegisterUI(regfact.InputRegister(), 1, 460, 60, 32, 478, "Клавишный Регистр");
@@ -279,6 +291,113 @@ public class ObjectFactoryUI
 		return channels;
 	}
 	
+	public ChannelUI[] createIOChannels()
+	{
+		EChannel empty_channel = new EChannel(null, null);			
+
+		int [][] mass1 = {{369, 160},
+						{468, 160},
+						{468, 160},
+						{468, 190}};
+		ChannelUI request1 = new ChannelUI(empty_channel, mass1);
+		
+		int [][] mass2 = {{369, 160},
+						{618, 160},
+						{618, 160},
+						{618, 190}};
+		ChannelUI request2 = new ChannelUI(empty_channel, mass2);
+		
+		int [][] mass3 = {{369, 160},
+						{768, 160},
+						{768, 160},
+						{768, 190}};
+		ChannelUI request3 = new ChannelUI(empty_channel, mass3);
+		
+		int [][] mass4 = {{369, 235},
+						{468, 235},
+						{468, 235},
+						{468, 190}};
+		ChannelUI state1 = new ChannelUI(empty_channel, mass4);
+		
+		int [][] mass5 = {{369, 235},
+						{618, 235},
+						{618, 235},
+						{618, 190}};
+		ChannelUI state2 = new ChannelUI(empty_channel, mass5);
+		
+		int [][] mass6 = {{369, 235},
+						{768, 235},
+						{768, 235},
+						{768, 190}};
+		ChannelUI state3 = new ChannelUI(empty_channel, mass6);
+		
+		int [][] mass7 = {{369, 288},
+						{618, 288},
+						{618, 288},
+						{618, 310}};
+		ChannelUI input2 = new ChannelUI(empty_channel, mass7);
+		
+		int [][] mass8 = {{369, 288},
+						{768, 288},
+						{768, 288},
+						{768, 310}};
+		ChannelUI input3 = new ChannelUI(empty_channel, mass8);
+		
+		int [][] mass9 = {{369, 392},
+						{468, 392},
+						{468, 392},
+						{468, 360}};
+		ChannelUI output1 = new ChannelUI(empty_channel, mass9);
+		
+		int [][] mass10 = {{369, 392},
+						{768, 392},
+						{768, 392},
+						{768, 360}};
+		ChannelUI output3 = new ChannelUI(empty_channel, mass10);
+		
+		int [][] mass11 = {{369, 27},
+						{468, 27},
+						{468, 27},
+						{468, 50}};
+		ChannelUI todec1 = new ChannelUI(empty_channel, mass11);
+		
+		int [][] mass12 = {{369, 27},
+						{618, 27},
+						{618, 27},
+						{618, 50}};
+		ChannelUI todec2 = new ChannelUI(empty_channel, mass12);
+		
+		int [][] mass13 = {{369, 27},
+						{768, 27},
+						{768, 27},
+						{768, 50}};
+		ChannelUI todec3 = new ChannelUI(empty_channel, mass13);
+		
+		int [][] mass14 = {{369, 108},
+						{468, 108},
+						{468, 108},
+						{468, 85}};
+		ChannelUI fromdec1 = new ChannelUI(empty_channel, mass14);
+		
+		int [][] mass15 = {{369, 108},
+						{618, 108},
+						{618, 108},
+						{618, 58}};
+		ChannelUI fromdec2 = new ChannelUI(empty_channel, mass15);
+		
+		int [][] mass16 = {{369, 108},
+						{768, 108},
+						{768, 108},
+						{768, 85}};
+		ChannelUI fromdec3 = new ChannelUI(empty_channel, mass16);
+		
+		ChannelUI channels[] = {request1, request2, request3, state1, state2, state3, input2, input3, output1, output3, todec1, todec2, todec3, fromdec1, fromdec2, fromdec3};
+		for (int i = 0; i < channels.length; i++)
+			channels[i].disableArrow();
+		
+		return channels;
+	}
+	
 	public ChannelUI[] createMPUChannels()						//Создание каналов для режима "Работа с МПУ"
 	{
 		EChannel empty_channel = new EChannel(null, null);			
@@ -313,7 +432,7 @@ public class ObjectFactoryUI
 						{543, 320},
 						{443, 320}};
 		ChannelUI fake_channel2 = new ChannelUI(empty_channel, mass5);
-		
+			
 		ChannelUI[] channels = {MEMtoMCR, MCRtoDEC, DECtoMIP, fake_channel1, fake_channel2};
 		
 		return channels;	
@@ -360,12 +479,12 @@ public class ObjectFactoryUI
 	
 	public JButton createWorkButton()
 	{
-		JButton work = new JButton("Останов.");
+		JButton work = new JButton("Работа");
 		work.setSize(127, 51);
 		work.setHorizontalTextPosition(2);
 		work.setFocusable(false);
-		work.setForeground(Color.BLACK);
-		work.setFont(new Font("Courier New", Font.PLAIN, 19));
+		work.setForeground(Color.RED);
+		work.setFont(new Font("Courier New", Font.PLAIN, 24));
 		
 		return work;
 	}

@@ -68,12 +68,7 @@ public class MPUnitUI extends JComponent
 		rs.drawRect(437, 465, 276, 50);		
 		work.setLocation(720, 465);		//Работа/Останов.
 		add(work);
-		
-		movement_check.repaint();
-		tact.repaint();
-		memory_check.repaint();
-		work.repaint();
-		
+				
 		//Отрисовка номера бита
 		rs.setFont(new Font("Courier New", Font.BOLD, 32));
 		rs.setPaint(new Color(231,236,119)); 
@@ -109,6 +104,8 @@ public class MPUnitUI extends JComponent
 		//Отрисовка разделительной линии
 		rs.setStroke(new BasicStroke(4.0f));
 		rs.drawLine(423, 1, 423, 432);
+		
+		rs.setStroke(new BasicStroke(1.0f));
 	}
 	
 	private RegisterUI[]				registers;					//Массив регистров
