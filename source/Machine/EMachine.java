@@ -45,7 +45,7 @@ public class EMachine
 	public void Continue()
 	{
 		Runnable r = new MachineRunnable(reg_factory, flags, man_dev, ctrl);
-        final Thread t = new Thread(r);
+        t = new Thread(r);
     	t.start();		
 	}
 	
@@ -124,6 +124,8 @@ public class EMachine
 	private EALU				alu;
 	private EManagerDevice		man_dev;
 	private DeviceFactory dev;
+	
+	Thread t;
 	
 	private EControlView ctrl;
 }

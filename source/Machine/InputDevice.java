@@ -41,16 +41,19 @@ public class InputDevice implements InternalDevice
 		return data_channel;
 	}
 	
+	// Приказ на ввод/вывод
 	public IChannel	getIORequestChannel()
 	{
 		return order_channel;
 	}
 	
+	// Адрес ВУ
 	public IChannel	getAdressChannel()
 	{
 		return adress_channel;
 	}
 	
+	// Состояние флагов ВУ
 	public IChannel	getStateFlagChannel()
 	{
 		return state_flag_channel;
