@@ -134,6 +134,7 @@ public class EUI extends JApplet
 			    	//Установка флага "Готовность ВУ 1"
 			        if (e.getKeyCode() == KeyEvent.VK_F1)
 			        {
+			        	machine.GetDeviceFactory().getOutputDevice().getInterruptionRequestChannel().Open();
 			        	flags[0].setFlag();
 			        	tabbedPane.repaint();
 	        		}
@@ -141,6 +142,7 @@ public class EUI extends JApplet
 			        //Установка флага "Готовность ВУ 2"
 			        if (e.getKeyCode() == KeyEvent.VK_F2)
 			        {
+			        	machine.GetDeviceFactory().getInputDevice1().getInterruptionRequestChannel().Open();
 			        	flags[1].setFlag();
 			        	tabbedPane.repaint();
 	        		}
@@ -148,6 +150,7 @@ public class EUI extends JApplet
 			        //Установка флага "Готовность ВУ 3"
 			        if (e.getKeyCode() == KeyEvent.VK_F3)
 			        {
+			        	machine.GetDeviceFactory().getInputDevice2().getInterruptionRequestChannel().Open();
 			        	flags[2].setFlag();
 			        	tabbedPane.repaint();
 	        		}

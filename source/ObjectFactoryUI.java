@@ -305,13 +305,13 @@ public class ObjectFactoryUI
 						{618, 160},
 						{618, 160},
 						{618, 190}};
-		ChannelUI request2 = new ChannelUI(empty_channel, mass2);
+		ChannelUI request2 = new ChannelUI(devfact.getInputDevice1().getInterruptionRequestChannel(), mass2);
 		
 		int [][] mass3 = {{369, 160},
 						{768, 160},
 						{768, 160},
 						{768, 190}};
-		ChannelUI request3 = new ChannelUI(empty_channel, mass3);
+		ChannelUI request3 = new ChannelUI(devfact.getInputDevice2().getInterruptionRequestChannel(), mass3);
 		
 		int [][] mass4 = {{369, 235},
 						{468, 235},
