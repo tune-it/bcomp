@@ -1,7 +1,5 @@
 package Machine;
 
-//import MachineRunnable;
-
 /*-----------------------------------------------------------------------------
 	Базовая ЭВМ (управление работой)
 -----------------------------------------------------------------------------*/
@@ -51,14 +49,35 @@ public class EMachine
 	
 	public void Adress()
 	{
-		reg_factory.MicroInstructionPointer().GetData(0x99);
+		if (ctrl.MicroWork())
+		{
+			reg_factory.MicroInstructionPointer().GetData(reg_factory.InputRegister().SendData());
+		}
+		else
+		{
+			reg_factory.MicroInstructionPointer().GetData(0x99);
+			Continue();
+		}
+		
+	}
+	
+	public void Read()
+	{
+		reg_factory.MicroInstructionPointer().GetData(0x9C);
 		Continue();
 	}
 	
 	public void Record()
 	{
-		reg_factory.MicroInstructionPointer().GetData(0xA1);
-		Continue();
+		if (ctrl.MicroWork())
+		{
+			micro_mem.GetData(reg_factory.InputRegister().SendData());
+		}
+		else
+		{
+			reg_factory.MicroInstructionPointer().GetData(0xA1);
+			Continue();
+		}
 	}
 	
 	public void StopWork()
@@ -128,6 +147,8 @@ public class EMachine
 	Thread t;
 	
 	private EControlView ctrl;
+
+
 }
 
 class MachineRunnable implements Runnable

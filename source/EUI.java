@@ -136,6 +136,7 @@ public class EUI extends JApplet
 			        {
 			        	machine.GetDeviceFactory().getOutputDevice().getInterruptionRequestChannel().Open();
 			        	flags[0].setFlag();
+			        	machine.GetDeviceFactory().getOutputDevice().getInterruptionRequestChannel().Open();
 			        	tabbedPane.repaint();
 	        		}
 			        
@@ -144,6 +145,7 @@ public class EUI extends JApplet
 			        {
 			        	machine.GetDeviceFactory().getInputDevice1().getInterruptionRequestChannel().Open();
 			        	flags[1].setFlag();
+			        	machine.GetDeviceFactory().getInputDevice1().getInterruptionRequestChannel().Open();
 			        	tabbedPane.repaint();
 	        		}
 			        
@@ -152,6 +154,7 @@ public class EUI extends JApplet
 			        {
 			        	machine.GetDeviceFactory().getInputDevice2().getInterruptionRequestChannel().Open();
 			        	flags[2].setFlag();
+			        	machine.GetDeviceFactory().getInputDevice2().getInterruptionRequestChannel().Open();
 			        	tabbedPane.repaint();
 	        		}
 			        
@@ -169,7 +172,8 @@ public class EUI extends JApplet
 			        
 			        //Чтение
 			        if (e.getKeyCode() == KeyEvent.VK_F6)
-			        {		        		
+			        {
+			        	machine.Read();
 	        		}
 			        
 			        //Пуск
