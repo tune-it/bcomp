@@ -54,7 +54,7 @@ public class EUI extends JApplet
 			
 			//Добавление кнопок выбора регистра в группу
 			ButtonGroup group = new ButtonGroup();
-			for (int i=0; i<register_check.length; i++)
+			for (int i = 0; i < register_check.length; i++)
 				group.add(register_check[i]);
 
 			//Инициализация компонентов Базовой ЭВМ (Базовая ЭВМ, Работа с ВУ, Работа с МПУ соотв.) 
@@ -84,7 +84,7 @@ public class EUI extends JApplet
 	        		//Сдвиг указателя выбранного регистра вправо
 			        if (e.getKeyCode() == KeyEvent.VK_RIGHT)
 	        		{	
-			        	for(int i =0; i<input_registers.length; i++)
+			        	for(int i = 0; i < input_registers.length; i++)
 			        		if(input_registers[i].isActive())
 			        			input_registers[i].setPointerPosition(input_registers[i].getPointerPosition() + 1);
 		        		
@@ -124,7 +124,7 @@ public class EUI extends JApplet
 			    	//Изменение бита в выбранном регистре на 1
 			        if (e.getKeyCode() == KeyEvent.VK_1)
 	        		{
-			        	for(int i =0; i<input_registers.length; i++)
+			        	for(int i = 0; i < input_registers.length; i++)
 			        		if(input_registers[i].isActive())
 			        			input_registers[i].setBit(true);
 		        	
@@ -132,6 +132,32 @@ public class EUI extends JApplet
 	        		}
 			        
 			    	//Установка флага "Готовность ВУ 1"
+		        	if (tabbedPane.getSelectedIndex() == 1)    
+		        	{    
+		        		if (e.getKeyCode() == KeyEvent.VK_F1);
+				        {
+				        	machine.GetDeviceFactory().getOutputDevice().getInterruptionRequestChannel().Open();
+				        	flags[0].setFlag();
+				        	tabbedPane.repaint();
+		        		}
+				        
+				        //Установка флага "Готовность ВУ 2"
+				        if (e.getKeyCode() == KeyEvent.VK_F2)
+				        {
+				        	machine.GetDeviceFactory().getInputDevice1().getInterruptionRequestChannel().Open();
+				        	flags[1].setFlag();
+				        	tabbedPane.repaint();
+		        		}
+				        
+				        //Установка флага "Готовность ВУ 3"
+				        if (e.getKeyCode() == KeyEvent.VK_F3)
+				        {
+				        	machine.GetDeviceFactory().getInputDevice2().getInterruptionRequestChannel().Open();
+				        	flags[2].setFlag();
+				        	tabbedPane.repaint();
+		        		}
+		        	}
+
 			        if (e.getKeyCode() == KeyEvent.VK_F1)
 			        {
 			        	machine.GetDeviceFactory().getOutputDevice().getInterruptionRequestChannel().Open();
@@ -160,33 +186,23 @@ public class EUI extends JApplet
 			        
 			        //Ввод адреса
 			        if (e.getKeyCode() == KeyEvent.VK_F4)
-			        {		        	        		
 		        		machine.Adress();
-	        		}
 			        
 			        //Запись
 			        if (e.getKeyCode() == KeyEvent.VK_F5)
-			        {		        		
 		        		machine.Record();
-	        		}
 			        
 			        //Чтение
 			        if (e.getKeyCode() == KeyEvent.VK_F6)
-			        {
 			        	machine.Read();
-	        		}
 			        
 			        //Пуск
 			        if (e.getKeyCode() == KeyEvent.VK_F7)
-			        {				        					        	
 			        	machine.Start();  	
-	        		}
 			        
 			        //Продолжение
 			        if (e.getKeyCode() == KeyEvent.VK_F8)
-			        {
 				        machine.Continue();
-	        		}
 			        
 			        //Работа/Остановка
 			        if (e.getKeyCode() == KeyEvent.VK_F9)
@@ -209,8 +225,9 @@ public class EUI extends JApplet
 		        }
 			});
 	        
+	         
 	      //Слушатель нажатия для чекбокса проверки сдвига
-			ActionListener movement_listener = new ActionListener()
+	       ActionListener movement_listener = new ActionListener()
 			{
 				public void actionPerformed(ActionEvent event)
 				{	

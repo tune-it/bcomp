@@ -68,7 +68,6 @@ public class InputDevice implements InternalDevice
 	private EChannel	adress_channel;		// Адрес ВУ
 	private EChannel	state_flag_channel;	// Состояние флагов ВУ
 	private EChannel	intrpt_channel;		// Запрос прерывания
-	
 	private EIOChannel	data_channel;		// Шина ввода/вывода
 	private ERegister	data_reg;			// Регистра данных
 	private EFlag		state_flag;			// флаг ВУ
