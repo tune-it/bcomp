@@ -52,6 +52,7 @@ public class EMachine
 		if (ctrl.MicroWork())
 		{
 			reg_factory.MicroInstructionPointer().GetData(reg_factory.InputRegister().SendData());
+			ctrl.Repaint();
 		}
 		else
 		{
@@ -72,6 +73,7 @@ public class EMachine
 		if (ctrl.MicroWork())
 		{
 			micro_mem.GetData(reg_factory.InputRegister().SendData());
+			ctrl.Repaint();
 		}
 		else
 		{
