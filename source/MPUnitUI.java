@@ -19,7 +19,7 @@ public class MPUnitUI extends JComponent
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public MPUnitUI (ObjectFactoryUI factory, InputRegisterUI input_register, JCheckBox movement_check, JCheckBox tact, JCheckBox memory_check, JButton work)
+	public MPUnitUI (ObjectFactoryUI factory, InputRegisterUI input_register, JCheckBox tact, JCheckBox memory_check, JButton work)
 	{
 		registers = factory.createMPURegisters();
 		channels = factory.createMPUChannels();
@@ -29,7 +29,6 @@ public class MPUnitUI extends JComponent
 		
 		this.key_register = input_register;
 		
-		this.movement_check = movement_check;
 		this.tact = tact;	
 		this.memory_check = memory_check;
 		this.work = work;
@@ -64,8 +63,6 @@ public class MPUnitUI extends JComponent
 		key_register.drawPointer(rs);
 		
 		//Добавление чекбоксов и рамок
-		add(movement_check);			//Проверка сдвига
-		rs.drawRect(1, 436, 301, 20);
 		add(tact);						//"Такт"
 		rs.drawRect(329, 465, 101, 50);
 		add(memory_check);				//"Работа с памятью МК"
@@ -113,12 +110,11 @@ public class MPUnitUI extends JComponent
 	}
 	
 	private RegisterUI[]				registers;					//Массив регистров
-	private InputRegisterUI			key_register;				//Клавишный регистр
+	private InputRegisterUI				key_register;				//Клавишный регистр
 	private ChannelUI[] 				channels;					//Массив каналов
 	private	MemoryUI					memory;						//Память
 	private MemoryUI					micro_memory;				//Память МК
 	private	AluUI						alu;						//АЛУ
-	private JCheckBox					movement_check;				//Чекбокс установки сдвига указателя
 	private JCheckBox					tact;						//Чекбокс для режима "Такт"
 	private JCheckBox					memory_check;				//Чекбокс "Работа с памятью МК"
 	private JButton						work;						//Кнопка "работа/остановка"

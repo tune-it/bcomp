@@ -17,7 +17,7 @@ public class BasePCUI extends JComponent
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public BasePCUI (ObjectFactoryUI factory, InputRegisterUI input_register, JCheckBox movement_check, JCheckBox tact, JButton work)
+	public BasePCUI (ObjectFactoryUI factory, InputRegisterUI input_register, JCheckBox tact, JButton work)
 	{
 		registers = factory.createClassicRegisters();
 		channels = factory.createClassicChannels();
@@ -25,7 +25,6 @@ public class BasePCUI extends JComponent
 		manager_device = factory.createManagerDevice();
 		alu = factory.createClassicAlu();
 		
-		this.movement_check = movement_check;
 		this.tact = tact;
 		this.work = work;
 		
@@ -76,8 +75,6 @@ public class BasePCUI extends JComponent
 		manager_device.draw(rs);	//Отрисовка Устройства Управления
 		
 		//Добавление чекбоксов и рамок
-		add(movement_check);		//Проверка сдвига
-		rs.drawRect(1, 436, 301, 20);
 		add(tact);					//"Такт"
 		rs.drawRect(329, 465, 101, 50);
 		
@@ -91,7 +88,6 @@ public class BasePCUI extends JComponent
 	private	MemoryUI					memory;						//Память
 	private ManagerDeviceUI				manager_device;				//Устройство Управления
 	private	AluUI						alu;						//АЛУ
-	private JCheckBox					movement_check;				//Чекбокс установки сдвига указателя
 	private JCheckBox					tact;						//Чекбокс режима "Такт"
 	private JButton						work;						//Лэйбл "Работа/Остановка"
 }

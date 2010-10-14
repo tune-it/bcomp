@@ -19,7 +19,7 @@ public class IOUnitUI extends JComponent
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public IOUnitUI (ObjectFactoryUI factory, InputRegisterUI[] input_registers, FlagUI[] flags, JCheckBox movement_check, JCheckBox tact, JButton work, JRadioButton[] register_check)
+	public IOUnitUI (ObjectFactoryUI factory, InputRegisterUI[] input_registers, FlagUI[] flags, JCheckBox tact, JButton work, JRadioButton[] register_check)
 	{
 		registers = factory.createIORegisters();
 		memory = factory.createСlassicMemory();
@@ -29,7 +29,6 @@ public class IOUnitUI extends JComponent
 		this.input_registers = input_registers;
 		key_register = input_registers[0];
 		
-		this.movement_check = movement_check;
 		this.tact = tact;
 		this.work = work;
 		this.register_check = register_check;
@@ -65,8 +64,6 @@ public class IOUnitUI extends JComponent
 		}
 
 		//Добавление чекбоксов и рамок
-		add(movement_check);			//Проверка сдвига
-		rs.drawRect(1, 436, 301, 20);
 		add(tact);						//"Такт"
 		rs.drawRect(329, 465, 101, 50);
 		
@@ -137,7 +134,6 @@ public class IOUnitUI extends JComponent
 	private InputRegisterUI[]			input_registers;			//Устройства вывода + клавишный регистр
 	private FlagUI[]					flags;						//Флаги
 	private	MemoryUI					memory;						//Память
-	private JCheckBox					movement_check;				//Чекбокс установки сдвига указателя
 	private JCheckBox					tact;						//Чекбокс режима "Такт"
 	private JButton						work;						//Кнопка "Работа/Остановка"
 	private JRadioButton[]				register_check;				//Кнопки выбора активного регистра

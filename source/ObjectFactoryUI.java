@@ -193,12 +193,11 @@ public class ObjectFactoryUI
 		ChannelUI RDtoMEM = new ChannelUI(channfact.WriteToMem(), mass2);
 		
 		//Канал от Памяти в Регистр Данных
-		int[][] mass3 = {{156, 71},
-	   					{220, 71},
-	   					{220, 71}, 
-	   		   			{220, 81}};
+		int[][] mass3 = {{156, 68},
+	   					{220, 68},
+	   					{220, 68}, 
+	   		   			{220, 76}};
 		ChannelUI MEMtoRD = new ChannelUI(channfact.ReadFromMem(), mass3);
-		MEMtoRD.disableArrow();
 		
 		//Канал из Счетчика Команд в АЛУ
 		int[][] mass4 = {{336, 177},
@@ -479,12 +478,12 @@ public class ObjectFactoryUI
 	
 	public JButton createWorkButton()
 	{
-		JButton work = new JButton("Работа");
+		JButton work = new JButton("Остановка");
 		work.setSize(127, 51);
 		work.setHorizontalTextPosition(2);
 		work.setFocusable(false);
-		work.setForeground(Color.RED);
-		work.setFont(new Font("Courier New", Font.PLAIN, 24));
+		work.setForeground(Color.BLACK);
+		work.setFont(new Font("Courier New", Font.PLAIN, 17));
 		
 		return work;
 	}

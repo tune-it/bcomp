@@ -46,7 +46,6 @@ public class EUI extends JApplet
 			flags = factory.createIOFlags();		//Инициализация флагов		
 			
 			//Инициализация управляющих компонентов 
-			JCheckBox movement_check = factory.createMovementCheckBox();	//Чекбокс сдвигов
 			JCheckBox tact_check = factory.createTactCheckBox();			//Чевбокс "Такт"
 			JCheckBox memory_check = factory.createMemoryCheckBox();		//Чекбокс "Работа с Памятью МК"
 			work = factory.createWorkButton();								//Кнопка "Работа/Останов."
@@ -58,9 +57,9 @@ public class EUI extends JApplet
 				group.add(register_check[i]);
 
 			//Инициализация компонентов Базовой ЭВМ (Базовая ЭВМ, Работа с ВУ, Работа с МПУ соотв.) 
-			final BasePCUI BasePC = new BasePCUI(factory, key_register, movement_check, tact_check, work);
-			final IOUnitUI OutputPC = new IOUnitUI(factory, input_registers, flags, movement_check, tact_check, work, register_check);
-			final MPUnitUI MicroPC = new MPUnitUI(factory,  key_register,  movement_check, tact_check, memory_check, work);
+			final BasePCUI BasePC = new BasePCUI(factory, key_register, tact_check, work);
+			final IOUnitUI OutputPC = new IOUnitUI(factory, input_registers, flags, tact_check, work, register_check);
+			final MPUnitUI MicroPC = new MPUnitUI(factory,  key_register, tact_check, memory_check, work);
 			
 			//Добавление компонентов Базовой ЭВМ на панель закладок
 			tabbedPane.addTab("Базовая ЭВМ", BasePC);
@@ -85,8 +84,7 @@ public class EUI extends JApplet
 			        if (e.getKeyCode() == KeyEvent.VK_RIGHT)
 	        		{	
 			        	for(int i = 0; i < input_registers.length; i++)
-			        		if(input_registers[i].isActive())
-			        			input_registers[i].setPointerPosition(input_registers[i].getPointerPosition() + 1);
+			        		input_registers[i].setPointerPosition(input_registers[i].getPointerPosition() + 1);
 		        		
 			        	tabbedPane.repaint();
 	        		}
@@ -95,8 +93,7 @@ public class EUI extends JApplet
 			        if (e.getKeyCode() == KeyEvent.VK_LEFT)
 	        		{
 			        	for(int i =0; i<input_registers.length; i++)
-			        		if(input_registers[i].isActive())
-			        			input_registers[i].setPointerPosition(input_registers[i].getPointerPosition() - 1);
+			        		input_registers[i].setPointerPosition(input_registers[i].getPointerPosition() - 1);
 		        		
 			        	tabbedPane.repaint();
 	        		}
@@ -105,8 +102,7 @@ public class EUI extends JApplet
 			        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN)
 	        		{
 			        	for(int i =0; i<input_registers.length; i++)
-			        		if(input_registers[i].isActive())
-			        			input_registers[i].setBit();
+			        		input_registers[i].setBit();
 		        		
 			        	tabbedPane.repaint();
 	        		}
@@ -115,8 +111,12 @@ public class EUI extends JApplet
 			        if (e.getKeyCode() == KeyEvent.VK_0)
 	        		{
 			        	for(int i =0; i<input_registers.length; i++)
-			        		if(input_registers[i].isActive())
-			        			input_registers[i].setBit(false);
+			        	{
+			        		input_registers[i].setBit(false);
+			        		input_registers[i].setPointerPosition(input_registers[i].getPointerPosition() + 1);
+
+			        	}
+			        	
 		        		
 			        	tabbedPane.repaint();
 	        		}
@@ -125,8 +125,10 @@ public class EUI extends JApplet
 			        if (e.getKeyCode() == KeyEvent.VK_1)
 	        		{
 			        	for(int i = 0; i < input_registers.length; i++)
-			        		if(input_registers[i].isActive())
-			        			input_registers[i].setBit(true);
+			        	{
+			        		input_registers[i].setBit(true);
+			        		input_registers[i].setPointerPosition(input_registers[i].getPointerPosition() + 1);
+			        	}
 		        	
 			        	tabbedPane.repaint();
 	        		}
@@ -209,38 +211,21 @@ public class EUI extends JApplet
 			        {			        			        		
 			        	if (machine.GetFlagFac().GetStateOfTumbler().SendData() == 0)
 						{
-							work.setForeground(Color.BLACK);
-							work.setFont(new Font("Courier New", Font.PLAIN, 17));
-							work.setText("Остановка");
-						}
-						else
-						{
 							work.setForeground(Color.RED);
 							work.setFont(new Font("Courier New", Font.PLAIN, 24));
 							work.setText("Работа");
+						}
+						else
+						{
+							work.setForeground(Color.BLACK);
+							work.setFont(new Font("Courier New", Font.PLAIN, 17));
+							work.setText("Остановка");
 						}
 		        		
 		        		machine.StopWork();
 	        		}
 		        }
 			});
-	        
-	         
-	      //Слушатель нажатия для чекбокса проверки сдвига
-	       ActionListener movement_listener = new ActionListener()
-			{
-				public void actionPerformed(ActionEvent event)
-				{	
-		        	for(int i =0; i<input_registers.length; i++)
-		        		if(input_registers[i].isMovement())
-		        			input_registers[i].setMovement(false);
-		        		else
-		        			input_registers[i].setMovement(true);
-					
-		        	tabbedPane.repaint();
-				}
-			};
-			movement_check.addActionListener(movement_listener);
 
 			//Слушатель нажатия для чекбокса "Такт"
 			ActionListener tact_listener = new ActionListener()
@@ -342,15 +327,15 @@ public class EUI extends JApplet
 	        		
 	        		if (machine.GetFlagFac().GetStateOfTumbler().SendData() == 0)
 					{
-						work.setForeground(Color.BLACK);
-						work.setFont(new Font("Courier New", Font.PLAIN, 17));
-						work.setText("Остановка");
+	        			work.setForeground(Color.RED);
+						work.setFont(new Font("Courier New", Font.PLAIN, 24));
+						work.setText("Работа");
 					}
 					else
 					{
-						work.setForeground(Color.RED);
-						work.setFont(new Font("Courier New", Font.PLAIN, 24));
-						work.setText("Работа");
+						work.setForeground(Color.BLACK);
+						work.setFont(new Font("Courier New", Font.PLAIN, 17));
+						work.setText("Остановка");
 					}
 	        		
 	        		machine.StopWork();
