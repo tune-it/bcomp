@@ -186,13 +186,13 @@ public class EMicrocommandMemory extends EMemory {
 			// Ввод адреса
 		programm[i++]=0x3000;
 		programm[i++]=0x4004;
-		programm[i++]=0x838F;
+		programm[i++]=0x8388;
 			// Чтение
 		programm[i++]=0x0300;
 		programm[i++]=0x4001;
 		programm[i++]=0x0311;
 		programm[i++]=0x4004;
-		programm[i++]=0x838F;
+		programm[i++]=0x8388;
 			// Запись
 		programm[i++]=0x0300;
 		programm[i++]=0x4001;
@@ -200,7 +200,7 @@ public class EMicrocommandMemory extends EMemory {
 		programm[i++]=0x4002;
 		programm[i++]=0x0312;
 		programm[i++]=0x4004;
-		programm[i++]=0x838F;
+		programm[i++]=0x8388;
 			// Пуск
 		programm[i++]=0x0020;
 		programm[i++]=0x4077;
