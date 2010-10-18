@@ -358,7 +358,6 @@ public class EManagerDevice
 					channels.ToAR(). Open();
 					channels.ToDR(). Open();
 					channels.ToCR(). Open();
-					channels.ToIP(). Open();
 					channels.ToAcc().Open();
 				}
 			}
