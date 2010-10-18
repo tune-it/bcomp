@@ -36,7 +36,7 @@ public class EMachine
 	
 	public void Start()
 	{
-		reg_factory.MicroInstructionPointer().GetData(0x9C);
+		reg_factory.MicroInstructionPointer().GetData(0xA8);
 		Continue();
 	}
 	
@@ -185,7 +185,7 @@ class MachineRunnable implements Runnable
 					man_dev.TimeStep();
 					ctrl.Repaint();
 				}
-				while (reg_factory.MicroInstructionPointer().SendData() != 1);
+				while (reg_factory.MicroInstructionPointer().SendData() != 0x89);
 			}
 			while (flags.GetStateOfTumbler().SendData() != 0);
 		}

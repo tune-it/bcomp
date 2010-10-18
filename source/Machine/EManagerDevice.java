@@ -38,12 +38,15 @@ public class EManagerDevice
 		
 		int n = reg_factory.MicroInstructionPointer().SendData();
 		
+		// Установка/сброс битов РС
 		if (n <= 0xC)
 		{
 			flag_factory.GetAdressSelection().ClearFlag();
 			flag_factory.GetInstructionFetch().SetFlag();
-			flag_factory.GetExecution().ClearFlag();
+			//flag_factory.GetExecution().ClearFlag();
 			flag_factory.GetInputOutput().ClearFlag();
+			flag_factory.GetProgram().SetFlag();
+			flag_factory.GetInterruption().ClearFlag();
 		}
 		else
 		{
@@ -51,8 +54,10 @@ public class EManagerDevice
 			{
 				flag_factory.GetAdressSelection().SetFlag();
 				flag_factory.GetInstructionFetch().ClearFlag();
-				flag_factory.GetExecution().ClearFlag();
+				//flag_factory.GetExecution().ClearFlag();
 				flag_factory.GetInputOutput().ClearFlag();
+				flag_factory.GetProgram().SetFlag();
+				flag_factory.GetInterruption().ClearFlag();
 			}
 			else
 			{
@@ -60,8 +65,10 @@ public class EManagerDevice
 				{
 					flag_factory.GetAdressSelection().ClearFlag();
 					flag_factory.GetInstructionFetch().ClearFlag();
-					flag_factory.GetExecution().SetFlag();
+					//flag_factory.GetExecution().SetFlag();
 					flag_factory.GetInputOutput().ClearFlag();
+					flag_factory.GetProgram().SetFlag();
+					flag_factory.GetInterruption().ClearFlag();
 				}
 				else
 				{
@@ -69,13 +76,48 @@ public class EManagerDevice
 					{
 						flag_factory.GetAdressSelection().ClearFlag();
 						flag_factory.GetInstructionFetch().ClearFlag();
-						flag_factory.GetExecution().ClearFlag();
+						//flag_factory.GetExecution().ClearFlag();
 						flag_factory.GetInputOutput().SetFlag();
+						flag_factory.GetProgram().ClearFlag();
+						flag_factory.GetInterruption().ClearFlag();
+					}
+					else
+					{
+						if (n <= 0x98)
+						{
+							flag_factory.GetAdressSelection().ClearFlag();
+							flag_factory.GetInstructionFetch().ClearFlag();
+							//flag_factory.GetExecution().ClearFlag();
+							flag_factory.GetInputOutput().ClearFlag();
+							flag_factory.GetProgram().ClearFlag();
+							flag_factory.GetInterruption().SetFlag();
+						}
+						else
+						{
+							if (n <= 0xff)
+							{
+								flag_factory.GetAdressSelection().ClearFlag();
+								flag_factory.GetInstructionFetch().ClearFlag();
+								//flag_factory.GetExecution().ClearFlag();
+								flag_factory.GetInputOutput().ClearFlag();
+								flag_factory.GetProgram().ClearFlag();
+								flag_factory.GetInterruption().ClearFlag();
+							}
+						
+						}
 					}
 				}
 			}
 		}
-			
+		if (n == 0x88)
+		{
+			flag_factory.GetAdressSelection().ClearFlag();
+			flag_factory.GetInstructionFetch().ClearFlag();
+			//flag_factory.GetExecution().ClearFlag();
+			flag_factory.GetInputOutput().ClearFlag();
+			flag_factory.GetProgram().ClearFlag();
+			flag_factory.GetInterruption().ClearFlag();
+		}
 		
 		flag_factory.RefreshStateCounter();
 		
