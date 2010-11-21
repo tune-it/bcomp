@@ -36,8 +36,20 @@ public class EMachine
 	
 	public void Start()
 	{
-		reg_factory.MicroInstructionPointer().GetData(0xA8);
-		Continue();
+		if(flags.GetStateOfTumbler().SendData() == 1)
+		{
+			reg_factory.MicroInstructionPointer().GetData(0xA8);
+			Continue();
+		}
+		else
+		{
+			reg_factory.MicroInstructionPointer().GetData(0xA8);
+			man_dev.TimeStep();
+			man_dev.TimeStep();
+			man_dev.TimeStep();
+			reg_factory.MicroInstructionPointer().GetData(0x01);
+			ctrl.Repaint();
+		}
 	}
 	
 	public void Continue()
@@ -73,6 +85,7 @@ public class EMachine
 		if (ctrl.MicroWork())
 		{
 			micro_mem.GetData(reg_factory.InputRegister().SendData());
+			reg_factory.MicroInstructionPointer().GetData(reg_factory.MicroInstructionPointer().SendData()+1);
 			ctrl.Repaint();
 		}
 		else
@@ -93,7 +106,6 @@ public class EMachine
 			flags.GetStateOfTumbler().GetData(0);
 		}
 		flags.RefreshStateCounter();
-		
 		ctrl.Repaint();
 	}
 	
@@ -173,26 +185,22 @@ class MachineRunnable implements Runnable
 				man_dev.TimeStep();
 				ctrl.Repaint();
 			}
-			while (flags.GetStateOfTumbler().SendData() != 0);
+			while (reg_factory.MicroCommandRegister().SendData() != 0x4008);
 		}
 		else
 		{
 			// Выполнение по командам
 			do
 			{
-				do
-				{
 					man_dev.TimeStep();
 					ctrl.Repaint();
-				}
-				while (reg_factory.MicroInstructionPointer().SendData() != 0x89);
 			}
-			while (flags.GetStateOfTumbler().SendData() != 0);
+			while (reg_factory.MicroCommandRegister().SendData() != 0x4008);
 		}
 	}
 	
-	private ERegisterFactory	reg_factory;;
+	private ERegisterFactory	reg_factory;
 	private EFlagFactory		flags;
 	private EManagerDevice		man_dev;
-	private EControlView ctrl;
+	private EControlView		ctrl;
 }

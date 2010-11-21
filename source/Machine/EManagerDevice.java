@@ -46,7 +46,6 @@ public class EManagerDevice
 			//flag_factory.GetExecution().ClearFlag();
 			flag_factory.GetInputOutput().ClearFlag();
 			flag_factory.GetProgram().SetFlag();
-			flag_factory.GetInterruption().ClearFlag();
 		}
 		else
 		{
@@ -57,7 +56,6 @@ public class EManagerDevice
 				//flag_factory.GetExecution().ClearFlag();
 				flag_factory.GetInputOutput().ClearFlag();
 				flag_factory.GetProgram().SetFlag();
-				flag_factory.GetInterruption().ClearFlag();
 			}
 			else
 			{
@@ -68,7 +66,6 @@ public class EManagerDevice
 					//flag_factory.GetExecution().SetFlag();
 					flag_factory.GetInputOutput().ClearFlag();
 					flag_factory.GetProgram().SetFlag();
-					flag_factory.GetInterruption().ClearFlag();
 				}
 				else
 				{
@@ -79,7 +76,6 @@ public class EManagerDevice
 						//flag_factory.GetExecution().ClearFlag();
 						flag_factory.GetInputOutput().SetFlag();
 						flag_factory.GetProgram().ClearFlag();
-						flag_factory.GetInterruption().ClearFlag();
 					}
 					else
 					{
@@ -90,7 +86,6 @@ public class EManagerDevice
 							//flag_factory.GetExecution().ClearFlag();
 							flag_factory.GetInputOutput().ClearFlag();
 							flag_factory.GetProgram().ClearFlag();
-							flag_factory.GetInterruption().SetFlag();
 						}
 						else
 						{
@@ -101,9 +96,7 @@ public class EManagerDevice
 								//flag_factory.GetExecution().ClearFlag();
 								flag_factory.GetInputOutput().ClearFlag();
 								flag_factory.GetProgram().ClearFlag();
-								flag_factory.GetInterruption().ClearFlag();
 							}
-						
 						}
 					}
 				}
@@ -329,11 +322,11 @@ public class EManagerDevice
 				if (CheckBit(command, 4)) alu.SetZ();
 				
 			// Остановка ЭВМ
-				if (CheckBit(command, 3))
-				{
-					flag_factory.GetStateOfTumbler().ClearFlag();
-					flag_factory.RefreshStateCounter();
-				}
+//				if (CheckBit(command, 3))
+//				{
+//					flag_factory.GetStateOfTumbler().ClearFlag();
+//					flag_factory.RefreshStateCounter();
+//				}
 				
 			// Выход АЛУ (Содержимое БР)
 				
