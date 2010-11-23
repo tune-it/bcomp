@@ -55,8 +55,8 @@ public class EMachine
 	public void Continue()
 	{
 		Runnable r = new MachineRunnable(reg_factory, flags, man_dev, ctrl);
-        t = new Thread(r);
-    	t.start();		
+		t = new Thread(r);
+		t.start();		
 	}
 	
 	public void Adress()
@@ -177,26 +177,21 @@ class MachineRunnable implements Runnable
 	
 	public void run()
 	{
-		if (ctrl.GetTact())
-		{
+		if (ctrl.GetTact())	{
 			// Выполнение по тактам
 			man_dev.TimeStep();
 			ctrl.Repaint();
-		}
-		else
-		{
+		} else {
 			// Выполнение по командам
-			do
-			{
-					man_dev.TimeStep();
-					ctrl.Repaint();
-					try {
-						Thread.sleep(10L);
-					} catch (Exception e) {
-						// Do nothing
-					}
-			}
-			while (reg_factory.MicroCommandRegister().SendData() != 0x4008);
+			do {
+				man_dev.TimeStep();
+				ctrl.Repaint();
+				try {
+					Thread.sleep(10L);
+				} catch (Exception e) {
+					// Do nothing
+				}
+			} while (reg_factory.MicroCommandRegister().SendData() != 0x4008);
 		}
 	}
 	

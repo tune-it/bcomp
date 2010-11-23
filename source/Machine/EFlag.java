@@ -12,36 +12,22 @@ public class EFlag implements IRegister
 	
 	public void ClearFlag()
 	{
-		flag=false;
+		flag = false;
 	}
 	
 	public void SetFlag()
 	{
-		flag=true;
+		flag = true;
 	}
 
 	public void GetData(int bits)
 	{
-		if (bits != 0)
-		{
-			flag = true;
-		}
-		else
-		{
-			flag = false;
-		}
+		flag = bits != 0;
 	}
 
 	public int SendData()
 	{
-		if(flag)
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
+		return flag ? 1 : 0;
 	}
 
 	public int Width()

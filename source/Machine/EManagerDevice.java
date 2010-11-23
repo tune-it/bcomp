@@ -35,7 +35,19 @@ public class EManagerDevice
 		dev.closeAllChannels(); // Закрыть все каналы ВУ
 		
 		channels.MicroCommandToRMC().Open(); // Пересылаем микрокоманду в регистр микрокоманд
-		
+
+		// Workaround для установки PC(5)
+		// Есть ощущение, что работа с PC и внешними устройствами
+		// реализована излишне сложно и может потребоваться рефакторинг
+		if ((flag_factory.GetInterruptEnable().SendData() == 1) && (
+				(dev.getInputDevice1().getStateFlag().SendData() == 1) ||
+				(dev.getInputDevice2().getStateFlag().SendData() == 1) ||
+				(dev.getOutputDevice().getStateFlag().SendData() == 1)
+			))
+			flag_factory.GetInterruption().SetFlag();
+		else
+			flag_factory.GetInterruption().ClearFlag();
+
 		int n = reg_factory.MicroInstructionPointer().SendData();
 		
 		// Установка/сброс битов РС
