@@ -190,6 +190,11 @@ class MachineRunnable implements Runnable
 			{
 					man_dev.TimeStep();
 					ctrl.Repaint();
+					try {
+						Thread.sleep(10L);
+					} catch (Exception e) {
+						// Do nothing
+					}
 			}
 			while (reg_factory.MicroCommandRegister().SendData() != 0x4008);
 		}
