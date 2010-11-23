@@ -203,19 +203,19 @@ public class ObjectFactoryUI
 		int[][] mass4 = {{336, 177},
 	   					{290, 177},
 	   					{290, 177}, 
-	   		   			{290, 210},
-	   		   			{290, 210}, 
-	   		   			{380, 210},
-	   		   			{380, 210},
+	   		   			{290, 215},
+	   		   			{290, 215}, 
+	   		   			{380, 215},
+	   		   			{380, 215},
 	   		   			{380, 226}};
 		ChannelUI RDtoSK = new ChannelUI(channfact.FromIP(), mass4);
 		
 		//Канал из Регистра Данных в АЛУ
 		int[][] mass5 = {{290, 140},
-	   					{290, 210},
-	   					{290, 210}, 
-	   		   			{380, 210},
-	   		   			{380, 210},
+	   					{290, 215},
+	   					{290, 215}, 
+	   		   			{380, 215},
+	   		   			{380, 215},
 	   		   			{380, 226}};
 		ChannelUI RDtoALU = new ChannelUI(channfact.FromDR(), mass5);
 		
@@ -265,10 +265,10 @@ public class ObjectFactoryUI
 		int[][] mass10 = {{301, 403},
 	   					{165, 403},
 	   					{165, 403}, 
-	   		   			{165, 210},
-	   		   			{165, 210},
-	   		   			{210, 210},
-	   		   			{210, 210},
+	   		   			{165, 215},
+	   		   			{165, 215},
+	   		   			{210, 215},
+	   		   			{210, 215},
 	   		   			{210, 226}};
 		ChannelUI AcctoALU = new ChannelUI(channfact.FromAcc(), mass10);
 		
@@ -285,7 +285,16 @@ public class ObjectFactoryUI
 	   		   			{714, 101}};
 		ChannelUI ALUtoRK = new ChannelUI(channfact.ToCR(), mass11);
 		
-		ChannelUI channels[] = {RAtoMEM, RDtoMEM, MEMtoRD, RDtoSK, RDtoALU, ALUtoAcc, ALUtoSK, ALUtoRD, ALUtoRA, AcctoALU, ALUtoRK};
+		//Канал из Регистра Команд в АЛУ
+		int[][] mass12 = {{603, 165},
+	   					{603, 215},
+						{603, 215},
+						{380, 215},
+	   		   			{380, 215},
+	   		   			{380, 226}};
+		ChannelUI RKtoALU = new ChannelUI(channfact.FromCR(), mass12);
+		
+		ChannelUI channels[] = {RAtoMEM, RDtoMEM, MEMtoRD, RDtoSK, RDtoALU, ALUtoAcc, ALUtoSK, ALUtoRD, ALUtoRA, AcctoALU, ALUtoRK, RKtoALU};
 		
 		return channels;
 	}
