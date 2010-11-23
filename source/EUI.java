@@ -187,27 +187,33 @@ public class EUI extends JApplet
 	        		}
 			        
 			        //Ввод адреса
-			        if (e.getKeyCode() == KeyEvent.VK_F4)
+			        if ((e.getKeyCode() == KeyEvent.VK_F4) ||
+					(e.getKeyCode() == KeyEvent.VK_4))
 		        		machine.Adress();
 			        
 			        //Запись
-			        if (e.getKeyCode() == KeyEvent.VK_F5)
+			        if ((e.getKeyCode() == KeyEvent.VK_F5) ||
+					(e.getKeyCode() == KeyEvent.VK_5))
 		        		machine.Record();
 			        
 			        //Чтение
-			        if (e.getKeyCode() == KeyEvent.VK_F6)
+			        if ((e.getKeyCode() == KeyEvent.VK_F6) ||
+					(e.getKeyCode() == KeyEvent.VK_6))
 			        	machine.Read();
 			        
 			        //Пуск
-			        if (e.getKeyCode() == KeyEvent.VK_F7)
+			        if ((e.getKeyCode() == KeyEvent.VK_F7) ||
+					(e.getKeyCode() == KeyEvent.VK_7))
 			        	machine.Start();  	
 			        
 			        //Продолжение
-			        if (e.getKeyCode() == KeyEvent.VK_F8)
+			        if ((e.getKeyCode() == KeyEvent.VK_F8) ||
+					(e.getKeyCode() == KeyEvent.VK_8))
 				        machine.Continue();
 			        
 			        //Работа/Остановка
-			        if (e.getKeyCode() == KeyEvent.VK_F9)
+			        if ((e.getKeyCode() == KeyEvent.VK_F9) ||
+					(e.getKeyCode() == KeyEvent.VK_9))
 			        {			        			        		
 			        	if (machine.GetFlagFac().GetStateOfTumbler().SendData() == 0)
 						{
