@@ -114,10 +114,8 @@ public class EUI extends JApplet
 			        	{
 			        		input_registers[i].setBit(false);
 			        		input_registers[i].setPointerPosition(input_registers[i].getPointerPosition() + 1);
-
 			        	}
 			        	
-		        		
 			        	tabbedPane.repaint();
 	        		}
 			        
@@ -159,32 +157,6 @@ public class EUI extends JApplet
 				        	tabbedPane.repaint();
 		        		}
 		        	}
-
-			        if (e.getKeyCode() == KeyEvent.VK_F1)
-			        {
-			        	machine.GetDeviceFactory().getOutputDevice().getInterruptionRequestChannel().Open();
-			        	flags[0].setFlag();
-			        	machine.GetDeviceFactory().getOutputDevice().getInterruptionRequestChannel().Open();
-			        	tabbedPane.repaint();
-	        		}
-			        
-			        //Установка флага "Готовность ВУ 2"
-			        if (e.getKeyCode() == KeyEvent.VK_F2)
-			        {
-			        	machine.GetDeviceFactory().getInputDevice1().getInterruptionRequestChannel().Open();
-			        	flags[1].setFlag();
-			        	machine.GetDeviceFactory().getInputDevice1().getInterruptionRequestChannel().Open();
-			        	tabbedPane.repaint();
-	        		}
-			        
-			        //Установка флага "Готовность ВУ 3"
-			        if (e.getKeyCode() == KeyEvent.VK_F3)
-			        {
-			        	machine.GetDeviceFactory().getInputDevice2().getInterruptionRequestChannel().Open();
-			        	flags[2].setFlag();
-			        	machine.GetDeviceFactory().getInputDevice2().getInterruptionRequestChannel().Open();
-			        	tabbedPane.repaint();
-	        		}
 			        
 			        //Ввод адреса
 			        if ((e.getKeyCode() == KeyEvent.VK_F4) ||
