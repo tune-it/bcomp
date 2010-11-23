@@ -180,12 +180,8 @@ class MachineRunnable implements Runnable
 		if (ctrl.GetTact())
 		{
 			// Выполнение по тактам
-			do
-			{
-				man_dev.TimeStep();
-				ctrl.Repaint();
-			}
-			while (reg_factory.MicroCommandRegister().SendData() != 0x4008);
+			man_dev.TimeStep();
+			ctrl.Repaint();
 		}
 		else
 		{

@@ -8,9 +8,9 @@ classes:
 basepc.zip:	bin/EUI.class bin/style.css Makefile
 	cp bin/style.css basepc
 	cd bin && jar cvf ../basepc/basepc.jar `find . -name "*.class"`
-	rm basepc.zip
-	zip -r9 basepc.zip basepc
+	rm -f basepc.zip
+	zip -9 basepc.zip basepc/*
 
 clean:
 	find bin -name "*.class" -delete
-	rm basepc.zip basepc/basepc.jar basepc/style.css
+	rm -rf basepc.zip basepc/basepc.jar basepc/style.css bin/Machine
