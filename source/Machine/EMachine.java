@@ -36,20 +36,8 @@ public class EMachine
 	
 	public void Start()
 	{
-		if(flags.GetStateOfTumbler().SendData() == 1)
-		{
-			reg_factory.MicroInstructionPointer().GetData(0xA8);
-			Continue();
-		}
-		else
-		{
-			reg_factory.MicroInstructionPointer().GetData(0xA8);
-			man_dev.TimeStep();
-			man_dev.TimeStep();
-			man_dev.TimeStep();
-			reg_factory.MicroInstructionPointer().GetData(0x01);
-			ctrl.Repaint();
-		}
+		reg_factory.MicroInstructionPointer().GetData(0xA8);
+		Continue();
 	}
 	
 	public void Continue()
