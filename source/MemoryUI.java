@@ -70,8 +70,8 @@ public class MemoryUI
 		String adress, data;
 		int a = 21; 								//Расстояние между строкой и рамкой заголовка 
 		int shift = 25;								//Расстояние между строками 
-		page = register.SendData() / page_size;		//Текущая страница
-		int mem[] = memory.GetMemory();				//Содержимое ячеек
+		page = register.getValue() / page_size;		//Текущая страница
+		int mem[] = memory.getMemory();				//Содержимое ячеек
 		
 		//Форматирование и вывод адресов и содержимого
 		for (int i = 0; i < page_size; i++)

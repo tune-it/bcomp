@@ -107,7 +107,7 @@ public class InputRegisterUI extends RegisterUI
 			else
 				content = content.substring(0, posit) + "0" + content.substring (posit + 1);
 		
-			register.GetData((int)convertToDec(content));
+			register.setValue((int)convertToDec(content));
 			
 			if(movement)
 				pointer_position ++;
@@ -127,7 +127,7 @@ public class InputRegisterUI extends RegisterUI
 			else
 				content = content.substring(0, posit) + "0" + content.substring (posit + 1);
 			
-			register.GetData((int)convertToDec(content));
+			register.setValue((int)convertToDec(content));
 			
 			if(movement)
 				pointer_position ++;

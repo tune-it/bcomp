@@ -12,32 +12,32 @@ import Machine.*;
 
 public class ObjectFactoryUI 
 {
-	public ObjectFactoryUI(EMachine machine)
+	public ObjectFactoryUI(Machine machine)
 	{
-		regfact = machine.GetRegFac();
-		flagfact = machine.GetFlagFac();
-		channfact = machine.GetChannelFac();
-		devfact = machine.GetDeviceFactory();
-		memory = machine.GetMemory();
-		micro_memory = machine.GetMicroMem();
+		regfact = machine.getRegFactory();
+		flagfact = machine.getFlagFactory();
+		channfact = machine.getChannelFactory();
+		devfact = machine.getDeviceFactory();
+		memory = machine.getMemory();
+		micro_memory = machine.getMicroMem();
 
 	}
 	
 	public RegisterUI[] createClassicRegisters() 					//Создание регистров для режима "Базовая ЭВМ"
 	{
-		RegisterUI RD = new RegisterUI(regfact.DataRegister(), 180, 85, 228, 103, "Регистр Данных");
+		RegisterUI RD = new RegisterUI(regfact.getDataRegister(), 180, 85, 228, 103, "Регистр Данных");
 		
-		RegisterUI RK = new RegisterUI(regfact.CommandRegister(), 580, 110, 628, 128, "Регистр Команд");
+		RegisterUI RK = new RegisterUI(regfact.getCommandRegister(), 580, 110, 628, 128, "Регистр Команд");
 		
-		RegisterUI RA = new RegisterUI(regfact.AdressRegister(), 340, 20, "Регистр Адреса");
+		RegisterUI RA = new RegisterUI(regfact.getAddressRegister(), 340, 20, "Регистр Адреса");
 		RA.setWidth(187);
 		
-		RegisterUI SK = new RegisterUI(regfact.InstructionPointer(), 340, 150, "Счетчик Команд");
+		RegisterUI SK = new RegisterUI(regfact.getInstructionPointer(), 340, 150, "Счетчик Команд");
 		SK.setWidth(187);
 		
-		RegisterUI Acc = new RegisterUI(regfact.Accumulator(), 335, 378, 400, 396, "Аккумулятор");
+		RegisterUI Acc = new RegisterUI(regfact.getAccumulator(), 335, 378, 400, 396, "Аккумулятор");
 		
-		RegisterUI C = new RegisterUI(flagfact.GetC(), 305, 378, "C");
+		RegisterUI C = new RegisterUI(flagfact.getC(), 305, 378, "C");
 		C.setWidth(30);
 		
 		RegisterUI Registers[] = {RD, RK, RA, SK, Acc, C};
@@ -47,27 +47,27 @@ public class ObjectFactoryUI
 	
 	public RegisterUI[] createIORegisters()					//Создание регистров для режима "Работа с ВУ"
 	{
-		RegisterUI RD = new RegisterUI(regfact.DataRegister(), 205, 70, 243, 88, "РД");
+		RegisterUI RD = new RegisterUI(regfact.getDataRegister(), 205, 70, 243, 88, "РД");
 		RD.setContentPosition((int)(RD.getX()+24), (int)(RD.getY()+42));
 		RD.setStyle(true);
 		
-		RegisterUI RA = new RegisterUI(regfact.AdressRegister(), 205, 140, 243, 158, "РА");
+		RegisterUI RA = new RegisterUI(regfact.getAddressRegister(), 205, 140, 243, 158, "РА");
 		RA.setContentPosition((int)(RA.getX()+31), (int)(RA.getY()+42));
 		RA.setStyle(true);
 		
-		RegisterUI SK = new RegisterUI(regfact.InstructionPointer(), 205, 210, 243, 228, "СК");
+		RegisterUI SK = new RegisterUI(regfact.getInstructionPointer(), 205, 210, 243, 228, "СК");
 		SK.setContentPosition((int)(SK.getX()+31), (int)(SK.getY()+42));
 		SK.setStyle(true);
 		
-		RegisterUI RK = new RegisterUI(regfact.CommandRegister(), 205, 280, 243, 298, "РК");
+		RegisterUI RK = new RegisterUI(regfact.getCommandRegister(), 205, 280, 243, 298, "РК");
 		RK.setContentPosition((int)(RK.getX()+24), (int)(RK.getY()+42));
 		RK.setStyle(true);
 		
-		RegisterUI Acc = new RegisterUI(regfact.Accumulator(), 205, 350, 236, 368, "Акк");
+		RegisterUI Acc = new RegisterUI(regfact.getAccumulator(), 205, 350, 236, 368, "Акк");
 		Acc.setContentPosition((int)(Acc.getX()+24), (int)(Acc.getY()+42));
 		Acc.setStyle(true);
 		
-		RegisterUI C = new RegisterUI(flagfact.GetC(), 175, 350, "C");
+		RegisterUI C = new RegisterUI(flagfact.getC(), 175, 350, "C");
 		C.setWidth(30);
 		
 		RegisterUI OutDev = new RegisterUI(devfact.getOutputDevice().getDataRegister(), 400, 310, 445, 328, "ВУ 1");
@@ -80,36 +80,36 @@ public class ObjectFactoryUI
 	
 	public RegisterUI[] createMPURegisters()						//Создание регистров для режима "Работа с МПУ"
 	{
-		RegisterUI RD = new RegisterUI(regfact.DataRegister(), 165, 85, 203, 103, "РД");
+		RegisterUI RD = new RegisterUI(regfact.getDataRegister(), 165, 85, 203, 103, "РД");
 		RD.setContentPosition((int)(RD.getX()+24), (int)(RD.getY()+42));
 		RD.setStyle(true);
 		
-		RegisterUI RK = new RegisterUI(regfact.CommandRegister(), 315, 20, 353, 38, "РК");
+		RegisterUI RK = new RegisterUI(regfact.getCommandRegister(), 315, 20, 353, 38, "РК");
 		RK.setContentPosition((int)(RK.getX()+24), (int)(RK.getY()+42));
 		RK.setStyle(true);
 		
-		RegisterUI RA = new RegisterUI(regfact.AdressRegister(), 165, 20, 203, 38, "РА");
+		RegisterUI RA = new RegisterUI(regfact.getAddressRegister(), 165, 20, 203, 38, "РА");
 		RA.setContentPosition((int)(RA.getX()+31), (int)(RA.getY()+42));
 		RA.setStyle(true);
 		
-		RegisterUI SK = new RegisterUI(regfact.InstructionPointer(), 315, 85, 353, 103, "СК");
+		RegisterUI SK = new RegisterUI(regfact.getInstructionPointer(), 315, 85, 353, 103, "СК");
 		SK.setContentPosition((int)(SK.getX()+31), (int)(SK.getY()+42));
 		SK.setStyle(true);
 		
-		RegisterUI Acc = new RegisterUI(regfact.Accumulator(), 240, 255, 271, 273, "Акк");
+		RegisterUI Acc = new RegisterUI(regfact.getAccumulator(), 240, 255, 271, 273, "Акк");
 		Acc.setContentPosition((int)(Acc.getX()+24), (int)(Acc.getY()+42));
 		Acc.setStyle(true);
 		
-		RegisterUI BR = new RegisterUI(regfact.BufferRegister(), 240, 185, 278, 206, "БР");
+		RegisterUI BR = new RegisterUI(regfact.getBufferRegister(), 240, 185, 278, 206, "БР");
 		BR.setContentPosition((int)(BR.getX()+18), (int)(BR.getY()+42));
 		BR.setStyle(true);
 		
-		RegisterUI SC = new RegisterUI(regfact.StateCounter(), 184, 338, 70, 190, 356, "Регистр Состояния");
+		RegisterUI SC = new RegisterUI(regfact.getStateCounter(), 184, 338, 70, 190, 356, "Регистр Состояния");
 		SC.setContentPosition((int)(SC.getX()+24), (int)(SC.getY()+42));
 		
-		RegisterUI MCR = new RegisterUI(regfact.MicroCommandRegister(), 430, 85, 449, 103, "Регистр Микрокоманд");
+		RegisterUI MCR = new RegisterUI(regfact.getMicroCommandRegister(), 430, 85, 449, 103, "Регистр Микрокоманд");
 		
-		RegisterUI MIP = new RegisterUI(regfact.MicroInstructionPointer(), 528, 358, 535, 376, "Счетчик МК");
+		RegisterUI MIP = new RegisterUI(regfact.getMicroInstructionPointer(), 528, 358, 535, 376, "Счетчик МК");
 		MIP.setWidth(135);
 		
 		RegisterUI registers[] = {RD, RK, RA, SK, Acc, BR, SC, MCR, MIP};
@@ -131,7 +131,7 @@ public class ObjectFactoryUI
 	
 	public InputRegisterUI createKeyRegister()
 	{
-		InputRegisterUI key_register = new InputRegisterUI(regfact.InputRegister(), 1, 460, 60, 32, 478, "Клавишный Регистр");
+		InputRegisterUI key_register = new InputRegisterUI(regfact.getInputRegister(), 1, 460, 60, 32, 478, "Клавишный Регистр");
 		key_register.setActive(true);
 		
 		return key_register;
@@ -160,12 +160,12 @@ public class ObjectFactoryUI
 	
 	public MemoryUI createСlassicMemory()							//Создание памяти
 	{
-		return new MemoryUI (memory, regfact.InstructionPointer(), 12, 1, 1, 150, 431, 33, 23, "Память");
+		return new MemoryUI (memory, regfact.getInstructionPointer(), 12, 1, 1, 150, 431, 33, 23, "Память");
 	}
 	
 	public MemoryUI createMCMemory()							//Создание памяти МК
 	{
-		return new MemoryUI (micro_memory, regfact.MicroInstructionPointer(), 8, 711, 1, 135, 431, 715, 23, "Память МК");
+		return new MemoryUI (micro_memory, regfact.getMicroInstructionPointer(), 8, 711, 1, 135, 431, 715, 23, "Память МК");
 	}
 	
 	public AluUI createClassicAlu()								//Создание АЛУ для режима "Базовая ЭВМ"
@@ -301,7 +301,7 @@ public class ObjectFactoryUI
 	
 	public ChannelUI[] createIOChannels()
 	{
-		EChannel empty_channel = new EChannel(null, null);			
+		Channel empty_channel = new Channel(null, null);			
 
 		int [][] mass1 = {{369, 160},
 						{468, 160},
@@ -408,7 +408,7 @@ public class ObjectFactoryUI
 	
 	public ChannelUI[] createMPUChannels()						//Создание каналов для режима "Работа с МПУ"
 	{
-		EChannel empty_channel = new EChannel(null, null);			
+		Channel empty_channel = new Channel(null, null);			
 		
 		//Канал из Памяти МК в РМК
 		int[][] mass1 = {{711, 43},
@@ -526,10 +526,10 @@ public class ObjectFactoryUI
 		return buttons;
 	}
 	
-	private ERegisterFactory 	regfact;					//Регистры
-	private EFlagFactory 		flagfact;					//Флаги
-	private EChannelFactory		channfact;					//Каналы
+	private RegisterFactory 	regfact;					//Регистры
+	private FlagFactory 		flagfact;					//Флаги
+	private ChannelFactory		channfact;					//Каналы
 	private DeviceFactory		devfact;					//Устройства ввода-вывода
-	private EMemory				memory;						//Память
-	private EMemory				micro_memory;				//Память микрокомманд
+	private Memory				memory;						//Память
+	private Memory				micro_memory;				//Память микрокомманд
 }

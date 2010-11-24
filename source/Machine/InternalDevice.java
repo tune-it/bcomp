@@ -2,8 +2,8 @@ package Machine;
 
 public interface InternalDevice
 {
-	public EFlag		getStateFlag();
-	public ERegister	getDataRegister();
+	public Flag		getStateFlag();
+	public Register	getDataRegister();
 	public IChannel		getDataChannel();
 	
 	public IChannel	getIORequestChannel();

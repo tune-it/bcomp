@@ -17,7 +17,7 @@ public class RegisterUI
 	public RegisterUI(IRegister reg, double x, double y, String text)
 	{
 		this.reg = reg;
-		length = reg.Width();
+		length = reg.width();
 		
 		style = false;
 		content = convertToBin(reg);
@@ -25,7 +25,7 @@ public class RegisterUI
 		leftX = x;
 		leftY = y;
 		
-		width = 17 * reg.Width() - 6;
+		width = 17 * reg.width() - 6;
 		height = 50;
 		
 		contentX = (int)leftX+10;
@@ -39,7 +39,7 @@ public class RegisterUI
 	public RegisterUI(IRegister reg, double x, double y, double height, String text)
 	{
 		this.reg = reg;
-		length = reg.Width();
+		length = reg.width();
 		
 		style = false;
 		content = convertToBin(reg);
@@ -47,7 +47,7 @@ public class RegisterUI
 		leftX = x;
 		leftY = y;
 		
-		width = 17 * reg.Width() - 6;
+		width = 17 * reg.width() - 6;
 		this.height = height;
 		
 		contentX = (int)leftX+10;
@@ -61,7 +61,7 @@ public class RegisterUI
 	public RegisterUI(IRegister reg, double x, double y, int messX, int messY, String text)
 	{
 		this.reg = reg;
-		length = reg.Width();
+		length = reg.width();
 		
 		style = false;
 		content = convertToBin(reg);	
@@ -69,7 +69,7 @@ public class RegisterUI
 		leftX = x;
 		leftY = y;
 		
-		width = 17 * reg.Width() - 6;
+		width = 17 * reg.width() - 6;
 		height = 50;
 		
 		contentX = (int)leftX+10;
@@ -83,7 +83,7 @@ public class RegisterUI
 	public RegisterUI(IRegister reg, double x, double y, double height, int messX, int messY, String text)
 	{
 		this.reg = reg;
-		length = reg.Width();
+		length = reg.width();
 		
 		style = false;
 		content = convertToBin(reg);
@@ -91,7 +91,7 @@ public class RegisterUI
 		leftX = x;
 		leftY = y;
 		
-		width = 17 * reg.Width() - 6;
+		width = 17 * reg.width() - 6;
 		this.height = height;
 		
 		contentX = (int)leftX+10;
@@ -145,7 +145,7 @@ public class RegisterUI
 		if (style == false)
 		{
 			content = convertToBin(reg);
-			width = 17 * reg.Width() - 6;
+			width = 17 * reg.width() - 6;
 		}
 		else
 		{
@@ -200,7 +200,7 @@ public class RegisterUI
 	
 	private String convertToBin(IRegister reg)				//Преобразование в двоичный вид
 	{
-		int pish = reg.SendData();
+		int pish = reg.getValue();
 		String str = "";
 		boolean flag = true;
 		
@@ -248,7 +248,7 @@ public class RegisterUI
 	private String convertToHex(IRegister reg)				//Преобразование в шестнадцатеричный вид
 	{
 		Formatter fmt = new Formatter();
-		fmt.format("%x", reg.SendData());
+		fmt.format("%x", reg.getValue());
 		String str = fmt.toString();
 		
 		int y = str.length();

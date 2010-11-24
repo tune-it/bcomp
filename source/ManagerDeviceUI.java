@@ -4,8 +4,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import Machine.EFlag;
-import Machine.EFlagFactory;
+import Machine.Flag;
+import Machine.FlagFactory;
 
 /*-----------------------------------------------------------------------------
 		Отрисовка устройства управления
@@ -13,7 +13,7 @@ import Machine.EFlagFactory;
 
 public class ManagerDeviceUI 
 {
-	public ManagerDeviceUI(EFlagFactory flag_factory, double x, double y)
+	public ManagerDeviceUI(FlagFactory flag_factory, double x, double y)
 	{
 		this.flag_factory = flag_factory;
 		
@@ -51,24 +51,24 @@ public class ManagerDeviceUI
 		
 		//Вызов методов отрисовки строк
 		rs.setFont(new Font("Courier New", Font.BOLD, 17));
-		drawMode(rs, flag_factory.GetInstructionFetch(), 1, "Выборка команды");
-		drawMode(rs, flag_factory.GetAdressSelection(), 2, "Выборка aдреса");
-		drawMode(rs, flag_factory.GetExecution(), 3, "Исполнение");
-		drawMode(rs, flag_factory.GetInterruption(), 4, "Прерывание");
-		drawMode(rs, flag_factory.GetInputOutput(), 5, "Ввод/вывод");
-		drawMode(rs, flag_factory.GetStateOfExternalDevice(), 6, "Состояние ВУ");
-		drawMode(rs, flag_factory.GetInterruptEnable(), 7, "Разрешение прерывания");
-		drawMode(rs, flag_factory.GetProgram(), 8, "Программа");
+		drawMode(rs, flag_factory.getInstructionFetch(), 1, "Выборка команды");
+		drawMode(rs, flag_factory.getAdressSelection(), 2, "Выборка aдреса");
+		drawMode(rs, flag_factory.getExecution(), 3, "Исполнение");
+		drawMode(rs, flag_factory.getInterruption(), 4, "Прерывание");
+		drawMode(rs, flag_factory.getInputOutput(), 5, "Ввод/вывод");
+		drawMode(rs, flag_factory.getStateOfExternalDevice(), 6, "Состояние ВУ");
+		drawMode(rs, flag_factory.getInterruptEnable(), 7, "Разрешение прерывания");
+		drawMode(rs, flag_factory.getProgram(), 8, "Программа");
 		
 		rs.setPaint(Color.BLACK);
 	}
 	
-	private void drawMode(Graphics g, EFlag flag, int line_number, String mode_name) 	//Определяет состояние режима и выводит его названия 
+	private void drawMode(Graphics g, Flag flag, int line_number, String mode_name) 	//Определяет состояние режима и выводит его названия 
 	{
 		Graphics2D rs = (Graphics2D) g;
 		int shift = line_number*20;			//Расстояние от линии разделителя
 		
-		if(flag.SendData() == 1)
+		if(flag.getValue() == 1)
 			rs.setPaint(Color.RED);
 		else
 			rs.setPaint(Color.BLACK);
@@ -76,7 +76,7 @@ public class ManagerDeviceUI
 		rs.drawString(mode_name, messX, (int)leftY+banner_height+shift);
 	}
 	
-	private EFlagFactory	flag_factory;
+	private FlagFactory	flag_factory;
 	private double 			leftX;
 	private double			leftY;
 	private int				width;

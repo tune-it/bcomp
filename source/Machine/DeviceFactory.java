@@ -1,11 +1,12 @@
 package Machine;
 
-/*-----------------------------------------------------------------------------
-	Фабрика устройств ввода/вывода
------------------------------------------------------------------------------*/
+/**
+ * Фабрика устройств ввода/вывода
+ * @author Ponomarev
+ */
 public class DeviceFactory
 {
-	public DeviceFactory(ERegisterFactory reg_factory)
+	public DeviceFactory(RegisterFactory reg_factory)
 	{
 		dev = new InternalDevice[3];
 		dev[0] = new OutputDevice(reg_factory);
@@ -45,7 +46,7 @@ public class DeviceFactory
 	{
 		for(InternalDevice x : dev)
 		{
-			x.getStateFlag().ClearFlag();
+			x.getStateFlag().clearFlag();
 		}
 	}
 	
@@ -53,12 +54,12 @@ public class DeviceFactory
 	{
 		for (InternalDevice x : dev)
 		{
-				x.getDataChannel().Close();
+				x.getDataChannel().close();
 				
-				x.getAdressChannel().Close();
-				x.getInterruptionRequestChannel().Close();
-				x.getIORequestChannel().Close();
-				x.getStateFlagChannel().Close();
+				x.getAdressChannel().close();
+				x.getInterruptionRequestChannel().close();
+				x.getIORequestChannel().close();
+				x.getStateFlagChannel().close();
 		}
 	}
 	

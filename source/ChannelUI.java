@@ -22,7 +22,7 @@ public class ChannelUI
 	{
 		Graphics2D rs = (Graphics2D) g;
 		
-		if (channel.GetConnect())
+		if (channel.getConnect())
 			rs.setPaint(Color.RED);
 		else
 			rs.setPaint(Color.GRAY);
@@ -90,7 +90,7 @@ public class ChannelUI
 	
 	public boolean isConnect()					//"Открытость" канала
 	{
-		return channel.GetConnect();
+		return channel.getConnect();
 	}
 	
 	private boolean		arrow;		//Наличие стрелки

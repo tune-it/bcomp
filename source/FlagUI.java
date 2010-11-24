@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import Machine.EFlag;
+import Machine.Flag;
 
 /*-----------------------------------------------------------------------------
 		Флаг. Отображает флаг в виде круга. Белый цвет - 
@@ -11,7 +11,7 @@ import Machine.EFlag;
 
 public class FlagUI 
 {
-	FlagUI(EFlag flag, int x, int y)
+	FlagUI(Flag flag, int x, int y)
 	{
 		this.flag = flag;
 		
@@ -25,7 +25,7 @@ public class FlagUI
 	{
 		Graphics2D rs = (Graphics2D) g;
 		
-		if (flag.SendData() == 1)
+		if (flag.getValue() == 1)
 		{
 			rs.setColor(Color.RED);
 			rs.fillOval(leftX, leftY, radius, radius);
@@ -42,10 +42,10 @@ public class FlagUI
 	
 	public void setFlag()
 	{
-		flag.SetFlag();
+		flag.setFlag();
 	}
 	
-	private EFlag		 flag;
+	private Flag		 flag;
 	private int			leftX; 
 	private	int			leftY;
 	private int			radius;

@@ -14,8 +14,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
-import Machine.EControlView;
-import Machine.EMachine;
+import Machine.ControlView;
+import Machine.Machine;
 
 public class EUI extends JApplet
 {	
@@ -30,8 +30,8 @@ public class EUI extends JApplet
 		{	 
 			//Инициализация основных элементов
 			tabbedPane = new JTabbedPane();				//Панель закладок
-			control = new EControlView(tabbedPane);		//Контроль отрисовки и режимов
-			machine = new EMachine(control);			//Машинные объекты
+			control = new ControlView(tabbedPane);		//Контроль отрисовки и режимов
+			machine = new Machine(control);			//Машинные объекты
 			factory = new ObjectFactoryUI(machine);		//Объекты интерфейса
 			
 			//Инициализация регистров ввода
@@ -136,7 +136,7 @@ public class EUI extends JApplet
 		        	{    
 		        		if (e.getKeyCode() == KeyEvent.VK_F1);
 				        {
-				        	machine.GetDeviceFactory().getOutputDevice().getInterruptionRequestChannel().Open();
+				        	machine.getDeviceFactory().getOutputDevice().getInterruptionRequestChannel().open();
 				        	flags[0].setFlag();
 				        	tabbedPane.repaint();
 		        		}
@@ -144,7 +144,7 @@ public class EUI extends JApplet
 				        //Установка флага "Готовность ВУ 2"
 				        if (e.getKeyCode() == KeyEvent.VK_F2)
 				        {
-				        	machine.GetDeviceFactory().getInputDevice1().getInterruptionRequestChannel().Open();
+				        	machine.getDeviceFactory().getInputDevice1().getInterruptionRequestChannel().open();
 				        	flags[1].setFlag();
 				        	tabbedPane.repaint();
 		        		}
@@ -152,7 +152,7 @@ public class EUI extends JApplet
 				        //Установка флага "Готовность ВУ 3"
 				        if (e.getKeyCode() == KeyEvent.VK_F3)
 				        {
-				        	machine.GetDeviceFactory().getInputDevice2().getInterruptionRequestChannel().Open();
+				        	machine.getDeviceFactory().getInputDevice2().getInterruptionRequestChannel().open();
 				        	flags[2].setFlag();
 				        	tabbedPane.repaint();
 		        		}
@@ -161,33 +161,33 @@ public class EUI extends JApplet
 			        //Ввод адреса
 			        if ((e.getKeyCode() == KeyEvent.VK_F4) ||
 					(e.getKeyCode() == KeyEvent.VK_4))
-		        		machine.Adress();
+		        		machine.adress();
 			        
 			        //Запись
 			        if ((e.getKeyCode() == KeyEvent.VK_F5) ||
 					(e.getKeyCode() == KeyEvent.VK_5))
-		        		machine.Record();
+		        		machine.record();
 			        
 			        //Чтение
 			        if ((e.getKeyCode() == KeyEvent.VK_F6) ||
 					(e.getKeyCode() == KeyEvent.VK_6))
-			        	machine.Read();
+			        	machine.read();
 			        
 			        //Пуск
 			        if ((e.getKeyCode() == KeyEvent.VK_F7) ||
 					(e.getKeyCode() == KeyEvent.VK_7))
-			        	machine.Start();  	
+			        	machine.start();  	
 			        
 			        //Продолжение
 			        if ((e.getKeyCode() == KeyEvent.VK_F8) ||
 					(e.getKeyCode() == KeyEvent.VK_8))
-				        machine.Continue();
+				        machine.ссontinue();
 			        
 			        //Работа/Остановка
 			        if ((e.getKeyCode() == KeyEvent.VK_F9) ||
 					(e.getKeyCode() == KeyEvent.VK_9))
 			        {			        			        		
-			        	if (machine.GetFlagFac().GetStateOfTumbler().SendData() == 0)
+			        	if (machine.getFlagFactory().getStateOfTumbler().getValue() == 0)
 						{
 							work.setForeground(Color.RED);
 							work.setFont(new Font("Courier New", Font.PLAIN, 24));
@@ -200,7 +200,7 @@ public class EUI extends JApplet
 							work.setText("Остановка");
 						}
 		        		
-		        		machine.StopWork();
+		        		machine.workStop();
 	        		}
 		        }
 			});
@@ -210,10 +210,10 @@ public class EUI extends JApplet
 			{
 				public void actionPerformed(ActionEvent event)
 				{	
-					if(control.GetTact())
-						control.ClearTact();
+					if(control.getTact())
+						control.clearTact();
 					else
-						control.SetTact();
+						control.setTact();
 					
 					tabbedPane.repaint();
 				}
@@ -225,10 +225,10 @@ public class EUI extends JApplet
 			{
 				public void actionPerformed(ActionEvent event)
 				{	
-					if(control.MicroWork())
-						control.ClearMicroWork();
+					if(control.microWork())
+						control.clearMicroWork();
 					else
-						control.SetMicroWork();
+						control.setMicroWork();
 					
 					tabbedPane.repaint();
 				}
@@ -303,7 +303,7 @@ public class EUI extends JApplet
 				public void actionPerformed(ActionEvent e) 
 				{
 	        		
-	        		if (machine.GetFlagFac().GetStateOfTumbler().SendData() == 0)
+	        		if (machine.getFlagFactory().getStateOfTumbler().getValue() == 0)
 					{
 	        			work.setForeground(Color.RED);
 						work.setFont(new Font("Courier New", Font.PLAIN, 24));
@@ -316,7 +316,7 @@ public class EUI extends JApplet
 						work.setText("Остановка");
 					}
 	        		
-	        		machine.StopWork();
+	        		machine.workStop();
 				}
 			};
 			work.addActionListener(work_listener);
@@ -325,8 +325,8 @@ public class EUI extends JApplet
 	}
 	
 	private JTabbedPane				tabbedPane;
-	private	EControlView 			control;
-	private EMachine				machine;
+	private	ControlView 			control;
+	private Machine				machine;
 	private ObjectFactoryUI 		factory;
 	private InputRegisterUI 		key_register;
 	private InputRegisterUI 		inp1_register; 

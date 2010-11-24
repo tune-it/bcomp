@@ -1,28 +1,29 @@
 package Machine;
 
-/*-----------------------------------------------------------------------------
-	Устройство вывода.
------------------------------------------------------------------------------*/
+/**
+ * Устройство вывода.
+ * @author Ponomarev
+ */
 public class OutputDevice implements InternalDevice
 {
-	public OutputDevice(ERegisterFactory reg_factory)
+	public OutputDevice(RegisterFactory reg_factory)
 	{
-		data_reg = new ERegister(8);
-		state_flag = new EFlag();
-		data_channel = new EIOChannel(data_reg, reg_factory.Accumulator());
+		data_reg = new Register(8);
+		state_flag = new Flag();
+		data_channel = new IOChannel(data_reg, reg_factory.getAccumulator());
 		
-		order_channel =			new EChannel(null, null);
-		state_flag_channel =	new EChannel(null, null);
-		adress_channel =		new EChannel(null, null);
-		intrpt_channel =		new EChannel(null, null);
+		order_channel =			new Channel(null, null);
+		state_flag_channel =	new Channel(null, null);
+		adress_channel =		new Channel(null, null);
+		intrpt_channel =		new Channel(null, null);
 	}
 
-	public EFlag getStateFlag()
+	public Flag getStateFlag()
 	{
 		return state_flag;
 	}
 
-	public ERegister getDataRegister()
+	public Register getDataRegister()
 	{
 		return data_reg;
 	}
@@ -51,12 +52,12 @@ public class OutputDevice implements InternalDevice
 		return intrpt_channel;
 	}
 	
-	private EChannel	order_channel;		// Приказ на ввод/вывод
-	private EChannel	adress_channel;		// Адрес ВУ
-	private EChannel	state_flag_channel;	// Состояние флагов ВУ
-	private EChannel	intrpt_channel;		// Запрос прерывания
+	private Channel	order_channel;		// Приказ на ввод/вывод
+	private Channel	adress_channel;		// Адрес ВУ
+	private Channel	state_flag_channel;	// Состояние флагов ВУ
+	private Channel	intrpt_channel;		// Запрос прерывания
 	
-	private EIOChannel	data_channel;		// Шина ввода/вывода
-	private ERegister	data_reg;			// Регистра данных
-	private EFlag		state_flag;			// флаг ВУ
+	private IOChannel	data_channel;		// Шина ввода/вывода
+	private Register	data_reg;			// Регистра данных
+	private Flag		state_flag;			// флаг ВУ
 }

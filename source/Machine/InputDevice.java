@@ -1,37 +1,39 @@
 package Machine;
 
-/*-----------------------------------------------------------------------------
-	Устройство ввода.
------------------------------------------------------------------------------*/
+/**
+ * Устройство ввода.
+ * @author Ponomarev
+ *
+ */
 public class InputDevice implements InternalDevice
 {
-	public InputDevice(ERegisterFactory reg_factory)
+	public InputDevice(RegisterFactory reg_factory)
 	{
-		data_reg = new ERegister(8);
+		data_reg = new Register(8);
 		
-		state_flag = new EFlag();
+		state_flag = new Flag();
 		
-		data_channel = new EIOChannel(reg_factory.Accumulator(), data_reg);
+		data_channel = new IOChannel(reg_factory.getAccumulator(), data_reg);
 		
-		order_channel =			new EChannel(null, null);
-		state_flag_channel =	new EChannel(null, null);
-		adress_channel =		new EChannel(null, null);
-		intrpt_channel =		new EChannel(null, null);
+		order_channel =			new Channel(null, null);
+		state_flag_channel =	new Channel(null, null);
+		adress_channel =		new Channel(null, null);
+		intrpt_channel =		new Channel(null, null);
 	}
 	
-	public InputDevice(int width, ERegisterFactory reg_factory)
+	public InputDevice(int width, RegisterFactory reg_factory)
 	{
-		data_reg = new ERegister(width);
-		state_flag = new EFlag();
-		data_channel = new EIOChannel(reg_factory.Accumulator(), data_reg);
+		data_reg = new Register(width);
+		state_flag = new Flag();
+		data_channel = new IOChannel(reg_factory.getAccumulator(), data_reg);
 	}
 
-	public EFlag getStateFlag()
+	public Flag getStateFlag()
 	{
 		return state_flag;
 	}
 
-	public ERegister getDataRegister()
+	public Register getDataRegister()
 	{
 		return data_reg;
 	}
@@ -64,11 +66,11 @@ public class InputDevice implements InternalDevice
 		return intrpt_channel;
 	}
 
-	private EChannel	order_channel;		// Приказ на ввод/вывод
-	private EChannel	adress_channel;		// Адрес ВУ
-	private EChannel	state_flag_channel;	// Состояние флагов ВУ
-	private EChannel	intrpt_channel;		// Запрос прерывания
-	private EIOChannel	data_channel;		// Шина ввода/вывода
-	private ERegister	data_reg;			// Регистра данных
-	private EFlag		state_flag;			// флаг ВУ
+	private Channel	order_channel;		// Приказ на ввод/вывод
+	private Channel	adress_channel;		// Адрес ВУ
+	private Channel	state_flag_channel;	// Состояние флагов ВУ
+	private Channel	intrpt_channel;		// Запрос прерывания
+	private IOChannel	data_channel;		// Шина ввода/вывода
+	private Register	data_reg;			// Регистра данных
+	private Flag		state_flag;			// флаг ВУ
 }

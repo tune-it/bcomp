@@ -1,11 +1,12 @@
 package Machine;
 
-/*-----------------------------------------------------------------------------
-	Интерфейс памяти.
------------------------------------------------------------------------------*/
+/**
+ * Интерфейс памяти.
+ * @author Ponomarev
+ */
 public interface IMemory {
-	public int SendData();
-	public void GetData(int bits);
-	public int Width();
-	public int[] GetMemory();
+	public int getValue();
+	public void setValue(int bits);
+	public int width();
+	public int[] getMemory();
 }
