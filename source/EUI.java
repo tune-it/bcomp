@@ -28,7 +28,7 @@ public class EUI extends JApplet
 		{
 		public void run()
 		{	 
-			//Инициализация основных элементов
+                    //Инициализация основных элементов
 			tabbedPane = new JTabbedPane();				//Панель закладок
 			control = new ControlView(tabbedPane);		//Контроль отрисовки и режимов
 			machine = new Machine(control);			//Машинные объекты
