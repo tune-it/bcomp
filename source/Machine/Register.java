@@ -40,6 +40,6 @@ public class Register implements IRegister
 		data = data & mask;
 	}
 	
-	private int	register_width; // Разрядность 
-	private int	data;           // Массив "битов"
+	private int				register_width;	// Разрядность 
+	private volatile int	data;			// Массив "битов"
 }

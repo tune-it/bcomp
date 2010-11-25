@@ -181,7 +181,7 @@ public class EUI extends JApplet
 			        //Продолжение
 			        if ((e.getKeyCode() == KeyEvent.VK_F8) ||
 					(e.getKeyCode() == KeyEvent.VK_8))
-				        machine.ссontinue();
+				        machine.continuebasepc();
 			        
 			        //Работа/Остановка
 			        if ((e.getKeyCode() == KeyEvent.VK_F9) ||

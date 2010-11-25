@@ -1,10 +1,14 @@
 package Machine;
 
+enum RUNSTATES {
+	STOPPED, RUNNING, STOPPING
+}
+
 /**
 * Базовая ЭВМ (управление работой)
 * @author Ponomarev
 */
-public class Machine
+public class Machine implements Runnable
 {
 	public Machine(ControlView ctrl)
 	{
@@ -33,28 +37,110 @@ public class Machine
 		
 		// Устройство управления
 		man_dev = new ManagerDevice(reg_factory, channels, alu, flags, dev);
-		
-		r = new MachineRunnable(reg_factory, man_dev, ctrl);
-		t = new Thread();
+
+		// Объекты для блокировок
+		lock_wait = new Object();
+		lock_continue = new Object();
+
+		// Запускаем поток для БЭВМ
+		runstate = RUNSTATES.STOPPED;
+		Thread t = new Thread(this);
+		t.start();
 	}
-	
+
+	/**
+	 * Поток, отвечающий за работу БЭВМ
+	 */
+	public void run()
+	{
+		for (;;) {
+			runstate = RUNSTATES.STOPPED;
+
+			synchronized (lock_continue) {
+				try {
+					lock_continue.wait(); 
+				} catch (Exception e) { }
+			}
+
+			runstate = RUNSTATES.RUNNING;
+			for (;;) {
+				man_dev.timeStep();
+				ctrl.repaint();
+
+				if (ctrl.getTact() || (runstate != RUNSTATES.RUNNING))
+					break;
+				
+				int mcmd = reg_factory.getMicroCommandRegister().getValue();
+				
+				if (((mcmd & 0xc000) == 0x4000) && ((mcmd & 0x8) == 0x8))
+					break;
+
+				try	{
+					Thread.sleep(10L);
+				} catch (Exception e) {	}
+			}
+
+			if (runstate == RUNSTATES.STOPPING) {
+				synchronized (lock_wait) {
+					try {
+						lock_wait.notifyAll();
+					} catch (Exception e) { }
+				}
+			}
+		}
+	}
+
+	/**
+	 * "Продолжение"
+	 */
+	public void continuebasepc()
+	{
+		if (runstate != RUNSTATES.STOPPED)
+			return;
+
+		synchronized (lock_continue) {
+			try {
+				lock_continue.notifyAll();
+			} catch (Exception e) { }
+		}
+	}
+
+	/**
+	 * Stop a running БЭВМ
+	 */
+	private void stopbasepc()
+	{
+		if (runstate == RUNSTATES.STOPPED)
+			return;
+
+		synchronized (runstate) {
+			if (runstate == RUNSTATES.RUNNING)
+				runstate = RUNSTATES.STOPPING;
+		}
+
+		synchronized (lock_wait) {
+			try {
+				lock_wait.wait();
+			} catch (Exception e) { }
+		}
+	}
+
+	/**
+	 * Запустить БЭВМ начиная с указанного адреса микрокоманд
+	 */
+	private void startfrom(int addr)
+	{
+		stopbasepc();
+		reg_factory.getMicroInstructionPointer().setValue(addr);
+		continuebasepc();
+	}
+
 	/**
 	 * "Пуск"
 	 */
 	public void start()
 	{
-		reg_factory.getMicroInstructionPointer().setValue(0xA8);
-		ссontinue();
-	}
-	
-	/**
-	 * "Продолжение"
-	 */
-	public void ссontinue()
-	{
-		while(t.isAlive())t.interrupt();
-		t = new Thread(r);
-		t.start();				
+		startfrom(0xA8);
 	}
 	
 	/**
@@ -62,16 +148,11 @@ public class Machine
 	 */
 	public void adress()
 	{
-		if (ctrl.microWork())
-		{
+		if (ctrl.microWork()) {
 			reg_factory.getMicroInstructionPointer().setValue(reg_factory.getInputRegister().getValue());
 			ctrl.repaint();
-		}
-		else
-		{
-			reg_factory.getMicroInstructionPointer().setValue(0x99);
-			ссontinue();
-		}
+		} else
+			startfrom(0x99);
 	}
 	
 	/**
@@ -79,8 +160,7 @@ public class Machine
 	 */
 	public void read()
 	{
-		reg_factory.getMicroInstructionPointer().setValue(0x9C);
-		ссontinue();
+		startfrom(0x9C);
 	}
 	
 	/**
@@ -88,17 +168,12 @@ public class Machine
 	 */
 	public void record()
 	{
-		if (ctrl.microWork())
-		{
+		if (ctrl.microWork()) {
 			micro_mem.setValue(reg_factory.getInputRegister().getValue());
 			reg_factory.getMicroInstructionPointer().setValue(reg_factory.getMicroInstructionPointer().getValue()+1);
 			ctrl.repaint();
-		}
-		else
-		{
-			reg_factory.getMicroInstructionPointer().setValue(0xA1);
-			ссontinue();
-		}
+		} else
+			startfrom(0xA1);
 	}
 	
 	/**
@@ -199,51 +274,9 @@ public class Machine
 	private ManagerDevice		man_dev;
 	private DeviceFactory 		dev;
 	
-	Runnable r;
-	Thread t;
-	
-	private ControlView ctrl;
+	private ControlView			ctrl;
+	private Object				lock_wait;
+	private Object				lock_continue;
 
-
-}
-
-class MachineRunnable implements Runnable
-{
-	public MachineRunnable(RegisterFactory reg_factory, ManagerDevice man_dev, ControlView ctrl)
-	{
-		this.ctrl = ctrl;
-		this.man_dev = man_dev;
-		this.reg_factory = reg_factory;
-	}
-	
-	public void run()
-	{
-		if (ctrl.getTact())
-		{
-			// Выполнение по тактам
-			man_dev.timeStep();
-			ctrl.repaint();
-		}
-		else
-		{
-			// Выполнение по командам
-			do
-			{
-				man_dev.timeStep();
-				ctrl.repaint();
-				try
-				{
-					Thread.sleep(10L);
-				}
-				catch (Exception e)
-				{
-					// Do nothing
-				}
-			} while (!Thread.currentThread().isInterrupted() && reg_factory.getMicroCommandRegister().getValue() != 0x4008);
-		}
-	}
-	
-	private RegisterFactory	reg_factory;
-	private ManagerDevice		man_dev;
-	private ControlView		ctrl;
+	private volatile RUNSTATES	runstate;
 }
