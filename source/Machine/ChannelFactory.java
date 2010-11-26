@@ -174,7 +174,7 @@ public class ChannelFactory
 	 * Канал РА -> Память
 	 * @return
 	 */
-	public Channel AdressRegToMem()
+	public Channel AddressRegToMem()
 	{
 		return channels[14];
 	}

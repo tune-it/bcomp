@@ -52,7 +52,7 @@ public class ManagerDeviceUI
 		//Вызов методов отрисовки строк
 		rs.setFont(new Font("Courier New", Font.BOLD, 17));
 		drawMode(rs, flag_factory.getInstructionFetch(), 1, "Выборка команды");
-		drawMode(rs, flag_factory.getAdressSelection(), 2, "Выборка aдреса");
+		drawMode(rs, flag_factory.getAddressSelection(), 2, "Выборка aдреса");
 		drawMode(rs, flag_factory.getExecution(), 3, "Исполнение");
 		drawMode(rs, flag_factory.getInterruption(), 4, "Прерывание");
 		drawMode(rs, flag_factory.getInputOutput(), 5, "Ввод/вывод");

@@ -74,7 +74,7 @@ public class FlagFactory
 		return flags[9];
 	}
 	
-	public Flag getAdressSelection()
+	public Flag getAddressSelection()
 	{
 		return flags[10];
 	}

@@ -161,7 +161,7 @@ public class EUI extends JApplet
 			        //Ввод адреса
 			        if ((e.getKeyCode() == KeyEvent.VK_F4) ||
 					(e.getKeyCode() == KeyEvent.VK_4))
-		        		machine.adress();
+		        		machine.setAddress();
 			        
 			        //Запись
 			        if ((e.getKeyCode() == KeyEvent.VK_F5) ||

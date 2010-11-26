@@ -183,7 +183,7 @@ public class ObjectFactoryUI
 		//Канал от Рестира Адреса к Памяти
 		int[][] mass1 = {{336, 45}, 
 			   			{160, 45}};	
-		ChannelUI RAtoMEM = new ChannelUI(channfact.AdressRegToMem(), mass1);
+		ChannelUI RAtoMEM = new ChannelUI(channfact.AddressRegToMem(), mass1);
 		
 		//Канал от Регистра Данных к Памяти
 		int[][] mass2 = {{220, 140}, 

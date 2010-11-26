@@ -7,7 +7,7 @@ public interface InternalDevice
 	public IChannel		getDataChannel();
 	
 	public IChannel	getIORequestChannel();
-	public IChannel	getAdressChannel();
+	public IChannel	getAddressChannel();
 	public IChannel	getStateFlagChannel();
 	public IChannel	getInterruptionRequestChannel();
 }

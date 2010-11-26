@@ -67,7 +67,7 @@ public class MemoryUI
 
 		rs.setFont(new Font("Courier New", Font.BOLD, 25));		//Шрифт содержимого
 		
-		String adress, data;
+		String address, data;
 		int a = 21; 								//Расстояние между строкой и рамкой заголовка 
 		int shift = 25;								//Расстояние между строками 
 		page = register.getValue() / page_size;		//Текущая страница
@@ -76,9 +76,9 @@ public class MemoryUI
 		//Форматирование и вывод адресов и содержимого
 		for (int i = 0; i < page_size; i++)
 		{	
-			adress = "" + convertToString(page * 16 + i, mem_width);
+			address = "" + convertToString(page * 16 + i, mem_width);
 			data = "" + convertToString(mem[page * 16 + i], page_size);
-			rs.drawString(adress, (int)leftX + 9, (int)leftY+ banner_height + a);
+			rs.drawString(address, (int)leftX + 9, (int)leftY+ banner_height + a);
 			rs.drawString(data, separatorX + 12, (int)leftY+ banner_height + a);
 			a += shift;
 		}
@@ -104,15 +104,15 @@ public class MemoryUI
 		separatorX =(int)leftX + x;
 	}
 	
-	public void setAdressWidth(int x)					//Установка разрядности адреса
+	public void setAddressWidth(int x)					//Установка разрядности адреса
 	{
 		mem_width = x;
 	}
 	
-	private String convertToString(int adress, int width)		//Преобразование адреса/cодержимого в строку
+	private String convertToString(int address, int width)		//Преобразование адреса/cодержимого в строку
 	{
 		Formatter fmt = new Formatter();
-		fmt.format("%x", adress);
+		fmt.format("%x", address);
 		String str = fmt.toString();
 		
 		int y = str.length();

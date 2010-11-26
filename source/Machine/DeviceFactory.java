@@ -29,7 +29,7 @@ public class DeviceFactory
 		return dev[2];
 	}
 	
-	public InternalDevice getDeviceByAdress(int dev_adr)
+	public InternalDevice getDeviceByAddress(int dev_adr)
 	{
 		dev_adr = dev_adr - 1;
 		if ((dev_adr >= 0) && (dev_adr <= 2))
@@ -56,7 +56,7 @@ public class DeviceFactory
 		{
 				x.getDataChannel().close();
 				
-				x.getAdressChannel().close();
+				x.getAddressChannel().close();
 				x.getInterruptionRequestChannel().close();
 				x.getIORequestChannel().close();
 				x.getStateFlagChannel().close();

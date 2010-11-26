@@ -55,7 +55,7 @@ public class ManagerDevice
 		// Установка/сброс битов РС
 		if (n <= 0xC)
 		{
-			flag_factory.getAdressSelection().clearFlag();
+			flag_factory.getAddressSelection().clearFlag();
 			flag_factory.getInstructionFetch().setFlag();
 			//flag_factory.GetExecution().ClearFlag();
 			flag_factory.getInputOutput().clearFlag();
@@ -65,7 +65,7 @@ public class ManagerDevice
 		{
 			if (n <= 0x1C)
 			{
-				flag_factory.getAdressSelection().setFlag();
+				flag_factory.getAddressSelection().setFlag();
 				flag_factory.getInstructionFetch().clearFlag();
 				//flag_factory.GetExecution().ClearFlag();
 				flag_factory.getInputOutput().clearFlag();
@@ -75,7 +75,7 @@ public class ManagerDevice
 			{
 				if (n <= 0x8D)
 				{
-					flag_factory.getAdressSelection().clearFlag();
+					flag_factory.getAddressSelection().clearFlag();
 					flag_factory.getInstructionFetch().clearFlag();
 					//flag_factory.GetExecution().SetFlag();
 					flag_factory.getInputOutput().clearFlag();
@@ -85,7 +85,7 @@ public class ManagerDevice
 				{
 					if (n == 0x8E)
 					{
-						flag_factory.getAdressSelection().clearFlag();
+						flag_factory.getAddressSelection().clearFlag();
 						flag_factory.getInstructionFetch().clearFlag();
 						//flag_factory.GetExecution().ClearFlag();
 						flag_factory.getInputOutput().setFlag();
@@ -95,7 +95,7 @@ public class ManagerDevice
 					{
 						if (n <= 0x98)
 						{
-							flag_factory.getAdressSelection().clearFlag();
+							flag_factory.getAddressSelection().clearFlag();
 							flag_factory.getInstructionFetch().clearFlag();
 							//flag_factory.GetExecution().ClearFlag();
 							flag_factory.getInputOutput().clearFlag();
@@ -105,7 +105,7 @@ public class ManagerDevice
 						{
 							if (n <= 0xff)
 							{
-								flag_factory.getAdressSelection().clearFlag();
+								flag_factory.getAddressSelection().clearFlag();
 								flag_factory.getInstructionFetch().clearFlag();
 								//flag_factory.GetExecution().ClearFlag();
 								flag_factory.getInputOutput().clearFlag();
@@ -118,7 +118,7 @@ public class ManagerDevice
 		}
 		if (n == 0x88)
 		{
-			flag_factory.getAdressSelection().clearFlag();
+			flag_factory.getAddressSelection().clearFlag();
 			flag_factory.getInstructionFetch().clearFlag();
 			//flag_factory.GetExecution().ClearFlag();
 			flag_factory.getInputOutput().clearFlag();
@@ -272,14 +272,14 @@ public class ManagerDevice
 					{
 						case 0:
 							// clf B
-							if (dev.getDeviceByAdress(dev_adr) != null) dev.getDeviceByAdress(dev_adr).getStateFlag().clearFlag();
+							if (dev.getDeviceByAddress(dev_adr) != null) dev.getDeviceByAddress(dev_adr).getStateFlag().clearFlag();
 							break;
 						case 1:
 							// tsf B
-							if (dev.getDeviceByAdress(dev_adr) != null)
+							if (dev.getDeviceByAddress(dev_adr) != null)
 							{
-								dev.getDeviceByAdress(dev_adr).getStateFlagChannel().open();
-								if ( dev.getDeviceByAdress(dev_adr).getStateFlag().getValue() == 1)
+								dev.getDeviceByAddress(dev_adr).getStateFlagChannel().open();
+								if ( dev.getDeviceByAddress(dev_adr).getStateFlag().getValue() == 1)
 								{
 									reg_factory.getMicroInstructionPointer().setValue(reg_factory.getMicroInstructionPointer().getValue()+1);
 								}
@@ -289,29 +289,29 @@ public class ManagerDevice
 							// in B
 							if ( dev_adr == 1)
 							{
-								dev.getDeviceByAdress(1).getAdressChannel().open();
-								dev.getDeviceByAdress(1).getIORequestChannel().open();
-								dev.getDeviceByAdress(2).getAdressChannel().open();
-								dev.getDeviceByAdress(2).getIORequestChannel().open();
-								dev.getDeviceByAdress(3).getAdressChannel().open();
-								dev.getDeviceByAdress(3).getIORequestChannel().open();
+								dev.getDeviceByAddress(1).getAddressChannel().open();
+								dev.getDeviceByAddress(1).getIORequestChannel().open();
+								dev.getDeviceByAddress(2).getAddressChannel().open();
+								dev.getDeviceByAddress(2).getIORequestChannel().open();
+								dev.getDeviceByAddress(3).getAddressChannel().open();
+								dev.getDeviceByAddress(3).getIORequestChannel().open();
 								
 								
-								dev.getDeviceByAdress(dev_adr).getDataChannel().open();
+								dev.getDeviceByAddress(dev_adr).getDataChannel().open();
 							}
 							break;
 						case 3:
 							// out B
 							if ( (dev_adr == 2) || (dev_adr == 3))
 							{
-								dev.getDeviceByAdress(1).getAdressChannel().open();
-								dev.getDeviceByAdress(1).getIORequestChannel().open();
-								dev.getDeviceByAdress(2).getAdressChannel().open();
-								dev.getDeviceByAdress(2).getIORequestChannel().open();
-								dev.getDeviceByAdress(3).getAdressChannel().open();
-								dev.getDeviceByAdress(3).getIORequestChannel().open();
+								dev.getDeviceByAddress(1).getAddressChannel().open();
+								dev.getDeviceByAddress(1).getIORequestChannel().open();
+								dev.getDeviceByAddress(2).getAddressChannel().open();
+								dev.getDeviceByAddress(2).getIORequestChannel().open();
+								dev.getDeviceByAddress(3).getAddressChannel().open();
+								dev.getDeviceByAddress(3).getIORequestChannel().open();
 								
-								dev.getDeviceByAdress(dev_adr).getDataChannel().open();
+								dev.getDeviceByAddress(dev_adr).getDataChannel().open();
 							}
 							break;
 						default: break;

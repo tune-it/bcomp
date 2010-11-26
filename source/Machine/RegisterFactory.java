@@ -26,11 +26,11 @@ public class RegisterFactory
 		this.registers[11] = new Register();
 	}
 	
-//	public ERegisterFactory(int adress_register, int data_register, int instruction_pointer, int command_register, int left_alu_in, int right_alu_in, int buffer_register, int acc, int state_counter)
+//	public ERegisterFactory(int address_register, int data_register, int instruction_pointer, int command_register, int left_alu_in, int right_alu_in, int buffer_register, int acc, int state_counter)
 //	{
 //		this.registers = new ERegister[9];
 //		
-//		this.registers[0] = new ERegister(adress_register);
+//		this.registers[0] = new ERegister(address_register);
 //		this.registers[1] = new ERegister(data_register);
 //		this.registers[2] = new ERegister(instruction_pointer);
 //		this.registers[3] = new ERegister(command_register);

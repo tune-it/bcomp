@@ -7,7 +7,7 @@ public class Memory implements IRegister, IMemory
 {
 	public Memory(RegisterFactory factory)
 	{
-		this.adress_register = factory.getAddressRegister();
+		this.address_register = factory.getAddressRegister();
 		this.memory_width = 16;
 		this.memory_length = (int) StrictMath.pow(2, factory.getAddressRegister().width());
 		memory = new Register[memory_length];
@@ -17,9 +17,9 @@ public class Memory implements IRegister, IMemory
 		}
 	}
 	
-	public Memory(Register adress_register, int length, int width)
+	public Memory(Register address_register, int length, int width)
 	{
-		this.adress_register = adress_register;
+		this.address_register = address_register;
 		this.memory_width = width;
 		this.memory_length = length;
 		memory = new Register[memory_length];
@@ -31,12 +31,12 @@ public class Memory implements IRegister, IMemory
 	
 	public int getValue()
 	{
-		return memory[makeAdress()].getValue();
+		return memory[makeAddress()].getValue();
 	}
 	
 	public void setValue(int bits)
 	{
-		memory[makeAdress()].setValue(bits);
+		memory[makeAddress()].setValue(bits);
 	}
 	
 	public int width()
@@ -44,9 +44,9 @@ public class Memory implements IRegister, IMemory
 		return memory_width;
 	}
 	
-	private int makeAdress()
+	private int makeAddress()
 	{
-		return adress_register.getValue();
+		return address_register.getValue();
 	}
 	
 	public int[] getMemory()
@@ -67,5 +67,5 @@ public class Memory implements IRegister, IMemory
 	private int			memory_length;   // Длина памяти
 	private int			memory_width;    // Разрядность памяти
 	private Register[]	memory;          // Память
-	private Register	adress_register; // Регистр адреса
+	private Register	address_register; // Регистр адреса
 }

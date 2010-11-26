@@ -1,6 +1,6 @@
 package Machine;
 
-enum RUNSTATES {
+enum RunState {
 	STOPPED, RUNNING, STOPPING
 }
 
@@ -8,10 +8,8 @@ enum RUNSTATES {
 * Базовая ЭВМ (управление работой)
 * @author Ponomarev
 */
-public class Machine implements Runnable
-{
-	public Machine(ControlView ctrl)
-	{
+public class Machine implements Runnable {
+	public Machine(ControlView ctrl) {
 		this.ctrl=ctrl;
 		
 		// Фабрика регистров
@@ -39,11 +37,14 @@ public class Machine implements Runnable
 		man_dev = new ManagerDevice(reg_factory, channels, alu, flags, dev);
 
 		// Объекты для блокировок
-		lock_wait = new Object();
-		lock_continue = new Object();
+		lockWait = new Object();
+		lockContinue = new Object();
 
-		// Запускаем поток для БЭВМ
-		runstate = RUNSTATES.STOPPED;
+		// Перестраховка: default state
+		synchronized (runstate) {
+			runstate = RunState.STOPPED;
+		}
+		// Запускаем поток для интерпретатора БЭВМ
 		Thread t = new Thread(this);
 		t.start();
 	}
@@ -51,23 +52,27 @@ public class Machine implements Runnable
 	/**
 	 * Поток, отвечающий за работу БЭВМ
 	 */
-	public void run()
-	{
+	public void run() {
 		for (;;) {
-			runstate = RUNSTATES.STOPPED;
+			synchronized (runstate) {
+				runstate = RunState.STOPPED;
+			}
 
-			synchronized (lock_continue) {
+			synchronized (lockContinue) {
 				try {
-					lock_continue.wait(); 
+					lockContinue.wait(); 
 				} catch (Exception e) { }
 			}
 
-			runstate = RUNSTATES.RUNNING;
+			synchronized (runstate) {
+				runstate = RunState.RUNNING;
+			}
+
 			for (;;) {
 				man_dev.timeStep();
 				ctrl.repaint();
 
-				if (ctrl.getTact() || (runstate != RUNSTATES.RUNNING))
+				if (ctrl.getTact() || (runstate != RunState.RUNNING))
 					break;
 				
 				int mcmd = reg_factory.getMicroCommandRegister().getValue();
@@ -80,10 +85,10 @@ public class Machine implements Runnable
 				} catch (Exception e) {	}
 			}
 
-			if (runstate == RUNSTATES.STOPPING) {
-				synchronized (lock_wait) {
+			if (runstate == RunState.STOPPING) {
+				synchronized (lockWait) {
 					try {
-						lock_wait.notifyAll();
+						lockWait.notifyAll();
 					} catch (Exception e) { }
 				}
 			}
@@ -93,14 +98,13 @@ public class Machine implements Runnable
 	/**
 	 * "Продолжение"
 	 */
-	public void continuebasepc()
-	{
-		if (runstate != RUNSTATES.STOPPED)
+	public void continuebasepc() {
+		if (runstate != RunState.STOPPED)
 			return;
 
-		synchronized (lock_continue) {
+		synchronized (lockContinue) {
 			try {
-				lock_continue.notifyAll();
+				lockContinue.notifyAll();
 			} catch (Exception e) { }
 		}
 	}
@@ -108,19 +112,18 @@ public class Machine implements Runnable
 	/**
 	 * Stop a running БЭВМ
 	 */
-	private void stopbasepc()
-	{
-		if (runstate == RUNSTATES.STOPPED)
+	private void stopbasepc() {
+		if (runstate == RunState.STOPPED)
 			return;
 
 		synchronized (runstate) {
-			if (runstate == RUNSTATES.RUNNING)
-				runstate = RUNSTATES.STOPPING;
+			if (runstate == RunState.RUNNING)
+				runstate = RunState.STOPPING;
 		}
 
-		synchronized (lock_wait) {
+		synchronized (lockWait) {
 			try {
-				lock_wait.wait();
+				lockWait.wait();
 			} catch (Exception e) { }
 		}
 	}
@@ -128,8 +131,7 @@ public class Machine implements Runnable
 	/**
 	 * Запустить БЭВМ начиная с указанного адреса микрокоманд
 	 */
-	private void startfrom(int addr)
-	{
+	private void startfrom(int addr) {
 		stopbasepc();
 		reg_factory.getMicroInstructionPointer().setValue(addr);
 		continuebasepc();
@@ -138,36 +140,33 @@ public class Machine implements Runnable
 	/**
 	 * "Пуск"
 	 */
-	public void start()
-	{
+	public void start() {
 		startfrom(0xA8);
 	}
 	
 	/**
 	 * "Ввод адреса"
 	 */
-	public void adress()
-	{
+	public void setAddress() {
 		if (ctrl.microWork()) {
 			reg_factory.getMicroInstructionPointer().setValue(reg_factory.getInputRegister().getValue());
 			ctrl.repaint();
-		} else
+		} else {
 			startfrom(0x99);
+		}
 	}
 	
 	/**
 	 * "Чтение"
 	 */
-	public void read()
-	{
+	public void read() {
 		startfrom(0x9C);
 	}
 	
 	/**
 	 * "Запись"
 	 */
-	public void record()
-	{
+	public void record() {
 		if (ctrl.microWork()) {
 			micro_mem.setValue(reg_factory.getInputRegister().getValue());
 			reg_factory.getMicroInstructionPointer().setValue(reg_factory.getMicroInstructionPointer().getValue()+1);
@@ -179,8 +178,7 @@ public class Machine implements Runnable
 	/**
 	 * "Работа останов"
 	 */
-	public void workStop()
-	{
+	public void workStop() {
 		if (flags.getStateOfTumbler().getValue() == 0)
 		{
 			flags.getStateOfTumbler().setValue(1);
@@ -197,8 +195,7 @@ public class Machine implements Runnable
 	 * Получить фабрику регистров
 	 * @return Возвращает фабрику регистров
 	 */
-	public RegisterFactory getRegFactory()
-	{
+	public RegisterFactory getRegFactory() {
 		return reg_factory;
 	}
 	
@@ -206,8 +203,7 @@ public class Machine implements Runnable
 	 * Получить основную память
 	 * @return Возвращает основную память
 	 */
-	public Memory getMemory()
-	{
+	public Memory getMemory() {
 		return memory;
 	}
 	
@@ -215,8 +211,7 @@ public class Machine implements Runnable
 	 * Получить память микрокоманд
 	 * @return Возвращает память микрокоманд
 	 */
-	public MicrocommandMemory getMicroMem()
-	{
+	public MicrocommandMemory getMicroMem() {
 		return micro_mem;
 	}
 	
@@ -224,8 +219,7 @@ public class Machine implements Runnable
 	 * Получить фабрику флагов
 	 * @return Возвращает фабрику флагов
 	 */
-	public FlagFactory getFlagFactory()
-	{
+	public FlagFactory getFlagFactory() {
 		return flags;
 	}
 	
@@ -233,8 +227,7 @@ public class Machine implements Runnable
 	 * Получить фабрику каналов
 	 * @return Возвращает фабрику каналов
 	 */
-	public ChannelFactory getChannelFactory()
-	{
+	public ChannelFactory getChannelFactory() {
 		return channels;
 	}
 	
@@ -242,8 +235,7 @@ public class Machine implements Runnable
 	 * Получить АЛУ
 	 * @return Возвращает АЛУ
 	 */
-	public ALU getALU()
-	{
+	public ALU getALU() {
 		return alu;
 	}
 	
@@ -251,8 +243,7 @@ public class Machine implements Runnable
 	 * Получить устройство управление
 	 * @return Возвращает Возвращает УУ
 	 */
-	public ManagerDevice getManagerDevice()
-	{
+	public ManagerDevice getManagerDevice() {
 		return man_dev;
 	}
 	
@@ -260,8 +251,7 @@ public class Machine implements Runnable
 	 * Получить фабрику усройств
 	 * @return Возвращает фабрику усройств
 	 */
-	public DeviceFactory getDeviceFactory()
-	{
+	public DeviceFactory getDeviceFactory() {
 		return dev;
 	}
 	
@@ -275,8 +265,8 @@ public class Machine implements Runnable
 	private DeviceFactory 		dev;
 	
 	private ControlView			ctrl;
-	private Object				lock_wait;
-	private Object				lock_continue;
+	private Object				lockWait;
+	private Object				lockContinue;
 
-	private volatile RUNSTATES	runstate;
+	private volatile RunState	runstate;
 }

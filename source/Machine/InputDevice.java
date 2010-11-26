@@ -17,7 +17,7 @@ public class InputDevice implements InternalDevice
 		
 		order_channel =			new Channel(null, null);
 		state_flag_channel =	new Channel(null, null);
-		adress_channel =		new Channel(null, null);
+		address_channel =		new Channel(null, null);
 		intrpt_channel =		new Channel(null, null);
 	}
 	
@@ -50,9 +50,9 @@ public class InputDevice implements InternalDevice
 	}
 	
 	// Адрес ВУ
-	public IChannel	getAdressChannel()
+	public IChannel	getAddressChannel()
 	{
-		return adress_channel;
+		return address_channel;
 	}
 	
 	// Состояние флагов ВУ
@@ -67,7 +67,7 @@ public class InputDevice implements InternalDevice
 	}
 
 	private Channel	order_channel;		// Приказ на ввод/вывод
-	private Channel	adress_channel;		// Адрес ВУ
+	private Channel	address_channel;		// Адрес ВУ
 	private Channel	state_flag_channel;	// Состояние флагов ВУ
 	private Channel	intrpt_channel;		// Запрос прерывания
 	private IOChannel	data_channel;		// Шина ввода/вывода
