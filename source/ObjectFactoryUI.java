@@ -183,7 +183,7 @@ public class ObjectFactoryUI
 		//Канал от Рестира Адреса к Памяти
 		int[][] mass1 = {{336, 45}, 
 			   			{160, 45}};	
-		ChannelUI RAtoMEM = new ChannelUI(channfact.AddressRegToMem(), mass1);
+		ChannelUI RAtoMEM = new ChannelUI(channfact.AdressRegToMem(), mass1);
 		
 		//Канал от Регистра Данных к Памяти
 		int[][] mass2 = {{220, 140}, 
@@ -485,18 +485,6 @@ public class ObjectFactoryUI
 		return memory_check;
 	}
 	
-	public JButton createWorkButton()
-	{
-		JButton work = new JButton("Остановка");
-		work.setSize(127, 51);
-		work.setHorizontalTextPosition(2);
-		work.setFocusable(false);
-		work.setForeground(Color.BLACK);
-		work.setFont(new Font("Courier New", Font.PLAIN, 17));
-		
-		return work;
-	}
-	
 	public JRadioButton[] createRegisterRadioButtons()
 	{
 
@@ -525,11 +513,88 @@ public class ObjectFactoryUI
 		
 		return buttons;
 	}
-	
+
+        public JButton[] createDbuttons()
+        {
+            JButton adress = new JButton("Ввод адреса(F4/4)");
+            adress.setBounds(1, 525, 153, 30);
+            adress.setFocusable(false);
+            adress.setForeground(Color.BLACK);
+            adress.setFont(new Font("Courier New", Font.PLAIN, 12));
+
+            JButton record = new JButton("Запись(F5/5)");
+            record.setBounds(157, 525, 118, 30);
+            record.setFocusable(false);
+            record.setForeground(Color.BLACK);
+            record.setFont(new Font("Courier New", Font.PLAIN, 12));
+
+            JButton read = new JButton("Чтение(F6/6)");
+            read.setBounds(278, 525, 118, 30);
+            read.setFocusable(false);
+            read.setForeground(Color.BLACK);
+            read.setFont(new Font("Courier New", Font.PLAIN, 12));
+
+            JButton start = new JButton("Пуск(F7/7)");
+            start.setBounds(399, 525, 104, 30);
+            start.setFocusable(false);
+            start.setForeground(Color.BLACK);
+            start.setFont(new Font("Courier New", Font.PLAIN, 12));
+
+            JButton continuebasepc = new JButton("Продолжение(F8/8)");
+            continuebasepc.setBounds(506, 525, 153, 30);
+            continuebasepc.setFocusable(false);
+            continuebasepc.setForeground(Color.BLACK);
+            continuebasepc.setFont(new Font("Courier New", Font.PLAIN, 12));
+
+            JButton[] buttons =  {adress, record, read, start, continuebasepc};
+
+            return buttons;
+        }
+
+        public JButton createWorkButton()
+	{
+		JButton work = new JButton("Остановка(F9/9)");
+		work.setBounds(662, 523, 185, 34);
+		work.setHorizontalTextPosition(2);
+		work.setFocusable(false);
+		work.setForeground(Color.BLACK);
+		work.setFont(new Font("Courier New", Font.PLAIN, 12));
+
+		return work;
+	}
+
+        public JButton[] createFlagButtons()
+        {
+                JButton flag1 = new JButton("Готовность ВУ1(F1/1)");
+                flag1.setBounds(619, 439, 175, 25);
+		flag1.setHorizontalTextPosition(2);
+		flag1.setFocusable(false);
+		flag1.setForeground(Color.BLACK);
+		flag1.setFont(new Font("Courier New", Font.PLAIN, 12));
+
+                JButton flag2 = new JButton("Готовность ВУ2(F2/2)");
+                flag2.setBounds(619, 465, 175, 25);
+		flag2.setHorizontalTextPosition(2);
+		flag2.setFocusable(false);
+		flag2.setForeground(Color.BLACK);
+		flag2.setFont(new Font("Courier New", Font.PLAIN, 12));
+
+                JButton flag3 = new JButton("Готовность ВУ3(F3/3)");
+                flag3.setBounds(619, 491, 175, 25);
+		flag3.setHorizontalTextPosition(2);
+		flag3.setFocusable(false);
+		flag3.setForeground(Color.BLACK);
+		flag3.setFont(new Font("Courier New", Font.PLAIN, 12));
+
+                JButton[] flags = {flag1, flag2, flag3};
+
+                return flags;
+        }
+        
 	private RegisterFactory 	regfact;					//Регистры
 	private FlagFactory 		flagfact;					//Флаги
 	private ChannelFactory		channfact;					//Каналы
 	private DeviceFactory		devfact;					//Устройства ввода-вывода
-	private Memory				memory;						//Память
-	private Memory				micro_memory;				//Память микрокомманд
+	private Memory			memory;						//Память
+	private Memory			micro_memory;				//Память микрокомманд
 }

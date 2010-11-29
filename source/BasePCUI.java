@@ -17,7 +17,7 @@ public class BasePCUI extends JComponent
      */
     private static final long serialVersionUID = 1L;
 
-    public BasePCUI(ObjectFactoryUI factory, InputRegisterUI input_register, JCheckBox tact, JButton work)
+    public BasePCUI(ObjectFactoryUI factory, InputRegisterUI input_register, JButton[] dbuttons, JCheckBox tact, JButton work)
     {
         registers = factory.createClassicRegisters();
         channels = factory.createClassicChannels();
@@ -28,7 +28,9 @@ public class BasePCUI extends JComponent
         this.tact = tact;
         this.work = work;
 
-        this.key_register = input_register;
+        key_register = input_register;
+
+        this.dbuttons = dbuttons;
     }
 
     public void paintComponent(Graphics g)
@@ -44,8 +46,6 @@ public class BasePCUI extends JComponent
             if (channels[i].isConnect())
                 channels[i].draw(rs);
 
-
-
         //Отрисовка канала в устройство управления
         rs.setColor(Color.GRAY);
         rs.fillRect(713, 160, 40, 20);
@@ -56,7 +56,6 @@ public class BasePCUI extends JComponent
         //Отрисовка регистров
         for (int i = 0; i < registers.length; i++)
             registers[i].draw(rs);
-
 
         //Отрисовка клавишного регистра
         key_register.draw(rs);
@@ -74,7 +73,6 @@ public class BasePCUI extends JComponent
         else
             rs.drawString("" + bit_number, 287, 500);
 
-
         alu.draw(rs);				//Отрисовка АЛУ
         memory.draw(rs);			//Отрисовка Памяти
         manager_device.draw(rs);                //Отрисовка Устройства Управления
@@ -82,8 +80,10 @@ public class BasePCUI extends JComponent
         //Добавление чекбоксов и рамок
         add(tact);				//"Такт"
         rs.drawRect(329, 465, 101, 50);
+        
+        for (int i = 0; i<dbuttons.length; i++)
+            add(dbuttons[i]);
 
-        work.setLocation(437, 465);
         add(work);
     }
    
@@ -93,6 +93,7 @@ public class BasePCUI extends JComponent
     private MemoryUI            memory;             //Память
     private ManagerDeviceUI     manager_device;     //Устройство Управления
     private AluUI               alu;                //АЛУ
+    private JButton[]           dbuttons;           //Дублирующие кнопки
     private JCheckBox           tact;               //Чекбокс режима "Такт"
     private JButton             work;               //Лэйбл "Работа/Остановка"
 }

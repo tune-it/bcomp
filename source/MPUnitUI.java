@@ -19,7 +19,7 @@ public class MPUnitUI extends JComponent
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public MPUnitUI (ObjectFactoryUI factory, InputRegisterUI input_register, JCheckBox tact, JCheckBox memory_check, JButton work)
+	public MPUnitUI (ObjectFactoryUI factory, InputRegisterUI input_register, JButton[] dbuttons, JCheckBox tact, JCheckBox memory_check, JButton work)
 	{
 		registers = factory.createMPURegisters();
 		channels = factory.createMPUChannels();
@@ -28,7 +28,8 @@ public class MPUnitUI extends JComponent
 		alu = factory.createMPUAlu();
 		
 		this.key_register = input_register;
-		
+
+                this.dbuttons = dbuttons;
 		this.tact = tact;	
 		this.memory_check = memory_check;
 		this.work = work;
@@ -61,14 +62,17 @@ public class MPUnitUI extends JComponent
 		//Отрисовка клавишного регистра
 		key_register.draw(rs);
 		key_register.drawPointer(rs);
-		
+
+                //Добавление дублирующих кнопок
+                for (int i = 0; i < dbuttons.length; i++)
+                    add(dbuttons[i]);
+
 		//Добавление чекбоксов и рамок
 		add(tact);						//"Такт"
 		rs.drawRect(329, 465, 101, 50);
 		add(memory_check);				//"Работа с памятью МК"
 		rs.drawRect(437, 465, 276, 50);		
-		work.setLocation(720, 465);		//Работа/Останов.
-		add(work);
+		add(work);                      	//Работа/Останов.
 				
 		//Отрисовка номера бита
 		rs.setFont(new Font("Courier New", Font.BOLD, 32));
@@ -112,11 +116,12 @@ public class MPUnitUI extends JComponent
 	private RegisterUI[]				registers;					//Массив регистров
 	private InputRegisterUI				key_register;				//Клавишный регистр
 	private ChannelUI[] 				channels;					//Массив каналов
-	private	MemoryUI					memory;						//Память
-	private MemoryUI					micro_memory;				//Память МК
-	private	AluUI						alu;						//АЛУ
-	private JCheckBox					tact;						//Чекбокс для режима "Такт"
-	private JCheckBox					memory_check;				//Чекбокс "Работа с памятью МК"
-	private JButton						work;						//Кнопка "работа/остановка"
+	private	MemoryUI				memory;						//Память
+	private MemoryUI				micro_memory;				//Память МК
+	private	AluUI					alu;						//АЛУ
+        private JButton[]                               dbuttons;                               //Дублирующие кнопки
+	private JCheckBox				tact;						//Чекбокс для режима "Такт"
+	private JCheckBox				memory_check;				//Чекбокс "Работа с памятью МК"
+	private JButton					work;						//Кнопка "работа/остановка"
 
 }

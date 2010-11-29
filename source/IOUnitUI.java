@@ -19,7 +19,7 @@ public class IOUnitUI extends JComponent
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public IOUnitUI (ObjectFactoryUI factory, InputRegisterUI[] input_registers, FlagUI[] flags, JCheckBox tact, JButton work, JRadioButton[] register_check)
+	public IOUnitUI (ObjectFactoryUI factory, InputRegisterUI[] input_registers, JButton[] dbuttons, JButton[] flag_buttons, FlagUI[] flags, JCheckBox tact, JButton work, JRadioButton[] register_check)
 	{
 		registers = factory.createIORegisters();
 		memory = factory.createСlassicMemory();
@@ -28,7 +28,9 @@ public class IOUnitUI extends JComponent
 		
 		this.input_registers = input_registers;
 		key_register = input_registers[0];
-		
+
+                this.dbuttons = dbuttons;
+                this.flag_buttons = flag_buttons;
 		this.tact = tact;
 		this.work = work;
 		this.register_check = register_check;
@@ -57,23 +59,30 @@ public class IOUnitUI extends JComponent
 		memory.draw(rs);			//Отрисовка Памяти
 		
 		//Отрисовка устройств вывода
-		for (int i=0; i<input_registers.length; i++)
+		for (int i = 0; i < input_registers.length; i++)
 		{
 			input_registers[i].draw(rs);
 			input_registers[i].drawPointer(rs);
 		}
+
+                //Добавление дублирующих кнопок
+                for (int i = 0; i < dbuttons.length; i++)
+                    add(dbuttons[i]);
+
+                //Добавление кнопок работы с ВУ
+                for (int i = 0; i < flag_buttons.length; i++)
+                    add(flag_buttons[i]);
 
 		//Добавление чекбоксов и рамок
 		add(tact);						//"Такт"
 		rs.drawRect(329, 465, 101, 50);
 		
 		//Добавление панели выбора регистра и отрисовка рамки
-		for (int i=0; i<register_check.length; i++)
+		for (int i = 0; i < register_check.length; i++)
 			add(register_check[i]);
 		rs.drawRect(437, 439, 175, 76);
 		
 		//Установка позиции кнопки "работа/остановка" и ее отрисовка
-		work.setLocation(619, 465);
 		add(work);
 		
 		//Отрисовка номера бита
@@ -129,12 +138,14 @@ public class IOUnitUI extends JComponent
 	}
 	
 	private RegisterUI[]				registers;					//Массив регистров
-	private ChannelUI[]					channels;					//Массив каналов
+	private ChannelUI[]				channels;					//Массив каналов
 	private InputRegisterUI				key_register;				//Клавишный регистр
 	private InputRegisterUI[]			input_registers;			//Устройства вывода + клавишный регистр
-	private FlagUI[]					flags;						//Флаги
-	private	MemoryUI					memory;						//Память
-	private JCheckBox					tact;						//Чекбокс режима "Такт"
-	private JButton						work;						//Кнопка "Работа/Остановка"
+	private FlagUI[]				flags;						//Флаги
+	private	MemoryUI				memory;						//Память
+        private JButton[]                               dbuttons;                   //Дублирующие кнопки
+        private JButton[]                               flag_buttons;               //Кнопки работы с ВУ
+	private JCheckBox				tact;						//Чекбокс режима "Такт"
+	private JButton                                 work;						//Кнопка "Работа/Остановка"
 	private JRadioButton[]				register_check;				//Кнопки выбора активного регистра
 }
