@@ -40,10 +40,9 @@ public class Machine implements Runnable {
 		lockWait = new Object();
 		lockContinue = new Object();
 
-		// Перестраховка: default state
-		synchronized (runstate) {
-			runstate = RunState.STOPPED;
-		}
+		// Перестраховка? default state
+		runstate = RunState.STOPPED;
+
 		// Запускаем поток для интерпретатора БЭВМ
 		Thread t = new Thread(this);
 		t.start();

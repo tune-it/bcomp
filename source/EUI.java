@@ -161,7 +161,7 @@ public class EUI extends JApplet {
 
                         //Ввод адреса
                         if ((e.getKeyCode() == KeyEvent.VK_F4) || (e.getKeyCode() == KeyEvent.VK_4))
-                            machine.adress();
+                            machine.setAddress();
                         //Запись
                         if ((e.getKeyCode() == KeyEvent.VK_F5) || (e.getKeyCode() == KeyEvent.VK_5))
                             machine.record();
@@ -209,7 +209,7 @@ public class EUI extends JApplet {
                 {
                     public void actionPerformed(ActionEvent event)
                     {
-                        machine.adress();
+                        machine.setAddress();
                     }
                 };
                 dbuttons[0].addActionListener(address_listener);
