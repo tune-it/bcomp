@@ -135,7 +135,7 @@ public class EUI extends JApplet {
                         //Установка флага "Готовность ВУ 1"
                         if (tabbedPane.getSelectedIndex() == 1)
                         {
-                            if (e.getKeyCode() == KeyEvent.VK_F1);
+                            if (e.getKeyCode() == KeyEvent.VK_F1)
                             {
                                 machine.getDeviceFactory().getOutputDevice().getInterruptionRequestChannel().open();
                                 flags[0].setFlag();
