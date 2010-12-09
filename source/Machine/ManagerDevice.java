@@ -265,7 +265,7 @@ public class ManagerDevice
 				// Организация связей с ВУ
 				if (checkBit(command, 8))
 				{
-					int cmd = reg_factory.getCommandRegister().getValue()&0x0f00;
+					int cmd = (reg_factory.getCommandRegister().getValue()&0x0f00)>>8;
 					int dev_adr = reg_factory.getCommandRegister().getValue()&0x00ff;
 					
 					switch(cmd)
@@ -281,11 +281,11 @@ public class ManagerDevice
 								dev.getDeviceByAddress(dev_adr).getStateFlagChannel().open();
 								if ( dev.getDeviceByAddress(dev_adr).getStateFlag().getValue() == 1)
 								{
-									reg_factory.getMicroInstructionPointer().setValue(reg_factory.getMicroInstructionPointer().getValue()+1);
+									reg_factory.getInstructionPointer().setValue(reg_factory.getInstructionPointer().getValue()+1);
 								}
 							}
 							break;
-						case 2:
+						case 3:
 							// in B
 							if ( dev_adr == 1)
 							{
@@ -300,7 +300,7 @@ public class ManagerDevice
 								dev.getDeviceByAddress(dev_adr).getDataChannel().open();
 							}
 							break;
-						case 3:
+						case 2:
 							// out B
 							if ( (dev_adr == 2) || (dev_adr == 3))
 							{
