@@ -25,22 +25,6 @@ public class InputRegisterUI extends RegisterUI
 		{
 			Graphics2D rs = (Graphics2D) g;
 
-			//Условия для зацикливания установки позиций указателя
-			if (super.getContent().length() == 16)
-			{
-				if (getPointerPosition() == -1)
-					setPointerPosition(15);
-				if (getPointerPosition() == 16)
-					setPointerPosition(0);
-			}
-			if (super.getContent().length() == 8)
-			{
-				if (getPointerPosition() == -1)
-					setPointerPosition(7);
-				if (getPointerPosition() == 8)
-					setPointerPosition(0);
-			}
-
 			int	position = getPointerPosition();	//Текущая позиция
 			int shift = 0;							//Смещение от первого символа содержимого регистра
 
@@ -69,7 +53,11 @@ public class InputRegisterUI extends RegisterUI
 
 	public void setPointerPosition(int position)			//Установка позиции указателя
 	{
-		pointer_position = position;
+		if(active) {
+			int cLen = super.getContent().length();
+
+			pointer_position = position < 0 ? cLen - 1 : position >= cLen ? 0 : position;
+		}
 	}
 
 	public void setMovement(boolean x)						//Вкл/выкл смещение указателя после изменения бита
