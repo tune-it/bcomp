@@ -286,8 +286,8 @@ public class ManagerDevice
 							}
 							break;
 						case 3:
-							// in B
-							if ( dev_adr == 1)
+							// OUT B
+							if ((dev_adr == 1) || (dev_adr == 3))
 							{
 								dev.getDeviceByAddress(1).getAddressChannel().open();
 								dev.getDeviceByAddress(1).getIORequestChannel().open();
@@ -301,8 +301,8 @@ public class ManagerDevice
 							}
 							break;
 						case 2:
-							// out B
-							if ( (dev_adr == 2) || (dev_adr == 3))
+							// IN B
+							if ((dev_adr == 2) || (dev_adr == 3))
 							{
 								dev.getDeviceByAddress(1).getAddressChannel().open();
 								dev.getDeviceByAddress(1).getIORequestChannel().open();
