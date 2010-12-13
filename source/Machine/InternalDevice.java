@@ -15,7 +15,6 @@ public class InternalDevice
 	{
 		data_reg = new Register(8);
 		state_flag = new Flag();
-		this.type=type;
 		
 		switch (type)
 		{
@@ -135,7 +134,6 @@ public class InternalDevice
 	
 	private Register data_reg;			// Регистр данных
 	private Flag state_flag;			// флаг ВУ
-	private int type;					// Тип внешнего устройства
 	
 	private IOChannel inputChannel;		// Шина ввода
 	private IOChannel outputChannel; 	// Шина вывода

@@ -38,9 +38,7 @@ public class ManagerDevice
 		
 		channels.MicroCommandToRMC().open(); // Пересылаем микрокоманду в регистр микрокоманд
 
-		// Workaround для установки PC(5)
-		// Есть ощущение, что работа с PC и внешними устройствами
-		// реализована излишне сложно и может потребоваться рефакторинг
+		// Установка PC(5)
 		if ((flag_factory.getInterruptEnable().getValue() == 1) && dev.deviceRequest())
 			flag_factory.getInterruption().setFlag();
 		else
@@ -370,7 +368,6 @@ public class ManagerDevice
 			//flag_factory.GetExecution().ClearFlag();
 			flag_factory.getInputOutput().clearFlag();
 			flag_factory.getProgram().clearFlag();
-			flag_factory.getInterruption().clearFlag();
 		}
 	}
 	
