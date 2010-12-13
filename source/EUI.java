@@ -137,7 +137,7 @@ public class EUI extends JApplet {
                         {
                             if (e.getKeyCode() == KeyEvent.VK_F1)
                             {
-                                machine.getDeviceFactory().getOutputDevice().getInterruptionRequestChannel().open();
+                                machine.getDeviceFactory().getInternalDevice(1).getInterruptionRequestChannel().open();
                                 flags[0].setFlag();
                                 tabbedPane.repaint();
                             }
@@ -145,7 +145,7 @@ public class EUI extends JApplet {
                             //Установка флага "Готовность ВУ 2"
                             if (e.getKeyCode() == KeyEvent.VK_F2)
                             {
-                                machine.getDeviceFactory().getInputDevice1().getInterruptionRequestChannel().open();
+                                machine.getDeviceFactory().getInternalDevice(2).getInterruptionRequestChannel().open();
                                 flags[1].setFlag();
                                 tabbedPane.repaint();
                             }
@@ -153,7 +153,7 @@ public class EUI extends JApplet {
                             //Установка флага "Готовность ВУ 3"
                             if (e.getKeyCode() == KeyEvent.VK_F3)
                             {
-                                machine.getDeviceFactory().getInputDevice2().getInterruptionRequestChannel().open();
+                                machine.getDeviceFactory().getInternalDevice(3).getInterruptionRequestChannel().open();
                                 flags[2].setFlag();
                                 tabbedPane.repaint();
                             }
@@ -258,7 +258,7 @@ public class EUI extends JApplet {
                 {
                     public void actionPerformed(ActionEvent event)
                     {
-                        machine.getDeviceFactory().getOutputDevice().getInterruptionRequestChannel().open();
+                        machine.getDeviceFactory().getInternalDevice(1).getInterruptionRequestChannel().open();
                         flags[0].setFlag();
                         tabbedPane.repaint();
                     }
@@ -269,7 +269,7 @@ public class EUI extends JApplet {
                 {
                     public void actionPerformed(ActionEvent event)
                     {
-                        machine.getDeviceFactory().getInputDevice1().getInterruptionRequestChannel().open();
+                        machine.getDeviceFactory().getInternalDevice(2).getInterruptionRequestChannel().open();
                         flags[1].setFlag();
                         tabbedPane.repaint();
                     }
@@ -280,7 +280,7 @@ public class EUI extends JApplet {
                 {
                     public void actionPerformed(ActionEvent event)
                     {
-                         machine.getDeviceFactory().getInputDevice2().getInterruptionRequestChannel().open();
+                         machine.getDeviceFactory().getInternalDevice(3).getInterruptionRequestChannel().open();
                          flags[2].setFlag();
                          tabbedPane.repaint();
                     }

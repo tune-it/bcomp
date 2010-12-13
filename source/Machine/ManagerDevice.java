@@ -41,90 +41,15 @@ public class ManagerDevice
 		// Workaround для установки PC(5)
 		// Есть ощущение, что работа с PC и внешними устройствами
 		// реализована излишне сложно и может потребоваться рефакторинг
-		if ((flag_factory.getInterruptEnable().getValue() == 1) && (
-				(dev.getInputDevice1().getStateFlag().getValue() == 1) ||
-				(dev.getInputDevice2().getStateFlag().getValue() == 1) ||
-				(dev.getOutputDevice().getStateFlag().getValue() == 1)
-			))
+		if ((flag_factory.getInterruptEnable().getValue() == 1) && dev.deviceRequest())
 			flag_factory.getInterruption().setFlag();
 		else
 			flag_factory.getInterruption().clearFlag();
 
-		int n = reg_factory.getMicroInstructionPointer().getValue();
+		
 		
 		// Установка/сброс битов РС
-		if (n <= 0xC)
-		{
-			flag_factory.getAddressSelection().clearFlag();
-			flag_factory.getInstructionFetch().setFlag();
-			//flag_factory.GetExecution().ClearFlag();
-			flag_factory.getInputOutput().clearFlag();
-			flag_factory.getProgram().setFlag();
-		}
-		else
-		{
-			if (n <= 0x1C)
-			{
-				flag_factory.getAddressSelection().setFlag();
-				flag_factory.getInstructionFetch().clearFlag();
-				//flag_factory.GetExecution().ClearFlag();
-				flag_factory.getInputOutput().clearFlag();
-				flag_factory.getProgram().setFlag();
-			}
-			else
-			{
-				if (n <= 0x8D)
-				{
-					flag_factory.getAddressSelection().clearFlag();
-					flag_factory.getInstructionFetch().clearFlag();
-					//flag_factory.GetExecution().SetFlag();
-					flag_factory.getInputOutput().clearFlag();
-					flag_factory.getProgram().setFlag();
-				}
-				else
-				{
-					if (n == 0x8E)
-					{
-						flag_factory.getAddressSelection().clearFlag();
-						flag_factory.getInstructionFetch().clearFlag();
-						//flag_factory.GetExecution().ClearFlag();
-						flag_factory.getInputOutput().setFlag();
-						flag_factory.getProgram().clearFlag();
-					}
-					else
-					{
-						if (n <= 0x98)
-						{
-							flag_factory.getAddressSelection().clearFlag();
-							flag_factory.getInstructionFetch().clearFlag();
-							//flag_factory.GetExecution().ClearFlag();
-							flag_factory.getInputOutput().clearFlag();
-							flag_factory.getProgram().clearFlag();
-						}
-						else
-						{
-							if (n <= 0xff)
-							{
-								flag_factory.getAddressSelection().clearFlag();
-								flag_factory.getInstructionFetch().clearFlag();
-								//flag_factory.GetExecution().ClearFlag();
-								flag_factory.getInputOutput().clearFlag();
-								flag_factory.getProgram().clearFlag();
-							}
-						}
-					}
-				}
-			}
-		}
-		if (n == 0x88)
-		{
-			flag_factory.getAddressSelection().clearFlag();
-			flag_factory.getInstructionFetch().clearFlag();
-			//flag_factory.GetExecution().ClearFlag();
-			flag_factory.getInputOutput().clearFlag();
-			flag_factory.getProgram().clearFlag();
-			flag_factory.getInterruption().clearFlag();
-		}
+		updateStateBits();
 		
 		flag_factory.refreshStateCounter();
 		
@@ -272,14 +197,14 @@ public class ManagerDevice
 					{
 						case 0:
 							// clf B
-							if (dev.getDeviceByAddress(dev_adr) != null) dev.getDeviceByAddress(dev_adr).getStateFlag().clearFlag();
+							if (dev.getInternalDevice(dev_adr) != null) dev.getInternalDevice(dev_adr).getStateFlag().clearFlag();
 							break;
 						case 1:
 							// tsf B
-							if (dev.getDeviceByAddress(dev_adr) != null)
+							if (dev.getInternalDevice(dev_adr) != null)
 							{
-								dev.getDeviceByAddress(dev_adr).getStateFlagChannel().open();
-								if ( dev.getDeviceByAddress(dev_adr).getStateFlag().getValue() == 1)
+								dev.getInternalDevice(dev_adr).getStateFlagChannel().open();
+								if ( dev.getInternalDevice(dev_adr).getStateFlag().getValue() == 1)
 								{
 									reg_factory.getInstructionPointer().setValue(reg_factory.getInstructionPointer().getValue()+1);
 								}
@@ -289,29 +214,29 @@ public class ManagerDevice
 							// OUT B
 							if ((dev_adr == 1) || (dev_adr == 3))
 							{
-								dev.getDeviceByAddress(1).getAddressChannel().open();
-								dev.getDeviceByAddress(1).getIORequestChannel().open();
-								dev.getDeviceByAddress(2).getAddressChannel().open();
-								dev.getDeviceByAddress(2).getIORequestChannel().open();
-								dev.getDeviceByAddress(3).getAddressChannel().open();
-								dev.getDeviceByAddress(3).getIORequestChannel().open();
+								dev.getInternalDevice(1).getAddressChannel().open();
+								dev.getInternalDevice(1).getIORequestChannel().open();
+								dev.getInternalDevice(2).getAddressChannel().open();
+								dev.getInternalDevice(2).getIORequestChannel().open();
+								dev.getInternalDevice(3).getAddressChannel().open();
+								dev.getInternalDevice(3).getIORequestChannel().open();
 								
 								
-								dev.getDeviceByAddress(dev_adr).getDataChannel().open();
+								dev.getInternalDevice(dev_adr).getOutputChannel().open();
 							}
 							break;
 						case 2:
 							// IN B
 							if ((dev_adr == 2) || (dev_adr == 3))
 							{
-								dev.getDeviceByAddress(1).getAddressChannel().open();
-								dev.getDeviceByAddress(1).getIORequestChannel().open();
-								dev.getDeviceByAddress(2).getAddressChannel().open();
-								dev.getDeviceByAddress(2).getIORequestChannel().open();
-								dev.getDeviceByAddress(3).getAddressChannel().open();
-								dev.getDeviceByAddress(3).getIORequestChannel().open();
+								dev.getInternalDevice(1).getAddressChannel().open();
+								dev.getInternalDevice(1).getIORequestChannel().open();
+								dev.getInternalDevice(2).getAddressChannel().open();
+								dev.getInternalDevice(2).getIORequestChannel().open();
+								dev.getInternalDevice(3).getAddressChannel().open();
+								dev.getInternalDevice(3).getIORequestChannel().open();
 								
-								dev.getDeviceByAddress(dev_adr).getDataChannel().open();
+								dev.getInternalDevice(dev_adr).getInputChannel().open();
 							}
 							break;
 						default: break;
@@ -368,6 +293,84 @@ public class ManagerDevice
 					channels.ToAcc().open();
 				}
 			}
+		}
+	}
+	
+	private void updateStateBits()
+	{
+		int n = reg_factory.getMicroInstructionPointer().getValue();
+		
+		if (n <= 0xC)
+		{
+			flag_factory.getAddressSelection().clearFlag();
+			flag_factory.getInstructionFetch().setFlag();
+			//flag_factory.GetExecution().ClearFlag();
+			flag_factory.getInputOutput().clearFlag();
+			flag_factory.getProgram().setFlag();
+		}
+		else
+		{
+			if (n <= 0x1C)
+			{
+				flag_factory.getAddressSelection().setFlag();
+				flag_factory.getInstructionFetch().clearFlag();
+				//flag_factory.GetExecution().ClearFlag();
+				flag_factory.getInputOutput().clearFlag();
+				flag_factory.getProgram().setFlag();
+			}
+			else
+			{
+				if (n <= 0x8D)
+				{
+					flag_factory.getAddressSelection().clearFlag();
+					flag_factory.getInstructionFetch().clearFlag();
+					//flag_factory.GetExecution().SetFlag();
+					flag_factory.getInputOutput().clearFlag();
+					flag_factory.getProgram().setFlag();
+				}
+				else
+				{
+					if (n == 0x8E)
+					{
+						flag_factory.getAddressSelection().clearFlag();
+						flag_factory.getInstructionFetch().clearFlag();
+						//flag_factory.GetExecution().ClearFlag();
+						flag_factory.getInputOutput().setFlag();
+						flag_factory.getProgram().clearFlag();
+					}
+					else
+					{
+						if (n <= 0x98)
+						{
+							flag_factory.getAddressSelection().clearFlag();
+							flag_factory.getInstructionFetch().clearFlag();
+							//flag_factory.GetExecution().ClearFlag();
+							flag_factory.getInputOutput().clearFlag();
+							flag_factory.getProgram().clearFlag();
+						}
+						else
+						{
+							if (n <= 0xff)
+							{
+								flag_factory.getAddressSelection().clearFlag();
+								flag_factory.getInstructionFetch().clearFlag();
+								//flag_factory.GetExecution().ClearFlag();
+								flag_factory.getInputOutput().clearFlag();
+								flag_factory.getProgram().clearFlag();
+							}
+						}
+					}
+				}
+			}
+		}
+		if (n == 0x88)
+		{
+			flag_factory.getAddressSelection().clearFlag();
+			flag_factory.getInstructionFetch().clearFlag();
+			//flag_factory.GetExecution().ClearFlag();
+			flag_factory.getInputOutput().clearFlag();
+			flag_factory.getProgram().clearFlag();
+			flag_factory.getInterruption().clearFlag();
 		}
 	}
 	

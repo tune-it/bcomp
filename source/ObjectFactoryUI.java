@@ -70,7 +70,7 @@ public class ObjectFactoryUI
 		RegisterUI C = new RegisterUI(flagfact.getC(), 175, 350, "C");
 		C.setWidth(30);
 		
-		RegisterUI OutDev = new RegisterUI(devfact.getOutputDevice().getDataRegister(), 400, 310, 445, 328, "ВУ 1");
+		RegisterUI OutDev = new RegisterUI(devfact.getInternalDevice(1).getDataRegister(), 400, 310, 445, 328, "ВУ 1");
 		OutDev.setWidth(135);
 		
 		RegisterUI registers[] = {RD, RA, SK, RK, Acc, C, OutDev};
@@ -119,9 +119,9 @@ public class ObjectFactoryUI
 	
 	public FlagUI[] createIOFlags()
 	{
-		FlagUI OutFlag = new FlagUI(devfact.getOutputDevice().getStateFlag(), 450, 180);
-		FlagUI InpFlag1 = new FlagUI(devfact.getInputDevice1().getStateFlag(), 600, 180);
-		FlagUI InpFlag2 = new FlagUI(devfact.getInputDevice2().getStateFlag(), 750, 180);
+		FlagUI OutFlag = new FlagUI(devfact.getInternalDevice(1).getStateFlag(), 450, 180);
+		FlagUI InpFlag1 = new FlagUI(devfact.getInternalDevice(2).getStateFlag(), 600, 180);
+		FlagUI InpFlag2 = new FlagUI(devfact.getInternalDevice(3).getStateFlag(), 750, 180);
 		
 		FlagUI[] flags = {OutFlag, InpFlag1, InpFlag2};
 		
@@ -139,7 +139,7 @@ public class ObjectFactoryUI
 	
 	public InputRegisterUI createInputRegister1()
 	{
-		InputRegisterUI InpDev1 = new InputRegisterUI(devfact.getInputDevice1().getDataRegister(), 550, 310, 60, 595, 328, "ВУ 2");
+		InputRegisterUI InpDev1 = new InputRegisterUI(devfact.getInternalDevice(2).getDataRegister(), 550, 310, 60, 595, 328, "ВУ 2");
 		InpDev1.setWidth(135);
 		
 		return InpDev1;
@@ -147,7 +147,7 @@ public class ObjectFactoryUI
 	
 	public InputRegisterUI createInputRegister2()
 	{
-		InputRegisterUI InpDev2 = new InputRegisterUI(devfact.getInputDevice2().getDataRegister(), 700, 310, 60, 745, 328, "ВУ 3");
+		InputRegisterUI InpDev2 = new InputRegisterUI(devfact.getInternalDevice(3).getDataRegister(), 700, 310, 60, 745, 328, "ВУ 3");
 		InpDev2.setWidth(135);
 				
 		return InpDev2;
@@ -307,19 +307,19 @@ public class ObjectFactoryUI
 						{468, 160},
 						{468, 160},
 						{468, 190}};
-		ChannelUI request1 = new ChannelUI(devfact.getOutputDevice().getInterruptionRequestChannel(), mass1);
+		ChannelUI request1 = new ChannelUI(devfact.getInternalDevice(1).getInterruptionRequestChannel(), mass1);
 		
 		int [][] mass2 = {{369, 160},
 						{618, 160},
 						{618, 160},
 						{618, 190}};
-		ChannelUI request2 = new ChannelUI(devfact.getInputDevice1().getInterruptionRequestChannel(), mass2);
+		ChannelUI request2 = new ChannelUI(devfact.getInternalDevice(2).getInterruptionRequestChannel(), mass2);
 		
 		int [][] mass3 = {{369, 160},
 						{768, 160},
 						{768, 160},
 						{768, 190}};
-		ChannelUI request3 = new ChannelUI(devfact.getInputDevice2().getInterruptionRequestChannel(), mass3);
+		ChannelUI request3 = new ChannelUI(devfact.getInternalDevice(3).getInterruptionRequestChannel(), mass3);
 		
 		int [][] mass4 = {{369, 235},
 						{468, 235},

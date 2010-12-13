@@ -9,37 +9,25 @@ public class DeviceFactory
 	public DeviceFactory(RegisterFactory reg_factory)
 	{
 		dev = new InternalDevice[3];
-		dev[0] = new OutputDevice(reg_factory);
-		dev[1] = new InputDevice(reg_factory);
-		dev[2] = new InputDevice(reg_factory);
+		dev[0] = new InternalDevice(reg_factory, 0);
+		dev[1] = new InternalDevice(reg_factory, 1);
+		dev[2] = new InternalDevice(reg_factory);
 	}
 	
-	public InternalDevice getOutputDevice()
+	public InternalDevice getInternalDevice(int deviceAdress)
 	{
-		return dev[0];
-	}
-	
-	public InternalDevice getInputDevice1()
-	{
-		return dev[1];
-	}
-	
-	public InternalDevice getInputDevice2()
-	{
-		return dev[2];
-	}
-	
-	public InternalDevice getDeviceByAddress(int dev_adr)
-	{
-		dev_adr = dev_adr - 1;
-		if ((dev_adr >= 0) && (dev_adr <= 2))
+		
+		deviceAdress--;
+		if (deviceAdress < dev.length)
 		{
-			return dev[dev_adr];
+			
+			return dev[deviceAdress];
 		}
 		else
 		{
 			return null;
 		}
+		
 	}
 	
 	public void clearAllFlags()
@@ -54,13 +42,24 @@ public class DeviceFactory
 	{
 		for (InternalDevice x : dev)
 		{
-				x.getDataChannel().close();
-				
+				if ( x.getInputChannel() != null )	x.getInputChannel().close();
+				if ( x.getOutputChannel() != null )	x.getOutputChannel().close();
 				x.getAddressChannel().close();
 				x.getInterruptionRequestChannel().close();
 				x.getIORequestChannel().close();
 				x.getStateFlagChannel().close();
 		}
+	}
+	
+	public boolean deviceRequest()
+	{
+		boolean request = false;
+		
+		for (InternalDevice x : dev)
+		{
+			request = request || (x.getStateFlag().getValue() == 1);
+		}
+		return request;
 	}
 	
 	private InternalDevice dev[];
