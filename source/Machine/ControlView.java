@@ -13,6 +13,7 @@ public class ControlView
 		jtp = p;
 		tact = false;
 		micro_com_work=false;
+		sleep = 10L;
 	}
 	
 	public void setTact()
@@ -37,7 +38,7 @@ public class ControlView
 		jtp.repaint();
 	}
 	
-	public int getSleep()
+	public long getSleep()
 	{
 		return sleep;
 	}
@@ -65,5 +66,5 @@ public class ControlView
 	private JTabbedPane jtp;
 	private boolean tact;
 	private boolean micro_com_work;
-	private int sleep;
+	private long sleep;
 }

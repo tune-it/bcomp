@@ -80,7 +80,7 @@ public class Machine implements Runnable {
 					break;
 
 				try	{
-					Thread.sleep(10L);
+					Thread.sleep(ctrl.getSleep());
 				} catch (Exception e) {	}
 			}
 
