@@ -202,7 +202,11 @@ public class EUI extends JApplet {
 						// !!! Временная заглушка для управления
 						// !!! задержкой при выполнении тактов
 						case KeyEvent.VK_F11:
-							control.rotateSleep();
+							control.decSleep();
+							break;
+
+						case KeyEvent.VK_F12:
+							control.incSleep();
 							break;
 						}
                     }
