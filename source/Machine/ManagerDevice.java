@@ -5,6 +5,11 @@ package Machine;
  * @author Ponomarev
  *
  */
+
+enum Cycle {
+	INSTRFETCH, ADDRFETCH, EXECUTION, ANOTHER
+}
+ 
 public class ManagerDevice
 {
 	public ManagerDevice(RegisterFactory reg_factory, ChannelFactory channels, ALU alu, FlagFactory flag_factory, DeviceFactory dev)
@@ -38,14 +43,6 @@ public class ManagerDevice
 		
 		channels.MicroCommandToRMC().open(); // Пересылаем микрокоманду в регистр микрокоманд
 
-		// Установка PC(5)
-		if ((flag_factory.getInterruptEnable().getValue() == 1) && dev.deviceRequest())
-			flag_factory.getInterruption().setFlag();
-		else
-			flag_factory.getInterruption().clearFlag();
-
-		
-		
 		// Установка/сброс битов РС
 		updateStateBits();
 		
@@ -191,6 +188,8 @@ public class ManagerDevice
 					int cmd = (reg_factory.getCommandRegister().getValue()&0x0f00)>>8;
 					int dev_adr = reg_factory.getCommandRegister().getValue()&0x00ff;
 					
+					flag_factory.getInputOutput().setFlag();
+
 					switch(cmd)
 					{
 						case 0:
@@ -259,14 +258,14 @@ public class ManagerDevice
 				if (checkBit(command, 4)) alu.setZ();
 				
 			// Остановка ЭВМ
-//				if (CheckBit(command, 3))
-//				{
-//					flag_factory.GetStateOfTumbler().ClearFlag();
-//					flag_factory.RefreshStateCounter();
-//				}
+				if (checkBit(command, 3)) {
+					flag_factory.getAddressSelection().clearFlag();
+					flag_factory.getInstructionFetch().clearFlag();
+					flag_factory.getExecution().clearFlag();
+					flag_factory.getProgram().clearFlag();
+				}
 				
 			// Выход АЛУ (Содержимое БР)
-				
 				// в РА
 				if (!checkBit(command, 2) && !checkBit(command, 1) && checkBit(command, 0)) channels.ToAR().open();
 
@@ -296,79 +295,31 @@ public class ManagerDevice
 	
 	private void updateStateBits()
 	{
-		int n = reg_factory.getMicroInstructionPointer().getValue();
-		
-		if (n <= 0xC)
-		{
-			flag_factory.getAddressSelection().clearFlag();
-			flag_factory.getInstructionFetch().setFlag();
-			//flag_factory.GetExecution().ClearFlag();
-			flag_factory.getInputOutput().clearFlag();
-			flag_factory.getProgram().setFlag();
-		}
+		// В/В осуществляется только в определённых микрокомандах
+		flag_factory.getInputOutput().clearFlag();
+
+		// Установка PC(5)
+		if ((flag_factory.getInterruptEnable().getValue() == 1) && dev.deviceRequest())
+			flag_factory.getInterruption().setFlag();
 		else
-		{
-			if (n <= 0x1C)
-			{
-				flag_factory.getAddressSelection().setFlag();
-				flag_factory.getInstructionFetch().clearFlag();
-				//flag_factory.GetExecution().ClearFlag();
-				flag_factory.getInputOutput().clearFlag();
-				flag_factory.getProgram().setFlag();
-			}
-			else
-			{
-				if (n <= 0x8D)
-				{
-					flag_factory.getAddressSelection().clearFlag();
-					flag_factory.getInstructionFetch().clearFlag();
-					//flag_factory.GetExecution().SetFlag();
-					flag_factory.getInputOutput().clearFlag();
-					flag_factory.getProgram().setFlag();
-				}
-				else
-				{
-					if (n == 0x8E)
-					{
-						flag_factory.getAddressSelection().clearFlag();
-						flag_factory.getInstructionFetch().clearFlag();
-						//flag_factory.GetExecution().ClearFlag();
-						flag_factory.getInputOutput().setFlag();
-						flag_factory.getProgram().clearFlag();
-					}
-					else
-					{
-						if (n <= 0x98)
-						{
-							flag_factory.getAddressSelection().clearFlag();
-							flag_factory.getInstructionFetch().clearFlag();
-							//flag_factory.GetExecution().ClearFlag();
-							flag_factory.getInputOutput().clearFlag();
-							flag_factory.getProgram().clearFlag();
-						}
-						else
-						{
-							if (n <= 0xff)
-							{
-								flag_factory.getAddressSelection().clearFlag();
-								flag_factory.getInstructionFetch().clearFlag();
-								//flag_factory.GetExecution().ClearFlag();
-								flag_factory.getInputOutput().clearFlag();
-								flag_factory.getProgram().clearFlag();
-							}
-						}
-					}
-				}
-			}
-		}
-		if (n == 0x88)
-		{
-			flag_factory.getAddressSelection().clearFlag();
-			flag_factory.getInstructionFetch().clearFlag();
-			//flag_factory.GetExecution().ClearFlag();
-			flag_factory.getInputOutput().clearFlag();
-			flag_factory.getProgram().clearFlag();
-		}
+			flag_factory.getInterruption().clearFlag();
+
+		int n = reg_factory.getMicroInstructionPointer().getValue();
+		Cycle cycle;
+
+		if ((n <= 0xC) || ((n >= 0x5E) && (n <= 8D)) || (n >= 0xE0))
+			cycle = Cycle.INSTRFETCH;
+		else if ((n >= 0xD) && (n <= 0x1C))
+			cycle = Cycle.ADDRFETCH;
+		else if (((n >= 0x1D) && (n <= 0x5B)) || ((n >= 0xB0) && (n <= 0xDF)))
+			cycle = Cycle.EXECUTION;
+		else
+			cycle = Cycle.ANOTHER;
+
+		flag_factory.getInstructionFetch().setValue(cycle == Cycle.INSTRFETCH);
+		flag_factory.getAddressSelection().setValue(cycle == Cycle.ADDRFETCH);
+		flag_factory.getExecution().setValue(cycle == Cycle.EXECUTION);
+		flag_factory.getProgram().setValue(cycle != Cycle.ANOTHER);
 	}
 	
 	private Register			instr_pointer;

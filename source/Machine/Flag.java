@@ -26,6 +26,11 @@ public class Flag implements IRegister
 		flag = bits != 0;
 	}
 
+	public void setValue(boolean value)
+	{
+		flag = value;
+	}
+
 	public int getValue()
 	{
 		return flag ? 1 : 0;
