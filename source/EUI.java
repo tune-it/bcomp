@@ -196,6 +196,11 @@ public class EUI extends JApplet {
 
                             machine.workStop();
                         }
+
+						// !!! Временная заглушка для управления
+						// !!! задержкой при выполнении тактов
+						if (e.getKeyCode() == KeyEvent.VK_F11)
+							control.rotateSleep();
                     }
                 });
 

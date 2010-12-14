@@ -13,7 +13,7 @@ public class ControlView
 		jtp = p;
 		tact = false;
 		micro_com_work=false;
-		sleep = 10L;
+		sleep = sleeps[lastSleep = 2];
 	}
 	
 	public void setTact()
@@ -42,10 +42,19 @@ public class ControlView
 	{
 		return sleep;
 	}
-	
+
 	public void setSleep(int sl)
 	{
 		sleep = sl;
+	}
+	
+	// !!! Временное решение для обеспечения ротации задержки
+	public void rotateSleep()
+	{
+		if ((++lastSleep) >= sleeps.length)
+			lastSleep = 0;
+
+		sleep = sleeps[lastSleep];
 	}
 	
 	public boolean microWork()
@@ -67,4 +76,7 @@ public class ControlView
 	private boolean tact;
 	private boolean micro_com_work;
 	private long sleep;
+	// !!! Временное решение для обеспечения ротации задержки
+	private final long[] sleeps = { 1, 5, 10, 25, 50, 100 };
+	private int lastSleep;
 }
