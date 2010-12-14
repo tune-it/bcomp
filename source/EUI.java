@@ -82,35 +82,35 @@ public class EUI extends JApplet {
                 {
                     public void keyPressed(KeyEvent e)
                     {
+						switch (e.getKeyCode()) {
                         //Сдвиг указателя выбранного регистра вправо
-                        if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-                        {
+                        case KeyEvent.VK_RIGHT:
                             for (int i = 0; i < input_registers.length; i++)
                                 input_registers[i].setPointerPosition(input_registers[i].getPointerPosition() + 1);
 
                             tabbedPane.repaint();
-                        }
+							break;
 
                         //Сдвиг указателя выбранного регистра влево
-                        if (e.getKeyCode() == KeyEvent.VK_LEFT)
-                        {
+                        case KeyEvent.VK_LEFT:
                             for (int i = 0; i < input_registers.length; i++)
                                 input_registers[i].setPointerPosition(input_registers[i].getPointerPosition() - 1);
 
                             tabbedPane.repaint();
-                        }
+							break;
 
                         //Изменение бита в выбранном регистре
-                        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN)
-                        {
+                        case KeyEvent.VK_UP:
+						case KeyEvent.VK_DOWN:
                             for (int i = 0; i < input_registers.length; i++)
                                 input_registers[i].setBit();
 
                             tabbedPane.repaint();
-                        }
+							break;
 
                         //Изменение бита в выбранном регистре на 0
-                        if (e.getKeyCode() == KeyEvent.VK_0) {
+                        case KeyEvent.VK_0:
+						case KeyEvent.VK_NUMPAD0:
                             for (int i = 0; i < input_registers.length; i++)
                             {
                                 input_registers[i].setBit(false);
@@ -118,11 +118,11 @@ public class EUI extends JApplet {
                             }
 
                             tabbedPane.repaint();
-                        }
+							break;
 
                         //Изменение бита в выбранном регистре на 1
-                        if (e.getKeyCode() == KeyEvent.VK_1)
-                        {
+                        case KeyEvent.VK_1:
+						case KeyEvent.VK_NUMPAD1:
                             for (int i = 0; i < input_registers.length; i++)
                             {
                                 input_registers[i].setBit(true);
@@ -130,77 +130,81 @@ public class EUI extends JApplet {
                             }
 
                             tabbedPane.repaint();
-                        }
+							break;
 
                         //Установка флага "Готовность ВУ 1"
-                        if (tabbedPane.getSelectedIndex() == 1)
-                        {
-                            if (e.getKeyCode() == KeyEvent.VK_F1)
-                            {
-                                machine.getDeviceFactory().getInternalDevice(1).getInterruptionRequestChannel().open();
-                                flags[0].setFlag();
-                                tabbedPane.repaint();
-                            }
+						case KeyEvent.VK_F1:
+							machine.getDeviceFactory().getInternalDevice(1).getInterruptionRequestChannel().open();
+							flags[0].setFlag();
+							tabbedPane.repaint();
+                            break;
 
-                            //Установка флага "Готовность ВУ 2"
-                            if (e.getKeyCode() == KeyEvent.VK_F2)
-                            {
-                                machine.getDeviceFactory().getInternalDevice(2).getInterruptionRequestChannel().open();
-                                flags[1].setFlag();
-                                tabbedPane.repaint();
-                            }
+						//Установка флага "Готовность ВУ 2"
+						case KeyEvent.VK_F2:
+							machine.getDeviceFactory().getInternalDevice(2).getInterruptionRequestChannel().open();
+							flags[1].setFlag();
+							tabbedPane.repaint();
+                            break;
 
-                            //Установка флага "Готовность ВУ 3"
-                            if (e.getKeyCode() == KeyEvent.VK_F3)
-                            {
-                                machine.getDeviceFactory().getInternalDevice(3).getInterruptionRequestChannel().open();
-                                flags[2].setFlag();
-                                tabbedPane.repaint();
-                            }
-                        }
+						//Установка флага "Готовность ВУ 3"
+                        case KeyEvent.VK_F3:
+							machine.getDeviceFactory().getInternalDevice(3).getInterruptionRequestChannel().open();
+							flags[2].setFlag();
+							tabbedPane.repaint();
+                            break;
 
                         //Ввод адреса
-                        if ((e.getKeyCode() == KeyEvent.VK_F4) || (e.getKeyCode() == KeyEvent.VK_4))
+                        case KeyEvent.VK_F4:
+						case KeyEvent.VK_4:
                             machine.setAddress();
+							break;
+
                         //Запись
-                        if ((e.getKeyCode() == KeyEvent.VK_F5) || (e.getKeyCode() == KeyEvent.VK_5))
+                        case KeyEvent.VK_F5:
+						case KeyEvent.VK_5:
                             machine.record();
+							break;
 
                         //Чтение
-                        if ((e.getKeyCode() == KeyEvent.VK_F6) || (e.getKeyCode() == KeyEvent.VK_6))
+                        case KeyEvent.VK_F6:
+						case KeyEvent.VK_6:
                             machine.read();
+							break;
 
                         //Пуск
-                        if ((e.getKeyCode() == KeyEvent.VK_F7) || (e.getKeyCode() == KeyEvent.VK_7))
+                        case KeyEvent.VK_F7:
+						case KeyEvent.VK_7:
                             machine.start();
+							break;
 
                         //Продолжение
-                        if ((e.getKeyCode() == KeyEvent.VK_F8) || (e.getKeyCode() == KeyEvent.VK_8))
+                        case KeyEvent.VK_F8:
+						case KeyEvent.VK_8:
                             machine.continuebasepc();
+							break;
 
                         //Работа/Остановка
-                        if ((e.getKeyCode() == KeyEvent.VK_F9) || (e.getKeyCode() == KeyEvent.VK_9))
-                        {
-                            if (machine.getFlagFactory().getStateOfTumbler().getValue() == 0)
-                            {
+                        case KeyEvent.VK_F9:
+						case KeyEvent.VK_9:
+                            if (machine.getFlagFactory().getStateOfTumbler().getValue() == 0) {
                                 work.setForeground(Color.RED);
                                 work.setFont(new Font("Courier New", Font.PLAIN, 19));
                                 work.setText("Работа(F9/9)");
-                            }
-                            else
-                            {
+                            } else {
                                 work.setForeground(Color.BLACK);
                                 work.setFont(new Font("Courier New", Font.PLAIN, 17));
                                 work.setText("Остановка(F9/9)");
                             }
 
                             machine.workStop();
-                        }
+							break;
 
 						// !!! Временная заглушка для управления
 						// !!! задержкой при выполнении тактов
-						if (e.getKeyCode() == KeyEvent.VK_F11)
+						case KeyEvent.VK_F11:
 							control.rotateSleep();
+							break;
+						}
                     }
                 });
 
