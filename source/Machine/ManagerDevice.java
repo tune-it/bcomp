@@ -7,7 +7,7 @@ package Machine;
  */
 
 enum Cycle {
-	INSTRFETCH, ADDRFETCH, EXECUTION, ANOTHER
+	INSTRFETCH, ADDRFETCH, EXECUTION, INTERRUPTION, ANOTHER
 }
  
 public class ManagerDevice
@@ -307,12 +307,14 @@ public class ManagerDevice
 		int n = reg_factory.getMicroInstructionPointer().getValue();
 		Cycle cycle;
 
-		if ((n <= 0xC) || ((n >= 0x5E) && (n <= 8D)) || (n >= 0xE0))
+		if ((n <= 0x0c) || ((n >= 0x5e) && (n <= 0x8e)) || (n >= 0xe0))
 			cycle = Cycle.INSTRFETCH;
-		else if ((n >= 0xD) && (n <= 0x1C))
+		else if ((n >= 0x0d) && (n <= 0x1c))
 			cycle = Cycle.ADDRFETCH;
-		else if (((n >= 0x1D) && (n <= 0x5B)) || ((n >= 0xB0) && (n <= 0xDF)))
+		else if (((n >= 0x1d) && (n <= 0x5b)) || ((n >= 0xb0) && (n <= 0xdf)))
 			cycle = Cycle.EXECUTION;
+		else if ((n >= 0x8f) && (n <= 0x98))
+			cycle = Cycle.INTERRUPTION;
 		else
 			cycle = Cycle.ANOTHER;
 
