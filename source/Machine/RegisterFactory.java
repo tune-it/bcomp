@@ -7,104 +7,98 @@ public class RegisterFactory
 {
 	public RegisterFactory()
 	{
-		this.registers = new Register[12];
+		adressRegister		= new Register(11);
+		dataRegister		= new Register();
+		instructionPointer	= new Register(11);
+		commandRegister  	= new Register();
 		
-		this.registers[0]  = new Register(11);
-		this.registers[1]  = new Register();
-		this.registers[2]  = new Register(11);
-		this.registers[3]  = new Register();
+		leftALUInput	= new Register();
+		rightALUInput	= new Register();
+		bufferRegister  = new Register(17);
+		accumulator  	= new Register();
+		stateCounter  	= new Register(13);
 		
-		this.registers[4]  = new Register();
-		this.registers[5]  = new Register();
-		this.registers[6]  = new Register(17);
-		this.registers[7]  = new Register();
-		this.registers[8]  = new Register(13);
+		microInstructionPointer	= new Register(8);
+		microCommandRegister 	= new Register();
 		
-		this.registers[9]  = new Register(8);
-		this.registers[10] = new Register();
-		
-		this.registers[11] = new Register();
+		inputRegister = new Register();
 	}
-	
-//	public ERegisterFactory(int address_register, int data_register, int instruction_pointer, int command_register, int left_alu_in, int right_alu_in, int buffer_register, int acc, int state_counter)
-//	{
-//		this.registers = new ERegister[9];
-//		
-//		this.registers[0] = new ERegister(address_register);
-//		this.registers[1] = new ERegister(data_register);
-//		this.registers[2] = new ERegister(instruction_pointer);
-//		this.registers[3] = new ERegister(command_register);
-//		this.registers[4] = new ERegister(left_alu_in);
-//		this.registers[5] = new ERegister(right_alu_in);
-//		this.registers[6] = new ERegister(buffer_register);
-//		this.registers[7] = new ERegister(acc);
-//		this.registers[8] = new ERegister(state_counter);
-//	}
 	
 	/**
 	 * Получить регистр адреса РА
 	 */
 	public Register getAddressRegister()
 	{
-		return registers[0];
+		return adressRegister;
 	}
 	
 	public Register getDataRegister()
 	{
-		return registers[1];
+		return dataRegister;
 	}
 
 	public Register getInstructionPointer()
 	{
-		return registers[2];
+		return instructionPointer;
 	}
 	
 	public Register getCommandRegister()
 	{
-		return registers[3];
+		return commandRegister;
 	}
 	
 	public Register getLeftALUInput()
 	{
-		return registers[4];
+		return leftALUInput;
 	}
 	
 	public Register getRightALUInput()
 	{
-		return registers[5];
+		return rightALUInput;
 	}
 	
 	public Register getBufferRegister()
 	{
-		return registers[6];
+		return bufferRegister;
 	}
 	
 	public Register getAccumulator()
 	{
-		return registers[7];
+		return accumulator;
 	}
 	
 	public Register getStateCounter()
 	{
-		return registers[8];
+		return stateCounter;
 	}
 	
 	public Register getMicroInstructionPointer()
 	{
-		return registers[9];
+		return microInstructionPointer;
 	}
 	
 	public Register getMicroCommandRegister()
 	{
-		return registers[10];
+		return microCommandRegister;
 	}
 	
 	public Register getInputRegister()
 	{
-		return registers[11];
+		return inputRegister;
 	}
 	
-	private Register[] registers;
+	private Register adressRegister;
+	private Register dataRegister;
+	private Register instructionPointer;
+	private Register commandRegister;
+	private Register leftALUInput;
+	private Register rightALUInput;
+	private Register bufferRegister;
+	private Register accumulator;
+	private Register stateCounter;
+	private Register microInstructionPointer;
+	private Register microCommandRegister;
+	private Register inputRegister;
 	
 	//	registers[] - банк регистров
 	

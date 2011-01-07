@@ -28,6 +28,12 @@ public class Register implements IRegister
 		controlWidth();
 	}
 	
+	public void setValue(IRegister register)
+	{
+		data = register.getValue();
+		controlWidth();
+	}
+	
 	public int width()
 	{
 		return register_width;

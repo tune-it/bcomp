@@ -165,7 +165,7 @@ public class ALU
 	 */
 	public void setZ()
 	{
-		if (buffer_register.getValue() == 0)
+		if ((buffer_register.getValue() & 0xffff) == 0)
 		{
 			flag_factory.getZ().setFlag();
 			flag_factory.refreshStateCounter();

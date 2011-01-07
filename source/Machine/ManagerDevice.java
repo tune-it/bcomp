@@ -59,25 +59,25 @@ public class ManagerDevice
 			// Поле (бит сравнения)
 			boolean compare_bit = checkBit(command, 14);
 			
-			Register compare_reg = null;
+			//Register compare_reg = null;
 			
 			// РС - проверяемый регистр
-			if (!checkBit(command, 13) && !checkBit(command, 12)) compare_reg = reg_factory.getStateCounter();
+			if (!checkBit(command, 13) && !checkBit(command, 12)) reg_factory.getBufferRegister().setValue(reg_factory.getStateCounter());
 			
 			// РД - проверяемый регистр
-			if (!checkBit(command, 13) && checkBit(command, 12)) compare_reg = reg_factory.getDataRegister();
+			if (!checkBit(command, 13) && checkBit(command, 12)) reg_factory.getBufferRegister().setValue(reg_factory.getDataRegister());
 			
 			// РК - проверяемый регистр
-			if (checkBit(command, 13) && !checkBit(command, 12)) compare_reg = reg_factory.getCommandRegister();
+			if (checkBit(command, 13) && !checkBit(command, 12)) reg_factory.getBufferRegister().setValue(reg_factory.getCommandRegister());
 			
 			// А - проверяемый регистр
-			if (checkBit(command, 13) && checkBit(command, 12)) compare_reg = reg_factory.getAccumulator();
+			if (checkBit(command, 13) && checkBit(command, 12)) reg_factory.getBufferRegister().setValue(reg_factory.getAccumulator());
 			
 			// Проверяемый бит
 			int choose_bit =(command & 0xf00)>>8;
 			
 			// Сравнение
-			if ( checkBit(compare_reg.getValue(), choose_bit) == compare_bit )
+			if ( checkBit(reg_factory.getBufferRegister().getValue(), choose_bit) == compare_bit )
 			{
 				instr_pointer.setValue(command & 0xff);
 			}
