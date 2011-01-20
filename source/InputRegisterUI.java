@@ -1,6 +1,6 @@
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import Machine.IRegister;
+import Machine.Register;
 
 /*-----------------------------------------------------------------------------
 		Отрисовка обычного регистра. Изменяет значение
@@ -9,13 +9,12 @@ import Machine.IRegister;
 
 public class InputRegisterUI extends RegisterUI
 {
-	public InputRegisterUI(IRegister reg, double x, double y, double height, int messX, int messY, String text)
+	public InputRegisterUI(Register reg, double x, double y, double height, int messX, int messY, String text)
 	{
 		super(reg, x, y, height, messX, messY, text);
 
 		register = reg;
 		pointer_position = 0;
-		movement = false;
 		active = false;
 	}
 
@@ -60,16 +59,6 @@ public class InputRegisterUI extends RegisterUI
 		}
 	}
 
-	public void setMovement(boolean x)						//Вкл/выкл смещение указателя после изменения бита
-	{
-		movement = x;
-	}
-
-	public boolean isMovement()								//Передача текущего состояния смещяемости
-	{
-		return movement;
-	}
-
 	public void setActive(boolean x)						//Активировать регистр (выводить указатель)
 	{
 		active = x;
@@ -83,59 +72,16 @@ public class InputRegisterUI extends RegisterUI
 	public void setBit()									//Инверсия бита
 	{
 		if(active)
-		{
-			String content = super.getContent();				//Содержимого регистра
-			int posit = getPointerPosition();					//Позиция указателя
-
-			String bit = content.substring(posit, posit+1);		//Бит на который показывает указатель
-
-			//Изменение бита на который показывает указатель
-			if (bit.equals("0"))
-				content = content.substring(0, posit) + "1" + content.substring (posit + 1);
-			else
-				content = content.substring(0, posit) + "0" + content.substring (posit + 1);
-
-			register.setValue((int)convertToDec(content));
-
-			if(movement)
-				pointer_position ++;
-		}
+			register.invertBit(register.width() - pointer_position - 1);
 	}
 
 	public void setBit(boolean bit)					//Установка бита
 	{
 		if(active)
-		{
-			String content = super.getContent();		//Содержимого регистра
-			int posit = getPointerPosition();			//Позиция указателя
-
-			//Изменение бита на который показывает указатель
-			if (bit)
-				content = content.substring(0, posit) + "1" + content.substring (posit + 1);
-			else
-				content = content.substring(0, posit) + "0" + content.substring (posit + 1);
-
-			register.setValue((int)convertToDec(content));
-
-			if(movement)
-				pointer_position ++;
-		}
+			register.setBit(bit ? 1 : 0, register.width() - pointer_position - 1);
 	}
 
-	private double convertToDec(String content)		//Преобразование в десятичную систему
-	{
-		double data = 0;
-		for (int i = 0; i < content.length(); i++ )
-		{
-			if(content.substring(i, i+1).equals("1"))
-				data = data + Math.pow(2, content.length() - 1 - i);
-		}
-
-		return data;
-	}
-
-	private IRegister	register;				//Регистр
+	private Register	register;				//Регистр
 	private int			pointer_position;		//Позиция указателя
-	private boolean		movement;				//Сдвигание указателя после изменения бита
 	private boolean		active;					//Активность регистра
 }

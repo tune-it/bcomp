@@ -31,7 +31,33 @@ public class Register implements IRegister
 	{
 		setValue(register.getValue());
 	}
-	
+
+	public void setBit(int value, int bitno)
+	{
+		data = (data & (~(1 << bitno))) | (value << bitno);
+	}
+
+	public void invertBit(int bitno)
+	{
+		int bitpos = 1 << bitno;
+		data = (data & ~bitpos) | (~(data & bitpos) & bitpos);
+	}
+
+	public int getBit(int bitno)
+	{
+		return (data >> bitno) & 1;
+	}
+
+	public boolean checkBit(int bitno)
+	{
+		return getBit(bitno) == 1;
+	}
+
+	public int getBits(int startbit, int bitcount)
+	{
+		return (data >> startbit) & ((1 << bitcount) - 1);
+	}
+
 	public int width()
 	{
 		return register_width;

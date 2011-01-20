@@ -17,7 +17,7 @@ public interface IRegister
 	 * @param input - новое значение.
 	 */
 	void	setValue(int input);
-	
+
 	/**
 	 * Разрядность регистра
 	 * @return возвращает разрядность регистра
