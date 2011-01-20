@@ -7,13 +7,13 @@ public class Register implements IRegister
 {
 	Register()  // Регистр "по умолчанию" - 16 разрядов
 	{
-		register_width = 16;
-		data = 0;
+		this(16);
 	}
-	
+
 	Register(int width)
 	{
 		register_width = width;
+		mask = (1 << register_width) - 1;
 		data = 0;
 	}
 
@@ -21,31 +21,23 @@ public class Register implements IRegister
 	{
 		return data;
 	}
-	
+
 	public void setValue(int input)
 	{
-		data = input;
-		controlWidth();
+		data = input & mask;
 	}
-	
+
 	public void setValue(IRegister register)
 	{
-		data = register.getValue();
-		controlWidth();
+		setValue(register.getValue());
 	}
 	
 	public int width()
 	{
 		return register_width;
 	}
-	
-	private void controlWidth()
-	{
-		int mask = (int)Math.pow(2, register_width);
-		mask--;
-		data = data & mask;
-	}
-	
+
 	private int				register_width;	// Разрядность 
+	private int				mask;			// Маска для проверки разрядности
 	private volatile int	data;			// Массив "битов"
 }
