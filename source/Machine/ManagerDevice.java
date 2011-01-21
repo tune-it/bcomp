@@ -47,26 +47,32 @@ public class ManagerDevice
 			
 			// Поле (бит сравнения)
 			int compare_bit = command.getBit(14);
-			
+
 			//Поле проверяемый регистр
 			switch (command.getBits(12, 2)) {
 			// РС - проверяемый регистр
 			case 0:
-				reg_factory.getBufferRegister().setValue(reg_factory.getStateCounter());
+				channels.FromSC().open();
+				reg_factory.getRightALUInput().setValue(0);
 				break;
 			// РД - проверяемый регистр
 			case 1:
-				reg_factory.getBufferRegister().setValue(reg_factory.getDataRegister());
+				channels.FromDR().open();
+				reg_factory.getLeftALUInput().setValue(0);
 				break;
 			// РК - проверяемый регистр
 			case 2:
-				reg_factory.getBufferRegister().setValue(reg_factory.getCommandRegister());
+				channels.FromCR().open();
+				reg_factory.getLeftALUInput().setValue(0);
 				break;
 			// А - проверяемый регистр
 			case 3:
-				reg_factory.getBufferRegister().setValue(reg_factory.getAccumulator());
+				channels.FromAcc().open();
+				reg_factory.getRightALUInput().setValue(0);
 				break;
 			}
+
+			alu.add();
 
 			// Проверяемый бит
 			int choose_bit = command.getBits(8, 4);
