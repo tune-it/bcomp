@@ -1,6 +1,6 @@
 /**
  * Фабрика флагов
- * @author Ponomarev   
+ * @author Ponomarev
  * @version $Id$
  */
 
