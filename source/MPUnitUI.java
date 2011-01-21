@@ -1,3 +1,8 @@
+/**
+ * Компонент "Работа с МПУ". Вызывает методы отрисовки необходимых элементов.
+ * @version $Id$
+ */
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -8,16 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 
-/*-----------------------------------------------------------------------------
-				Компонент "Работа с МПУ". Вызывает методы отрисовки
-							необходимых элементов.
------------------------------------------------------------------------------*/	
-
 public class MPUnitUI extends JComponent
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public MPUnitUI (ObjectFactoryUI factory, InputRegisterUI input_register, JButton[] dbuttons, JCheckBox tact, JCheckBox memory_check, JButton work)
 	{

@@ -1,13 +1,15 @@
+/**
+ * Базовая ЭВМ (управление работой)
+ * @author Ponomarev
+ * @version $Id$
+ */
+
 package Machine;
 
 enum RunState {
 	STOPPED, RUNNING, STOPPING
 }
 
-/**
-* Базовая ЭВМ (управление работой)
-* @author Ponomarev
-*/
 public class Machine implements Runnable {
 	public Machine(ControlView ctrl) {
 		this.ctrl=ctrl;
@@ -68,15 +70,10 @@ public class Machine implements Runnable {
 			}
 
 			for (;;) {
-				man_dev.timeStep();
+				boolean halt = man_dev.timeStep();
 				ctrl.repaint();
 
-				if (ctrl.getTact() || (runstate != RunState.RUNNING))
-					break;
-				
-				int mcmd = reg_factory.getMicroCommandRegister().getValue();
-				
-				if (((mcmd & 0xc000) == 0x4000) && ((mcmd & 0x8) == 0x8))
+				if (halt || ctrl.getTact() || (runstate != RunState.RUNNING))
 					break;
 
 				try	{

@@ -1,11 +1,13 @@
+/**
+ * Класс, контролирующий настройки БЭВМ из пользовательского интерфейса
+ * @author Ponomarev
+ * @version $Id$
+ */
+
 package Machine;
 
 import javax.swing.JTabbedPane;
 
-/**
- * Класс, контролирующий настройки БЭВМ из пользовательского интерфейса
- * @author Ponomarev
- */
 public class ControlView
 {
 	public ControlView(JTabbedPane p)

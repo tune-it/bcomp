@@ -1,3 +1,8 @@
+/**
+ * Компонент "Работа с ВУ". Вызывает методы отрисовки необходимых элементов.
+ * @version $Id$
+ */
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -8,16 +13,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JRadioButton;
 
-/*-----------------------------------------------------------------------------
-			Компонент "Работа с ВУ". Вызывает методы отрисовки
-						необходимых элементов.
------------------------------------------------------------------------------*/	
-
 public class IOUnitUI extends JComponent
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public IOUnitUI (ObjectFactoryUI factory, InputRegisterUI[] input_registers, JButton[] dbuttons, JButton[] flag_buttons, FlagUI[] flags, JCheckBox tact, JButton work, JRadioButton[] register_check)
 	{

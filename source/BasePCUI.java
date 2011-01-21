@@ -1,3 +1,9 @@
+/**
+ * Компонент "Базовая ЭВМ". Вызывает методы отрисовки
+ * необходимых элементов.
+ * @version $Id$
+ */
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -6,15 +12,8 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 
-/*-----------------------------------------------------------------------------
-Компонент "Базовая ЭВМ". Вызывает методы отрисовки
-необходимых элементов.
------------------------------------------------------------------------------*/
 public class BasePCUI extends JComponent
 {
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     public BasePCUI(ObjectFactoryUI factory, InputRegisterUI input_register, JButton[] dbuttons, JCheckBox tact, JButton work)

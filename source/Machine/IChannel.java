@@ -1,9 +1,11 @@
-package Machine;
-
 /**
  * Интерфейс канала
  * @author Ponomarev
+ * @version $Id$
  */
+
+package Machine;
+
 public interface IChannel
 {
 	/**

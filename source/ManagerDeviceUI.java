@@ -1,3 +1,8 @@
+/**
+ * Отрисовка устройства управления
+ * @version $Id$
+ */
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -6,10 +11,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import Machine.Flag;
 import Machine.FlagFactory;
-
-/*-----------------------------------------------------------------------------
-		Отрисовка устройства управления
------------------------------------------------------------------------------*/
 
 public class ManagerDeviceUI 
 {

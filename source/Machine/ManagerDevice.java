@@ -1,10 +1,10 @@
-package Machine;
-
 /**
  * Устройство управления
  * @author Ponomarev
- *
+ * @version $Id$
  */
+
+package Machine;
 
 enum Cycle {
 	INSTRFETCH, ADDRFETCH, EXECUTION, INTERRUPTION, ANOTHER
@@ -22,8 +22,10 @@ public class ManagerDevice
 		this.dev = dev;
 	}
 
-	public void timeStep()
+	public boolean timeStep()
 	{
+		boolean halt = false; // Не останавливать БЭВМ после выполнения такта
+
 		alu.resetALU(); // Отключение инверторов и инкрементора
 		
 		channels.CloseAllChannels(); // Закрыть все каналы
@@ -175,6 +177,7 @@ public class ManagerDevice
 				flag_factory.getInstructionFetch().clearFlag();
 				flag_factory.getExecution().clearFlag();
 				flag_factory.getProgram().clearFlag();
+				halt = true; // Остановить БЭВМ после выполнения такта
 			}
 				
 			// Выход АЛУ (Содержимое БР)
@@ -305,6 +308,8 @@ public class ManagerDevice
 				break;
 			}
 		}
+
+		return halt;
 	}
 
 	private void updateStateBits()

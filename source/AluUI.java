@@ -1,12 +1,14 @@
+/**
+ * Отрисовка АЛУ
+ * @version $Id$
+ */
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-/*-----------------------------------------------------------------------------
-Отрисовка АЛУ 
------------------------------------------------------------------------------*/
 public class AluUI
 {
     public AluUI(int x, int y, String text)

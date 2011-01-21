@@ -1,3 +1,7 @@
+/**
+ * @version $Id$
+ */
+
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -18,9 +22,6 @@ import Machine.ControlView;
 import Machine.Machine;
 
 public class EUI extends JApplet {
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
     {
         EventQueue.invokeLater(new Runnable()

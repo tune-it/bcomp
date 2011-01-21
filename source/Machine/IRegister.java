@@ -1,9 +1,11 @@
-package Machine;
-
 /**
  * Интерфейс регистра/памяти
  * @author Ponomarev
+ * @version $Id$
  */
+
+package Machine;
+
 public interface IRegister
 {
 	/**

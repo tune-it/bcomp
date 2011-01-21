@@ -1,9 +1,11 @@
-package Machine;
-
 /**
  * Фабрика флагов
  * @author Ponomarev   
+ * @version $Id$
  */
+
+package Machine;
+
 public class FlagFactory
 {
 	public FlagFactory(RegisterFactory factory)

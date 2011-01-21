@@ -1,10 +1,12 @@
+/*
+ * Канал.
+ * Осуществляет пересылку данных регистр-регистр, память-регистр и регистр-память.
+ * @author Ponomarev
+ * @version $Id$
+ */
+
 package Machine;
 
-/**
-* Канал.
-* Осуществляет пересылку данных регистр-регистр, память-регистр и регистр-память.
-* @author Ponomarev
-*/
 public class Channel implements IChannel 
 {
 	public Channel(IRegister destination, IRegister source)

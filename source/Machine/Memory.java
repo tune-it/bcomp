@@ -1,8 +1,10 @@
+/**
+ * Основная память
+ * @version $Id$
+ */
+
 package Machine;
 
-/**
-* Основная память
-*/
 public class Memory implements IRegister, IMemory
 {
 	public Memory(RegisterFactory factory)

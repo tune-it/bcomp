@@ -1,3 +1,7 @@
+/*
+ * @version $Id$
+ */
+
 package Machine;
 
 /**

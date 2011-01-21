@@ -1,9 +1,10 @@
+/*
+ * Фабрика регистров
+ * @author Ponomarev
+ * @version $Id$
+ */
 package Machine;
 
-/**
-* Фабрика регистров
-* @author Ponomarev
-*/
 public class ChannelFactory 
 {
 	public ChannelFactory(RegisterFactory factory, Memory memory, MicrocommandMemory microcommand_memory)

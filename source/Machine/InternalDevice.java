@@ -1,9 +1,11 @@
-package Machine;
-
 /**
  * Внешнее устройство ввода/вывода
  * @author Ponomarev
+ * @version $Id$
  */
+
+package Machine;
+
 public class InternalDevice
 {
 	/**

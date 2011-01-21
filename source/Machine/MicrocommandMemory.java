@@ -1,8 +1,10 @@
+/**
+ * Память микропрограмм.
+ * @version $Id$
+ */
+
 package Machine;
 
-/**
- *	Память микропрограмм.
- */
 public class MicrocommandMemory extends Memory {
 
 	public MicrocommandMemory(RegisterFactory factory)

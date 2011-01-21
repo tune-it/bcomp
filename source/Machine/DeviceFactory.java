@@ -1,9 +1,11 @@
-package Machine;
-
 /**
  * Фабрика устройств ввода/вывода
  * @author Ponomarev
+ * @version $Id$
  */
+
+package Machine;
+
 public class DeviceFactory
 {
 	public DeviceFactory(RegisterFactory reg_factory)

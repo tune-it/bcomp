@@ -1,9 +1,11 @@
+/**
+ * Флаг (однобитовый регистр)
+ * @author Ponomarev
+ * @version $Id$
+ */
+
 package Machine;
 
-/**
-* Флаг (однобитовый регистр)
-* @author Ponomarev
-*/
 public class Flag implements IRegister
 {
 	Flag()

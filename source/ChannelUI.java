@@ -1,16 +1,16 @@
+/**
+ * Отрисовка канала и стрелки
+ * @version $Id$
+ */
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import Machine.*;
 
-/*-----------------------------------------------------------------------------
-		Отрисовка канала и стрелки
------------------------------------------------------------------------------*/
-
 public class ChannelUI
 {
-
 	public ChannelUI (IChannel channel, int[][] points)
 	{
 		this.channel = channel;
