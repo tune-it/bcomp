@@ -15,13 +15,14 @@ import Machine.*;
 
 public class MemoryUI
 {	
-	public MemoryUI (IMemory mem, IRegister reg, int mem_width, double x, double y, int width, int height, int messX, int messY, String text)
+	public MemoryUI (IMemory mem, IRegister reg, IChannel[] channels, int mem_width, double x, double y, int width, int height, int messX, int messY, String text)
 	{
 		memory = mem;
 		this.mem_width = mem_width;
 		
 		register = reg;
-		
+		this.channels = channels;
+
 		leftX = x;
 		leftY = y;
 		
@@ -66,14 +67,18 @@ public class MemoryUI
 		rs.setFont(new Font("Courier New", Font.BOLD, 23));
 		rs.drawString(text, messX, messY);
 
-		rs.setFont(new Font("Courier New", Font.BOLD, 25));		//Шрифт содержимого
+		rs.setFont(new Font("Courier New", Font.BOLD, 25));     //Шрифт содержимого
 		
 		String address, data;
-		int a = 21; 								//Расстояние между строкой и рамкой заголовка 
-		int shift = 25;								//Расстояние между строками 
-		page = register.getValue() / page_size;		//Текущая страница
-		int mem[] = memory.getMemory();				//Содержимое ячеек
+		int a = 21;         //Расстояние между строкой и рамкой заголовка
+		int shift = 25;     //Расстояние между строками
+
+                //Определение номера текущей страницы
+                for (int i = 0; i < channels.length; i++)
+                    if (channels[i].getConnect())
+                        setPage(register.getValue() / page_size);
 		
+                int mem[] = memory.getMemory();                          //Содержимое ячеек
 		//Форматирование и вывод адресов и содержимого
 		for (int i = 0; i < page_size; i++)
 		{	
@@ -85,12 +90,12 @@ public class MemoryUI
 		}
 	}
 	
-	public void setPage(int page) 						//Выбор страницы для отрисовки 
+	public void setPage(int page) 				//Выбор страницы для отрисовки 
 	{
 		this.page = page;
 	}
 	
-	public int getPage()								//Получение номера текущей страницы
+	public int getPage()					//Получение номера текущей страницы
 	{
 		return page;
 	}
@@ -100,17 +105,17 @@ public class MemoryUI
 		this.banner_height = banner_height;
 	}
 
-	public void setSeparator(int x)						//Установка координаты Х линии-разделителя
+	public void setSeparator(int x)				//Установка координаты Х линии-разделителя
 	{
 		separatorX =(int)leftX + x;
 	}
 	
-	public void setAddressWidth(int x)					//Установка разрядности адреса
+	public void setAddressWidth(int x)			//Установка разрядности адреса
 	{
 		mem_width = x;
 	}
 	
-	private String convertToString(int address, int width)		//Преобразование адреса/cодержимого в строку
+	private String convertToString(int address, int width)	//Преобразование адреса/cодержимого в строку
 	{
 		Formatter fmt = new Formatter();
 		fmt.format("%x", address);
@@ -127,19 +132,20 @@ public class MemoryUI
 		return str.toUpperCase();
 	}
 	
-	private IRegister		register;		//Регистр		
+	private IRegister		register;		//Регистр
+        private IChannel[]              channels;               //Канал
 	private IMemory			memory;			//Память ячеек
 	private int 			mem_width;		//Разрядность адреса
-	private int				frame_width;	//Ширина рамки
-	private int				frame_height;	//Высота рамки
+	private int			frame_width;            //Ширина рамки
+	private int			frame_height;           //Высота рамки
 	private double			leftX;			//Координата X левого верхнего угла рамки
 	private double			leftY;			//Координата Y левого верхнего угла рамки
-	private int				messX;			//Координата X заголовка
-	private int				messY;			//Координата Y заголовка
-	private int				page;			//Номер страницы памяти (по 16 ячеек)
+	private int			messX;			//Координата X заголовка
+	private int			messY;			//Координата Y заголовка
+	private int			page;			//Номер страницы памяти (по 16 ячеек)
 	private final int		page_size;		//Количество ячеек на странице
 	private String			text;			//Название памяти
-	private int				separatorX;		//Координата X разделяющей линии
-	private int 			banner_height;	//Высота заголовка		
+	private int			separatorX;		//Координата X разделяющей линии
+	private int 			banner_height;          //Высота заголовка
 
 }

@@ -79,13 +79,13 @@ public class BasePCUI extends JComponent
         //Добавление чекбоксов и рамок
         add(tact);				//"Такт"
         rs.drawRect(329, 465, 101, 50);
-        
+
         for (int i = 0; i<dbuttons.length; i++)
             add(dbuttons[i]);
 
         add(work);
     }
-   
+
     private RegisterUI[]        registers;          //Массив регистров
     private InputRegisterUI     key_register;       //Клавишный регистр
     private ChannelUI[]         channels;           //Массив каналов

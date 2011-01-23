@@ -120,58 +120,61 @@ public class ObjectFactoryUI
 	
 	public FlagUI[] createIOFlags()
 	{
-		FlagUI OutFlag = new FlagUI(devfact.getInternalDevice(1).getStateFlag(), 450, 180);
-		FlagUI InpFlag1 = new FlagUI(devfact.getInternalDevice(2).getStateFlag(), 600, 180);
-		FlagUI InpFlag2 = new FlagUI(devfact.getInternalDevice(3).getStateFlag(), 750, 180);
+            FlagUI OutFlag = new FlagUI(devfact.getInternalDevice(1).getStateFlag(), 450, 180);
+            FlagUI InpFlag1 = new FlagUI(devfact.getInternalDevice(2).getStateFlag(), 600, 180);
+            FlagUI InpFlag2 = new FlagUI(devfact.getInternalDevice(3).getStateFlag(), 750, 180);
+
+            FlagUI[] flags = {OutFlag, InpFlag1, InpFlag2};
 		
-		FlagUI[] flags = {OutFlag, InpFlag1, InpFlag2};
-		
-		return flags;
-		
+            return flags;
 	}
 	
 	public InputRegisterUI createKeyRegister()
 	{
-		InputRegisterUI key_register = new InputRegisterUI(regfact.getInputRegister(), 1, 460, 60, 32, 478, "Клавишный Регистр");
-		key_register.setActive(true);
+            InputRegisterUI key_register = new InputRegisterUI(regfact.getInputRegister(), 1, 460, 60, 32, 478, "Клавишный Регистр");
+            key_register.setActive(true);
 		
-		return key_register;
+	return key_register;
 	}
 	
 	public InputRegisterUI createInputRegister1()
 	{
-		InputRegisterUI InpDev1 = new InputRegisterUI(devfact.getInternalDevice(2).getDataRegister(), 550, 310, 60, 595, 328, "ВУ 2");
-		InpDev1.setWidth(135);
+            InputRegisterUI InpDev1 = new InputRegisterUI(devfact.getInternalDevice(2).getDataRegister(), 550, 310, 60, 595, 328, "ВУ 2");
+            InpDev1.setWidth(135);
 		
-		return InpDev1;
+	return InpDev1;
 	}
 	
 	public InputRegisterUI createInputRegister2()
 	{
-		InputRegisterUI InpDev2 = new InputRegisterUI(devfact.getInternalDevice(3).getDataRegister(), 700, 310, 60, 745, 328, "ВУ 3");
-		InpDev2.setWidth(135);
-				
-		return InpDev2;
+            InputRegisterUI InpDev2 = new InputRegisterUI(devfact.getInternalDevice(3).getDataRegister(), 700, 310, 60, 745, 328, "ВУ 3");
+            InpDev2.setWidth(135);
+
+            return InpDev2;
 	}
 	
 	public ManagerDeviceUI createManagerDevice()					//Создание устройства управления
 	{
-		return new ManagerDeviceUI(flagfact, 620, 210);
+            return new ManagerDeviceUI(flagfact, 620, 210);
 	}
 	
 	public MemoryUI createСlassicMemory()							//Создание памяти
 	{
-		return new MemoryUI (memory, regfact.getInstructionPointer(), 12, 1, 1, 150, 431, 33, 23, "Память");
+            IChannel[] channels = {channfact.ReadFromMem(), channfact.WriteToMem()};
+
+            return new MemoryUI (memory, regfact.getInstructionPointer(), channels, 12, 1, 1, 150, 431, 33, 23, "Память");
 	}
 	
 	public MemoryUI createMCMemory()							//Создание памяти МК
 	{
-		return new MemoryUI (micro_memory, regfact.getMicroInstructionPointer(), 8, 711, 1, 135, 431, 715, 23, "Память МК");
+            IChannel[] channels = {channfact.MicroCommandToRMC()};
+
+            return new MemoryUI (micro_memory, regfact.getMicroInstructionPointer(), channels, 8, 711, 1, 135, 431, 715, 23, "Память МК");
 	}
 	
 	public AluUI createClassicAlu()								//Создание АЛУ для режима "Базовая ЭВМ"
 	{		
-		return new AluUI(180, 235, "АЛУ");
+            return new AluUI(180, 235, "АЛУ");
 	}
 	
 	public AluUI createMPUAlu()									//Создание АЛУ для режима "Работа с МПУ"

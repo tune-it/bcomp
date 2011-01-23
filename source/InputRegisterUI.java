@@ -83,6 +83,6 @@ public class InputRegisterUI extends RegisterUI
 	}
 
 	private Register	register;				//Регистр
-	private int			pointer_position;		//Позиция указателя
+	private int		pointer_position;		//Позиция указателя
 	private boolean		active;					//Активность регистра
 }
