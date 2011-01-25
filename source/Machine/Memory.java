@@ -11,7 +11,7 @@ public class Memory implements IRegister, IMemory
 	{
 		this.address_register = factory.getAddressRegister();
 		this.memory_width = 16;
-		this.memory_length = (int) StrictMath.pow(2, factory.getAddressRegister().width());
+		this.memory_length = 1 << factory.getAddressRegister().width();
 		memory = new Register[memory_length];
 		for (int i = 0; i < memory_length; i++)
 		{
@@ -66,8 +66,8 @@ public class Memory implements IRegister, IMemory
 		memory[adr].setValue(bits);
 	}
 	
-	private int			memory_length;   // Длина памяти
-	private int			memory_width;    // Разрядность памяти
-	private Register[]	memory;          // Память
-	private Register	address_register; // Регистр адреса
+	private int			memory_length;   	// Длина памяти
+	private int			memory_width;    	// Разрядность памяти
+	private Register[]	memory;          	// Память
+	private Register	address_register;	// Регистр адреса
 }

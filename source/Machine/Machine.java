@@ -145,7 +145,7 @@ public class Machine implements Runnable {
 	 */
 	public void setAddress() {
 		if (ctrl.microWork()) {
-			reg_factory.getMicroInstructionPointer().setValue(reg_factory.getInputRegister().getValue());
+			channels.InputRegToMicroIP().open();
 			ctrl.repaint();
 		} else {
 			startfrom(0x99);
@@ -156,7 +156,12 @@ public class Machine implements Runnable {
 	 * "Чтение"
 	 */
 	public void read() {
-		startfrom(0x9C);
+		if (ctrl.microWork()) {
+			channels.MicroMemToInputReg().open();
+			reg_factory.getMicroInstructionPointer().setValue(reg_factory.getMicroInstructionPointer().getValue()+1);
+			ctrl.repaint();
+		} else
+			startfrom(0x9C);
 	}
 	
 	/**
@@ -164,7 +169,7 @@ public class Machine implements Runnable {
 	 */
 	public void record() {
 		if (ctrl.microWork()) {
-			micro_mem.setValue(reg_factory.getInputRegister().getValue());
+			channels.InputRegToMicroMem().open();
 			reg_factory.getMicroInstructionPointer().setValue(reg_factory.getMicroInstructionPointer().getValue()+1);
 			ctrl.repaint();
 		} else

@@ -30,6 +30,11 @@ public class ChannelFactory
 		
 		this.channels[13] = new Channel(factory.getMicroCommandRegister(), microcommand_memory);
 		
+		inputRegToMicroIP	= new Channel(factory.getMicroInstructionPointer(), factory.getInputRegister());
+		inputRegToMicroMem	= new Channel(microcommand_memory, factory.getInputRegister());
+		microMemToInputReg	= new Channel(factory.getInputRegister(), microcommand_memory);
+		
+		
 		this.channels[14] = new Channel(factory.getAddressRegister(), factory.getAddressRegister());
 	}
 	/**
@@ -168,6 +173,35 @@ public class ChannelFactory
 		return channels[13];
 	}
 	
+	/**
+	 * Канал Клавишный регистр -> Счетчик МК
+	 * @return
+	 */
+	public Channel InputRegToMicroIP()
+	{
+		return inputRegToMicroIP;
+	}
+	
+	/**
+	 * Канал Клавишный регистр -> Память МК
+	 * @return
+	 */
+	public Channel InputRegToMicroMem()
+	{
+		return inputRegToMicroMem;
+	}
+	
+	/**
+	 * Канал Память МК -> Клавишный регистр
+	 * @return
+	 */
+	public Channel MicroMemToInputReg()
+	{
+		return microMemToInputReg;
+	}
+	
+	
+	
 	/*-----------------------------------------------------------------------------
 	-----------------------------------------------------------------------------*/
 	
@@ -214,5 +248,8 @@ public class ChannelFactory
 	
 	// 14 - РА -> Память
 	
-	Channel[] channels;
+	private Channel[] channels;
+	private Channel inputRegToMicroIP;
+	private Channel	inputRegToMicroMem;
+	private Channel	microMemToInputReg;
 }
