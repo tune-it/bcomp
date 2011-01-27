@@ -205,7 +205,7 @@ public class ManagerDevice
 				channels.ToIP().open();
 				break;
 			// в A
-			case 6:
+			case 5:
 				channels.ToAcc().open();
 				break;
 			// в РА, РД, РК, А
