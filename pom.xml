@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ru.ifmo.cs</groupId>
+	<artifactId>BasicComputer</artifactId>
+	<version>1</version>
+	<packaging>pom</packaging>
+	<name>BasicComputer</name>
+	<modules>
+		<module>bcomp</module>
+		<module>elements</module>
+		<module>bcomp-ui</module>
+	</modules>
+	<properties>
+		<liferay.version>6.1.1</liferay.version>
+	</properties>
+	<scm>
+		<connection>scm:svn:https://bcomp.googlecode.com/svn</connection>
+		<developerConnection>scm:svn:https://bcomp.googlecode.com/svn</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://bcomp.googlecode.com/svn</url>
+	</scm>
+</project>
