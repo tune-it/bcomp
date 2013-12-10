@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package ru.ifmo.cs.bcomp.ui;
+package ru.ifmo.cs.bcomp;
 
 /**
  *

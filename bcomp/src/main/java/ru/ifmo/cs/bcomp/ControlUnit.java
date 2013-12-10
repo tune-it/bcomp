@@ -193,7 +193,7 @@ public class ControlUnit {
 	}
 
 	public void compileMicroProgram(MicroProgram mpsrc) throws Exception {
-		String[][] mp = mpsrc.getMicroProgram();
+		String[][] mp = mpsrc.microprogram;
 
 		for (int i = 0; i < labelsaddr.length; labelsaddr[i++] = 0);
 

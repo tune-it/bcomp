@@ -8,9 +8,7 @@ package ru.ifmo.cs.bcomp;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class BaseMicroProgram implements MicroProgram {
-	private static final String mpname = "исходная";
-
+public class BaseMicroProgram extends MicroProgram {
 	private static final String[][] mp = {
 		{null, "0000", null},
 		// Цикл выборки команды
@@ -206,15 +204,7 @@ public class BaseMicroProgram implements MicroProgram {
 		{"EXECCNT", "0000", null}
 	};
 
-	public String[][] getMicroProgram() {
-		return mp;
-	}
-
-	public String getMicroProgramName() {
-		return mpname;
-	}
-
-	public Instruction[] getInstructionSet() {
-		return BaseInstrSet.getInstructionSet();
+	public BaseMicroProgram() {
+		super("исходная", BaseInstrSet.getInstructionSet(), mp);
 	}
 }

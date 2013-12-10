@@ -16,28 +16,28 @@ public class CPU {
 		ACCUM, BUF, DATA, ADDR, IP, INSTR, STATE, KEY, MIP, MINSTR
 	}
 
-	private Bus aluOutput = new Bus(16);
-	private Bus intrReq = new Bus(1);
-	private Register regState = new Register("C", "РС", StateReg.WIDTH);
-	private ControlUnit cu = new ControlUnit(aluOutput);
-	private EnumMap<ControlSignal, DataHandler> valves =
+	private final Bus aluOutput = new Bus(16);
+	private final Bus intrReq = new Bus(1);
+	private final Register regState = new Register("C", "РС", StateReg.WIDTH);
+	private final ControlUnit cu = new ControlUnit(aluOutput);
+	private final EnumMap<ControlSignal, DataHandler> valves =
 		new EnumMap<ControlSignal, DataHandler> (ControlSignal.class);
-	private Register regAddr = new Register("РА", "Регистр адреса", 11, getValve(ControlSignal.BUF_TO_ADDR, aluOutput));
-	private Memory mem = new Memory("Память", 16, regAddr);
-	private Register regData = new Register("РД", "Регистр данных", 16,
+	private final Register regAddr = new Register("РА", "Регистр адреса", 11, getValve(ControlSignal.BUF_TO_ADDR, aluOutput));
+	private final Memory mem = new Memory("Память", 16, regAddr);
+	private final Register regData = new Register("РД", "Регистр данных", 16,
 		getValve(ControlSignal.BUF_TO_DATA, aluOutput),
 		getValve(ControlSignal.MEMORY_READ, mem));
-	private Register regInstr = new Register("РК", "Регистр команд", 16, getValve(ControlSignal.BUF_TO_INSTR, aluOutput));
-	private Register regIP = new Register("СК", "Счётчик команд", 11, getValve(ControlSignal.BUF_TO_IP, aluOutput));
-	private Register regAccum = new Register("Акк", "Аккумулятор", 16, getValve(ControlSignal.BUF_TO_ACCUM, aluOutput));
-	private Register regKey = new Register("КР", "Клавишный регистр", 16);
-	private Register regBuf;
-	private DataHandler valveRunState;
-	private DataHandler valveSetProgram;
-	private CPU2IO cpu2io;
+	private final Register regInstr = new Register("РК", "Регистр команд", 16, getValve(ControlSignal.BUF_TO_INSTR, aluOutput));
+	private final Register regIP = new Register("СК", "Счётчик команд", 11, getValve(ControlSignal.BUF_TO_IP, aluOutput));
+	private final Register regAccum = new Register("Акк", "Аккумулятор", 16, getValve(ControlSignal.BUF_TO_ACCUM, aluOutput));
+	private final Register regKey = new Register("КР", "Клавишный регистр", 16);
+	private final Register regBuf;
+	private final DataHandler valveRunState;
+	private final DataHandler valveSetProgram;
+	private final CPU2IO cpu2io;
 	private volatile boolean clock = true;
 	private int runLimit = 4 * 1024 * 1024;
-	private MicroProgram mp;
+	private final MicroProgram mp;
 
 	public CPU(MicroProgram mp) throws Exception {
 		getValve(ControlSignal.MEMORY_WRITE, regData).addDestination(mem);
@@ -254,7 +254,7 @@ public class CPU {
 	}
 
 	public String getMicroProgramName() {
-		return mp.getMicroProgramName();
+		return mp.microprogramName;
 	}
 
 	public int getIntrCycleStartAddr() {
@@ -262,7 +262,7 @@ public class CPU {
 	}
 
 	public Instruction[] getInstructionSet() {
-		return mp.getInstructionSet();
+		return mp.instructionSet;
 	}
 
 	public RunningCycle getRunningCycle() {

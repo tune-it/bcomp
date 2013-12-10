@@ -6,7 +6,7 @@ package ru.ifmo.cs.bcomp.ui.components;
 
 import java.awt.Graphics;
 import javax.swing.JLabel;
-import ru.ifmo.cs.bcomp.ui.Utils;
+import ru.ifmo.cs.bcomp.Utils;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 import ru.ifmo.cs.elements.Memory;
 

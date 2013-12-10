@@ -4,6 +4,7 @@
 
 package ru.ifmo.cs.bcomp.ui;
 
+import ru.ifmo.cs.bcomp.Utils;
 import java.util.ArrayList;
 import java.util.Scanner;
 import ru.ifmo.cs.bcomp.*;

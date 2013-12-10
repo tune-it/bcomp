@@ -7,7 +7,7 @@ package ru.ifmo.cs.bcomp.ui.components;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import ru.ifmo.cs.bcomp.StateReg;
-import ru.ifmo.cs.bcomp.ui.Utils;
+import ru.ifmo.cs.bcomp.Utils;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.FONT_COURIER_BOLD_25_WIDTH;
 import ru.ifmo.cs.elements.Register;
 

@@ -8,13 +8,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.font.FontRenderContext;
-import ru.ifmo.cs.bcomp.ui.Utils;
+import ru.ifmo.cs.bcomp.Utils;
 
 /**
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public abstract class DisplayStyles {
+public class DisplayStyles {
 	private static final FontRenderContext fr = new FontRenderContext(null, true, true);
 
 	// Fonts
