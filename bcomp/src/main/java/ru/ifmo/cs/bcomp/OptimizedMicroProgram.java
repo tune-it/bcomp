@@ -188,6 +188,6 @@ public class OptimizedMicroProgram extends MicroProgram {
 	};
 
 	public OptimizedMicroProgram() {
-		super("оптимизированная", BaseInstrSet.getInstructionSet(), mp);
+		super("оптимизированная", BaseInstrSet.instructions, mp);
 	}
 }

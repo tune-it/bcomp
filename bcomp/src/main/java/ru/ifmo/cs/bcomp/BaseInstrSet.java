@@ -9,7 +9,7 @@ package ru.ifmo.cs.bcomp;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class BaseInstrSet {
-	private static final Instruction[] instrs = {
+	public static final Instruction[] instructions = {
 		new Instruction(0x0000, "ISZ", Instruction.Type.ADDR),
 		new Instruction(0x1000, "AND", Instruction.Type.ADDR),
 		new Instruction(0x2000, "JSR", Instruction.Type.ADDR),
@@ -39,8 +39,4 @@ public class BaseInstrSet {
 		new Instruction(0xFA00, "EI", Instruction.Type.NONADDR),
 		new Instruction(0xFB00, "DI", Instruction.Type.NONADDR)
 	};
-
-	public static Instruction[] getInstructionSet() {
-		return instrs;
-	}
 }

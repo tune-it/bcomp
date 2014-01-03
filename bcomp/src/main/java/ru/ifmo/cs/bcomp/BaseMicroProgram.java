@@ -205,6 +205,6 @@ public class BaseMicroProgram extends MicroProgram {
 	};
 
 	public BaseMicroProgram() {
-		super("исходная", BaseInstrSet.getInstructionSet(), mp);
+		super("исходная", BaseInstrSet.instructions, mp);
 	}
 }

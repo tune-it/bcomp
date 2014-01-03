@@ -18,6 +18,9 @@ public class MicroPrograms {
 		if (mptype.equals("optimized"))
 			return new OptimizedMicroProgram();
 
+		if (mptype.equals("extended"))
+			return new ExtendedMicroProgram();
+
 		return null;
 	}
 }
