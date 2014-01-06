@@ -15,14 +15,15 @@ import ru.ifmo.cs.elements.DataDestination;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class CLI {
-	private BasicComp bcomp;
-	private CPU cpu;
-	private IOCtrl[] ioctrls;
-	private Assembler asm;
-	private ArrayList<Integer> writelist = new ArrayList<Integer>();
+	private final BasicComp bcomp;
+	private final MicroProgram mp;
+	private final CPU cpu;
+	private final IOCtrl[] ioctrls;
+	private final Assembler asm;
+	private final ArrayList<Integer> writelist = new ArrayList<Integer>();
 
 	public CLI(MicroProgram mp) throws Exception {
-		bcomp = new BasicComp(mp);
+		bcomp = new BasicComp(this.mp = mp);
 
 		cpu = bcomp.getCPU();
 		bcomp.addDestination(ControlSignal.MEMORY_WRITE, new DataDestination() {
@@ -67,7 +68,7 @@ public class CLI {
 	}
 
 	private void printMicroMemory(int addr) {
-		System.out.println(getMicroMemory(addr));
+		System.out.println(getMicroMemory(addr) + " " + mp.decodeCmd(cpu.getMicroMemoryValue(addr)));
 	}
 
 	private String getRegs() {
