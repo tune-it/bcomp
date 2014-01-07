@@ -43,7 +43,7 @@ public class ExtendedMicroProgram extends MicroProgram {
 		// CALL 2
 		{"CALL",	"0100",	null},		// РД ==> БР
 		{null,		"4003",	null},		// БР ==> РК
-		{"STORE",	"0040",	null},		// COM(0) ==> БР
+		{"CALLSTR",	"0040",	null},		// COM(0) ==> БР
 		{null,		"4001",	null},		// БР ==> РА
 		{null,		"0001",	null},		// ОП(РА) ==> РД
 		{null,		"0140",	null},		// COM(0) + РД ==> БР
@@ -86,7 +86,7 @@ public class ExtendedMicroProgram extends MicroProgram {
 		// MOV 1000
 		{"MOV",		"1000",	null},		// А ==> БР
 		{null,		"4002",	null},		// БР ==> РД
-		{null,		"0002",	null},		// РД ==> ОП(РА)
+		{"STORE",	"0002",	null},		// РД ==> ОП(РА)
 		{null,		"8300",	"INTR"},
 		// CMP 1001
 		{"CMP",		"0001",	null},		// ОП(РА) ==> РД
@@ -146,10 +146,10 @@ public class ExtendedMicroProgram extends MicroProgram {
 		{"02-3",	"E000",	"DI"},		// 0010 / 0011
 		// EI 0010
 		{"EI",		"4800",	null},		// EI
-		{null,		"8300",	"BEGIN"},
+		{null,		"8300",	"INTR"},
 		// DI 0011
 		{"DI",		"4400",	null},		// DI
-		{null,		"8300",	"BEGIN"},
+		{null,		"8300",	"INTR"},
 		// 01**
 		{"04-7",	"E100",	"06-7"},	// 010* / 011*
 		{"02-3",	"E000",	"CMC"},		// 0100 / 0101
@@ -213,26 +213,64 @@ public class ExtendedMicroProgram extends MicroProgram {
 		{null,		"0202",	null},		// РК ==> БР, РД ==> ОП(РА)
 		{null,		"4035",	null},		// БР ==> А, N, Z
 		{null,		"8300",	"INTR"},
-		// PUSH 1101
+		// PUSH/PUSHF 1101
 		{"PUSH",	"0140",	null},		// COM(0) + РД ==> БР
 		{null,		"4002",	null},		// БР ==> РД
 		{null,		"0102",	null},		// РД ==> БР, РД ==> ОП(РА)
 		{null,		"4001",	null},		// БР ==> РА
+		{null,		"E400",	"PUSHF"},
 		{null,		"1000",	null},		// А ==> БР
 		{null,		"4002",	null},		// БР ==> РД
-		{null,		"0002",	null},		// РД ==> ОП(РА)
-		{null,		"8300",	"INTR"},
+		{null,		"8300",	"STORE"},
+		// PUSHF
+		{"PUSHF",	"2000",	null},		// РС ==> БР
+		{null,		"4002",	null},		// БР ==> РД
+		{null,		"8300",	"STORE"},
 		// 111*
 		{"0E-F",	"0110",	null},		// РД + 1 ==> БР
 		{null,		"4002",	null},		// БР ==> РД
 		{null,		"0142",	null},		// COM(0) + РД ==> БР, РД ==> ОП(РА)
 		{null,		"4001",	null},		// БР ==> РА
 		{null,		"0001",	null},		// ОП(РА) ==> РД
-		{null,		"E000",	"JMP"},		// 1110 / 1111 - RET
-		// POP 1110
+		{null,		"E000",	"RET"},		// 1110 / 1111
+		// POP/POPF 1110
+		{null,		"E400",	"POPF"},	// 01110  / 11110
+		// POP
 		{"POP",		"0100",	null},		// РД ==> БР
 		{null,		"4035",	null},		// БР ==> А, N, Z
 		{null,		"8300",	"INTR"},
+		// RET/IRET 1111
+		{"RET",		"0100",	null},		// РД ==> БР
+		{null,		"4004",	null},		// БР ==> СК
+		{null,		"A400",	"INTR"},
+		// IRET
+		{"IRET",	"0040",	null},		// COM(0) ==> БР
+		{null,		"4001",	null},		// БР ==> РА
+		{null,		"0001",	null},		// ОП(РА) ==> РД
+		{null,		"0110",	null},		// РД + 1 ==> БР
+		{null,		"4002",	null},		// БР ==> РД
+		{null,		"0142",	null},		// COM(0) + РД ==> БР, РД ==> ОП(РА)
+		{null,		"4001",	null},		// БР ==> РА
+		{null,		"0001",	null},		// ОП(РА) ==> РД
+		// POPF
+		{"POPF",	"D000",	"SETC"},	// IF РД(0) = 1 THEN SETC
+		{null,		"4080",	null},		// 0 ==> C
+		{null,		"8300",	"CHKZ"},
+		{"SETC",	"40C0",	null},		// 1 ==> C
+		{"CHKZ",	"D100",	"SETZ"},	// IF РД(1) = 1 THEN SETZ
+		{null,		"0040",	null},		// COM(0) ==> БР
+		{null,		"4010",	null},		// БР ==> Z
+		{null,		"8300",	"CHKN"},
+		{"SETZ",	"0020",	null},		// 0 & 0 ==> БР
+		{null,		"4010",	null},		// БР ==> Z
+		{"CHKN",	"D200",	"SETN"},	// IF РД(2) = 1 THEN SETN
+		{null,		"0020",	null},		// 0 & 0 ==> БР
+		{null,		"4020",	null},		// БР ==> N
+		{null,		"8300",	"CHKINTR"},
+		{"SETN",	"0040",	null},		// COM(0) ==> БР
+		{null,		"4020",	null},		// БР ==> N
+		{"CHKINTR",	"D400",	"EI"},		// IF РД(4) = 1 THEN EI
+		{null,		"8300",	"DI"},		// GOTO DI
 
 		// Декодирование и исполнение команд ввода-вывода
 		{"IO",		"4100",	null},		// Ввод/вывод
@@ -243,12 +281,21 @@ public class ExtendedMicroProgram extends MicroProgram {
 		// Цикл прерывания
 		{"INTR",	"8700",	"HLT"},		// IF РС(7) = 0 THEN HLT - Останов
 		{null,		"8500",	"BEGIN"},	// IF РС(5) = 0 THEN BEGIN
-		{null,		"0020",	null},		// 0 & 0 ==> БР
+		{null,		"0040",	null},		// COM(0) ==> БР
+		{null,		"4001",	null},		// БР ==> РА
+		{null,		"0001",	null},		// ОП(РА) ==> РД
+		{null,		"0140",	null},		// COM(0) + РД ==> БР
+		{null,		"4002",	null},		// БР ==> РД
+		{null,		"0102",	null},		// РД ==> БР, РД ==> ОП(РА)
+		{null,		"4001",	null},		// БР ==> РА
+		{null,		"2000",	null},		// РС ==> БР
+		{null,		"4002",	null},		// БР ==> РД
+		{null,		"0022",	null},		// 0 & 0 ==> БР, РД ==> ОП(РА)
 		{null,		"4001",	null},		// БР ==> РА
 		{null,		"0001",	null},		// ОП(РА) ==> РД
 		{null,		"0100",	null},		// РД ==> БР
 		{null,		"4403",	null},		// БР ==> РК, DI
-		{null,		"8300",	"STORE"},	// GOTO STORE
+		{null,		"8300",	"CALLSTR"},	// GOTO STORE
 
 		// Пультовые операции
 		// Ввод адреса
@@ -275,8 +322,7 @@ public class ExtendedMicroProgram extends MicroProgram {
 		{null,		"0040",	null},		// COM(0) ==> БР
 		{null,		"4001",	null},		// БР ==> РА
 		{null,		"4002",	null},		// БР ==> РД
-		{null,		"0002",	null},		// РД ==> ОП(РА)
-		{null,		"8300",	"INTR"},
+		{null,		"8300",	"STORE"},
 		// Продолжение выполнения нереализованных команд
 		{"EXECCNT",	"0000",	null}
 	};
