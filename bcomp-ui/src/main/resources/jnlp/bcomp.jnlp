@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="http://helios.cs.ifmo.ru/bcomp" href="bcomp.jnlp">
+	<information>
+		<title>Basic Computer</title>
+		<vendor>MATPOCKuH</vendor>
+		<description>Basic Computer Emulator</description>
+	</information>
+	<resources>
+		<j2se version="1.6+"/>  
+		<jar href="bcomp.jar" main="true"/>
+	</resources>
+	<application-desc main-class="ru.ifmo.cs.bcomp.ui.BCompApp"/> 
+</jnlp>
