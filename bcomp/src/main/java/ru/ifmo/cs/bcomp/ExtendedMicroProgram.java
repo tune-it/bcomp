@@ -135,15 +135,15 @@ public class ExtendedMicroProgram extends MicroProgram {
 		// Безадресные и ввода/вывода 000*
 		{"NONADDR",	"EC00",	"IO"},		// 0000 / 0001
 		// Безадресные команды 0000
-		{null,		"E300",	"08-F"},	// 0*** / 1***
-		{null,		"E200",	"04-7"},	// 00** / 01**
-		{null,		"E100",	"02-3"},	// 000* / 001*
-		{null,		"A000",	"INTR"},	// 0001 / 0000 - NOP 0000
+		{null,		"EB00",	"08-F"},	// 0*** / 1***
+		{null,		"EA00",	"04-7"},	// 00** / 01**
+		{null,		"E900",	"02-3"},	// 000* / 001*
+		{null,		"A800",	"INTR"},	// 0001 / 0000 - NOP 0000
 		// HLT 0001
 		{"HLT",		"4008",	null},		// HLT
 		{"STP",		"8300",	"BEGIN"},
 		// 001*
-		{"02-3",	"E000",	"DI"},		// 0010 / 0011
+		{"02-3",	"E800",	"DI"},		// 0010 / 0011
 		// EI 0010
 		{"EI",		"4800",	null},		// EI
 		{null,		"8300",	"INTR"},
@@ -151,8 +151,8 @@ public class ExtendedMicroProgram extends MicroProgram {
 		{"DI",		"4400",	null},		// DI
 		{null,		"8300",	"INTR"},
 		// 01**
-		{"04-7",	"E100",	"06-7"},	// 010* / 011*
-		{"02-3",	"E000",	"CMC"},		// 0100 / 0101
+		{"04-7",	"E900",	"06-7"},	// 010* / 011*
+		{"02-3",	"E800",	"CMC"},		// 0100 / 0101
 		// CLC 0100
 		{"CLC",		"4080",	null},		// 0 ==> C
 		{null,		"8300",	"INTR"},
@@ -161,23 +161,23 @@ public class ExtendedMicroProgram extends MicroProgram {
 		{null,		"40C0",	null},		// 1 ==> C
 		{null,		"8300",	"INTR"},
 		// 011*
-		{"06-7",	"E000",	"RIGHT"},		// 0110 / 0111
+		{"06-7",	"E800",	"RIGHT"},		// 0110 / 0111
 		// ROL/SHL 0110
-		{"LEFT",	"A400",	"ROL"},
+		{"LEFT",	"A700",	"ROL"},
 		{"SHL",		"4080",	null},		// 0 ==> C
 		{"ROL",		"0008",	null},		// RAL(А) ==> БР
 		{null,		"4075",	null},		// БР ==> А, С, N, Z
 		{null,		"8300",	"INTR"},
 		// ROR/SHR 0111
-		{"RIGHT",	"A400",	"ROR"},
+		{"RIGHT",	"A700",	"ROR"},
 		{"SHR",		"4080",	null},		// 0 ==> C
 		{"ROR",		"0004",	null},		// RAR(А) ==> БР
 		{null,		"4075",	null},		// БР ==> А, С, N, Z
 		{null,		"8300",	"INTR"},
 		// 1***
-		{"08-F",	"E200",	"0C-F"},	// 10** / 11**
-		{null,		"E100",	"0A-B"},	// 100* / 101*
-		{null,		"E000",	"CMA"},		// 1000 / 1001
+		{"08-F",	"EA00",	"0C-F"},	// 10** / 11**
+		{null,		"E900",	"0A-B"},	// 100* / 101*
+		{null,		"E800",	"CMA"},		// 1000 / 1001
 		// CLA 1000
 		{"CLA",		"0020",	null},		// 0 & 0 ==> БР
 		{null,		"4035",	null},		// БР ==> А, N, Z
@@ -187,7 +187,7 @@ public class ExtendedMicroProgram extends MicroProgram {
 		{null,		"4035",	null},		// БР ==> А, N, Z
 		{null,		"8300",	"INTR"},
 		// 101*
-		{"0A-B",	"E000",	"DEC"},		// 1010 / 1011
+		{"0A-B",	"E800",	"DEC"},		// 1010 / 1011
 		// INC 1010
 		{"INC",		"1010",	null},		// А + 1 ==> БР
 		{null,		"4075",	null},		// БР ==> А, С, N, Z
@@ -200,8 +200,8 @@ public class ExtendedMicroProgram extends MicroProgram {
 		{"0C-F",	"0040",	null},		// COM(0) ==> БР
 		{null,		"4001",	null},		// БР ==> РА
 		{null,		"0001",	null},		// ОП(РА) ==> РД
-		{null,		"E100",	"0E-F"},	// 110* / 111*
-		{null,		"E000",	"PUSH"},	// 0111/ 0110
+		{null,		"E900",	"0E-F"},	// 110* / 111*
+		{null,		"E800",	"PUSH"},	// 0111/ 0110
 		// SWAP 1100
 		{"SWAP",	"0100",	null},		// РД ==> БР
 		{null,		"4001",	null},		// БР ==> РА
@@ -218,7 +218,7 @@ public class ExtendedMicroProgram extends MicroProgram {
 		{null,		"4002",	null},		// БР ==> РД
 		{null,		"0102",	null},		// РД ==> БР, РД ==> ОП(РА)
 		{null,		"4001",	null},		// БР ==> РА
-		{null,		"E400",	"PUSHF"},
+		{null,		"E700",	"PUSHF"},
 		{null,		"1000",	null},		// А ==> БР
 		{null,		"4002",	null},		// БР ==> РД
 		{null,		"8300",	"STORE"},
@@ -232,9 +232,9 @@ public class ExtendedMicroProgram extends MicroProgram {
 		{null,		"0142",	null},		// COM(0) + РД ==> БР, РД ==> ОП(РА)
 		{null,		"4001",	null},		// БР ==> РА
 		{null,		"0001",	null},		// ОП(РА) ==> РД
-		{null,		"E000",	"RET"},		// 1110 / 1111
+		{null,		"E800",	"RET"},		// 1110 / 1111
 		// POP/POPF 1110
-		{null,		"E400",	"POPF"},	// 01110  / 11110
+		{null,		"E700",	"POPF"},	// 01110  / 11110
 		// POP
 		{"POP",		"0100",	null},		// РД ==> БР
 		{null,		"4035",	null},		// БР ==> А, N, Z
@@ -242,7 +242,7 @@ public class ExtendedMicroProgram extends MicroProgram {
 		// RET/IRET 1111
 		{"RET",		"0100",	null},		// РД ==> БР
 		{null,		"4004",	null},		// БР ==> СК
-		{null,		"A400",	"INTR"},
+		{null,		"A700",	"INTR"},
 		// IRET
 		{"IRET",	"0040",	null},		// COM(0) ==> БР
 		{null,		"4001",	null},		// БР ==> РА
