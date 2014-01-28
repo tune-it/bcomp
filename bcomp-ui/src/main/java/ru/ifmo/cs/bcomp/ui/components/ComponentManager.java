@@ -186,7 +186,7 @@ public class ComponentManager {
 	private final CPU cpu;
 	private final IOCtrl[] ioctrls;
 	private final MemoryView mem;
-	private final MemoryView micromem;
+	private final MicroMemoryView micromem;
 	private EnumMap<CPU.Reg, RegisterView> regs = new EnumMap<CPU.Reg, RegisterView>(CPU.Reg.class);
 	private ActiveBitView activeBit = new ActiveBitView(ACTIVE_BIT_X, REG_KEY_Y);
 	private volatile BCompPanel activePanel;
@@ -262,7 +262,7 @@ public class ComponentManager {
 		};
 
 		mem = new MemoryView(cpu.getMemory(), MEM_X, MEM_Y);
-		micromem = new MemoryView(cpu.getMicroMemory(), MICROMEM_X, MEM_Y);
+		micromem = new MicroMemoryView(cpu, MICROMEM_X, MEM_Y);
 
 		bcomp.addDestination(ControlSignal.MEMORY_READ, new DataDestination() {
 			@Override
@@ -477,7 +477,7 @@ public class ComponentManager {
 		return running;
 	}
 
-	public MemoryView getMicroMemory() {
+	public MicroMemoryView getMicroMemory() {
 		return micromem;
 	}
 

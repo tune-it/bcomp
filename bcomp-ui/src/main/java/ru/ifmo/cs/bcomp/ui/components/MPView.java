@@ -10,14 +10,13 @@ import ru.ifmo.cs.bcomp.CPU;
 import ru.ifmo.cs.bcomp.ControlSignal;
 import ru.ifmo.cs.bcomp.ui.GUI;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
-import ru.ifmo.cs.elements.Register;
 
 /**
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class MPView extends BCompPanel {
-	private final MemoryView mem;
+	private final MicroMemoryView mem;
 	private final RegisterView regMIP;
 	private final RegisterView regMInstr;
 	private final RegisterView regBuf;

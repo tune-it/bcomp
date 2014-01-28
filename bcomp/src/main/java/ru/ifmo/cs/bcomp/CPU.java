@@ -253,6 +253,10 @@ public class CPU {
 		this.runLimit = runLimit;
 	}
 
+	public MicroProgram getMicroProgram() {
+		return mp;
+	}
+
 	public String getMicroProgramName() {
 		return mp.microprogramName;
 	}

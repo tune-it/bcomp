@@ -51,8 +51,12 @@ public class MemoryView extends BCompComponent {
 		g.drawLine(lineX, CELL_HEIGHT + 2, lineX, height - 2);
 	}
 
+	void updateValue(JLabel label, int value) {
+		label.setText(Utils.toHex(value, valueBitWidth));
+	}
+
 	private void updateValue(int offset) {
-		values[offset].setText(Utils.toHex(mem.getValue(lastPage + offset), valueBitWidth));
+		updateValue(values[offset], mem.getValue(lastPage + offset));
 	}
 
 	public void updateMemory() {
