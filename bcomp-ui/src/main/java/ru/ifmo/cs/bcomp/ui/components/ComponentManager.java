@@ -172,6 +172,11 @@ public class ComponentManager {
 				case KeyEvent.VK_F12:
 					cmdNextDelay();
 					break;
+
+				case KeyEvent.VK_Q:
+					if (e.isControlDown())
+						System.exit(0);
+					break;
 			}
 		}
 	};
