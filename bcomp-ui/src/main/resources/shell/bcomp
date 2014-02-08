@@ -3,44 +3,29 @@
 
 MODE=gui
 MP=base
+JAR=bcomp.jar
 
-for arg
+while getopts gcdboep: arg
 do
 	case "$arg" in
-	-g)
-		MODE=gui
-		;;
-
-	-c)
-		MODE=cli
-		;;
-
-	-d)
-		MODE=decoder
-		;;
-
-	-b)
-		MP=base
-		;;
-
-	-o)
-		MP=optimized
-		;;
-
-	-e)
-		MP=extended
-		;;
-
+	g)	MODE=gui;;
+	c)	MODE=cli;;
+	d)	MODE=decoder;;
+	b)	MP=base;;
+	o)	MP=optimized;;
+	e)	MP=extended;;
+	p)	JAR="$OPTARG";;
 	*)
-		echo "Usage: bcomp [-g | -c | -d] [-b | -o | -e]
+		echo "Usage: bcomp [-g | -c | -d] [-b | -o | -e] [-p path]
 	-g - run in GUI mode (default)
 	-c - run in CLI mode
 	-d - run microprogram decoder
 	-b - use base microprogram (default)
 	-o - use optimized microprogram
-	-e - use extended microprogram"
+	-e - use extended microprogram
+	-p path - path to bcomp.jar"
 		exit 1
 	esac
 done
 
-java -server -Dmode=$MODE -Dmp=$MP -jar bcomp.jar
+java -server -Dmode=$MODE -Dmp=$MP -jar "$JAR"
