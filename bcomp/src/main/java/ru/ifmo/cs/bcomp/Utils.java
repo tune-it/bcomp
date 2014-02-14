@@ -69,4 +69,18 @@ public class Utils {
 		return new String(buf);
 	}
 
+	public static boolean isNumeric(String s, int radix) {
+		if (s == null || s.length() == 0)
+			return false;
+
+		for (int i = 0; i < s.length(); i++)
+			if (Character.digit(s.charAt(i++), radix) < 0)
+				return false;
+
+		return true;
+	}
+
+	public static boolean isHexNumeric(String s) {
+		return isNumeric(s, 16);
+	}
 }

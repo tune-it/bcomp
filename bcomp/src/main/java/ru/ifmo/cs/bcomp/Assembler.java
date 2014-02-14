@@ -165,7 +165,11 @@ public class Assembler {
 						} else
 							addrtype = 0;
 
-						cmds.add(new Command(addr++, instr.getInstr() + addrtype, getLabel(labelname)));
+						if (Utils.isHexNumeric(labelname))
+							cmds.add(new Command(addr++, instr.getInstr() + addrtype + Integer.parseInt(labelname, 16)));
+						else
+							cmds.add(new Command(addr++, instr.getInstr() + addrtype, getLabel(labelname)));
+
 						break;
 
 					case NONADDR:
