@@ -151,6 +151,40 @@ public class CPU {
 		return null;
 	}
 
+	public Register getRegister(String reg) {
+		if (regAccum.name.equals(reg))
+			return regAccum;
+
+		if (regBuf.name.equals(reg))
+			return regBuf;
+
+		if (regData.name.equals(reg))
+			return regData;
+
+		if (regAddr.name.equals(reg))
+			return regAddr;
+
+		if (regIP.name.equals(reg))
+			return regIP;
+
+		if (regInstr.name.equals(reg))
+			return regInstr;
+
+		if (regState.name.equals(reg))
+			return regState;
+
+		if (regKey.name.equals(reg))
+			return regKey;
+
+		if (cu.getIP().name.equals(reg))
+			return cu.getIP();
+
+		if (cu.getInstr().name.equals(reg))
+			return cu.getInstr();
+
+		return null;
+	}
+
 	public int getRegValue(Reg reg) {
 		return getRegister(reg).getValue();
 	}
