@@ -23,7 +23,7 @@ public class StateReg extends PseudoRegister {
 	public static final int FLAG_RUN = 7;
 	public static final int FLAG_PROG = 8;
 	public static final int WIDTH = FLAG_PROG + 1;
-	public static String[] NAME = {
+	public static String[] FULLNAME = {
 		"Перенос (C)",
 		"Нуль (Z)",
 		"Знак (N)",
@@ -35,7 +35,27 @@ public class StateReg extends PseudoRegister {
 		"Программа"
 	};
 
+	public static String[] NAME = {
+		"C",
+		"Z",
+		"N",
+		"0",
+		"EI",
+		"INT",
+		"READY",
+		"RUN",
+		"PROG"
+	};
+
 	public StateReg(Register reg, int startbit, DataSource ... inputs) {
-		super(NAME[startbit], reg, startbit, inputs);
+		super(FULLNAME[startbit], reg, startbit, inputs);
+	}
+
+	public int getFlag(String s) throws Exception {
+		for (int i = 0; i < s.length(); i++)
+			if (NAME[i].equals(s))
+				return i;
+
+		throw new Exception("Unknown flag");
 	}
 }

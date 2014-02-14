@@ -29,7 +29,7 @@ public class StateRegisterView extends RegisterView {
 				return;
 			}
 
-			String newtooltip = StateReg.NAME[bitno];
+			String newtooltip = StateReg.FULLNAME[bitno];
 			if (newtooltip != tooltip)
 				value.setToolTipText(tooltip = newtooltip);
 		}
