@@ -226,11 +226,10 @@ public class Assembler {
 		int cmd = 0;
 		Label arg = null;
 
-		try {
+		if (Utils.isHexNumeric(value))
 			cmd = Integer.parseInt(value, 16);
-		} catch (Exception e) {
+		else
 			arg = getLabel(value);
-		}
 
 		cmds.add(new Command(addr, cmd, arg, size));
 	}

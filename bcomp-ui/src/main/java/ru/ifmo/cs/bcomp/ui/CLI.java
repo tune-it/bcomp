@@ -181,11 +181,10 @@ public class CLI {
 	}
 
 	private int parseAddress(String s) throws Exception {
-		try {
+		if (Utils.isHexNumeric(s))
 			return Integer.parseInt(s, 16);
-		} catch (Exception ex) {
+		else
 			return asm.getLabelAddr(s.toUpperCase());
-		}
 	}
 
 	public void cli() {
