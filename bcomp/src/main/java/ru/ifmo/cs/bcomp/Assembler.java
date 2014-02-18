@@ -239,7 +239,7 @@ public class Assembler {
 			throw new Exception("Адрес выходит из допустимых значений");
 	}
 
-	private Instruction findInstruction(String mnemonics) {
+	public Instruction findInstruction(String mnemonics) {
 		for (Instruction instr : instrset)
 			if (instr.getMnemonics().equals(mnemonics))
 				return instr;
