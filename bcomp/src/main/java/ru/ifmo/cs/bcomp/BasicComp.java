@@ -11,15 +11,14 @@ import ru.ifmo.cs.elements.DataDestination;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class BasicComp {
-	private CPU cpu;
-	private CPU2IO cpu2io;
-	private IOCtrl[] ioctrls;
-	private IODevTimer timer;
+	private final CPU cpu;
+	private final IOCtrl[] ioctrls;
+	private final IODevTimer timer;
 
 	public BasicComp(MicroProgram mp) throws Exception {
 		cpu = new CPU(mp);
-		cpu2io = cpu.getCPU2IO();
 
+		CPU2IO cpu2io = cpu.getCPU2IO();
 		ioctrls = new IOCtrl[] {
 			new IOCtrl(0, IOCtrl.Direction.OUT, cpu2io),
 			new IOCtrl(1, IOCtrl.Direction.OUT, cpu2io),

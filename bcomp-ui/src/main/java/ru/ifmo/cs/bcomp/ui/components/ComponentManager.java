@@ -200,9 +200,9 @@ public class ComponentManager {
 	private volatile boolean running = false;
 	private final Object lockRun = new Object();
 	private final Object lockActivePanel = new Object();
-	private JCheckBox cucheckbox;
+	private final JCheckBox cucheckbox;
 	private volatile boolean cuswitch = false;
-	private SignalListener[] listeners;
+	private final SignalListener[] listeners;
 	private ArrayList<ControlSignal> openBuses = new ArrayList<ControlSignal>();
 	private static final ControlSignal[] busSignals = {
 		ControlSignal.DATA_TO_ALU,
@@ -308,7 +308,7 @@ public class ComponentManager {
 					synchronized (lockRun) {
 						try {
 							lockRun.wait();
-						} catch (Exception e) {
+						} catch (InterruptedException e) {
 							continue;
 						}
 					}
@@ -336,7 +336,7 @@ public class ComponentManager {
 						if (delayPeriods[currentDelay] != 0)
 							try {
 								Thread.sleep(delayPeriods[currentDelay]);
-							} catch (Exception e) {	}
+							} catch (InterruptedException e) { }
 					}
 
 					running = false;
