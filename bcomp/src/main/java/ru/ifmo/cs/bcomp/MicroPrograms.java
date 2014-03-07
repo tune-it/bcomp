@@ -4,6 +4,8 @@
 
 package ru.ifmo.cs.bcomp;
 
+import java.util.HashMap;
+
 /**
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
@@ -11,16 +13,16 @@ package ru.ifmo.cs.bcomp;
 public class MicroPrograms {
 	public static final String DEFAULT_MICROPROGRAM = "base";
 
-	public static MicroProgram getMicroProgram(String mptype) {
-		if (mptype.equals(DEFAULT_MICROPROGRAM))
-			return new BaseMicroProgram();
+	private static final HashMap<String, Class> microprograms =
+		new HashMap<String, Class>();
 
-		if (mptype.equals("optimized"))
-			return new OptimizedMicroProgram();
+	static {
+		microprograms.put(DEFAULT_MICROPROGRAM, BaseMicroProgram.class);
+		microprograms.put("optimized", OptimizedMicroProgram.class);
+		microprograms.put("extended", ExtendedMicroProgram.class);
+	}
 
-		if (mptype.equals("extended"))
-			return new ExtendedMicroProgram();
-
-		return null;
+	public static MicroProgram getMicroProgram(String mptype) throws Exception {
+		return (MicroProgram)microprograms.get(mptype).newInstance();
 	}
 }

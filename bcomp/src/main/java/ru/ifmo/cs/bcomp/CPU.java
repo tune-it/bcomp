@@ -96,11 +96,12 @@ public class CPU {
 	}
 
 	private DataHandler getValve(ControlSignal cs, DataSource ... inputs) {
-		// XXX: replace containsKey with valves.get(cs) == NULL
-		if (!valves.containsKey(cs))
-			valves.put(cs, cu.createValve(cs, inputs));
+		DataHandler valve = valves.get(cs);
 
-		return valves.get(cs);
+		if (valve == null)
+			valves.put(cs, valve = cu.createValve(cs, inputs));
+
+		return valve;
 	}
 
 	public CPU2IO getCPU2IO() {
