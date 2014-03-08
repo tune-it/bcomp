@@ -268,6 +268,20 @@ public class CPU {
 		start();
 	}
 
+	public void runSetAddr(int addr) throws Exception {
+		setRegKey(addr);
+		startFrom(ControlUnit.LABEL_ADDR);
+	}
+
+	public void runWrite(int value) throws Exception {
+		setRegKey(value);
+		startFrom(ControlUnit.LABEL_WRITE);
+	}
+
+	public void runRead() throws Exception {
+		startFrom(ControlUnit.LABEL_READ);
+	}
+
 	public boolean getClockState() {
 		return clock;
 	}
