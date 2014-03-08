@@ -8,8 +8,10 @@ package ru.ifmo.cs.bcomp;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class OptimizedMicroProgram extends MicroProgram {
-	protected static final String[][] mp = {
+class OptimizedMicroProgram extends MicroProgram {
+    static final String NAME = "optimized";
+
+    private static final String[][] mp = {
 		{null,		"0000",	null},
 		// Цикл выборки команды
 		{"BEGIN",	"0300",	null},
@@ -187,7 +189,7 @@ public class OptimizedMicroProgram extends MicroProgram {
 		{"EXECCNT",	"0000",	null}
 	};
 
-	public OptimizedMicroProgram() {
+	OptimizedMicroProgram() {
 		super("оптимизированная", BaseInstrSet.instructions, mp);
 	}
 }
