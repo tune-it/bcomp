@@ -9,9 +9,9 @@ package ru.ifmo.cs.bcomp;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 class BaseMicroProgram extends MicroProgram {
-    static final String NAME = "base";
+	static final String NAME = "base";
 
-    private static final String[][] mp = {
+	private static final String[][] mp = {
 		{null, "0000", null},
 		// Цикл выборки команды
 		{"BEGIN", "0300", null},

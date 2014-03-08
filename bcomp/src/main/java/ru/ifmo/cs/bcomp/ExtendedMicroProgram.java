@@ -9,9 +9,9 @@ package ru.ifmo.cs.bcomp;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 class ExtendedMicroProgram extends MicroProgram {
-    static final String NAME = "extended";
+	static final String NAME = "extended";
 
-    private static final String[][] mp = {
+	private static final String[][] mp = {
 		{null,		"0000",	null},		// Skip
 		// Цикл выборки команды
 		{"BEGIN",	"0300",	null},		// СК ==> БР
@@ -236,7 +236,7 @@ class ExtendedMicroProgram extends MicroProgram {
 		{null,		"0001",	null},		// ОП(РА) ==> РД
 		{null,		"E800",	"RET"},		// 1110 / 1111
 		// POP/POPF 1110
-		{null,		"E700",	"POPF"},	// 01110  / 11110
+		{null,		"E700",	"POPF"},	// 01110 / 11110
 		// POP
 		{"POP",		"0100",	null},		// РД ==> БР
 		{null,		"4035",	null},		// БР ==> А, N, Z

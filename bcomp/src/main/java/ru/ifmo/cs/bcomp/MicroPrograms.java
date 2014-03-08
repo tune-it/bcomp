@@ -27,7 +27,7 @@ public class MicroPrograms {
 		return (MicroProgram)microprograms.get(mptype).newInstance();
 	}
 
-    public static Set<String> getMicroProgramsList() {
-        return microprograms.keySet();
-    }
+	public static Set<String> getMicroProgramsList() {
+		return microprograms.keySet();
+	}
 }
