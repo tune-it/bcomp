@@ -282,6 +282,10 @@ public class CPU {
 		startFrom(ControlUnit.LABEL_READ);
 	}
 
+	public void runStart() throws Exception {
+		startFrom(ControlUnit.LABEL_START);
+	}
+
 	public boolean getClockState() {
 		return clock;
 	}
