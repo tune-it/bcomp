@@ -51,11 +51,11 @@ public class StateReg extends PseudoRegister {
 		super(FULLNAME[startbit], reg, startbit, inputs);
 	}
 
-	public int getFlag(String s) throws Exception {
-		for (int i = 0; i < s.length(); i++)
+	public static int getFlag(String s) throws Exception {
+		for (int i = 0; i < NAME.length; i++)
 			if (NAME[i].equals(s))
 				return i;
 
-		throw new Exception("Unknown flag");
+		throw new Exception("Unknown flag " + s);
 	}
 }
