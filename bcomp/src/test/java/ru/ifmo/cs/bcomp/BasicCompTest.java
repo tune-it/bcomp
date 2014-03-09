@@ -20,9 +20,34 @@ import static ru.ifmo.cs.bcomp.Utils.toHex;
  * @author Anastasia Prasolova <a-prasolova1507@yandex.ru>
  */
 public class BasicCompTest {
+	private class HexInt {
+		private final int value;
+
+		public HexInt(int value) {
+			this.value = value;
+		}
+
+		public int getValue() {
+			return value;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof HexInt) {
+				return value == ((HexInt) obj).getValue();
+			}
+			return false;
+		}
+
+		@Override
+		public String toString() {
+			return toHex(value, 16);
+		}
+	}
+
 	private static final CPU.Reg[] REGS_TO_TEST = {
 		CPU.Reg.ACCUM, CPU.Reg.ADDR, CPU.Reg.DATA, CPU.Reg.IP, CPU.Reg.INSTR
-	}
+	};
 
 	private static final int[] FLAGS_TO_TEST = {
 		StateReg.FLAG_C, StateReg.FLAG_Z, StateReg.FLAG_N, StateReg.FLAG_EI
@@ -32,10 +57,13 @@ public class BasicCompTest {
 		Arrays.asList("ADDR", "WRITE", "READ", "START");
 
 	private static final String[] baseInstrSetTests = {
+		"ADDR 100;chk:СК=100",
+		"WRITE DEAD;chk:СК=011,РА=010,РД=DEAD,010=DEAD",
+		"READ;mem:010=BEEF;chk:РД=BEEF",
+		"START;run:DEC,CMC;chk:Акк=0000,СК=010,C=0,Z=1,N=0",
 		//		"CLA; cmds = INC; check = АCCUM = 0",
 		//		"CLC; data = 020 = 9000, 021 = 8000; cmds = CLA, ADD 020, ADD 021; flags = C = 0",
 		"CMA;mem:020=8000;run:ADD 020;chk:Акк=7FFF,N=0",
-		"ADDR 100;chk:СК=100",
 	//		"CMC; data = 020 = 9000, 021 = 8000; cmds = CLA, ADD 020, ADD 021; flags = C = 0",
 	//		"ROL; data = 020 = 0004; cmds = CLA, CLC, ADD 020; regs = ACCUM = 0008; flags = C = 0",
 	//		"ROL; data = 020 = 8000; cmds = CLA, CLC, ADD 020; regs = ACCUM = 0; flags = C = 1",
@@ -69,7 +97,8 @@ public class BasicCompTest {
 	//		"OUT 1; data = 020 = 7890; cmds = CLA, MOV 020; regs = IODATA = 7890, ACCUM = 7890; flags = READY = 0"//fail
 	};
 
-	private static final String[] extendedInstrSetTests = { //		"CLA; cmds = INC; check = АCCUM = 0",
+	private static final String[] extendedInstrSetTests = {
+	//		"CLA; cmds = INC; check = АCCUM = 0",
 	//		"CLC; data = 020 = 9000, 021 = 8000; cmds = CLA, ADD 020, ADD 021; flags = C = 0",
 	//		"CMA; data = 020 = 8000; cmds = CLA, CLC, ADD 020; regs = АCCUM = 7FFF; flags = N = 0, Z = 0", //FAIL
 	//		"CMC; data = 020 = 9000, 021 = 8000; cmds = CLA, ADD 020, ADD 021; flags = C = 0",
@@ -118,12 +147,12 @@ public class BasicCompTest {
 	//		"OUT 1; data = 020 = 7890; cmds = CLA, MOV 020; regs = IODATA = 7890, ACCUM = 7890; flags = READY = 0"//fail
 	};
 
-	private static final HashMap<Instruction[], String[]> testsets
+	private static final HashMap<Instruction[], String[]> TEST_SETS
 		= new HashMap<Instruction[], String[]>();
 
 	static {
-		testsets.put(BaseInstrSet.instructions, baseInstrSetTests);
-		testsets.put(ExtendedInstrSet.instructions, extendedInstrSetTests);
+		TEST_SETS.put(BaseInstrSet.instructions, baseInstrSetTests);
+		TEST_SETS.put(ExtendedInstrSet.instructions, extendedInstrSetTests);
 	}
 
 	@Test
@@ -133,13 +162,11 @@ public class BasicCompTest {
 		}
 	}
 
-	;
-
 	private void testMicroProgram(String microprogram) throws Exception {
 		MicroProgram mp = MicroPrograms.getMicroProgram(microprogram);
 		BasicComp bcomp = new BasicComp(mp);
 		Assembler asm = new Assembler(mp.instructionSet);
-		for (String test : testsets.get(bcomp.getCPU().getInstructionSet())) {
+		for (String test : TEST_SETS.get(bcomp.getCPU().getInstructionSet())) {
 			runTest(test, bcomp, asm);
 		}
 	}
@@ -159,9 +186,9 @@ public class BasicCompTest {
 		String run = null;
 		String[] data = null;
 		String[] checks = null;
-		EnumMap<CPU.Reg, Integer> regs = new EnumMap<CPU.Reg, Integer>(CPU.Reg.class);
+		EnumMap<CPU.Reg, HexInt> regs = new EnumMap<CPU.Reg, HexInt>(CPU.Reg.class);
 		HashMap<Integer, Integer> flags = new HashMap<Integer, Integer>();
-		HashMap<Integer, Integer> mem = new HashMap<Integer, Integer>();
+		HashMap<Integer, HexInt> mem = new HashMap<Integer, HexInt>();
 
 		for (String field : Arrays.copyOfRange(fields, 1, fields.length)) {
 			String[] params = field.split(":");
@@ -196,17 +223,17 @@ public class BasicCompTest {
 
 		if (isControlOp) {
 			for (CPU.Reg reg : REGS_TO_TEST)
-				regs.put(reg, cpu.getRegValue(reg));
+				regs.put(reg, new HexInt(cpu.getRegValue(reg)));
 		} else {
 			prepareProgram(cmd, cpu, asm);
 
-			regs.put(CPU.Reg.ACCUM, cpu.getRegValue(CPU.Reg.ACCUM));
+			regs.put(CPU.Reg.ACCUM, new HexInt(cpu.getRegValue(CPU.Reg.ACCUM)));
 			int ip = cpu.getRegValue(CPU.Reg.IP);
 			int command = cpu.getMemoryValue(ip);
-			regs.put(CPU.Reg.ADDR, ip);
-			regs.put(CPU.Reg.DATA, command);
-			regs.put(CPU.Reg.IP, ip + 1);
-			regs.put(CPU.Reg.INSTR, command);
+			regs.put(CPU.Reg.ADDR, new HexInt(ip));
+			regs.put(CPU.Reg.DATA, new HexInt(command));
+			regs.put(CPU.Reg.IP, new HexInt(ip + 1));
+			regs.put(CPU.Reg.INSTR, new HexInt(command));
 		}
 
 		for (int flag : FLAGS_TO_TEST)
@@ -214,16 +241,21 @@ public class BasicCompTest {
 
 		if (checks != null)
 			for (String chk : checks) {
-					String[] pair = chk.split("=");
-					int value = parseInt(pair[1], 16);
-					CPU.Reg reg;
+				String[] pair = chk.split("=");
+				int value = parseInt(pair[1], 16);
 
-					if (isHexNumeric(pair[0]))
-						mem.put(parseInt(pair[0], 16), value);
-					else if ((reg = cpu.findRegister(pair[0])) != null)
-						regs.put(reg, value);
+				if (StateReg.isFlag(pair[0]))
+					flags.put(StateReg.getFlag(pair[0]), value);
+				else if (isHexNumeric(pair[0]))
+					mem.put(parseInt(pair[0], 16), new HexInt(value));
+				else {
+					CPU.Reg reg = cpu.findRegister(pair[0]);
+
+					if (reg != null && Arrays.asList(REGS_TO_TEST).contains(reg))
+						regs.put(reg, new HexInt(value));
 					else
-						flags.put(StateReg.getFlag(pair[0]), value);
+						fail("Неизвестная проверка " + pair[0]);
+				}
 			}
 
 		if (isControlOp) {
@@ -243,16 +275,16 @@ public class BasicCompTest {
 		for (CPU.Reg reg : regs.keySet())
 			assertEquals(
 				mpname + cmd + ": " + cpu.getRegister(reg).fullname,
-				regs.get(reg), (Integer) cpu.getRegValue(reg));
+				regs.get(reg), new HexInt(cpu.getRegValue(reg)));
 
 		for (int flag : flags.keySet())
 			assertEquals(
 				mpname + cmd + ": флаг " + StateReg.NAME[flag],
-				flags.get(flag), (Integer) cpu.getStateValue(flag));
+				flags.get(flag).intValue(), cpu.getStateValue(flag));
 
 		for (int addr : mem.keySet())
 			assertEquals(
 				mpname + cmd + ": ОП(" + toHex(addr, 11) + ")",
-				mem.get(addr), (Integer) cpu.getMemoryValue(addr));
+				mem.get(addr), new HexInt(cpu.getMemoryValue(addr)));
 	}
 }
