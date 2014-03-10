@@ -59,8 +59,8 @@ public class BasicCompTest {
 	private static final String[] baseInstrSetTests = {
 		"ADDR 100;chk:СК=100",
 		"WRITE DEAD;chk:СК=011,РА=010,РД=DEAD,010=DEAD",
-		"READ;mem:010=BEEF;chk:РД=BEEF",
-		"START;run:DEC,CMC;chk:Акк=0000,СК=010,C=0,Z=1,N=0",
+		"READ;mem:010=BEEF;chk:СК=011,РА=010,РД=BEEF",
+		"START;run:DEC,CMC;chk:Акк=0000,C=0,Z=1,N=0",
 		//		"CLA; cmds = INC; check = АCCUM = 0",
 		//		"CLC; data = 020 = 9000, 021 = 8000; cmds = CLA, ADD 020, ADD 021; flags = C = 0",
 		"CMA;mem:020=8000;run:ADD 020;chk:Акк=7FFF,N=0",
@@ -98,6 +98,10 @@ public class BasicCompTest {
 	};
 
 	private static final String[] extendedInstrSetTests = {
+		"ADDR 100;chk:СК=100",
+		"WRITE DEAD;chk:СК=011,РА=010,РД=DEAD,010=DEAD",
+		"READ;mem:010=BEEF;chk:СК=011,РА=010,РД=BEEF",
+		"START;run:DEC,CMC;chk:Акк=0000,РА=7FF,РД=FFFF,C=0,Z=1,N=0,7FF=FFFF",
 	//		"CLA; cmds = INC; check = АCCUM = 0",
 	//		"CLC; data = 020 = 9000, 021 = 8000; cmds = CLA, ADD 020, ADD 021; flags = C = 0",
 	//		"CMA; data = 020 = 8000; cmds = CLA, CLC, ADD 020; regs = АCCUM = 7FFF; flags = N = 0, Z = 0", //FAIL
@@ -222,6 +226,8 @@ public class BasicCompTest {
 		}
 
 		if (isControlOp) {
+			cpu.runSetAddr(0x10);
+
 			for (CPU.Reg reg : REGS_TO_TEST)
 				regs.put(reg, new HexInt(cpu.getRegValue(reg)));
 		} else {
@@ -259,8 +265,6 @@ public class BasicCompTest {
 			}
 
 		if (isControlOp) {
-			cpu.runSetAddr(0x10);
-
 			if (cmdfields[0].equals("ADDR"))
 				cpu.runSetAddr(parseInt(cmdfields[1], 16));
 			else if (cmdfields[0].equals("WRITE"))
