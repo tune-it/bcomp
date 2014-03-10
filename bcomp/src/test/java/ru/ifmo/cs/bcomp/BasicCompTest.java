@@ -56,7 +56,7 @@ public class BasicCompTest {
 	private static final List<String> CONTROL_OPS =
 		Arrays.asList("ADDR", "WRITE", "READ", "START");
 
-	private static final String[] baseInstrSetTests = {
+	private static final String[] BASE_SET_TESTS = {
 		"ADDR 100;chk:СК=100",
 		"WRITE DEAD;chk:СК=011,РА=010,РД=DEAD,010=DEAD",
 		"READ;mem:010=BEEF;chk:СК=011,РА=010,РД=BEEF",
@@ -97,7 +97,7 @@ public class BasicCompTest {
 	//		"OUT 1; data = 020 = 7890; cmds = CLA, MOV 020; regs = IODATA = 7890, ACCUM = 7890; flags = READY = 0"//fail
 	};
 
-	private static final String[] extendedInstrSetTests = {
+	private static final String[] EXTENDED_SET_TESTS = {
 		"ADDR 100;chk:СК=100",
 		"WRITE DEAD;chk:СК=011,РА=010,РД=DEAD,010=DEAD",
 		"READ;mem:010=BEEF;chk:СК=011,РА=010,РД=BEEF",
@@ -155,8 +155,8 @@ public class BasicCompTest {
 		= new HashMap<Instruction[], String[]>();
 
 	static {
-		TEST_SETS.put(BaseInstrSet.instructions, baseInstrSetTests);
-		TEST_SETS.put(ExtendedInstrSet.instructions, extendedInstrSetTests);
+		TEST_SETS.put(BaseInstrSet.instructions, BASE_SET_TESTS);
+		TEST_SETS.put(ExtendedInstrSet.instructions, EXTENDED_SET_TESTS);
 	}
 
 	@Test
