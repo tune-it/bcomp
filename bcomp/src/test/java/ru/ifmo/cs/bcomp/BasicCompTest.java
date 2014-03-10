@@ -56,14 +56,18 @@ public class BasicCompTest {
 	private static final List<String> CONTROL_OPS =
 		Arrays.asList("ADDR", "WRITE", "READ", "START");
 
-	private static final String[] BASE_SET_TESTS = {
+	private static final String[] SHARED_TESTS = {
 		"ADDR 100;chk:СК=100",
 		"WRITE DEAD;chk:СК=011,РА=010,РД=DEAD,010=DEAD",
-		"READ;mem:010=BEEF;chk:СК=011,РА=010,РД=BEEF",
-		"START;run:DEC,CMC;chk:Акк=0000,C=0,Z=1,N=0",
-		//		"CLA; cmds = INC; check = АCCUM = 0",
-		//		"CLC; data = 020 = 9000, 021 = 8000; cmds = CLA, ADD 020, ADD 021; flags = C = 0",
+		"READ;mem:010=BEEF;chk:СК=011,РА=010,РД=BEEF",		
+		"CLA;run:DEC,DEC;chk:Акк=0000,Z=1,N=0", // C=1 after double DEC
+		"CLA;run:INC;chk:Акк=0000,Z=1,N=0",
 		"CMA;mem:020=8000;run:ADD 020;chk:Акк=7FFF,N=0",
+	};
+
+	private static final String[] BASE_SET_TESTS = {
+		"START;run:DEC,CMC;chk:Акк=0000,C=0,Z=1,N=0",
+		//		"CLC; data = 020 = 9000, 021 = 8000; cmds = CLA, ADD 020, ADD 021; flags = C = 0",
 	//		"CMC; data = 020 = 9000, 021 = 8000; cmds = CLA, ADD 020, ADD 021; flags = C = 0",
 	//		"ROL; data = 020 = 0004; cmds = CLA, CLC, ADD 020; regs = ACCUM = 0008; flags = C = 0",
 	//		"ROL; data = 020 = 8000; cmds = CLA, CLC, ADD 020; regs = ACCUM = 0; flags = C = 1",
@@ -98,9 +102,6 @@ public class BasicCompTest {
 	};
 
 	private static final String[] EXTENDED_SET_TESTS = {
-		"ADDR 100;chk:СК=100",
-		"WRITE DEAD;chk:СК=011,РА=010,РД=DEAD,010=DEAD",
-		"READ;mem:010=BEEF;chk:СК=011,РА=010,РД=BEEF",
 		"START;run:DEC,CMC;chk:Акк=0000,РА=7FF,РД=FFFF,C=0,Z=1,N=0,7FF=FFFF",
 	//		"CLA; cmds = INC; check = АCCUM = 0",
 	//		"CLC; data = 020 = 9000, 021 = 8000; cmds = CLA, ADD 020, ADD 021; flags = C = 0",
@@ -170,9 +171,11 @@ public class BasicCompTest {
 		MicroProgram mp = MicroPrograms.getMicroProgram(microprogram);
 		BasicComp bcomp = new BasicComp(mp);
 		Assembler asm = new Assembler(mp.instructionSet);
-		for (String test : TEST_SETS.get(bcomp.getCPU().getInstructionSet())) {
+
+		for (String test : SHARED_TESTS)
 			runTest(test, bcomp, asm);
-		}
+		for (String test : TEST_SETS.get(bcomp.getCPU().getInstructionSet()))
+			runTest(test, bcomp, asm);
 	}
 
 	private void prepareProgram(String cmds, CPU cpu, Assembler asm) throws Exception {
