@@ -13,6 +13,8 @@ import org.junit.Test;
 import static java.lang.Integer.parseInt;
 import static ru.ifmo.cs.bcomp.Utils.isHexNumeric;
 import static ru.ifmo.cs.bcomp.Utils.toHex;
+import ru.ifmo.cs.elements.DataDestination;
+import ru.ifmo.cs.elements.Register;
 
 /**
  *
@@ -45,28 +47,75 @@ public class BasicCompTest {
 		}
 	}
 
+	private class MemoryListener implements DataDestination {
+		private final Register regAddr;
+		private final String testinfo;
+		private final HashMap<Integer, HexInt> mem;
+
+		public MemoryListener(CPU cpu,String testinfo, HashMap<Integer, HexInt> mem) {
+			this.regAddr = cpu.getRegister(CPU.Reg.ADDR);
+			this.testinfo = testinfo;
+			this.mem = mem;
+		}
+
+		public void setValue(int value) {
+			int addr = regAddr.getValue();
+			if (!mem.containsKey(addr))
+				fail(testinfo + "неожиданная запись в ячейку " + toHex(addr, 11));
+		}
+	}
+
 	private static final CPU.Reg[] REGS_TO_TEST = {
 		CPU.Reg.ACCUM, CPU.Reg.ADDR, CPU.Reg.DATA, CPU.Reg.IP, CPU.Reg.INSTR
 	};
 
 	private static final int[] FLAGS_TO_TEST = {
-		StateReg.FLAG_C, StateReg.FLAG_Z, StateReg.FLAG_N, StateReg.FLAG_EI
+		StateReg.FLAG_C, StateReg.FLAG_Z, StateReg.FLAG_N, StateReg.FLAG_EI, StateReg.FLAG_READY
 	};
 
 	private static final List<String> CONTROL_OPS =
 		Arrays.asList("ADDR", "WRITE", "READ", "START");
 
 	private static final String[] SHARED_TESTS = {
+		// Пультовые операции
 		"ADDR 100;chk:СК=100",
 		"WRITE DEAD;chk:СК=011,РА=010,РД=DEAD,010=DEAD",
-		"READ;mem:010=BEEF;chk:СК=011,РА=010,РД=BEEF",		
+		"READ;mem:010=BEEF;chk:СК=011,РА=010,РД=BEEF",
+		// Безадресные команды
+		"HLT",
+		"NOP",
 		"CLA;run:DEC,DEC;chk:Акк=0000,Z=1,N=0", // C=1 after double DEC
 		"CLA;run:INC;chk:Акк=0000,Z=1,N=0",
+		"CLC;chk:C=0",
+		"CLC;run:DEC,DEC;chk:C=0",
 		"CMA;mem:020=8000;run:ADD 020;chk:Акк=7FFF,N=0",
+		"CMA;chk:Акк=FFFF,N=1,Z=0",
+		"CMA;run:DEC;chk:Акк=0000,N=0,Z=1",
+		"CMC;chk:C=1",
+		"CMC;run:DEC,DEC;chk:C=0",
+		"ROL;run:CMC;chk:Акк=0001,Z=0,C=0",
+		"ROL;mem:020=4000;run:ADD 020;chk:Акк=8000,N=1",
+		"ROL;mem:020=8000;run:ADD 020;chk:Акк=0000,Z=1,N=0,C=1",
+		"ROR;run:CMC;chk:Акк=8000,Z=0,N=1,C=0",
+		"ROR;mem:020=8000;run:ADD 020;chk:Акк=4000,N=0",
+		"ROR;run:INC;chk:Акк=0000,Z=1,C=1",
+		"INC;chk:Акк=0001,Z=0",
+		"INC;run:DEC;chk:Акк=0000,Z=1,N=0,C=1",
+		"INC;mem:020=7FFF;run:ADD 020;chk:Акк=8000,N=1",
+		"DEC;chk:Акк=FFFF,Z=0,N=1",
+		"DEC;run:INC;chk:Акк=0000,Z=1,C=1",
+		"DEC;mem:020=8000;run:ADD 020;chk:Акк=7FFF,N=0,C=1",
+		// Адресные команды
+		"ISZ 020;mem:020=8000;chk:РД=8001,РА=020,020=8001",
+		"ISZ 020;mem:020=FFFF;chk:РД=0000,РА=020,СК=012,020=0000",
 	};
 
 	private static final String[] BASE_SET_TESTS = {
+		// Пультовые операции
 		"START;run:DEC,CMC;chk:Акк=0000,C=0,Z=1,N=0",
+		// Безадресные команды
+		"EI;chk:РД=F000,РА=011,СК=012,РК=F000,EI=1",
+		"DI;run:EI;chk:РД=F000,РА=011,СК=012,РК=F000,EI=0",
 		//		"CLC; data = 020 = 9000, 021 = 8000; cmds = CLA, ADD 020, ADD 021; flags = C = 0",
 	//		"CMC; data = 020 = 9000, 021 = 8000; cmds = CLA, ADD 020, ADD 021; flags = C = 0",
 	//		"ROL; data = 020 = 0004; cmds = CLA, CLC, ADD 020; regs = ACCUM = 0008; flags = C = 0",
@@ -102,7 +151,11 @@ public class BasicCompTest {
 	};
 
 	private static final String[] EXTENDED_SET_TESTS = {
+		// Пультовые операции
 		"START;run:DEC,CMC;chk:Акк=0000,РА=7FF,РД=FFFF,C=0,Z=1,N=0,7FF=FFFF",
+		// Безадресные команды
+		"EI;chk:EI=1",
+		"DI;run:EI;chk:EI=0",
 	//		"CLA; cmds = INC; check = АCCUM = 0",
 	//		"CLC; data = 020 = 9000, 021 = 8000; cmds = CLA, ADD 020, ADD 021; flags = C = 0",
 	//		"CMA; data = 020 = 8000; cmds = CLA, CLC, ADD 020; regs = АCCUM = 7FFF; flags = N = 0, Z = 0", //FAIL
@@ -185,7 +238,7 @@ public class BasicCompTest {
 
 	private void runTest(String test, BasicComp bcomp, Assembler asm) throws Exception {
 		CPU cpu = bcomp.getCPU();
-		String mpname = "Микропрограмма " + cpu.getMicroProgramName() + ": ";
+		String mpname = "Микропрограмма " + cpu.getMicroProgramName() + " Тест ";
 		String[] fields = test.split(";");
 		String cmd = fields[0];
 		String[] cmdfields = cmd.split(" ");
@@ -196,6 +249,8 @@ public class BasicCompTest {
 		EnumMap<CPU.Reg, HexInt> regs = new EnumMap<CPU.Reg, HexInt>(CPU.Reg.class);
 		HashMap<Integer, Integer> flags = new HashMap<Integer, Integer>();
 		HashMap<Integer, HexInt> mem = new HashMap<Integer, HexInt>();
+		String testinfo = mpname + test + ": ";
+		DataDestination memoryListener;
 
 		for (String field : Arrays.copyOfRange(fields, 1, fields.length)) {
 			String[] params = field.split(":");
@@ -267,6 +322,9 @@ public class BasicCompTest {
 				}
 			}
 
+		bcomp.addDestination(ControlSignal.MEMORY_WRITE,
+			memoryListener =new MemoryListener(cpu, testinfo, mem));
+
 		if (isControlOp) {
 			if (cmdfields[0].equals("ADDR"))
 				cpu.runSetAddr(parseInt(cmdfields[1], 16));
@@ -279,19 +337,21 @@ public class BasicCompTest {
 		} else
 			cpu.start();
 
+		bcomp.removeDestination(ControlSignal.MEMORY_WRITE, memoryListener);
+
 		for (CPU.Reg reg : regs.keySet())
 			assertEquals(
-				mpname + cmd + ": " + cpu.getRegister(reg).fullname,
+				testinfo + cpu.getRegister(reg).fullname,
 				regs.get(reg), new HexInt(cpu.getRegValue(reg)));
 
 		for (int flag : flags.keySet())
 			assertEquals(
-				mpname + cmd + ": флаг " + StateReg.NAME[flag],
+				testinfo + "флаг " + StateReg.NAME[flag],
 				flags.get(flag).intValue(), cpu.getStateValue(flag));
 
 		for (int addr : mem.keySet())
 			assertEquals(
-				mpname + cmd + ": ОП(" + toHex(addr, 11) + ")",
+				testinfo + "ОП(" + toHex(addr, 11) + ")",
 				mem.get(addr), new HexInt(cpu.getMemoryValue(addr)));
 	}
 }
