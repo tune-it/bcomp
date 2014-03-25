@@ -19,7 +19,6 @@ import ru.ifmo.cs.elements.Register;
 /**
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
- * @author Anastasia Prasolova <a-prasolova1507@yandex.ru>
  */
 public class BasicCompTest {
 	private class HexInt {
@@ -60,8 +59,14 @@ public class BasicCompTest {
 
 		public void setValue(int value) {
 			int addr = regAddr.getValue();
-			if (!mem.containsKey(addr))
+			HexInt expected = mem.get(addr);
+
+			if (expected == null)
 				fail(testinfo + "неожиданная запись в ячейку " + toHex(addr, 11));
+
+			assertEquals(
+				testinfo + "ОП(" + toHex(addr, 11) + ")",
+				expected, new HexInt(value));
 		}
 	}
 
@@ -88,8 +93,7 @@ public class BasicCompTest {
 		"CLA;run:INC;chk:Акк=0000,Z=1,N=0",
 		"CLC;chk:C=0",
 		"CLC;run:DEC,DEC;chk:C=0",
-		"CMA;mem:020=8000;run:ADD 020;chk:Акк=7FFF,N=0",
-		"CMA;chk:Акк=FFFF,N=1,Z=0",
+		"CMA;mem:020=0000;run:SUB 020;chk:Акк=FFFF,N=1,Z=0",
 		"CMA;run:DEC;chk:Акк=0000,N=0,Z=1",
 		"CMC;chk:C=1",
 		"CMC;run:DEC,DEC;chk:C=0",
@@ -348,10 +352,5 @@ public class BasicCompTest {
 			assertEquals(
 				testinfo + "флаг " + StateReg.NAME[flag],
 				flags.get(flag).intValue(), cpu.getStateValue(flag));
-
-		for (int addr : mem.keySet())
-			assertEquals(
-				testinfo + "ОП(" + toHex(addr, 11) + ")",
-				mem.get(addr), new HexInt(cpu.getMemoryValue(addr)));
 	}
 }
