@@ -77,7 +77,7 @@ class OptimizedMicroProgram extends MicroProgram {
 		{null,		"4002",	null},
 		{null,		"0002",	null},
 		{null,		"DF00",	"INTR"},
-		{"ISZ+1",	"0310",	null},
+		{"SKPCMD",	"0310",	null},
 		{null,		"4004",	null},
 		{null,		"8300",	"INTR"},
 		{"JSR",		"0110",	null},		// 0010
@@ -147,11 +147,9 @@ class OptimizedMicroProgram extends MicroProgram {
 		{null,		"8300",	"INTR"},
 		{"EI",		"4800",	null},		// 1010
 		{null,		"8300",	"BEGIN"},
-		// Декодирование и исполнение команд ввода-вывода
+		// Исполнение команд ввода-вывода
 		{"IO",		"4100",	null},
-		{null,		"E900",	"INTR"},
-		{null,		"A800",	"INTR"},
-		{"TSF",		"C600",	"ISZ+1"},
+		{"TSF",		"C600",	"SKPCMD"},
 		// Цикл прерывания
 		{"INTR",	"8700",	"HLT"},
 		{null,		"8500",	"BEGIN"},

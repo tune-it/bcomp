@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class DataHandler extends DataStorage {
 	// XXX: Replace ArrayList with HashMap (?) ask jek
-	private ArrayList<DataDestination> dests = new ArrayList<DataDestination>();
+	private final ArrayList<DataDestination> dests = new ArrayList<DataDestination>();
 
 	public DataHandler(String name, int width, DataSource ... inputs) {
 		super(name, width, inputs);

@@ -274,10 +274,8 @@ class ExtendedMicroProgram extends MicroProgram {
 		{"CHKINTR",	"D400",	"EI"},		// IF РД(4) = 1 THEN EI
 		{null,		"8300",	"DI"},		// GOTO DI
 
-		// Декодирование и исполнение команд ввода-вывода
+		// Исполнение команд ввода-вывода
 		{"IO",		"4100",	null},		// Ввод/вывод
-		{null,		"E900",	"INTR"},	// IF РК(9) = 1 THEN INTR
-		{null,		"A800",	"INTR"},	// IF РК(8) = 0 THEN INTR
 		{"TSF",		"C600",	"SKPCMD"},	// IF РС(6) = 1 THEN SKPCMD - TSF
 
 		// Цикл прерывания

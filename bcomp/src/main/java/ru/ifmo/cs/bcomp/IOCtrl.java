@@ -46,7 +46,7 @@ public class IOCtrl {
 		cpu2io.addIntrCtrlInput(valveClearFlag);
 		cpu2io.addIntrCtrlInput(valveSetFlag);
 
-		Valve checkFlag = new Valve(flag, 1, order);
+		ValveOnce checkFlag = new ValveOnce(flag, 1, order);
 		cpu2io.addFlagInput(checkFlag);
 		signals.put(ControlSignal.CHKFLAG, new DataHandler[] { checkFlag });
 

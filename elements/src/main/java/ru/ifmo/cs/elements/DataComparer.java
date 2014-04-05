@@ -9,8 +9,8 @@ package ru.ifmo.cs.elements;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class DataComparer extends DataHandler {
-	private DataSource input;
-	private int cmp2;
+	private final DataSource input;
+	private final int cmp2;
 
 	public DataComparer(DataSource input, int cmp2, DataSource ... ctrls) {
 		super(1, ctrls);
