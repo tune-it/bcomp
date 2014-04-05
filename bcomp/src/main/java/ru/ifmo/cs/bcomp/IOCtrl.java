@@ -19,13 +19,13 @@ public class IOCtrl {
 		SETFLAG, CHKFLAG, IN, OUT
 	};
 
-	private Register flag;
-	private Register data;
-	private int addr;
-	private Direction dir;
-	private Valve valveSetFlag = new Valve(Consts.consts[1]);
-	private EnumMap<ControlSignal, Valve[]> signals =
-		new EnumMap<ControlSignal, Valve[]>(ControlSignal.class);
+	private final Register flag;
+	private final Register data;
+	private final int addr;
+	private final Direction dir;
+	private final Valve valveSetFlag = new Valve(Consts.consts[1]);
+	private final EnumMap<ControlSignal, DataHandler[]> signals =
+		new EnumMap<ControlSignal, DataHandler[]>(ControlSignal.class);
 
 	public IOCtrl(int addr, Direction dir, CPU2IO cpu2io) {
 		this.addr = addr;
@@ -38,7 +38,7 @@ public class IOCtrl {
 		ValveDecoder order = new ValveDecoder(cpu2io.getOrder(), dc);
 
 		Valve valveClearFlag = new Valve(Consts.consts[0], 0, order);
-		signals.put(ControlSignal.SETFLAG, new Valve[] { valveSetFlag, valveClearFlag });
+		signals.put(ControlSignal.SETFLAG, new DataHandler[] { valveSetFlag, valveClearFlag });
 
 		flag = new Register("Ф ВУ" + Integer.toString(addr), "Флаг ВУ" + Integer.toString(addr), 1, valveSetFlag, valveClearFlag);
 		cpu2io.addIntrBusInput(flag);
@@ -48,18 +48,18 @@ public class IOCtrl {
 
 		Valve checkFlag = new Valve(flag, 1, order);
 		cpu2io.addFlagInput(checkFlag);
-		signals.put(ControlSignal.CHKFLAG, new Valve[] { checkFlag });
+		signals.put(ControlSignal.CHKFLAG, new DataHandler[] { checkFlag });
 
 		if (dir != Direction.IN) {
 			Valve valveOut = new Valve(cpu2io.getOut(), 3, order);
 			valveOut.addDestination(data);
-			signals.put(ControlSignal.OUT, new Valve[] { valveOut });
+			signals.put(ControlSignal.OUT, new DataHandler[] { valveOut });
 		}
 
 		if (dir != Direction.OUT) {
-			Valve valveIn = new Valve(data, 2, order);
+			ValveOnce valveIn = new ValveOnce(data, 2, order);
 			cpu2io.addInInput(valveIn);
-			signals.put(ControlSignal.IN, new Valve[] { valveIn });
+			signals.put(ControlSignal.IN, new DataHandler[] { valveIn });
 		}
 	}
 
@@ -87,12 +87,12 @@ public class IOCtrl {
 	}
 
 	public void addDestination(ControlSignal cs, DataDestination dest) {
-		for (Valve valve : signals.get(cs))
+		for (DataHandler valve : signals.get(cs))
 			valve.addDestination(dest);
 	}
 
 	public void removeDestination(ControlSignal cs, DataDestination dest) {
-		for (Valve valve : signals.get(cs))
+		for (DataHandler valve : signals.get(cs))
 			valve.removeDestination(dest);
 	}
 }

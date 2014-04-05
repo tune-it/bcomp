@@ -9,12 +9,16 @@ package ru.ifmo.cs.elements;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class ValveOnce extends DataCtrl {
-	private DataSource input;
+	private final DataSource input;
 
 	public ValveOnce(String name, DataSource input, int ctrlbit, DataSource ... ctrls) {
 		super(name, input.getWidth(), ctrlbit, ctrls);
 
 		this.input = input;
+	}
+
+	public ValveOnce(DataSource input, int ctrlbit, DataSource ... ctrls) {
+		this(null, input, ctrlbit, ctrls);
 	}
 
 	public ValveOnce(String name, DataSource input, DataSource ... ctrls) {

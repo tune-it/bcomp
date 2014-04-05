@@ -12,7 +12,7 @@ import java.util.Arrays;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class Bus extends DataWidth implements DataSource {
-	private ArrayList<DataSource> inputs = new ArrayList<DataSource>();
+	private final ArrayList<DataSource> inputs = new ArrayList<DataSource>();
 
 	public Bus(DataSource ... inputs) {
 		super(getMaxWidth(inputs));

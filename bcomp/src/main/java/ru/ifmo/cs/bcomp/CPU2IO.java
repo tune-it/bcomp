@@ -11,14 +11,15 @@ import ru.ifmo.cs.elements.*;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class CPU2IO {
-	private DataSource valveio;
-	private Bus addr = new Bus(8);
-	private BusSplitter order;
-	private Bus out = new Bus(8);
-	private Bus intr;
-	private PseudoRegister flag;
-	private PseudoRegister in;
-	private DataHandler intrctrl;
+	private final DataSource valveio;
+	private final Bus addr = new Bus(8);
+	private final BusSplitter order;
+	private final Bus in = new Bus(8);
+	private final Bus out = new Bus(8);
+	private final Bus intr;
+	private final PseudoRegister flag;
+	private final DataHandler intrctrl;
+	private final DummyValve valveIn = new DummyValve(in);
 
 	public CPU2IO(Register accum, Register state, Bus intrReq, DataSource valveio, DataHandler intrctrl) {
 		this.intr = intrReq;
@@ -27,10 +28,10 @@ public class CPU2IO {
 		addr.addInput(this.valveio = valveio);
 		order = new BusSplitter(valveio, 8, 4);
 
+		valveIn.addDestination(new PseudoRegister(accum, 0, 8));
 		out.addInput(accum);
 
 		flag = new PseudoRegister(state, StateReg.FLAG_READY);
-		in = new PseudoRegister(accum, 0, 8);
 	}
 
 	public DataSource getValveIO() {
@@ -50,7 +51,8 @@ public class CPU2IO {
 	}
 
 	public void addInInput(DataHandler ctrl) {
-		ctrl.addDestination(in);
+		in.addInput(ctrl);
+		ctrl.addDestination(valveIn);
 	}
 
 	public void addFlagInput(DataHandler ctrl) {
