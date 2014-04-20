@@ -34,6 +34,10 @@ public class GUI extends JApplet {
 		cpu = bcomp.getCPU();
 	}
 
+	public GUI() throws Exception {
+		this(MicroPrograms.getMicroProgram(MicroPrograms.DEFAULT_MICROPROGRAM));
+	}
+
 	@Override
 	public void init() {
 		cmanager = new ComponentManager(this);
