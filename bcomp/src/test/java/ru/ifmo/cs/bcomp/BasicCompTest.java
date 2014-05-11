@@ -1,4 +1,4 @@
-f/*
+/*
  * $Id$
  */
 package ru.ifmo.cs.bcomp;
