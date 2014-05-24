@@ -24,6 +24,6 @@ public class MicroIP extends Register {
 	 */
 	@Override
 	public void setValue(int value) {
-		super.setValue(value == 0 ? this.value + 1 : value);
+		super.setValue((value & mask) == 0 ? this.value + 1 : value);
 	}
 }
