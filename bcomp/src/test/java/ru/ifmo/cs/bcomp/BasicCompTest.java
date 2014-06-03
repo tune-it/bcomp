@@ -87,6 +87,10 @@ public class BasicCompTest {
 		"BR 020;run:DEC;chk:СК=020",
 		"BR 020;chk:СК=020",
 		"BR 020;run:INC,CMC;chk:СК=020",
+		"ADD (007);mem:007=0020,020=DEAD;chk:РД=DEAD,РА=020,Акк=DEAD,C=0,N=1,Z=0",
+		"SUB (008);mem:008=0020,020=BEEF;chk:РД=BEEF,РА=020,Акк=4111,C=0,N=0,Z=0,008=0021",
+		"BEQ (00F);mem:00F=0020;chk:РД=0020,РА=00F,СК=020,00F=0021",
+		"BMI (010);chk:РД=A810,РА=010",
 	};
 
 	private static final String[] EXTENDED_SET_TESTS = {
@@ -121,6 +125,10 @@ public class BasicCompTest {
 		"CMP 020;mem:020=0001;chk:РД=0001,РА=020,C=0,N=1,Z=0",
 		"LOOP 020;mem:020=0000;chk:РД=FFFF,РА=020,020=FFFF",
 		"LOOP 020;mem:020=8000;chk:РД=7FFF,РА=020,СК=012,020=7FFF",
+		"ADD (020);mem:020=0040,040=DEAD;chk:РД=DEAD,РА=040,Акк=DEAD,C=0,N=1,Z=0",
+		"SUB (020);mem:020=8040,040=BEEF;chk:РД=BEEF,РА=040,Акк=4111,C=0,N=0,Z=0,020=8041",
+		"BEQ (020);mem:020=0040;chk:РД=0040,РА=020,СК=040",
+		"BMI (020);mem:020=8040;chk:РД=8040,РА=020,020=8041",
 	};
 
 	private static final CPU.Reg[] REGS_TO_TEST = {
