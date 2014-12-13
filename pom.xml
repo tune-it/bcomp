@@ -13,7 +13,7 @@
 		<module>bcomp-portlet</module>
 	</modules>
 	<properties>
-		<liferay.version>6.1.1</liferay.version>
+		<liferay.version>6.2.1</liferay.version>
 	</properties>
 	<scm>
 		<connection>scm:svn:https://bcomp.googlecode.com/svn</connection>
