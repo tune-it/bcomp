@@ -248,17 +248,19 @@ public class Assembler {
 	}
 
 	public void loadProgram(CPU cpu) throws Exception {
+		if (cpu.isRunning())
+			throw new Exception("Операция невозможна: выполняется программа");
+
 		for (Command cmd : cmds) {
-			cpu.setRegKey(cmd.addr);
-			cpu.startFrom(ControlUnit.LABEL_ADDR);
-			for (int i = 0; i < cmd.size; i++) {
-				cpu.setRegKey(cmd.getCommand());
-				cpu.startFrom(ControlUnit.LABEL_WRITE);
-			}
+			if (!cpu.runSetAddr(cmd.addr))
+				throw new Exception("Операция прервана: выполняется программа");
+			for (int i = 0; i < cmd.size; i++)
+				if (!cpu.runWrite(cmd.getCommand()))
+					throw new Exception("Операция прервана: выполняется программа");
 		}
 
-		cpu.setRegKey(getBeginAddr());
-		cpu.startFrom(ControlUnit.LABEL_ADDR);
+		if (!cpu.runSetAddr(getBeginAddr()))
+			throw new Exception("Операция прервана: выполняется программа");
 	}
 
 	public int getLabelAddr(String labelname) throws Exception {

@@ -160,7 +160,7 @@ public class BasicCompTest {
 			ControlSignal.BUF_TO_STATE_N
 		});
 		FLAGS_TO_TEST.put(StateReg.FLAG_EI, new ControlSignal[] 	{
-			ControlSignal.ENABLE_INTERRUPTS, 
+			ControlSignal.ENABLE_INTERRUPTS,
 			ControlSignal.DISABLE_INTERRUPTS
 		});
 		FLAGS_TO_TEST.put(StateReg.FLAG_READY, new ControlSignal[] {
@@ -298,9 +298,9 @@ public class BasicCompTest {
 
 		if (run != null) {
 			prepareProgram(run, cpu, asm);
-			cpu.setRunState(1);
-			cpu.start();
-			cpu.setRunState(0);
+			cpu.invertRunState();
+			cpu.runContinue();
+			cpu.invertRunState();
 		}
 
 		if (isControlOp) {
@@ -360,7 +360,7 @@ public class BasicCompTest {
 			else if (cmdfields[0].equals("START"))
 				cpu.runStart();
 		} else
-			cpu.start();
+			cpu.runContinue();
 
 		bcomp.removeDestination(ControlSignal.MEMORY_WRITE, memoryListener);
 

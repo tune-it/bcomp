@@ -16,27 +16,28 @@ public class ControlUnit {
 		LEFT_INPUT, RIGHT_INPUT, FLAG_C, BR_TO, CONTROL_CMD_REG
 	}
 
-	private MicroIP ip = new MicroIP("СМ", "Счётчик МК", 8);
-	private Memory mem = new Memory("Память МК", 16, ip);
-	private Valve clock = new Valve(mem);
-	private Register instr = new Register("РМ", "Регистр микрокоманд", 16, clock);
-	private EnumMap<Decoders, DataHandler> decoders = new EnumMap<Decoders, DataHandler>(Decoders.class);
-	private DataHandler vr00;
-	private DataHandler vr01;
-	private DataHandler valve4ctrlcmd;
+	private final MicroIP ip = new MicroIP("СМ", "Счётчик МК", 8);
+	private final Memory mem = new Memory("Память МК", 16, ip);
+	private final Valve clock = new Valve(mem);
+	private final Register instr = new Register("РМ", "Регистр микрокоманд", 16, clock);
+	private final EnumMap<Decoders, DataHandler> decoders = new EnumMap<Decoders, DataHandler>(Decoders.class);
+	private final DataHandler vr00;
+	private final DataHandler vr01;
+	private final DataHandler valve4ctrlcmd;
 	private static final String[] labels = {
 		"ADDRGET", "EXEC", "INTR", "EXECCNT", "ADDR", "READ", "WRITE", "START", "STP"
 	};
-	private int[] labelsaddr = new int[labels.length];
+	private final int[] labelsaddr = new int[labels.length];
+	static final int NO_LABEL = -1;
 	private static final int LABEL_CYCLE_ADDR = 0;
 	private static final int LABEL_CYCLE_EXEC = 1;
 	private static final int LABEL_CYCLE_INTR = 2;
 	private static final int LABEL_CYCLE_EXECCNT = 3;
-	public static final int LABEL_ADDR = 4;
-	public static final int LABEL_READ = 5;
-	public static final int LABEL_WRITE = 6;
-	public static final int LABEL_START = 7;
-	public static final int LABEL_STP = 8;
+	static final int LABEL_ADDR = 4;
+	static final int LABEL_READ = 5;
+	static final int LABEL_WRITE = 6;
+	static final int LABEL_START = 7;
+	static final int LABEL_STP = 8;
 
 	public ControlUnit(Bus aluOutput) {
 		Valve vr0 = new Valve(clock, new Inverter(15, clock));

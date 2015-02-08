@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import ru.ifmo.cs.bcomp.ControlSignal;
+import ru.ifmo.cs.bcomp.SignalListener;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.COLOR_ACTIVE;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.COLOR_BUS;
 
@@ -55,13 +56,6 @@ public abstract class BCompPanel extends ActivateblePanel {
 	private void drawOpenBuses(Color color) {
 		Graphics g = getGraphics();
 		ArrayList<ControlSignal> signals = cmanager.getActiveSignals();
-
-		// XXX: Perfomance optimization required
-//		for (ControlSignal active : signals)
-//			for (BusView bus : buses)
-//				for (ControlSignal bussignal : bus.getSignals())
-//					if (active == bussignal)
-//						bus.draw(g, color);
 
 		for (BusView bus : buses)
 			for (ControlSignal signal : bus.getSignals())

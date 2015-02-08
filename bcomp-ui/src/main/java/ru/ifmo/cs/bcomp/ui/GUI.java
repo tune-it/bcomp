@@ -41,7 +41,6 @@ public class GUI extends JApplet {
 	@Override
 	public void init() {
 		cmanager = new ComponentManager(this);
-		cmanager.startBComp();
 		bcomp.startTimer();
 
 		ActivateblePanel[] panes = {

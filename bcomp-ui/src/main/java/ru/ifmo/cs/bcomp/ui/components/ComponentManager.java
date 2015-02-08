@@ -196,9 +196,8 @@ public class ComponentManager {
 	private ActiveBitView activeBit = new ActiveBitView(ACTIVE_BIT_X, REG_KEY_Y);
 	private volatile BCompPanel activePanel;
 	private final long[] delayPeriods = { 0, 1, 5, 10, 25, 50, 100, 1000 };
-	private int currentDelay = 3;
-	private volatile boolean running = false;
-	private final Object lockRun = new Object();
+	private volatile int currentDelay = 3;
+	private volatile int savedDelay;
 	private final Object lockActivePanel = new Object();
 	private final JCheckBox cucheckbox;
 	private volatile boolean cuswitch = false;
@@ -234,6 +233,33 @@ public class ComponentManager {
 		bcomp = gui.getBasicComp();
 		cpu = gui.getCPU();
 		ioctrls = gui.getIOCtrls();
+
+		cpu.setTickStartListener(new Runnable() {
+			@Override
+			public void run() {
+				synchronized (lockActivePanel) {
+					if (activePanel != null)
+						activePanel.stepStart();
+				}
+
+				openBuses.clear();				
+			}
+		});
+
+		cpu.setTickFinishListener(new Runnable() {
+			@Override
+			public void run() {
+				synchronized (lockActivePanel) {
+					if (activePanel != null)
+						activePanel.stepFinish();
+				}
+
+				if (delayPeriods[currentDelay] != 0)
+					try {
+						Thread.sleep(delayPeriods[currentDelay]);
+					} catch (InterruptedException e) { }
+			}
+		});
 
 		for (ControlSignal cs : busSignals)
 			bcomp.addDestination(cs, new SignalHandler(cs));
@@ -300,58 +326,11 @@ public class ComponentManager {
 		});
 	}
 
-	public void startBComp() {
-		Thread basicComputer = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				for (;;) {
-					synchronized (lockRun) {
-						try {
-							lockRun.wait();
-						} catch (InterruptedException e) {
-							continue;
-						}
-					}
-
-					running = true;
-					cpu.cont();
-
-					for (;;) {
-						synchronized (lockActivePanel) {
-							if (activePanel != null)
-								activePanel.stepStart();
-						}
-
-						openBuses.clear();
-						boolean run = cpu.step();
-
-						synchronized (lockActivePanel) {
-							if (activePanel != null)
-								activePanel.stepFinish();
-						}
-
-						if (!run)
-							break;
-
-						if (delayPeriods[currentDelay] != 0)
-							try {
-								Thread.sleep(delayPeriods[currentDelay]);
-							} catch (InterruptedException e) { }
-					}
-
-					running = false;
-				}
-			}
-		}, "BComp");
-		basicComputer.start();
-	}
-
-	// XXX: Перенести setProperties из всех view, проперти получать из статического массива
 	public void panelActivate(BCompPanel component) {
 		synchronized (lockActivePanel) {
 			activePanel = component;
-			setSignalListeners(activePanel.getSignalListeners());
-			setSignalListeners(listeners);
+			bcomp.addDestination(activePanel.getSignalListeners());
+			bcomp.addDestination(listeners);
 		}
 
 		component.add(mem);
@@ -367,8 +346,8 @@ public class ComponentManager {
 
 	public void panelDeactivate() {
 		synchronized (lockActivePanel) {
-			clearSignalListeners(listeners);
-			clearSignalListeners(activePanel.getSignalListeners());
+			bcomp.removeDestination(listeners);
+			bcomp.removeDestination(activePanel.getSignalListeners());
 			activePanel = null;
 		}
 	}
@@ -381,67 +360,44 @@ public class ComponentManager {
 		((InputRegisterView)regs.get(CPU.Reg.KEY)).setActive();
 	}
 
-	private void setSignalListeners(SignalListener[] listeners) {
-		for (SignalListener listener : listeners)
-			for (ControlSignal signal : listener.signals)
-				bcomp.addDestination(signal, listener.dest);
-	}
-
-	private void clearSignalListeners(SignalListener[] listeners) {
-		for (SignalListener listener : listeners)
-			for (ControlSignal signal : listener.signals)
-				bcomp.removeDestination(signal, listener.dest);
-	}
-
 	public RegisterView getRegisterView(CPU.Reg reg) {
 		return regs.get(reg);
 	}
 
 	public void cmdContinue() {
-		if (running)
-			return;
-		synchronized (lockRun) {
-			lockRun.notifyAll();
-		}
-	}
-
-	private void cmdCPUjump(int label) {
-		if (running)
-			return;
-		cpu.jump(label);
-		cmdContinue();
+		cpu.startContinue();
 	}
 
 	public void cmdEnterAddr() {
 		if (cuswitch) {
-			cpu.jump();
+			cpu.runSetMAddr();
 			regs.get(CPU.Reg.MIP).setValue();
 		} else
-			cmdCPUjump(ControlUnit.LABEL_ADDR);
+			cpu.startSetAddr();
 	}
 
 	public void cmdWrite() {
 		if (cuswitch) {
 			micromem.updateLastAddr();
-			cpu.setMicroMemory();
+			cpu.runMWrite();
 			micromem.updateMemory();
 			regs.get(CPU.Reg.MIP).setValue();
 		} else
-			cmdCPUjump(ControlUnit.LABEL_WRITE);
+			cpu.startWrite();
 	}
 
 	public void cmdRead() {
 		if (cuswitch) {
 			micromem.eventRead();
-			cpu.readMInstr();
+			cpu.runMRead();
 			regs.get(CPU.Reg.MIP).setValue();
 			regs.get(CPU.Reg.MINSTR).setValue();
 		} else
-			cmdCPUjump(ControlUnit.LABEL_READ);
+			cpu.startRead();
 	}
 
 	public void cmdStart() {
-		cmdCPUjump(ControlUnit.LABEL_START);
+		cpu.startStart();
 	}
 
 	public void cmdInvertRunState() {
@@ -452,11 +408,8 @@ public class ComponentManager {
 	}
 
 	public void cmdInvertClockState() {
-		cpu.invertClockState();
-		boolean state = cpu.getClockState();
+		boolean state = cpu.invertClockState();
 		buttons[BUTTON_CLOCK].setForeground(buttonColors[state ? 0 : 1]);
-		if (!state)
-			cpu.cont();
 	}
 
 	public void cmdSetIOFlag(int dev) {
@@ -471,15 +424,20 @@ public class ComponentManager {
 		currentDelay = (currentDelay > 0 ? currentDelay : delayPeriods.length) - 1;
 	}
 
+	public void saveDelay() {
+		savedDelay = currentDelay;
+		currentDelay = 0;
+	}
+
+	public void restoreDelay() {
+		currentDelay = savedDelay;
+	}
+
 	public void cmdAbout() {
 		JOptionPane.showMessageDialog(gui,
 			"Эмулятор Базовой ЭВМ. Версия r" + GUI.class.getPackage().getImplementationVersion() +
 			"\n\nЗагружена " + gui.getMicroProgramName() + " микропрограмма",
 			"О программе", JOptionPane.INFORMATION_MESSAGE);
-	}
-
-	public boolean getRunningState() {
-		return running;
 	}
 
 	public MicroMemoryView getMicroMemory() {

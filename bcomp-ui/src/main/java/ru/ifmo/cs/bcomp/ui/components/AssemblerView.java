@@ -47,11 +47,12 @@ public class AssemblerView extends ActivateblePanel {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (cmanager.getRunningState()) {
+				if (cpu.isRunning()) {
 					showError("Для компиляции остановите выполняющуюся программу");
 					return;
 				}
 
+				cmanager.saveDelay();
 				boolean clock = cpu.getClockState();
 				cpu.setClockState(true);
 
@@ -64,6 +65,7 @@ public class AssemblerView extends ActivateblePanel {
 
 				cpu.setClockState(clock);
 				cmanager.clearActiveSignals();
+				cmanager.restoreDelay();
 			}
 		});
 		add(button);

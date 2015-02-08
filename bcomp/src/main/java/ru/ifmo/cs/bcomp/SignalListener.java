@@ -2,9 +2,8 @@
  * $Id$
  */
 
-package ru.ifmo.cs.bcomp.ui.components;
+package ru.ifmo.cs.bcomp;
 
-import ru.ifmo.cs.bcomp.ControlSignal;
 import ru.ifmo.cs.elements.DataDestination;
 
 /**
