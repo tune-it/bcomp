@@ -11,7 +11,7 @@ package ru.ifmo.cs.elements;
 public class DataStorage extends DataValue implements DataDestination {
 	public DataStorage(String name, int width, DataSource ... inputs) {
 		super(name, width, inputs);
-	} 
+	}
 	
 	@Override
 	public void setValue(int value) {

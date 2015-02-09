@@ -16,7 +16,7 @@ public class DataHandler extends DataStorage {
 
 	public DataHandler(String name, int width, DataSource ... inputs) {
 		super(name, width, inputs);
-	} 
+	}
 
 	public DataHandler(int width, DataSource ... inputs) {
 		this(null, width, inputs);

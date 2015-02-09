@@ -20,6 +20,9 @@ public class Assembler {
 
 			if (label.equals(""))
 				throw new Exception("Имя метки не может быть пустым");
+
+			if (Utils.isHexNumeric(label))
+				throw new Exception("Имя метки не должно быть шестнадцатеричным числом");
 		}
 
 		private void setAddr(int addr) throws Exception {

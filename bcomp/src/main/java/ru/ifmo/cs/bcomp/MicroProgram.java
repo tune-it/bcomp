@@ -180,7 +180,7 @@ public class MicroProgram {
 			int addr = getBits(cmd, 0, 8);
 			return "IF " + getRegister(cmd) + "(" + getBits(cmd, 8, 4) + ") = " +
 				getBits(cmd, 14, 1) + " THEN " +
-				(addr >= microprogram.length ? "" : microprogram[addr][0]) + 
+				(addr >= microprogram.length ? "" : microprogram[addr][0]) +
 				"(" + Utils.toHex(addr, 8) + ")";
 		} else if (checkBit(cmd, 14))
 			return

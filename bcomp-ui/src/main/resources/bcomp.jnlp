@@ -6,8 +6,8 @@
 		<description>Basic Computer Emulator</description>
 	</information>
 	<resources>
-		<j2se version="1.6+"/>  
+		<j2se version="1.6+"/>
 		<jar href="bcomp.jar" main="true"/>
 	</resources>
-	<application-desc main-class="ru.ifmo.cs.bcomp.ui.BCompApp"/> 
+	<application-desc main-class="ru.ifmo.cs.bcomp.ui.BCompApp"/>
 </jnlp>
