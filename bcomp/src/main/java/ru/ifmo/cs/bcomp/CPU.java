@@ -361,7 +361,7 @@ public class CPU {
 	}
 
 	public boolean startSetAddr() {
-		return runFrom(ControlUnit.LABEL_ADDR);
+		return startFrom(ControlUnit.LABEL_ADDR);
 	}
 
 	public boolean startWrite() {
