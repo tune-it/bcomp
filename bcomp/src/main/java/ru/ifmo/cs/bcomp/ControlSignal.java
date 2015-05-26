@@ -115,7 +115,6 @@ public enum ControlSignal {
 	INPUT_OUTPUT,
 	/**
 	 * Управляющий сигнал 26: Очистка всех флагов
-	 * @deprecated Не используется
 	 */
 	CLEAR_ALL_FLAGS,
 	/**

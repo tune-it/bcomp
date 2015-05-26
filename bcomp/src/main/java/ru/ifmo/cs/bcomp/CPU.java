@@ -137,7 +137,10 @@ public class CPU {
 			getValve(ControlSignal.DISABLE_INTERRUPTS), getValve(ControlSignal.ENABLE_INTERRUPTS));
 		StateReg intrwrite = new StateReg(regState, StateReg.FLAG_INTR, intrctrl);
 
-		cpu2io = new CPU2IO(regAccum, regState, intrReq, getValve(ControlSignal.INPUT_OUTPUT, regData), intrctrl);
+		cpu2io = new CPU2IO(regAccum, regState, intrReq,
+			getValve(ControlSignal.INPUT_OUTPUT, regData),
+			getValve(ControlSignal.CLEAR_ALL_FLAGS, Consts.consts[1]),
+			intrctrl);
 
 		valveRunState = getValve(ControlSignal.SET_RUN_STATE);
 		StateReg regStateRun = new StateReg(regState, StateReg.FLAG_RUN, valveRunState);

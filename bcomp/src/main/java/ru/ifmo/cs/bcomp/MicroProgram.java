@@ -184,8 +184,9 @@ public class MicroProgram {
 				"(" + Utils.toHex(addr, 8) + ")";
 		} else if (checkBit(cmd, 14))
 			return
-				(checkBit(cmd, 11) ? "Разрешить прерывания " : "") +
-				(checkBit(cmd, 10) ? "Запретить прерывания " : "") +
+				(checkBit(cmd, 11) ? "Разрешение прерывания " : "") +
+				(checkBit(cmd, 10) ? "Запрещение прерывания " : "") +
+				(checkBit(cmd, 9) ? "Сброс флагов ВУ " : "") +
 				(checkBit(cmd, 8) ? "Ввод/вывод" : "") +
 				(checkBit(cmd, 3) ? "Останов машины" : "") +
 				getOutput(cmd) + getC(cmd) +

@@ -181,7 +181,7 @@ class OptimizedMicroProgram extends MicroProgram {
 		{null,		"8300",	"HLT"},
 		// Пуск
 		{"START",	"0020",	null},
-		{null,		"4475",	null},
+		{null,		"4675",	null},
 		{null,		"8300",	"INTR"},
 		// Продолжение выполнения нереализованных команд
 		{"EXECCNT",	"0000",	null}

@@ -318,7 +318,7 @@ class ExtendedMicroProgram extends MicroProgram {
 		{null,		"8300",	"HLT"},
 		// Пуск
 		{"START",	"0020",	null},		// 0 & 0 ==> БР
-		{null,		"4475",	null},		// БР ==> А, С, N, Z, DI
+		{null,		"4675",	null},		// БР ==> А, С, N, Z; DI; Сброс всех флагов 
 		{null,		"0040",	null},		// COM(0) ==> БР
 		{null,		"4001",	null},		// БР ==> РА
 		{null,		"4002",	null},		// БР ==> РД

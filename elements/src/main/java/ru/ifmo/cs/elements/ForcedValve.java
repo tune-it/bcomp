@@ -9,7 +9,7 @@ package ru.ifmo.cs.elements;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class ForcedValve extends DataCtrl {
-	private DataSource input;
+	private final DataSource input;
 
 	public ForcedValve(DataSource input, int width, DataSource ... ctrls) {
 		super(width, 0, ctrls);

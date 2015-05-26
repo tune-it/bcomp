@@ -20,10 +20,12 @@ public class CPU2IO {
 	private final Bus flagstate = new Bus(1);
 	private final DataHandler intrctrl;
 	private final DummyValve valveIn = new DummyValve(in);
+	private final DataHandler valveClearAll;
 
-	public CPU2IO(Register accum, Register state, Bus intrReq, DataSource valveio, DataHandler intrctrl) {
+	public CPU2IO(Register accum, Register state, Bus intrReq, DataSource valveio, DataHandler valveClearAll, DataHandler intrctrl) {
 		this.intr = intrReq;
 		this.intrctrl = intrctrl;
+		this.valveClearAll = valveClearAll;
 
 		this.valveio = new DummyValve(valveio, valveio);
 		addr.addInput(valveio);
@@ -68,5 +70,9 @@ public class CPU2IO {
 
 	public void addIntrCtrlInput(DataHandler ctrl) {
 		ctrl.addDestination(intrctrl);
+	}
+
+	public void addValveClearFlag(DataDestination valve) {
+		valveClearAll.addDestination(valve);
 	}
 }

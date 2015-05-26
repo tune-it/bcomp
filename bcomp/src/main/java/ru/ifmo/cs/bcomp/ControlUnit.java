@@ -165,6 +165,9 @@ public class ControlUnit {
 			case INPUT_OUTPUT:
 				return new Valve("В25", inputs[0], 8, vr01);
 
+			case CLEAR_ALL_FLAGS:
+				return new Valve("В26", inputs[0], 9, vr01);
+
 			case DISABLE_INTERRUPTS:
 				return new Valve("В27", inputs[0], 10, vr01);
 
