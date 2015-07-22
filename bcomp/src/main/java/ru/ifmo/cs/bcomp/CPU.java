@@ -84,6 +84,7 @@ public class CPU {
 						cpuStopListener.run();
 				}
 			} catch (InterruptedException e) {
+				return;
 			} finally {
 				lock.unlock();
 			}
@@ -157,6 +158,10 @@ public class CPU {
 		} finally {
 			lock.unlock();
 		}
+	}
+
+	void stopCPU() {
+		cpu.interrupt();
 	}
 
 	private DataHandler getValve(ControlSignal cs, DataSource ... inputs) {
@@ -314,6 +319,15 @@ public class CPU {
 
 	public void setRegKey(int value) {
 		regKey.setValue(value);
+	}
+
+	public void setRunState(boolean state) {
+		tick.lock();
+		try {
+			valveRunState.setValue(state ? 1 : 0);
+		} finally {
+			tick.unlock();
+		}
 	}
 
 	public void invertRunState() {
@@ -482,5 +496,11 @@ public class CPU {
 
 	public RunningCycle getRunningCycle() {
 		return cu.getCycle();
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		stopCPU();
 	}
 }
