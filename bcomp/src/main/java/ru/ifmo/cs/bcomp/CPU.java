@@ -160,7 +160,7 @@ public class CPU {
 		}
 	}
 
-	void stopCPU() {
+	public void stopCPU() {
 		cpu.interrupt();
 	}
 
