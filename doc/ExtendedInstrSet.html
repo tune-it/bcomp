@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Расширенный набор команд БЭВМ</title>
+  <!-- $Id$ -->
+</head>
+<body>
+<h1 id="a1">Расширенный набор команд <a href="index.html">БЭВМ</a></h1>
+
+<h3 id="a1">Содержание</h3>
+<ol>
+<li><a href="#a2">Набор команд</a></li>
+<li><a href="#a3">Реализация</a></li>
+<li><a href="#a4">Ограничения</a></li>
+<li><a href="#a5">Стэк</a></li>
+<li><a href="#a6">Отличия от оригинального набора команд</a></li>
+<li><a href="#a7">Новые команды</a></li>
+<li><a href="#a8">Примеры использования</a></li>
+</ol>
+
+<h3 id="a2">Набор команд</h3>
+<table border="1">
+<tr>
+  <td align="center"><b>Наименование</b></td>
+  <td align="center"><b>Мнемоника</b></td>
+  <td align="center"><b>Код</b></td>
+  <td align="center"><b>Описание</b></td>
+</tr>
+<tr><td colspan="4" align="center"><b>Безадресные команды</b></td></tr>
+<tr><td> Нет операции </td><td> NOP </td><td> 0000 </td><td> </td></tr>
+<tr><td> Останов </td><td> HLT </td><td> 0100 </td><td> </td></tr>
+<tr><td> Разрешение прерываний </td><td> EI </td><td> 0200 </td><td> </td></tr>
+<tr><td> Запрещение прерываний </td><td> DI </td><td> 0300 </td><td> </td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+<tr><td> Очистка флага переноса </td><td> CLC </td><td> 0400 </td><td> 0 → С </td></tr>
+<tr><td> Инверсия флага переноса </td><td> CMC </td><td> 0500 </td><td> (!С) → С </td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+<tr><td> Циклический сдвиг влево </td><td> ROL </td><td> 0600 </td><td> Содержимое А и С циклически сдвигается влево </td></tr>
+<tr><td><u>Сдвиг влево</u></td><td><u>SHL</u></td><td> 0680 </td><td> Содержимое А сдвигается влево c заполнением старшего бита нулём </td></tr>
+<tr><td> Циклический сдвиг вправо </td><td> ROR </td><td> 0700 </td><td> Содержимое А и С циклически сдвигается вправо </td></tr>
+<tr><td><u>Сдвиг вправо</u></td><td><u>SHR</u></td><td> 0780 </td><td> Содержимое А сдвигается вправо c заполнением младшего бита нулём </td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+<tr><td> Очистка аккумулятора </td><td> CLA </td><td> 0800 </td><td> 0 → А </td></tr>
+<tr><td> Инверсия аккумулятора </td><td> CMA </td><td> 0900 </td><td> (!А) → А </td></tr>
+<tr><td> Инкремент аккумулятора </td><td> INC </td><td> 0A00 </td><td> (А) + 1 → А </td></tr>
+<tr><td> Декремент аккумулятора </td><td> DEC </td><td> 0B00 </td><td> (А) - 1 → А </td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+<tr><td><u>Обмен аккумулятора с вершиной стека</u></td><td><u>SWAP</u></td><td> 0C00 </td><td> (A) ↔ ((7FF)) </td></tr>
+<tr><td><u>Помещение аккумулятора в стек</u></td><td><u>PUSH</u></td><td> 0D00 </td><td> (7FF) - 1 → 7FF, A → (7FF) </td></tr>
+<tr><td><u>Помещение РС в стек</u></td><td><u>PUSHF</u></td><td> 0D80 </td><td> (7FF) - 1 → 7FF, РС → (7FF) </td></tr>
+<tr><td><u>Получение аккумулятора из стека</u></td><td><u>POP</u></td><td> 0E00 </td><td> ((7FF)) → A, (7FF) + 1 → 7FF</td></tr>
+<tr><td><u>Получение РС из стека</u></td><td><u>POPF</u></td><td> 0E80 </td><td> ((7FF)) → C, N, Z, EI, (7FF) + 1 → 7FF </td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+<tr><td><u>Возврат из подпрограммы</u></td><td><u>RET</u></td><td> 0F00 </td><td> ((7FF)) → СК, (7FF) + 1 → 7FF </td></tr>
+<tr><td><u>Возврат из прерывания</u></td><td><u>IRET</u></td><td> 0F80 </td><td> ((7FF)) → СК, (7FF) + 1 → 7FF, ((7FF)) → C, N, Z, EI, (7FF) + 1 → 7FF </td></tr>
+<tr><td></td><td></td><td></td><td> <b>Команды ввода-вывода</b> </td></tr>
+<tr><td> Очистка флага ВУ </td><td> CLF ВУ </td><td> 10XX </td><td> </td></tr>
+<tr><td> Опрос флага ВУ </td><td> TSF ВУ </td><td> 11XX </td><td> Если флаг ВУ = 1, то (СК) + 1 → СК </td></tr>
+<tr><td> Ввод </td><td> IN ВУ </td><td> 12XX </td><td> (ВУ) → А </td></tr>
+<tr><td> Вывод </td><td> OUT ВУ </td><td> 13XX </td><td> (А) → ВУ </td></tr>
+<tr><td colspan="4" align="center"><b>Адресные команды</b></td></tr>
+<tr><td><u>Обращение к подпрограмме</u></td><td><u>CALL М</u></td><td> 2XXX </td><td> (7FF) - 1 → 7FF, (СК) → (7FF); М → СК </td></tr>
+<tr><td> Безусловный переход </td><td> JMP М </td><td> 3XXX </td><td> М → СК </td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+<tr><td> Переход, если перенос </td><td> BCS М </td><td> 4XXX </td><td> Если (С) = 1, то М → СК </td></tr>
+<tr><td> Переход, если плюс </td><td> BPL М </td><td> 5XXX </td><td> Если (А) ≥ 0, то М → СК </td></tr>
+<tr><td> Переход, если минус </td><td> BMI М </td><td> 6XXX </td><td> Если (А) < 0, то М → СК </td></tr>
+<tr><td> Переход, если нуль </td><td> BEQ М </td><td> 7XXX </td><td> Если (А) = 0, то М → СК </td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+<tr><td> Пересылка </td><td> MOV М </td><td> 8XXX </td><td> (A) → М </td></tr>
+<tr><td><u>Сравнение</u></td><td><u>CMP М</u></td><td> 9XXX </td><td> (A) - (М) → C, N, Z </td></tr>
+<tr><td><u>Декремент и пропуск</u></td><td><u>LOOP М</u></td><td> AXXX </td><td> (М) - 1 → М; Если (М) ≥ 0, то (СК) + 1 → СК </td></tr>
+<tr><td> Приращение и пропуск </td><td> ISZ М </td><td> BXXX </td><td> (М) + 1 → М; Если (М) ≥ 0, то (СК) + 1 → СК </td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+<tr><td> Вычитание </td><td> SUB М </td><td> CXXX </td><td> (A) - (М) → A </td></tr>
+<tr><td> Сложение с переносом </td><td> ADC М </td><td> DXXX </td><td> (A) + (С) + (М) → A </td></tr>
+<tr><td> Сложение </td><td> ADD М </td><td> EXXX </td><td> (A) + (М) → A </td></tr>
+<tr><td> Логическое умножение </td><td> AND М </td><td> FXXX </td><td> (A) & (М) → A </td></tr>
+</table>
+<u>Выделены</u> <a href="#a7">новые команды</a>.
+
+<h3 id="a3">Реализация</h3>
+Расширенный набор команд реализован в:
+<ol>
+<li><a href="ExtendedMicroProgram.html">Расширенной микропрограмме</a></li>
+</ol>
+
+<h3 id="a4">Ограничения</h3>
+<ol>
+<li>Данный набор команд представлен в ознакомительных целях. Использование расширенного набора команд и <a href="ExtendedMicroProgram.html">расширенной микропрограммы</a> при выполнении лабораторных работ, домашних заданий и при написании рубежного контроля запрещено</li>
+<li>Программы, использующие расширенный набор команд, бинарно несовместимы с программами, написанными с использованием <a href="BaseInstrSet.html">оригинального набора команд</a></li>
+<li>Для программ, использующих стэк, выполнение пультовой операции <code>Пуск</code> является обязательным</li>
+</ol>
+
+<h3 id="a5">Стэк</h3>
+В связи с отсутствием в БЭВМ регистра для хранение указателя стэка используется ячейка памяти с адресом 7FF. Указатель стэка устанавливается в значение по умолчанию при выполнении пультовой операции <code>Пуск</code>.
+
+<h3 id="a6">Отличия от оригинального набора команд</h3>
+<ol>
+<li>Для всех команд изменён их код. Команда HLT получила код 0000</li>
+<li>Мнемоника команды BR изменена на JMP</li>
+<li>Команда JSR заменена новой командой CALL, которую можно использовать в рекурсивных подпрограммах</li>
+<li>Команды EI и DI получили цикл прерывания</li>
+<li>Добавлены <a href="#a7">новые команды</a></li>
+<li>Изменена обработка прерываний:
+<ol>
+<li>При обращении к подпрограмме обработки прерывания содержимое СК и РС сохраняется в стэке и происходит переход по адресу, расположенному в ячейке 000</li>
+<li>Для возврата из подпрограммы обработки прерывания добавлена команда IRET, которая восстановит из стэка значение СК и состояние флагов C, N, Z, EI. В подпрограмме обработки прерывания больше не требуются сохранение флага C и разрешение прерываний перед возвратом из неё</li>
+<li>За счёт использования стэка теоретически возможно разрешение прерываний в подпрограмме обработки прерывания</li>
+</ol></li></ol>
+
+<h3 id="a7">Новые команды</h3>
+<ol>
+<li>LOOP - осуществляет декремент указанной ячейки и пропускает следующую команду до тех пор, пока значение ячейки не станет отрицательным. Предназначена для организации циклов с предусловием</li>
+<li>CMP - вычитает из содержимого аккумулятора содержимое указанной ячейки и сохраняет результат во флагах C, N, Z</li>
+<li>CALL - переход к подпрограмме с сохранением адреса возврата в стэке</li>
+<li>RET - возврат из подпрограммы</li>
+<li>IRET - возврат из подпрограммы обработки прерывания. Восстанавливает из стэка значения СК и флагов C, N, Z, EI</li>
+<li>PUSH - сохраняет значение А в стэке</li>
+<li>POP - восстанавливает значение А из стэка</li>
+<li>PUSHF - сохраняет значение РС в стэке</li>
+<li>POPF - восстанавливает значение флагов C, N, Z, EI из стэка</li>
+<li>SWAP - обменивает содержимое А с вершиной стэка</li>
+<li>SHL - сдвиг содержимого А влево с заполнением старшего бита А нулём</li>
+<li>SHR - сдвиг содержимого А вправо с заполнением младшего бита А нулём</li>
+</ol>
+
+<h3 id="a8">Примеры использования</h3>
+<h4>Вычисление произведения двух чисел</h4>
+<pre>
+ORG 10
+BEGIN:	CLA
+	MOV	R
+	ADD	Y
+	PUSH
+	CLA
+	ADD	X
+LOOP:	BEQ	DONE
+	SHR
+	SWAP
+	BCS	ADDUP
+	JMP	SKIP
+ADDUP:	PUSH
+	ADD	R
+	MOV	R
+	POP
+SKIP:	SHL
+	SWAP
+	JMP	LOOP
+DONE:	POP
+	HLT
+
+X:	WORD	?
+Y:	WORD	?
+R:	WORD	?
+</pre>
+
+<h4>Вычисление факториала числа</h4>
+<h5>Используя для умножения операцию сложения</h5>
+<pre>
+ORG 10
+BEGIN:
+	CLA
+	ADD	X
+	CALL	FACTORIAL
+	MOV	R
+	HLT
+
+ORG 18
+X:	WORD	8
+R:	WORD	?
+
+ORG 20
+FACTORIAL:
+	CMP	CONST
+	BEQ	FINISH
+	PUSH
+	DEC
+	CALL	FACTORIAL
+	MOV	VALUE
+	POP
+	MOV	COUNT
+	CLA
+LOOP:	LOOP	COUNT
+FINISH:	RET
+	ADD	VALUE
+	JMP	LOOP
+
+CONST:	WORD	1
+VALUE:	WORD	?
+COUNT:	WORD	?
+</pre>
+
+<h5>Используя для умножения подпрограмму</h5>
+<pre>
+ORG 10
+BEGIN:
+	CLA
+	ADD	X
+	CALL	FACTORIAL
+	MOV	R
+	HLT
+
+ORG 18
+X:	WORD	8
+R:	WORD	?
+
+ORG 20
+FACTORIAL:
+	CMP	CONST
+	BEQ	FINISH
+	PUSH
+	DEC
+	CALL	FACTORIAL
+	CALL	MUL
+FINISH:	RET
+
+CONST:	WORD	1
+
+ORG 30
+MUL:	SWAP
+	MOV	RETURN
+	CLA
+	MOV	SUM
+	POP
+LOOP:	BEQ	DONE
+	SHR
+	SWAP
+	BCS	ADDUP
+	JMP	SKIP
+ADDUP:	PUSH
+	ADD	SUM
+	MOV	SUM
+	POP
+SKIP:	SHL
+	SWAP
+	JMP	LOOP
+DONE:	POP
+	CLA
+	ADD	SUM
+	JMP	(RETURN)
+SUM:	WORD	?
+RETURN:	WORD	?
+</pre>
+
+<h4>Обработка прерываний</h4>
+<h5>Требования</h5>
+<ol>
+<li>В основной программе должно циклически сдвигаться содержимое ячейки R, всегда содержащее один единичный бит.</li>
+<li>Раз в десять секунд должно увеличиваться содержимое ячейки T.</li>
+<li>При запросе от ВУ1 выводить на него значение ячейки X.</li>
+<li>При запросе от ВУ2 сохранять введённое в РД ВУ2 значение в ячейку X.</li>
+<li>При запросе от ВУ3 обменивать местами значение его РД и ячейки X.</li>
+<li>Обмен с ВУ осуществлять в режиме прерывания.</li>
+</ol>
+<h5>Решение</h5>
+<pre>
+ORG 000
+	WORD	INTR
+
+ORG 010
+BEGIN:
+	CLA
+	MOV	T
+	ADD	CONST
+	OUT	0
+	EI
+	CLA
+	INC
+LOOP:	ROR
+	BCS	LOOP
+	MOV	R
+	JMP	LOOP
+
+ORG 01C
+CONST:	WORD	A
+X:	WORD	0
+T:	WORD	?
+R:	WORD	?
+
+INTR:	PUSH
+	TSF	0
+	JMP	IO1
+	CLF	0
+	ISZ	T
+	NOP
+IO1:	TSF	1
+	JMP	IO2
+	CLA
+	ADD	X
+	OUT	1
+	CLF	1
+IO2:	TSF	2
+	JMP	IO3
+	CLA
+	IN	2
+	CLF	2
+	MOV	X
+IO3:	TSF	3
+	JMP	END
+	CLA
+	ADD	X
+	PUSH
+	IN	3
+	MOV	X
+	POP
+	OUT	3
+	CLF	3
+END:	POP
+	IRET
+</pre>
+</html>

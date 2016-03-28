@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Декомпилятор микропрограммы</title>
+  <!-- $Id$ -->
+</head>
+<body>
+<h1 id="a1">Декомпилятор микропрограммы <a href="index.html">БЭВМ</a></h1>
+
+<h3 id="a1">Содержание</h3>
+<ol>
+<li><a href="#a2">Способы запуска</a></li>
+<li><a href="#a3">Микропрограммы</a></li>
+<li><a href="#a4">Ограничения и известные проблемы</a></li>
+</ol>
+
+<h3 id="a2">Способы запуска</h3>
+<ol>
+<li>Скачать <a href="bcomp.jar">JAR-архив</a> и запустить декомпилятор командой:</li>
+<pre>
+java -jar -Dmode=decoder bcomp.jar
+</pre>
+<li>Для unix-подобных систем дополнительно скачать <a href="bcomp">shell скрипт</a> и запустить его командой:</li>
+<pre>
+bcomp -d
+</pre>
+<li>Зайти на сервер кафедры ВТ helios и выполнить команду:</li>
+<pre>
+bcomp -d
+</pre>
+</ol>
+
+<h3 id="a3">Микропрограммы</h3>
+<ol>
+<li><a href="BaseMicroProgram.html">Исходная микропрограмма</a> используется по умолчанию.</li>
+<li><a href="OptimizedMicroProgram.html">Оптимизированная микропрограмма</a> используется при указании ключа <code>-Dmp=optimized</code>.</li>
+<li><a href="ExtendedMicroProgram.html">Расширенная микропрограмма</a> используется при указании ключа <code>-Dmp=extended</code>.</li>
+</ol>
+
+<h3 id="a4">Ограничения и известные проблемы</h3>
+<ol>
+<li>Декомпилятор работает только с предварительно подготовленными микропрограммами.</li>
+</ol>
+</html>
