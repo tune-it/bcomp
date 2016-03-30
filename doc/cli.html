@@ -38,23 +38,23 @@
   <td align="center"><b>Короткая форма</b></td>
   <td align="center"><b>Описание</b></td>
 </tr>
-<tr><td><code>help</code></td><td><code>h</code></td><td> Вывости подсказку по командам </td></tr>
-<tr><td><code>address</code></td><td><code>a</code></td><td> Пультовая операция <code>Ввод адреса</code> </td></tr>
-<tr><td><code>write</code></td><td><code>w</code></td><td> Пультовая операция <code>Запись</code> </td></tr>
-<tr><td><code>read</code></td><td><code>r</code></td><td> Пультовая операция <code>Чтение</code> </td></tr>
-<tr><td><code>start</code></td><td><code>s</code></td><td> Пультовая операция <code>Пуск</code>. Будет выполнена в фоновом режиме если указана последней в строке </td></tr>
-<tr><td><code>continue</code></td><td><code>c</code></td><td> Пультовая операция <code>Продолжить</code>. Будет выполнена в фоновом режиме если указана последней в строке </td></tr>
-<tr><td><code>run</code></td><td><code>ru</code></td><td> Переключение режима Работа/Останов </td></tr>
-<tr><td><code>clock</code></td><td><code>cl</code></td><td> Переключение режима потактового выполнения </td></tr>
-<tr><td><code>maddress</code></td><td><code>ma</code></td><td> Переход на микрокоманду </td></tr>
-<tr><td><code>mwrite</code></td><td><code>mw</code></td><td> Запись микрокоманды </td></tr>
-<tr><td><code>mread</code></td><td><code>mr</code></td><td> Чтение микрокоманды </td></tr>
-<tr><td><code>io <code>[</code>addr <code>[</code>value<code>]</code><code>]</code></code></td><td><code>i</code></td><td> Вывод состояния всех ВУ/указанного ВУ/запись <code>value</code> в ВУ </td></tr>
-<tr><td><code>flag addr</code></td><td><code>f</code></td><td> Установка флага готовности указанного ВУ </td></tr>
-<tr><td><code>asm</code></td><td><code>as</code></td><td> Ввод программы на <a href="asm.html">ассемблере</a> </td></tr>
-<tr><td><code>{exit|quit}</code></td><td><code>{e|q}</code></td><td> Выход из эмулятора </td></tr>
-<tr><td><code>value</code></td><td></td><td> Ввод шестнадцатеричного значения в клавишный регистр</td></tr>
-<tr><td><code>label</code></td><td></td><td> Ввод адреса метки в клавишный регистр</td></tr>
+<tr><td><code>help</code></td><td><code>h</code></td><td>Вывести подсказку по командам</td></tr>
+<tr><td><code>address</code></td><td><code>a</code></td><td>Пультовая операция <code>Ввод адреса</code></td></tr>
+<tr><td><code>write</code></td><td><code>w</code></td><td>Пультовая операция <code>Запись</code></td></tr>
+<tr><td><code>read</code></td><td><code>r</code></td><td>Пультовая операция <code>Чтение</code></td></tr>
+<tr><td><code>start</code></td><td><code>s</code></td><td>Пультовая операция <code>Пуск</code>. Будет выполнена в фоновом режиме если указана последней в строке</td></tr>
+<tr><td><code>continue</code></td><td><code>c</code></td><td>Пультовая операция <code>Продолжить</code>. Будет выполнена в фоновом режиме если указана последней в строке</td></tr>
+<tr><td><code>run</code></td><td><code>ru</code></td><td>Переключение режима Работа/Останов</td></tr>
+<tr><td><code>clock</code></td><td><code>cl</code></td><td>Переключение режима потактового выполнения</td></tr>
+<tr><td><code>maddress</code></td><td><code>ma</code></td><td>Переход на микрокоманду</td></tr>
+<tr><td><code>mwrite</code></td><td><code>mw</code></td><td>Запись микрокоманды</td></tr>
+<tr><td><code>mread</code></td><td><code>mr</code></td><td>Чтение микрокоманды</td></tr>
+<tr><td><code>io <code>[</code>addr <code>[</code>value<code>]</code><code>]</code></code></td><td><code>i</code></td><td>Вывод состояния всех ВУ/указанного ВУ/запись <code>value</code> в ВУ</td></tr>
+<tr><td><code>flag addr</code></td><td><code>f</code></td><td>Установка флага готовности указанного ВУ</td></tr>
+<tr><td><code>asm</code></td><td><code>as</code></td><td>Ввод программы на <a href="asm.html">ассемблере</a></td></tr>
+<tr><td><code>{exit|quit}</code></td><td><code>{e|q}</code></td><td>Выход из эмулятора</td></tr>
+<tr><td><code>value</code></td><td></td><td>Ввод шестнадцатеричного значения в клавишный регистр</td></tr>
+<tr><td><code>label</code></td><td></td><td>Ввод адреса метки в клавишный регистр</td></tr>
 </table>
 
 <h3 id="a4">Возможности эмулятора</h3>
@@ -62,7 +62,7 @@
 <li>Автоматическая генерация таблиц трассировки для программ и микропрограмм в точном соответствии с требованиями методички.</li>
 <li>Возможность работы с перенаправлением ввода для автоматического выполнения заготовленного сценария работы.</li>
 <li>Возможность запуска программы в фоновом режиме для, например, выполнения лабораторных работ, связанных с вводом-выводом.</li>
-<li>В одной строке может быть несколько команда, которые будут обработаны в порядке их указания.</li>
+<li>В одной строке может быть несколько команд, которые будут обработаны в порядке их указания.</li>
 <li>Если очередная команда начинается с символа <code>#</code>, то весь остаток строки игнорируется.</li>
 </ol>
 
