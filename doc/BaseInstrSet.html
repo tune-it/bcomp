@@ -21,36 +21,149 @@
   <td align="center"><b>Описание</b></td>
 </tr>
 <tr><td colspan="4" align="center"><b>Адресные команды</b></td></tr>
-<tr><td> Приращение и пропуск </td><td> ISZ М </td><td> 0XXX </td><td> (М) + 1 → М; Если (М) ≥ 0, то (СК) + 1 → СК </td></tr>
-<tr><td> Логическое умножение </td><td> AND М </td><td> 1XXX </td><td> (A) & (М) → A </td></tr>
-<tr><td> Обращение к подпрограмме </td><td> JSR М </td><td> 2XXX </td><td> (СК) → М; М + 1 → СК </td></tr>
-<tr><td> Пересылка </td><td> MOV М </td><td> 3XXX </td><td> (A) → М </td></tr>
-<tr><td> Сложение </td><td> ADD М </td><td> 4XXX </td><td> (A) + (М) → A </td></tr>
-<tr><td> Сложение с переносом </td><td> ADC М </td><td> 5XXX </td><td> (A) + (С) + (М) → A </td></tr>
-<tr><td> Вычитание </td><td> SUB М </td><td> 6XXX </td><td> (A) - (М) → A </td></tr>
-<tr><td> Переход, если перенос </td><td> BCS М </td><td> 8XXX </td><td> Если (С) = 1, то М → СК </td></tr>
-<tr><td> Переход, если плюс </td><td> BPL М </td><td> 9XXX </td><td> Если (А) ≥ 0, то М → СК </td></tr>
-<tr><td> Переход, если минус </td><td> BMI М </td><td> AXXX </td><td> Если (А) < 0, то М → СК </td></tr>
-<tr><td> Переход, если нуль </td><td> BEQ М </td><td> BXXX </td><td> Если (А) = 0, то М → СК </td></tr>
-<tr><td> Безусловный переход </td><td> BR М </td><td> CXXX </td><td> М → СК </td></tr>
+<tr>
+  <td>Приращение и пропуск</td>
+  <td>ISZ М</td>
+  <td>0XXX</td>
+  <td>(М) + 1 → М; Если (М) ≥ 0, то (СК) + 1 → СК</td>
+</tr>
+<tr>
+  <td>Логическое умножение</td>
+  <td>AND М</td>
+  <td>1XXX</td>
+  <td>(A) & (М) → A</td></tr>
+<tr>
+  <td>Обращение к подпрограмме</td>
+  <td>JSR М</td>
+  <td>2XXX</td>
+  <td>(СК) → М; М + 1 → СК</td></tr>
+<tr>
+  <td>Пересылка</td>
+  <td>MOV М</td>
+  <td>3XXX</td>
+  <td>(A) → М</td></tr>
+<tr>
+  <td>Сложение</td>
+  <td>ADD М</td>
+  <td>4XXX</td>
+  <td>(A) + (М) → A</td></tr>
+<tr>
+  <td>Сложение с переносом</td>
+  <td>ADC М</td>
+  <td>5XXX</td>
+  <td>(A) + (С) + (М) → A</td></tr>
+<tr>
+  <td>Вычитание</td>
+  <td>SUB М</td>
+  <td>6XXX</td>
+  <td>(A) - (М) → A</td></tr>
+<tr>
+  <td>Переход, если перенос</td>
+  <td>BCS М</td>
+  <td>8XXX</td>
+  <td>Если (С) = 1, то М → СК</td></tr>
+<tr>
+  <td>Переход, если плюс</td>
+  <td>BPL М</td>
+  <td>9XXX</td>
+  <td>Если (N) = 0, то М → СК</td></tr>
+<tr>
+  <td>Переход, если минус</td>
+  <td>BMI М</td>
+  <td>AXXX</td>
+  <td>Если (N) = 1, то М → СК</td></tr>
+<tr>
+  <td>Переход, если нуль</td>
+  <td>BEQ М</td>
+  <td>BXXX</td>
+  <td>Если (Z) = 1, то М → СК</td></tr>
+<tr>
+  <td>Безусловный переход</td>
+  <td>BR М</td>
+  <td>CXXX</td>
+  <td>М → СК</td></tr>
 <tr><td colspan="4" align="center"><b>Безадресные команды</b></td></tr>
-<tr><td> Останов </td><td> HLT </td><td> F000 </td><td> </td></tr>
-<tr><td> Нет операции </td><td> NOP </td><td> F100 </td><td> </td></tr>
-<tr><td> Очистка аккумулятора </td><td> CLA </td><td> F200 </td><td> 0 → А </td></tr>
-<tr><td> Очистка флага переноса </td><td> CLC </td><td> F300 </td><td> 0 → С </td></tr>
-<tr><td> Инверсия аккумулятора </td><td> CMA </td><td> F400 </td><td> (!А) → А </td></tr>
-<tr><td> Инверсия флага переноса </td><td> CMC </td><td> F500 </td><td> (!С) → С </td></tr>
-<tr><td> Циклический сдвиг влево </td><td> ROL </td><td> F600 </td><td> Содержимое А и С сдвигается влево </td></tr>
-<tr><td> Циклический сдвиг вправо </td><td> ROR </td><td> F700 </td><td> Содержимое А и С сдвигается вправо </td></tr>
-<tr><td> Инкремент аккумулятора </td><td> INC </td><td> F800 </td><td> (А) + 1 → А </td></tr>
-<tr><td> Декремент аккумулятора </td><td> DEC </td><td> F900 </td><td> (А) - 1 → А </td></tr>
-<tr><td> Разрешение прерываний </td><td> EI </td><td> FA00 </td><td> </td></tr>
-<tr><td> Запрещение прерываний </td><td> DI </td><td> FB00 </td><td> </td></tr>
+<tr>
+  <td>Останов</td>
+  <td>HLT</td>
+  <td>F000</td>
+  <td></td></tr>
+<tr>
+  <td>Нет операции</td>
+  <td>NOP</td>
+  <td>F100</td>
+  <td></td></tr>
+<tr>
+  <td>Очистка аккумулятора</td>
+  <td>CLA</td>
+  <td>F200</td>
+  <td>0 → А</td></tr>
+<tr>
+  <td>Очистка флага переноса</td>
+  <td>CLC</td>
+  <td>F300</td>
+  <td>0 → С</td></tr>
+<tr>
+  <td>Инверсия аккумулятора</td>
+  <td>CMA</td>
+  <td>F400</td>
+  <td>(!А) → А</td></tr>
+<tr>
+  <td>Инверсия флага переноса</td>
+  <td>CMC</td>
+  <td>F500</td>
+  <td>(!С) → С</td></tr>
+<tr>
+  <td>Циклический сдвиг влево</td>
+  <td>ROL</td>
+  <td>F600</td>
+  <td>Содержимое А и С сдвигается влево</td></tr>
+<tr>
+  <td>Циклический сдвиг вправо</td>
+  <td>ROR</td>
+  <td>F700</td>
+  <td>Содержимое А и С сдвигается вправо</td></tr>
+<tr>
+  <td>Инкремент аккумулятора</td>
+  <td>INC</td>
+  <td>F800</td>
+  <td>(А) + 1 → А</td></tr>
+<tr>
+  <td>Декремент аккумулятора</td>
+  <td>DEC</td>
+  <td>F900</td>
+  <td>(А) - 1 → А</td></tr>
+<tr>
+  <td>Разрешение прерываний</td>
+  <td>EI</td>
+  <td>FA00</td>
+  <td></td></tr>
+<tr>
+  <td>Запрещение прерываний</td>
+  <td>DI</td>
+  <td>FB00</td>
+  <td></td></tr>
 <tr><td colspan="4" align="center"><b>Команды ввода-вывода</b></td></tr>
-<tr><td> Очистка флага ВУ </td><td> CLF ВУ </td><td> E0XX </td><td> </td></tr>
-<tr><td> Опрос флага ВУ </td><td> TSF ВУ </td><td> E1XX </td><td> Если флаг ВУ = 1, то (СК) + 1 → СК </td></tr>
-<tr><td> Ввод </td><td> IN ВУ </td><td> E2XX </td><td> (ВУ) → А </td></tr>
-<tr><td> Вывод </td><td> OUT ВУ </td><td> E3XX </td><td> (А) → ВУ </td></tr>
+<tr>
+  <td>Очистка флага ВУ</td>
+  <td>CLF ВУ</td>
+  <td>E0XX</td>
+  <td></td></tr>
+<tr>
+  <td>Опрос флага ВУ</td>
+  <td>TSF ВУ</td>
+  <td>E1XX</td>
+  <td>Если флаг ВУ = 1, то (СК) + 1 → СК</td></tr>
+<tr>
+  <td>Ввод</td>
+  <td>IN ВУ</td>
+  <td>E2XX</td>
+  <td>(ВУ) → А</td></tr>
+<tr>
+  <td>Вывод</td>
+  <td>OUT ВУ</td>
+  <td>E3XX</td>
+  <td>(А) → ВУ</td></tr>
 </table>
 
 <h3 id="a3">Реализация</h3>

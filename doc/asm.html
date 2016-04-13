@@ -27,7 +27,11 @@
   <td align="center"><b>Синтаксис</b></td>
   <td align="center"><b>Пример использования</b></td>
 </tr>
-<tr><td> Управление размещением в памяти </td><td> <code>ORG адрес</code> </td><td> <code>ORG 10</code> </td></tr>
+<tr>
+  <td>Управление размещением в памяти</td>
+  <td><code>ORG адрес</code></td>
+  <td><code>ORG 10</code></td>
+</tr>
 <tr>
   <td rowspan=2>Константы и переменные</td>
   <td><code>[метка:] WORD ЗНАЧЕНИЕ [, ЗНАЧЕНИЕ ...]</code></td>
@@ -37,10 +41,26 @@
   <td><code>[метка:] WORD количество DUP (значение)</code></td>
   <td><code>ARRAY: WORD 6 DUP (?)</code></td>
 </tr>
-<tr><td> Адресная команда с прямой адресацией </td><td> <code>[метка:] МНЕМОНИКА АРГУМЕНТ</code> </td><td> <code>MOV R</code> </td></tr>
-<tr><td> Адресная команда с косвенной адресацией </td><td> <code>[метка:] МНЕМОНИКА (АРГУМЕНТ)</code> </td><td> <code>ADD (K)</code> </td></tr>
-<tr><td> Безадресная команда </td><td> <code>[метка:] МНЕМОНИКА</code> </td><td> <code>BEGIN: CLA</code> </td></tr>
-<tr><td> Команда ввода-вывода </td><td> <code>[метка:] МНЕМОНИКА АДРЕСВУ</code> </td><td> <code>OUT 3</code> </td></tr>
+<tr>
+  <td>Адресная команда с прямой адресацией</td>
+  <td><code>[метка:] МНЕМОНИКА АРГУМЕНТ</code></td>
+  <td><code>MOV R</code></td>
+</tr>
+<tr>
+  <td>Адресная команда с косвенной адресацией</td>
+  <td><code>[метка:] МНЕМОНИКА (АРГУМЕНТ)</code></td>
+  <td><code>ADD (K)</code></td>
+</tr>
+<tr>
+  <td>Безадресная команда</td>
+  <td><code>[метка:] МНЕМОНИКА</code></td>
+  <td><code>BEGIN: CLA</code></td>
+</tr>
+<tr>
+  <td>Команда ввода-вывода</td>
+  <td><code>[метка:] МНЕМОНИКА АДРЕСВУ</code></td>
+  <td><code>OUT 3</code></td>
+</tr>
 </table>
 
 <p>Метки, команды, их аргументы и т.п. должны быть отделены друг от друга пробелом или символом табуляции.
