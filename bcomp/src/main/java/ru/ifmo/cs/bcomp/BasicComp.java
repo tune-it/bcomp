@@ -24,9 +24,12 @@ public class BasicComp {
 			new IOCtrl(0, IOCtrl.Direction.OUT, cpu2io),
 			new IOCtrl(1, IOCtrl.Direction.OUT, cpu2io),
 			new IOCtrl(2, IOCtrl.Direction.IN, cpu2io),
-			new IOCtrl(3, IOCtrl.Direction.INOUT, cpu2io)
+			new IOCtrl(3, IOCtrl.Direction.INOUT, cpu2io),
+			new IOCtrl(4, IOCtrl.Direction.OUT, cpu2io),
+			new IOCtrl(5, IOCtrl.Direction.OUT, cpu2io),
+			new IOCtrl(6, IOCtrl.Direction.OUT, cpu2io),
+			new IOCtrl(7, IOCtrl.Direction.IN, cpu2io)
 		};
-
 		timer = new IODevTimer(ioctrls[0]);
 	}
 

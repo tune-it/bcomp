@@ -15,6 +15,9 @@ import ru.ifmo.cs.bcomp.IOCtrl;
 import ru.ifmo.cs.bcomp.SignalListener;
 import ru.ifmo.cs.bcomp.ui.GUI;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
+import ru.ifmo.cs.bcomp.ui.io.SevenSegmentDisplay;
+import ru.ifmo.cs.bcomp.ui.io.TextPrinter;
+import ru.ifmo.cs.bcomp.ui.io.Ticker;
 import ru.ifmo.cs.elements.DataDestination;
 
 /**
@@ -48,14 +51,17 @@ public class IOView extends BCompPanel {
 		}
 	}
 
-	private IOCtrl[] ioctrls;
-	private RegisterView[] ioregs = new RegisterView[3];
-	private JButton[] flags = {
+	private final IOCtrl[] ioctrls;
+	private final TextPrinter textPrinter;
+	private final Ticker ticker;
+	private final SevenSegmentDisplay ssd;
+	private final RegisterView[] ioregs = new RegisterView[3];
+	private final JButton[] flags = {
 		new JButton("F1 ВУ1"),
 		new JButton("F2 ВУ2"),
 		new JButton("F3 ВУ3")
 	};
-	private BusView[] intrBuses = {
+	private final BusView[] intrBuses = {
 		new BusView(new int[][] {
 			{IO1_CENTER, BUS_INTR_Y1},
 			{IO1_CENTER, BUS_INTR_Y},
@@ -158,6 +164,42 @@ public class IOView extends BCompPanel {
 		);
 
 		ioctrls = gui.getIOCtrls();
+
+		textPrinter = new TextPrinter(ioctrls[4]);
+		JButton button = new JButton("ВУ4");
+		button.setFont(FONT_COURIER_PLAIN_12);
+		button.setBounds(IO1_CENTER, REG_KEY_Y, FLAG_WIDTH, CELL_HEIGHT);
+		button.setFocusable(false);
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textPrinter.activate();
+			}
+		});
+		add(button);
+
+		ticker = new Ticker(ioctrls[5]);
+		button = new JButton("ВУ5");
+		button.setFont(FONT_COURIER_PLAIN_12);
+		button.setBounds(IO2_CENTER, REG_KEY_Y, FLAG_WIDTH, CELL_HEIGHT);
+		button.setFocusable(false);
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ticker.activate();
+			}
+		});
+		add(button);
+
+		ssd = new SevenSegmentDisplay(ioctrls[6]);
+		button = new JButton("ВУ6");
+		button.setFont(FONT_COURIER_PLAIN_12);
+		button.setBounds(IO3_CENTER - 30, REG_KEY_Y, FLAG_WIDTH, CELL_HEIGHT);
+		button.setFocusable(false);
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ssd.activate();
+			}
+		});
+		add(button);
 
 		for (int i = 0; i < ioregs.length; i++) {
 			int x = IO_X + i * IO_DELIM;
