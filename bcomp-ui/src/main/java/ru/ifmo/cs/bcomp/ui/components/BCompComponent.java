@@ -1,5 +1,5 @@
 /*
- * $Id: RegisterView.java 317 2012-09-26 13:20:38Z MATPOCKuH $
+ * $Id$
  */
 
 package ru.ifmo.cs.bcomp.ui.components;
