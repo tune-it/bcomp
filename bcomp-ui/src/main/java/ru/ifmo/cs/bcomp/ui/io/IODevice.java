@@ -1,5 +1,5 @@
 /*
- * $Id: BCompApp.java 319 2012-09-29 17:28:34Z MATPOCKuH $
+ * $Id$
  */
 
 package ru.ifmo.cs.bcomp.ui.io;
