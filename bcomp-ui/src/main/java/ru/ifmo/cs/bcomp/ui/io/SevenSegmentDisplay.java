@@ -25,132 +25,69 @@ public class SevenSegmentDisplay extends OutputDevice {
 	private static final int COUNT = 8;
 	private static final int SEGMENT_LENGTH = 16;
 	private static final int SEGMENT_WIDTH = 2;
-	private static final Dimension dims = new Dimension(
+	private static final Dimension DIMS = new Dimension(
 		SEGMENT_LENGTH + 4 * SEGMENT_WIDTH,
 		2 * SEGMENT_LENGTH + 5 * SEGMENT_WIDTH);
 
+	// Верх, середина, низ, левый верх, левый низ, правый верх, правый низ
+	private static final boolean NUMBERS[][] = new boolean[][] {
+		{true, false, true, true, true, true, true}, // 0
+		{false, false, false, false, false, true, true}, // 1
+		{true, true, true, false, true, true, false}, // 2
+		{true, true, true, false, false, true, true}, // 3
+		{false, true, false, true, false, true, true}, // 4
+		{true, true, true, true, false, false, true}, // 5
+		{true, true, true, true, true, false, true}, // 6
+		{true, false, false, false, false, true, true}, // 7
+		{true, true, true, true, true, true, true}, // 8
+		{true, true, true, true, false, true, true}, // 9
+		{false, true, false, false, false, false, false}, // A "-"
+		{false, false, false, false, false, false, false}, // B
+		{false, false, false, false, false, false, false}, // C
+		{false, false, false, false, false, false, false}, // D
+		{false, false, false, false, false, false, false}, // E
+		{false, false, false, false, false, false, false} // F
+	};
+	private static final int COORDINATES[][] = new int[][] {
+		{pos(0, 2), pos(0, 1), SEGMENT_LENGTH, SEGMENT_WIDTH}, // Верх
+		{pos(0, 2), pos(1, 2), SEGMENT_LENGTH, SEGMENT_WIDTH}, // Середина
+		{pos(0, 2), pos(2, 3), SEGMENT_LENGTH, SEGMENT_WIDTH}, // Низ
+		{pos(0, 1), pos(0, 2), SEGMENT_WIDTH, SEGMENT_LENGTH}, // Левый верх
+		{pos(0, 1), pos(1, 3), SEGMENT_WIDTH, SEGMENT_LENGTH}, // Левый низ
+		{pos(1, 2), pos(0, 2), SEGMENT_WIDTH, SEGMENT_LENGTH}, // Правый верх
+		{pos(1, 2), pos(1, 3), SEGMENT_WIDTH, SEGMENT_LENGTH}, // Правый низ
+	};
 	private final SSD ssd[] = new SSD[COUNT];
 
 	private class SSD extends JComponent {
-		private int value = -1;
+		private int value = 0xf;
 
 		public SSD() {
-			setMinimumSize(dims);
-			setMaximumSize(dims);
-			setPreferredSize(dims);
-			setSize(dims);
+			setMinimumSize(DIMS);
+			setMaximumSize(DIMS);
+			setPreferredSize(DIMS);
+			setSize(DIMS);
 		}
 
-		private int pos(int length, int width) {
-			return length * SEGMENT_LENGTH + width * SEGMENT_WIDTH;
-		}
 
 		@Override
 		public void paintComponent(Graphics g) {
-			// Верхняя
-			switch(value) {
-			case 1:
-			case 4:
-			case -1:
-				g.setColor(LED_OFF);
-				break;
-
-			default:
-				g.setColor(LED_ON);
+			for (int i = 0; i < COORDINATES.length; i++) {
+				g.setColor(NUMBERS[value][i] ? LED_ON : LED_OFF);
+				g.fillRect(
+					COORDINATES[i][0], COORDINATES[i][1],
+					COORDINATES[i][2], COORDINATES[i][3]);
 			}
-			g.fillRect(pos(0, 2), pos(0, 1), SEGMENT_LENGTH, SEGMENT_WIDTH);
-
-			// Средняя
-			switch(value) {
-			case 0:
-			case 1:
-			case 7:
-			case -1:
-				g.setColor(LED_OFF);
-				break;
-
-			default:
-				g.setColor(LED_ON);
-			}
-			g.fillRect(pos(0, 2), pos(1, 2), SEGMENT_LENGTH, SEGMENT_WIDTH);
-
-			// Нижняя
-			switch(value) {
-			case 1:
-			case 4:
-			case 7:
-			case -1:
-				g.setColor(LED_OFF);
-				break;
-
-			default:
-				g.setColor(LED_ON);
-			}
-			g.fillRect(pos(0, 2), pos(2, 3), SEGMENT_LENGTH, SEGMENT_WIDTH);
-
-			// Левая верхняя
-			switch(value) {
-			case 1:
-			case 2:
-			case 3:
-			case 7:
-			case -1:
-				g.setColor(LED_OFF);
-				break;
-
-			default:
-				g.setColor(LED_ON);
-			}
-			g.fillRect(pos(0, 1), pos(0, 2), SEGMENT_WIDTH, SEGMENT_LENGTH);
-
-			// Левая нижняя
-			switch(value) {
-			case 1:
-			case 3:
-			case 4:
-			case 5:
-			case 7:
-			case 9:
-			case -1:
-				g.setColor(LED_OFF);
-				break;
-
-			default:
-				g.setColor(LED_ON);
-			}
-			g.fillRect(pos(0, 1), pos(1, 3), SEGMENT_WIDTH, SEGMENT_LENGTH);
-
-			// Правая верхняя
-			switch(value) {
-			case 5:
-			case 6:
-			case -1:
-				g.setColor(LED_OFF);
-				break;
-
-			default:
-				g.setColor(LED_ON);
-			}
-			g.fillRect(pos(1, 2), pos(0, 2), SEGMENT_WIDTH, SEGMENT_LENGTH);
-
-			// Правая нижняя
-			switch(value) {
-			case 2:
-			case -1:
-				g.setColor(LED_OFF);
-				break;
-
-			default:
-				g.setColor(LED_ON);
-			}
-			g.fillRect(pos(1, 2), pos(1, 3), SEGMENT_WIDTH, SEGMENT_LENGTH);
 		}
-			
 	}
 
 	public SevenSegmentDisplay(IOCtrl ioctrl) {
 		super(ioctrl, "Семисегментный индикатор");
-	}	
+	}
+
+	private static int pos(int length, int width) {
+		return length * SEGMENT_LENGTH + width * SEGMENT_WIDTH;
+	}
 
 	protected Component getContent() {
 		JPanel content = new JPanel(new BorderLayout());
@@ -169,9 +106,8 @@ public class SevenSegmentDisplay extends OutputDevice {
 
 	protected void actionPerformed(int value) {
 		int pos = (value >> 4) & 0xf;
-		value &= 0xf;
-		ssd[pos].value = value > 9 ? -1 : value;
 
+		ssd[pos].value = value & 0xf;
 		ssd[pos].repaint();
 	}
 }
