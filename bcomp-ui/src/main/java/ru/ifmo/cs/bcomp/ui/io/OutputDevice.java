@@ -20,6 +20,7 @@ import ru.ifmo.cs.bcomp.IOCtrl;
 public abstract class OutputDevice extends IODevice {
 	private Thread timer = null;
 	private long sleeptime = 100;
+	private volatile boolean poweredon = true;
 
 	public OutputDevice(final IOCtrl ioctrl, final String title) {
 		super(ioctrl, title);
@@ -45,12 +46,11 @@ public abstract class OutputDevice extends IODevice {
 			public void itemStateChanged(ItemEvent e) {
 				switch(e.getStateChange()) {
 				case ItemEvent.SELECTED:
-					// !!! Переделать на не-deprecated функции
-					timer.resume();
+					poweredon = true;
 					break;
 
 				case ItemEvent.DESELECTED:
-					timer.suspend();
+					poweredon = false;
 					break;
 				}
 			}
@@ -69,14 +69,17 @@ public abstract class OutputDevice extends IODevice {
 					ioctrl.setFlag();
 
 					for (;;) {
+						try {
+							Thread.sleep(sleeptime);
+						} catch (Exception ex) { }
+
+						if (!poweredon)
+							continue;
+
 						if (ioctrl.getFlag() == 0) {
 							actionPerformed(ioctrl.getData());
 							ioctrl.setFlag();
 						}
-
-						try {
-							Thread.sleep(sleeptime);
-						} catch (Exception ex) { }
 					}
 				}
 			}, title);
