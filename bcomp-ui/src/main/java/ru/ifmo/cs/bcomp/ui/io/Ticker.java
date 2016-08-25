@@ -19,6 +19,8 @@ import ru.ifmo.cs.bcomp.IOCtrl;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class Ticker extends OutputDevice {
+	private static final Color LED_OFF = new Color(224, 224, 224);
+	private static final Color LED_ON = new Color(0, 160, 0);
 	private static final int ELEMENTS_COUNT = 32;
 	private static final int ELEMENTS_HEIGHT = 8;
 	private static final int ELEMENT_SIZE = 4;
@@ -46,7 +48,7 @@ public class Ticker extends OutputDevice {
 				int value = elements[(x + position) % ELEMENTS_COUNT];
 
 				for (int y = 0; y < ELEMENTS_HEIGHT; y++) {
-					g.setColor(((value >> (ELEMENTS_HEIGHT - y - 1)) & 1) == 1 ? Color.RED : Color.BLACK);
+					g.setColor(((value >> (ELEMENTS_HEIGHT - y - 1)) & 1) == 1 ? LED_ON : LED_OFF);
 					g.fillRect(
 						x * ELEMENT_FULL_SIZE + ELEMENT_SPACE,
 						y * ELEMENT_FULL_SIZE + ELEMENT_SPACE,
@@ -60,7 +62,7 @@ public class Ticker extends OutputDevice {
 		super(ioctrl, "Бегущая строка");
 
 		Arrays.fill(elements, 0);
-	}	
+	}
 
 	protected Component getContent() {
 		JPanel content = new JPanel(new BorderLayout());
