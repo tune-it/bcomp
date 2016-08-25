@@ -15,6 +15,7 @@ import ru.ifmo.cs.bcomp.IOCtrl;
 import ru.ifmo.cs.bcomp.SignalListener;
 import ru.ifmo.cs.bcomp.ui.GUI;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
+import ru.ifmo.cs.bcomp.ui.io.Keyboard;
 import ru.ifmo.cs.bcomp.ui.io.SevenSegmentDisplay;
 import ru.ifmo.cs.bcomp.ui.io.TextPrinter;
 import ru.ifmo.cs.bcomp.ui.io.Ticker;
@@ -55,6 +56,7 @@ public class IOView extends BCompPanel {
 	private final TextPrinter textPrinter;
 	private final Ticker ticker;
 	private final SevenSegmentDisplay ssd;
+	private final Keyboard kbd;
 	private final RegisterView[] ioregs = new RegisterView[3];
 	private final JButton[] flags = {
 		new JButton("F1 ВУ1"),
@@ -197,6 +199,18 @@ public class IOView extends BCompPanel {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ssd.activate();
+			}
+		});
+		add(button);
+
+		kbd = new Keyboard(ioctrls[7]);
+		button = new JButton("ВУ7");
+		button.setFont(FONT_COURIER_PLAIN_12);
+		button.setBounds(IO1_CENTER, REG_KEY_Y + 30, FLAG_WIDTH, CELL_HEIGHT);
+		button.setFocusable(false);
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				kbd.activate();
 			}
 		});
 		add(button);
