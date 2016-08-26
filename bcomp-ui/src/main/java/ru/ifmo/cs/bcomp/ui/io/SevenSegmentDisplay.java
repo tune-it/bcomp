@@ -97,6 +97,7 @@ public class SevenSegmentDisplay extends OutputDevice {
 		JPanel north = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		north.add(getSleepSlider());
 		north.add(getPowerChkBox());
+		north.add(new FlagIndicator(ioctrl, 30));
 		content.add(BorderLayout.NORTH, north);
 
 		return content;

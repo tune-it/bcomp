@@ -151,8 +151,10 @@ public class Keyboard extends IODevice {
 		}
 
 		JPanel jrow = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		jrow.add(new FlagIndicator(ioctrl, 30));
+
 		SizedButton caps = new SizedButton("Caps Lock");
-		caps.buttonSetSize(new Dimension(128, 30));
+		caps.buttonSetSize(new Dimension(120, 30));
 		caps.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				for (Key key : keys) {
@@ -163,7 +165,7 @@ public class Keyboard extends IODevice {
 		});
 		jrow.add(caps);
 		SizedButton space = new SizedButton(" ");
-		space.buttonSetSize(new Dimension(192, 30));
+		space.buttonSetSize(new Dimension(180, 30));
 		space.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					buttonPressed(" ");
@@ -171,7 +173,7 @@ public class Keyboard extends IODevice {
 			});
 		jrow.add(space);
 		SizedButton latrus = new SizedButton("Lat/Рус");
-		latrus.buttonSetSize(new Dimension(128, 30));
+		latrus.buttonSetSize(new Dimension(120, 30));
 		latrus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				for (Key key : keys) {

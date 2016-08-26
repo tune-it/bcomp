@@ -56,6 +56,7 @@ public class TextPrinter extends OutputDevice {
 		north.add(getSleepSlider());
 
 		north.add(getPowerChkBox());
+		north.add(new FlagIndicator(ioctrl, 30));
 
 		content.add(BorderLayout.NORTH, north);
 
