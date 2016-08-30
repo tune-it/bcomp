@@ -242,7 +242,7 @@ public class ComponentManager {
 						activePanel.stepStart();
 				}
 
-				openBuses.clear();				
+				openBuses.clear();
 			}
 		});
 
@@ -289,7 +289,13 @@ public class ComponentManager {
 			new SignalListener(regs.get(CPU.Reg.INSTR), ControlSignal.BUF_TO_INSTR),
 			new SignalListener(regs.get(CPU.Reg.IP), ControlSignal.BUF_TO_IP),
 			new SignalListener(regs.get(CPU.Reg.ACCUM),
-				ControlSignal.BUF_TO_ACCUM, ControlSignal.IO2_IN, ControlSignal.IO3_IN)
+				ControlSignal.BUF_TO_ACCUM,
+				ControlSignal.IO2_IN,
+				ControlSignal.IO3_IN,
+				ControlSignal.IO7_IN,
+				ControlSignal.IO8_IN,
+				ControlSignal.IO9_IN
+			)
 		};
 
 		mem = new MemoryView(cpu.getMemory(), MEM_X, MEM_Y);

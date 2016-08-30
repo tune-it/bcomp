@@ -113,6 +113,21 @@ public class BasicComp {
 					iocs = IOCtrl.ControlSignal.OUT;
 					break;
 
+				case IO7_IN:
+					iodev = 7;
+					iocs = IOCtrl.ControlSignal.IN;
+					break;
+
+				case IO8_IN:
+					iodev = 8;
+					iocs = IOCtrl.ControlSignal.IN;
+					break;
+
+				case IO9_IN:
+					iodev = 9;
+					iocs = IOCtrl.ControlSignal.IN;
+					break;
+
 				default:
 					if (remove)
 						cpu.removeDestination(cs, dest);
