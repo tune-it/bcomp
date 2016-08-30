@@ -17,7 +17,7 @@ import ru.ifmo.cs.elements.DataDestination;
  */
 class FlagIndicator extends JComponent {
 	private static final Color LED_OFF = new Color(128, 128, 128);
-	private static final Color LED_ON = new Color(160, 0, 0);
+	private static final Color LED_ON = new Color(0, 160, 0);
 
 	private final Dimension DIMS;
 	private final IOCtrl ioctrl;
