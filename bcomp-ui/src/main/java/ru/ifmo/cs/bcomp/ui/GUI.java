@@ -28,14 +28,24 @@ public class GUI extends JApplet {
 	private ActivateblePanel activePanel = null;
 	private final BasicComp bcomp;
 	private final CPU cpu;
+	private final GUI pairgui;
+
+	public GUI(final MicroProgram mp, final GUI pairgui) throws Exception {
+		this.bcomp = new BasicComp(mp);
+		this.cpu = bcomp.getCPU();
+		this.pairgui = pairgui;
+	}
 
 	public GUI(MicroProgram mp) throws Exception {
-		bcomp = new BasicComp(mp);
-		cpu = bcomp.getCPU();
+		this(mp, null);
 	}
 
 	public GUI() throws Exception {
 		this(MicroPrograms.getMicroProgram(MicroPrograms.DEFAULT_MICROPROGRAM));
+	}
+
+	public GUI(final GUI pairgui) throws Exception {
+		this(pairgui.getCPU().getMicroProgram(), pairgui);
 	}
 
 	@Override
@@ -45,7 +55,7 @@ public class GUI extends JApplet {
 
 		ActivateblePanel[] panes = {
 			new BasicView(this),
-			new IOView(this),
+			new IOView(this, pairgui),
 			new MPView(this),
 			new AssemblerView(this)
 		};
@@ -79,7 +89,8 @@ public class GUI extends JApplet {
 
 	public void gui() throws Exception {
 		JFrame frame = new JFrame("БЭВМ");
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		if (pairgui == null)
+			frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.getContentPane().add(this);
 		init();
 		frame.pack();

@@ -30,7 +30,7 @@ public class BasicComp {
 			new IOCtrl(6, IOCtrl.Direction.OUT, cpu2io),
 			new IOCtrl(7, IOCtrl.Direction.IN, cpu2io),
 			new IOCtrl(8, IOCtrl.Direction.IN, cpu2io),
-			new IOCtrl(9, IOCtrl.Direction.IN, cpu2io),
+			new IOCtrl(9, IOCtrl.Direction.INOUT, cpu2io),
 		};
 		timer = new IODevTimer(ioctrls[0]);
 	}

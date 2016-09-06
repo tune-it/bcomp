@@ -15,6 +15,7 @@ import ru.ifmo.cs.bcomp.IOCtrl;
 import ru.ifmo.cs.bcomp.SignalListener;
 import ru.ifmo.cs.bcomp.ui.GUI;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
+import ru.ifmo.cs.bcomp.ui.io.BComp2BCompIODev;
 import ru.ifmo.cs.bcomp.ui.io.Keyboard;
 import ru.ifmo.cs.bcomp.ui.io.Numpad;
 import ru.ifmo.cs.bcomp.ui.io.SevenSegmentDisplay;
@@ -54,11 +55,12 @@ public class IOView extends BCompPanel {
 	}
 
 	private final IOCtrl[] ioctrls;
-	private final TextPrinter textPrinter;
-	private final Ticker ticker;
-	private final SevenSegmentDisplay ssd;
-	private final Keyboard kbd;
-	private final Numpad numpad;
+	private TextPrinter textPrinter = null;
+	private Ticker ticker = null;
+	private SevenSegmentDisplay ssd = null;
+	private Keyboard kbd = null;
+	private Numpad numpad = null;
+	private GUI pairgui = null;
 	private final RegisterView[] ioregs = new RegisterView[3];
 	private final JButton[] flags = {
 		new JButton("F1 ВУ1"),
@@ -83,7 +85,7 @@ public class IOView extends BCompPanel {
 		})
 	};
 
-	public IOView(GUI gui) {
+	public IOView(final GUI gui, final GUI _pairgui) {
 		super(gui.getComponentManager(),
 			new RegisterProperties[] {
 				new RegisterProperties(CPU.Reg.ADDR, CU_X_IO, REG_ADDR_Y_IO, true),
@@ -167,64 +169,90 @@ public class IOView extends BCompPanel {
 			}
 		);
 
+		pairgui = _pairgui;
 		ioctrls = gui.getIOCtrls();
 
-		textPrinter = new TextPrinter(ioctrls[4]);
 		JButton button = new JButton("ВУ4");
 		button.setFont(FONT_COURIER_PLAIN_12);
 		button.setBounds(IO1_CENTER, REG_KEY_Y, FLAG_WIDTH, CELL_HEIGHT);
 		button.setFocusable(false);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (textPrinter == null)
+					textPrinter = new TextPrinter(ioctrls[4]);
 				textPrinter.activate();
 			}
 		});
 		add(button);
 
-		ticker = new Ticker(ioctrls[5]);
 		button = new JButton("ВУ5");
 		button.setFont(FONT_COURIER_PLAIN_12);
 		button.setBounds(IO2_CENTER, REG_KEY_Y, FLAG_WIDTH, CELL_HEIGHT);
 		button.setFocusable(false);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (ticker == null)
+					ticker = new Ticker(ioctrls[5]);
 				ticker.activate();
 			}
 		});
 		add(button);
 
-		ssd = new SevenSegmentDisplay(ioctrls[6]);
 		button = new JButton("ВУ6");
 		button.setFont(FONT_COURIER_PLAIN_12);
 		button.setBounds(IO3_CENTER - 30, REG_KEY_Y, FLAG_WIDTH, CELL_HEIGHT);
 		button.setFocusable(false);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (ssd == null)
+					ssd = new SevenSegmentDisplay(ioctrls[6]);
 				ssd.activate();
 			}
 		});
 		add(button);
 
-		kbd = new Keyboard(ioctrls[7]);
 		button = new JButton("ВУ7");
 		button.setFont(FONT_COURIER_PLAIN_12);
 		button.setBounds(IO1_CENTER, REG_KEY_Y + 30, FLAG_WIDTH, CELL_HEIGHT);
 		button.setFocusable(false);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (kbd == null)
+					kbd = new Keyboard(ioctrls[7]);
 				kbd.activate();
 			}
 		});
 		add(button);
 
-		numpad = new Numpad(ioctrls[8]);
 		button = new JButton("ВУ8");
 		button.setFont(FONT_COURIER_PLAIN_12);
 		button.setBounds(IO2_CENTER, REG_KEY_Y + 30, FLAG_WIDTH, CELL_HEIGHT);
 		button.setFocusable(false);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (numpad == null)
+					numpad = new Numpad(ioctrls[8]);
 				numpad.activate();
+			}
+		});
+		add(button);
+
+		button = new JButton("ВУ9");
+		button.setFont(FONT_COURIER_PLAIN_12);
+		button.setBounds(IO3_CENTER - 30, REG_KEY_Y + 30, FLAG_WIDTH, CELL_HEIGHT);
+		button.setFocusable(false);
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (pairgui == null) {
+					try {
+						pairgui = new GUI(gui);
+						pairgui.gui();
+						BComp2BCompIODev b2b = new BComp2BCompIODev(
+							gui.getBasicComp().getIOCtrls()[9],
+							pairgui.getBasicComp().getIOCtrls()[9]);
+					} catch (Exception ex) { }
+				}
+				gui.requestFocus();
 			}
 		});
 		add(button);
