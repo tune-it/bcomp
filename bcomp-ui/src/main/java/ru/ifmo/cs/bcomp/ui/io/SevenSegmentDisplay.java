@@ -104,7 +104,7 @@ public class SevenSegmentDisplay extends OutputDevice {
 	}
 
 	protected void actionPerformed(int value) {
-		int pos = (value >> 4) & 0xf;
+		int pos = (value >> 4) & 0x7;
 
 		ssd[pos].value = value & 0xf;
 		ssd[pos].repaint();

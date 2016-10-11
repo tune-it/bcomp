@@ -29,8 +29,6 @@ public abstract class IODevice {
 			frame = new JFrame(title);
 			frame.add(getContent());
 			frame.pack();
-			// !!! Recheck this
-			// frame.setResizable(false);
 		}
 
 		frame.setVisible(true);

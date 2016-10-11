@@ -25,7 +25,7 @@ public class IODevTimer {
 
 				while (running) {
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(100);
 					} catch (Exception ex) { }
 
 					value = ctrl.getData();

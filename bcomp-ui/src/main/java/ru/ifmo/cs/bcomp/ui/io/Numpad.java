@@ -3,6 +3,7 @@
  */
 package ru.ifmo.cs.bcomp.ui.io;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -10,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import ru.ifmo.cs.bcomp.IOCtrl;
+import ru.ifmo.cs.elements.DataDestination;
 
 /**
  *
@@ -32,6 +34,8 @@ public class Numpad extends IODevice {
 		}
 	}
 
+	private final NumButton[] buttons = new NumButton[16];
+
 	public Numpad(final IOCtrl ioctrl) {
 		super(ioctrl, "Цифровая клавиатура");
 	}
@@ -39,22 +43,29 @@ public class Numpad extends IODevice {
 	@Override
 	protected Component getContent() {
 		JPanel content = new JPanel(new GridLayout(4, 4, 0, 0));
-		content.add(new NumButton("7", 0x7));
-		content.add(new NumButton("8", 0x8));
-		content.add(new NumButton("9", 0x9));
-		content.add(new NumButton("/", 0xc));
-		content.add(new NumButton("4", 0x4));
-		content.add(new NumButton("5", 0x5));
-		content.add(new NumButton("6", 0x6));
-		content.add(new NumButton("*", 0xd));
-		content.add(new NumButton("1", 0x1));
-		content.add(new NumButton("2", 0x2));
-		content.add(new NumButton("3", 0x3));
-		content.add(new NumButton("-", 0xa));
-		content.add(new NumButton("0", 0x0));
-		content.add(new NumButton(".", 0xe));
-		content.add(new NumButton("=", 0xf));
-		content.add(new NumButton("+", 0xb));
+		content.add(buttons[0] = new NumButton("7", 0x7));
+		content.add(buttons[1] = new NumButton("8", 0x8));
+		content.add(buttons[2] = new NumButton("9", 0x9));
+		content.add(buttons[3] = new NumButton("/", 0xc));
+		content.add(buttons[4] = new NumButton("4", 0x4));
+		content.add(buttons[5] = new NumButton("5", 0x5));
+		content.add(buttons[6] = new NumButton("6", 0x6));
+		content.add(buttons[7] = new NumButton("*", 0xd));
+		content.add(buttons[8] = new NumButton("1", 0x1));
+		content.add(buttons[9] = new NumButton("2", 0x2));
+		content.add(buttons[10] = new NumButton("3", 0x3));
+		content.add(buttons[11] = new NumButton("-", 0xa));
+		content.add(buttons[12] = new NumButton("0", 0x0));
+		content.add(buttons[13] = new NumButton(".", 0xe));
+		content.add(buttons[14] = new NumButton("=", 0xf));
+		content.add(buttons[15] = new NumButton("+", 0xb));
+
+		ioctrl.addDestination(IOCtrl.ControlSignal.SETFLAG, new DataDestination() {
+			public void setValue(int value) {
+				for (NumButton button : buttons)
+					button.setForeground(value == 0 ? Color.black : Color.red);
+			}
+		});
 
 		return content;
 	}

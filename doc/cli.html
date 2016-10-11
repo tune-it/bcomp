@@ -128,8 +128,9 @@ s
 asm run start
 ORG	010
 BEGIN:	CLA
-	INC
+	ADD	CONST
 	OUT	0
+	CLA
 LOOP:	TSF	0
 	BR	TSF1
 	INC
@@ -139,8 +140,9 @@ TSF1:	TSF	1
 	OUT	1
 	CLF	1
 	BR	LOOP
+CONST:	WORD	A
 END
 flag 1
 io 1
 </pre>
-</html>
+</body></html>
