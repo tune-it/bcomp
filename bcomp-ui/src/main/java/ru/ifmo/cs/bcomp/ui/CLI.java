@@ -21,7 +21,7 @@ public class CLI {
 	private final Assembler asm;
 	private final ArrayList<Integer> writelist = new ArrayList<Integer>();
 
-	private final static int SLEEP_TIME = 1;
+	private int sleeptime = 1;
 	private volatile int addr;
 	private volatile boolean printOnStop = true;
 	private volatile boolean printRegsTitle = false;
@@ -180,6 +180,7 @@ public class CLI {
 			"io addr value\t- Запись value в указанное ВУ\n" +
 			"flag addr\t- Установка флага готовности указанного ВУ\n" +
 			"asm\t\t- Ввод программы на ассемблере\n" +
+			"sleep value\t- Задержка между тактами при фоновом выполнении\n" +
 			"{exit|quit}\t- Выход из эмулятора\n" +
 			"value\t\t- Ввод шестнадцатеричного значения в клавишный регистр\n" +
 			"label\t\t- Ввод адреса метки в клавишный регистр");
@@ -245,7 +246,7 @@ public class CLI {
 
 					if (checkCmd(cmd, "start")) {
 						if (i == cmds.length - 1) {
-							sleep = SLEEP_TIME;
+							sleep = sleeptime;
 							checkResult(cpu.startStart());
 						} else
 							checkResult(cpu.runStart());
@@ -254,7 +255,7 @@ public class CLI {
 
 					if (checkCmd(cmd, "continue")) {
 						if (i == cmds.length - 1) {
-							sleep = SLEEP_TIME;
+							sleep = sleeptime;
 							checkResult(cpu.startContinue());
 						} else
 							checkResult(cpu.runContinue());
@@ -345,6 +346,14 @@ public class CLI {
 							System.out.println("Результат по адресу " + Utils.toHex(asm.getLabelAddr("R"), 11));
 						} catch (Exception e) { }
 
+						continue;
+					}
+
+					if (checkCmd(cmd, "sleep")) {
+						if (i == cmds.length - 1)
+							throw new Exception("команда sleep требует аргумент");
+
+						sleeptime = Integer.parseInt(cmds[++i], 16);
 						continue;
 					}
 				} catch (Exception e) {
