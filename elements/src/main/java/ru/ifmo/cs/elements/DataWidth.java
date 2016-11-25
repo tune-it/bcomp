@@ -10,8 +10,8 @@ package ru.ifmo.cs.elements;
  */
 public class DataWidth {
 	public final String name;
-	protected final int width;
-	protected final int mask;
+	public final int width;
+	public final int mask;
 
 	public DataWidth(String name, int width) {
 		this.name = name;
