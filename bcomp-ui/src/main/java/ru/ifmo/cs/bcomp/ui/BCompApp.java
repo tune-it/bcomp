@@ -48,6 +48,11 @@ public class BCompApp {
 			return;
 		}
 
+		if (app.equals("hardcore")) {
+			Hardcore hardcore = new Hardcore(mp);
+			return;
+		}
+
 		System.err.println("Invalid mode selected");
 	}
 }
