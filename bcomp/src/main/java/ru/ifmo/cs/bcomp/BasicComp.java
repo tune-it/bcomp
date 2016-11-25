@@ -113,14 +113,44 @@ public class BasicComp {
 					iocs = IOCtrl.ControlSignal.OUT;
 					break;
 
+				case IO4_TSF:
+					iodev = 4;
+					iocs = IOCtrl.ControlSignal.CHKFLAG;
+					break;
+
+				case IO5_TSF:
+					iodev = 5;
+					iocs = IOCtrl.ControlSignal.CHKFLAG;
+					break;
+
+				case IO6_TSF:
+					iodev = 6;
+					iocs = IOCtrl.ControlSignal.CHKFLAG;
+					break;
+
+				case IO7_TSF:
+					iodev = 7;
+					iocs = IOCtrl.ControlSignal.CHKFLAG;
+					break;
+
 				case IO7_IN:
 					iodev = 7;
 					iocs = IOCtrl.ControlSignal.IN;
 					break;
 
+				case IO8_TSF:
+					iodev = 8;
+					iocs = IOCtrl.ControlSignal.CHKFLAG;
+					break;
+
 				case IO8_IN:
 					iodev = 8;
 					iocs = IOCtrl.ControlSignal.IN;
+					break;
+
+				case IO9_TSF:
+					iodev = 9;
+					iocs = IOCtrl.ControlSignal.CHKFLAG;
 					break;
 
 				case IO9_IN:
