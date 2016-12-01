@@ -1,5 +1,5 @@
 /*
- * $Id: BCompApp.java 319 2012-09-29 17:28:34Z MATPOCKuH $
+ * $Id$
  */
 package ru.ifmo.cs.bcomp.ui;
 
@@ -39,7 +39,7 @@ import ru.ifmo.cs.elements.Register;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class Hardcore {
+public class Nightmare {
 	private static final Color LED_OFF = new Color(128, 128, 128);
 	private static final Color LED_ON = new Color(0, 160, 0);
 	private static final int BIT_RADIUS = 16;
@@ -54,6 +54,9 @@ public class Hardcore {
 	private EnumMap<CPU.Reg, RegisterView> regs = new EnumMap<CPU.Reg, RegisterView>(CPU.Reg.class);
 	private final SignalListener[] listeners;
 
+	private BasicIOView io1 = null;
+	private BasicIOView io2 = null;
+	private BasicIOView io3 = null;
 	private TextPrinter textPrinter = null;
 	private Ticker ticker = null;
 	private SevenSegmentDisplay ssd = null;
@@ -88,7 +91,7 @@ public class Hardcore {
 		private final BitView[] bits;
 
 		private RegisterView(Register reg) {
-			super(new FlowLayout(FlowLayout.CENTER, 0, 0));
+			super(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 
 			JLabel label = new JLabel((this.reg = reg).fullname);
 			label.setFont(LABEL_FONT);
@@ -110,25 +113,105 @@ public class Hardcore {
 		}
 	}
 
-	public Hardcore(MicroProgram mp) throws Exception {
-		String code = null;
-		FileInputStream fin = null;
+	private class BasicIOView {
+		private final IOCtrl ioctrl;
+		private final JFrame frame;
+		private final RegisterView data;
+		private final RegisterView flag;
 
+		private BasicIOView(IOCtrl ioctrls[], int number) {
+			this.ioctrl = ioctrls[number];
+			data = new RegisterView(ioctrl.getRegData());
+			flag = new RegisterView(ioctrl.getRegFlag());
+
+			ioctrl.addDestination(IOCtrl.ControlSignal.SETFLAG, flag);
+			if (ioctrl.getDirection() != IOCtrl.Direction.IN)
+				ioctrl.addDestination(IOCtrl.ControlSignal.OUT, data);
+
+			JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+			panel.add(flag);
+			panel.add(data);
+
+			frame = new JFrame("Контроллер ВУ" + number);
+			frame.add(panel);
+			frame.pack();
+
+			frame.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+					switch (e.getKeyCode()) {
+					case KeyEvent.VK_F:
+					case KeyEvent.VK_R:
+					case KeyEvent.VK_F1:
+					case KeyEvent.VK_F2:
+					case KeyEvent.VK_F3:
+						ioctrl.setFlag();
+						break;
+
+					case KeyEvent.VK_0:
+						invertBit(0);
+						break;
+
+					case KeyEvent.VK_1:
+						invertBit(1);
+						break;
+
+					case KeyEvent.VK_2:
+						invertBit(2);
+						break;
+
+					case KeyEvent.VK_3:
+						invertBit(3);
+						break;
+
+					case KeyEvent.VK_4:
+						invertBit(4);
+						break;
+
+					case KeyEvent.VK_5:
+						invertBit(5);
+						break;
+
+					case KeyEvent.VK_6:
+						invertBit(6);
+						break;
+
+					case KeyEvent.VK_7:
+						invertBit(7);
+						break;
+					}
+				}
+			});
+		}
+
+		// XXX: Говнокод
+		private void invertBit(int startbit) {
+			if (ioctrl.getDirection() != IOCtrl.Direction.OUT)
+				data.invertBit(startbit);
+		}
+
+		private void activate() {
+			frame.setVisible(true);
+			frame.requestFocus();
+		}
+	}
+
+	public Nightmare(MicroProgram mp) throws Exception {
 		this.bcomp = new BasicComp(mp);
 		this.cpu = bcomp.getCPU();
 		this.ioctrls = bcomp.getIOCtrls();
 
 		try {
-			code = System.getProperty("code", null);
-		} catch (Exception e) { }
-
-		if (code != null) {
+			String code = System.getProperty("code", null);
 			File file = new File(code);
+			FileInputStream fin = null;
+
 			try {
 				fin = new FileInputStream(file);
 				byte content[] = new byte[(int)file.length()];
 				fin.read(content);
 				code = new String(content, Charset.forName("UTF-8"));
+				// XXX: Handle exceptions from assembler
 				Assembler asm = new Assembler(cpu.getInstructionSet());
 				asm.compileProgram(code);
 				asm.loadProgram(cpu);
@@ -136,7 +219,7 @@ public class Hardcore {
 				if (fin != null)
 					fin.close();
 			}
-		}
+		} catch (Exception e) { }
 
 		for (CPU.Reg reg : CPU.Reg.values())
 			regs.put(reg, new RegisterView(cpu.getRegister(reg)));
@@ -219,6 +302,27 @@ public class Hardcore {
 					switch (e.getKeyCode()) {
 					case KeyEvent.VK_Q:
 						System.exit(0);
+						break;
+
+					case KeyEvent.VK_1:
+					case KeyEvent.VK_F1:
+						if (io1 == null)
+							io1 = new BasicIOView(ioctrls, 1);
+						io1.activate();
+						break;
+
+					case KeyEvent.VK_2:
+					case KeyEvent.VK_F2:
+						if (io2 == null)
+							io2 = new BasicIOView(ioctrls, 2);
+						io2.activate();
+						break;
+
+					case KeyEvent.VK_3:
+					case KeyEvent.VK_F3:
+						if (io3 == null)
+							io3 = new BasicIOView(ioctrls, 3);
+						io3.activate();
 						break;
 
 					case KeyEvent.VK_4:
@@ -334,6 +438,18 @@ public class Hardcore {
 					regs.get(CPU.Reg.KEY).invertBit(15);
 					break;
 
+				case KeyEvent.VK_F1:
+					ioctrls[1].setFlag();
+					break;
+
+				case KeyEvent.VK_F2:
+					ioctrls[2].setFlag();
+					break;
+
+				case KeyEvent.VK_F3:
+					ioctrls[3].setFlag();
+					break;
+
 				case KeyEvent.VK_F4:
 					cpu.startSetAddr();
 					break;
@@ -368,7 +484,6 @@ public class Hardcore {
 			}
 		});
 		frame.pack();
-		//frame.setResizable(false);
 		frame.setVisible(true);
 		frame.requestFocus();
 	}

@@ -65,8 +65,16 @@ public class IOCtrl {
 		}
 	}
 
+	public Direction getDirection() {
+		return dir;
+	}
+
 	public int getFlag() {
 		return flag.getValue();
+	}
+
+	public Register getRegFlag() {
+		return flag;
 	}
 
 	public void setFlag() {

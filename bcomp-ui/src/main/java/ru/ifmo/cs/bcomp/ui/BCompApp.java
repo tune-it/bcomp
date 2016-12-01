@@ -48,8 +48,8 @@ public class BCompApp {
 			return;
 		}
 
-		if (app.equals("hardcore")) {
-			Hardcore hardcore = new Hardcore(mp);
+		if (app.equals("nightmare")) {
+			Nightmare nightmare = new Nightmare(mp);
 			return;
 		}
 

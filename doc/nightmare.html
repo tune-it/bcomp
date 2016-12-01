@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Альтернативный графический интерфейс эмулятора БЭВМ</title>
+  <!-- $Id$ -->
+</head>
+<body>
+<h1 id="a1">Альтернативный графический интерфейс эмулятора <a href="index.html">БЭВМ</a></h1>
+
+<h3 id="a1">Содержание</h3>
+<ol>
+<li><a href="#a2">Способы запуска</a></li>
+<li><a href="#a3">Список горячих клавиш</a></li>
+<li><a href="#a4">Список горячих клавиш для внешних устройств 1-3</a></li>
+<li><a href="#a5">Микропрограммы</a></li>
+<li><a href="#a6">Ограничения и известные проблемы</a></li>
+</ol>
+
+<h3 id="a2">Способы запуска</h3>
+<ol>
+<li>Зайти на сервер кафедры ВТ helios и выполнить команду:
+<pre>bcomp -n</pre>
+Данный способ рекомендуется при работе в аудитории 375. Удалённый запуск с сервера helios возможен, но требует наличия на клиенте X сервера и умения организации проброса X11.</li>
+<li>Скачать <a href="bcomp.jar">JAR-архив</a> и запустить эмулятор командой:</li>
+<pre>java -Dmode=nightmare -jar bcomp.jar</pre>
+<li>Для unix-подобных систем дополнительно скачать <a href="bcomp">shell скрипт</a> и запустить его командой:</li>
+<pre>bcomp -n</pre>
+</ol>
+
+<h3 id="a3">Список горячих клавиш</h3>
+<table border="1">
+<tr>
+  <td align="center"><b>Сочетание клавиш</b></td>
+  <td align="center"><b>Действие</b></td>
+</tr>
+<tr>
+  <td align="center">0</td><td>Инвертировать бит 0 клавишного регистра</td>
+</tr>
+<tr>
+  <td align="center">1</td><td>Инвертировать бит 1 клавишного регистра</td>
+</tr>
+<tr>
+  <td align="center">2</td><td>Инвертировать бит 2 клавишного регистра</td>
+</tr>
+<tr>
+  <td align="center">3</td><td>Инвертировать бит 3 клавишного регистра</td>
+</tr>
+<tr>
+  <td align="center">4</td><td>Инвертировать бит 4 клавишного регистра</td>
+</tr>
+<tr>
+  <td align="center">5</td><td>Инвертировать бит 5 клавишного регистра</td>
+</tr>
+<tr>
+  <td align="center">6</td><td>Инвертировать бит 6 клавишного регистра</td>
+</tr>
+<tr>
+  <td align="center">7</td><td>Инвертировать бит 7 клавишного регистра</td>
+</tr>
+<tr>
+  <td align="center">8</td><td>Инвертировать бит 8 клавишного регистра</td>
+</tr>
+<tr>
+  <td align="center">9</td><td>Инвертировать бит 9 клавишного регистра</td>
+</tr>
+<tr>
+  <td align="center">A</td><td>Инвертировать бит A клавишного регистра</td>
+</tr>
+<tr>
+  <td align="center">B</td><td>Инвертировать бит B клавишного регистра</td>
+</tr>
+<tr>
+  <td align="center">C</td><td>Инвертировать бит C клавишного регистра</td>
+</tr>
+<tr>
+  <td align="center">D</td><td>Инвертировать бит D клавишного регистра</td>
+</tr>
+<tr>
+  <td align="center">E</td><td>Инвертировать бит E клавишного регистра</td>
+</tr>
+<tr>
+  <td align="center">F</td><td>Инвертировать бит F клавишного регистра</td>
+</tr>
+<tr><td align="center">F1</td><td>Установка готовности ВУ1</td></tr>
+<tr><td align="center">F2</td><td>Установка готовности ВУ2</td></tr>
+<tr><td align="center">F3</td><td>Установка готовности ВУ3</td></tr>
+<tr>
+  <td align="center">F4</td>
+  <td>Пультовая операция <code>Ввод адреса</code></td>
+</tr>
+<tr>
+  <td align="center">F5</td><td>Пультовая операция <code>Запись</code></td>
+</tr>
+<tr>
+  <td align="center">F6</td><td>Пультовая операция <code>Чтение</code></td>
+</tr>
+<tr>
+  <td align="center">F7</td><td>Пультовая операция <code>Пуск</code></td>
+</tr>
+<tr>
+  <td align="center">F8</td><td>Пультовая операция <code>Продолжение</code></td>
+</tr>
+<tr>
+  <td align="center">F9</td>
+  <td>Переключение режимов <code>Работа</code> и <code>Останов</code></td>
+</tr>
+<tr>
+  <td align="center">F11</td>
+  <td>Циклическое уменьшение задержки между тактами</td>
+</tr>
+<tr>
+  <td align="center">F12</td>
+  <td>Циклическое увеличение задержки между тактами</td>
+</tr>
+<tr>
+  <td align="center">Shift-F9</td>
+  <td>Переключение режима потактового выполнения</td>
+</tr>
+<tr><td align="center">^F1</td><td>Внешнее устройство 1</td></tr>
+<tr><td align="center">^F2</td><td>Внешнее устройство 2</td></tr>
+<tr><td align="center">^F3</td><td>Внешнее устройство 3</td></tr>
+<tr><td align="center">^F4</td><td>Внешнее устройство 4</td></tr>
+<tr><td align="center">^F5</td><td>Внешнее устройство 5</td></tr>
+<tr><td align="center">^F6</td><td>Внешнее устройство 6</td></tr>
+<tr><td align="center">^F7</td><td>Внешнее устройство 7</td></tr>
+<tr><td align="center">^F8</td><td>Внешнее устройство 8</td></tr>
+<tr><td align="center">^Q</td><td>Выход из программы</td></tr>
+</table>
+
+<h3 id="a4">Список горячих клавиш для внешних устройств 1-3</h3>
+<table border="1">
+<tr>
+  <td align="center"><b>Сочетание клавиш</b></td>
+  <td align="center"><b>Действие</b></td>
+</tr>
+<tr><td align="center">0</td><td>Инвертировать бит 0 РД ВУ</td></tr>
+<tr><td align="center">1</td><td>Инвертировать бит 1 РД ВУ</td></tr>
+<tr><td align="center">2</td><td>Инвертировать бит 2 РД ВУ</td></tr>
+<tr><td align="center">3</td><td>Инвертировать бит 3 РД ВУ</td></tr>
+<tr><td align="center">4</td><td>Инвертировать бит 4 РД ВУ</td></tr>
+<tr><td align="center">5</td><td>Инвертировать бит 5 РД ВУ</td></tr>
+<tr><td align="center">6</td><td>Инвертировать бит 6 РД ВУ</td></tr>
+<tr><td align="center">7</td><td>Инвертировать бит 7 РД ВУ</td></tr>
+<tr><td align="center">R<BR>F</td><td>Установить флаг готовности ВУ</td></tr>
+</table>
+
+<h3 id="a5">Микропрограммы</h3>
+<ol>
+<li><a href="BaseMicroProgram.html">Исходная микропрограмма</a> используется по умолчанию.</li>
+<li><a href="OptimizedMicroProgram.html">Оптимизированная микропрограмма</a> используется при указании ключа <code>-Dmp=optimized</code>. При использовании <a href="bcomp">shell скрипта bcomp</a> необходимо указать ключ <code>-o</code>.</li>
+<li><a href="ExtendedMicroProgram.html">Расширенная микропрограмма</a> используется при указании ключа <code>-Dmp=extended</code>. При использовании <a href="bcomp">shell скрипта bcomp</a> необходимо указать ключ <code>-e</code>.</li>
+</ol>
+
+<h3 id="a6">Ограничения и известные проблемы</h3>
+<ol>
+<li>Взаимодействие с микропрограммным устройством управления не предусмотрено.</li>
+<li>Возможность работы с ВУ9 не реализована.</li>
+</ol>
+</body></html>

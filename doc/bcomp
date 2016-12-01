@@ -5,13 +5,13 @@ MODE=gui
 MP=base
 JAR=bcomp.jar
 
-while getopts gcdHboep: arg
+while getopts gcdnboep: arg
 do
 	case "$arg" in
 	g)	MODE=gui;;
 	c)	MODE=cli;;
 	d)	MODE=decoder;;
-	H)	MODE=hardcore;;
+	n)	MODE=nightmare;;
 	b)	MP=base;;
 	o)	MP=optimized;;
 	e)	MP=extended;;
