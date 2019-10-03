@@ -10,121 +10,205 @@ package ru.ifmo.cs.bcomp;
  */
 public enum ControlSignal {
 	/**
-	 * Управляющий сигнал 0: Halt
+	 * Control signal 0:
+	 * HALT
 	 */
 	HALT,
 	/**
-	 * Управляющий сигнал 1: РД -> Правый вход АЛУ
+	 * Control signal 1:
+	 * Read Data Register
 	 */
-	DATA_TO_ALU,
+	R_DR,
 	/**
-	 * Управляющий сигнал 2: РК -> Правый вход АЛУ
+	 * Control signal 2:
+	 * Read Instruction Pointer
 	 */
-	INSTR_TO_ALU,
+	R_IP,
 	/**
-	 * Управляющий сигнал 3: СК -> Правый вход АЛУ
+	 * Control signal 3:
+	 * Read Command Register
 	 */
-	IP_TO_ALU,
+	R_CR,
 	/**
-	 * Управляющий сигнал 4: А -> Левый вход АЛУ
+	 * Control signal 4:
+	 * Read Stack Pointer
 	 */
-	ACCUM_TO_ALU,
+	R_SP,
 	/**
-	 * Управляющий сигнал 5: РС -> Левый вход АЛУ
+	 * Control signal 5:
+	 * Read Accumulator
 	 */
-	STATE_TO_ALU,
+	R_AC,
 	/**
-	 * Управляющий сигнал 6: КлР -> Левый вход АЛУ
+	 * Control signal 6:
+	 * Read Program State register
 	 */
-	KEY_TO_ALU,
+	R_PS,
 	/**
-	 * Управляющий сигнал 7: Левый вход: инверсия
+	 * Control signal 7:
+	 * Read Buffer Register
 	 */
-	INVERT_LEFT,
+	R_BR,
 	/**
-	 * Управляющий сигнал 8: Правый вход: инверсия
+	 * Control signal 8:
+	 * Read Input Register
 	 */
-	INVERT_RIGHT,
+	R_IR,
 	/**
-	 * Управляющий сигнал 9: АЛУ: + или &
+	 * Control signal 9:
+	 * Write to Data Register
 	 */
-	ALU_AND,
+	W_DR,
 	/**
-	 * Управляющий сигнал 10: АЛУ: +1
+	 * Control signal 10:
+	 * Write to Instruction Pointer
 	 */
-	ALU_PLUS_1,
+	W_IP,
 	/**
-	 * Управляющий сигнал 11: Сдвиг вправо
+	 * Control signal 11:
+	 * Write to Command Register
 	 */
-	SHIFT_RIGHT,
+	W_CR,
 	/**
-	 * Управляющий сигнал 12: Сдвиг влево
+	 * Control signal 12:
+	 * Write to Stack Pointer
 	 */
-	SHIFT_LEFT,
+	W_SP,
 	/**
-	 * Управляющий сигнал 13: БР(16) -> С
+	 * Control signal 13:
+	 * Write to Accumulator
 	 */
-	BUF_TO_STATE_C,
+	W_AC,
 	/**
-	 * Управляющий сигнал 14: БР(15) -> N
+	 * Control signal 14:
+	 * Write to Program State register
 	 */
-	BUF_TO_STATE_N,
+	W_PS,
 	/**
-	 * Управляющий сигнал 15: БР == 0 -> Z
+	 * Control signal 15:
+	 * Write to Buffer Register
 	 */
-	BUF_TO_STATE_Z,
+	W_BR,
 	/**
-	 * Управляющий сигнал 16: 0 -> С
+	 * Control signal 16:
+	 * Write to Address Register
 	 */
-	CLEAR_STATE_C,
+	W_AR,
 	/**
-	 * Управляющий сигнал 17: 1 -> С
+	 * Control signal 17:
+	 * Complement Left input
 	 */
-	SET_STATE_C,
+	COML,
 	/**
-	 * Управляющий сигнал 18: БР -> РА
+	 * Control signal 18:
+	 * Complement Right input
 	 */
-	BUF_TO_ADDR,
+	COMR,
 	/**
-	 * Управляющий сигнал 19: БР -> РД
+	 * Control signal 19:
+	 * Summary OR And
 	 */
-	BUF_TO_DATA,
+	SORA,
 	/**
-	 * Управляющий сигнал 20: БР -> РК
+	 * Control signal 20:
+	 * Plus one
 	 */
-	BUF_TO_INSTR,
+	PLS1,
 	/**
-	 * Управляющий сигнал 21: БР -> СК
+	 * Control signal 21:
+	 * Lower byte to lower
 	 */
-	BUF_TO_IP,
+	LTOL,
 	/**
-	 * Управляющий сигнал 22: БР -> А
+	 * Control signal 22:
+	 * High byte to high
 	 */
-	BUF_TO_ACCUM,
+	HTOH,
 	/**
-	 * Управляющий сигнал 23: Память -> РД
+	 * Control signal 23:
+	 * Lower byte to high
 	 */
-	MEMORY_READ,
+	LTOH,
 	/**
-	 * Управляющий сигнал 24: РД -> Память
+	 * Control signal 24:
+	 * High byte to lower
 	 */
-	MEMORY_WRITE,
+	HTOL,
 	/**
-	 * Управляющий сигнал 25: Ввод-вывод
+	 * Control signal 25:
+	 * Sign Extend from lower byte to high
 	 */
-	INPUT_OUTPUT,
+	SEXT,
 	/**
-	 * Управляющий сигнал 26: Очистка всех флагов
+	 * Control signal 26:
+	 * SHift Left
 	 */
-	CLEAR_ALL_FLAGS,
+	SH_L,
 	/**
-	 * Управляющий сигнал 27: DI
+	 * Control signal 27:
+	 * Use old C as value for 0th bit (SH_L + SHL0 == ROL)
 	 */
-	DISABLE_INTERRUPTS,
+	SHL0,
 	/**
-	 * Управляющий сигнал 28: EI
+	 * Control signal 28:
+	 * SHift Right
 	 */
-	ENABLE_INTERRUPTS,
+	SH_R,
+	/**
+	 * Control signal 29:
+	 * ???
+	 */
+	SH15,
+	/**
+	 * Control signal 30:
+	 * Set flag C
+	 */
+	SETC,
+	/**
+	 * Control signal 31:
+	 * Set flags N and Z
+	 */
+	STNZ,
+	/**
+	 * Control signal 32:
+	 * Set flag oVerflow
+	 */
+	SETV,
+	/**
+	 * Control signal 33:
+	 * Read MEmory
+	 */
+	R_ME,
+	/**
+	 * Control signal 34:
+	 *
+	 */
+	W_ME,
+	/**
+	 * Control signal 35:
+	 * Input output
+	 */
+	IO,
+	/**
+	 * Control signal 36:
+	 * Clear flags for all IO Controllers
+	 */
+	CLRF,
+	/**
+	 * Control signal 37:
+	 * Disable interrupts
+	 */
+	CLRI,
+	/**
+	 * Control signal 38:
+	 * Enable interrupts
+	 */
+	SETI,
+	/**
+	 * Control signal 39:
+	 * Micro command type
+	 */
+	TYPE,
 	/**
 	 * Псевдосигнал: Переключение работа/останов
 	 */

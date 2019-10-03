@@ -14,9 +14,6 @@ import ru.ifmo.cs.elements.*;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class CPU {
-	public enum Reg {
-		ACCUM, BUF, DATA, ADDR, IP, INSTR, STATE, KEY, MIP, MINSTR
-	}
 
 	private final Bus aluOutput = new Bus(16);
 	private final Bus intrReq = new Bus(1);
