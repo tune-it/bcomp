@@ -5,7 +5,7 @@
 package ru.ifmo.cs.bcomp;
 
 import java.util.EnumMap;
-import ru.ifmo.cs.elements.*;
+import ru.ifmo.cs.components.*;
 
 /**
  *
@@ -16,7 +16,7 @@ public class ControlUnit {
 		LEFT_INPUT, RIGHT_INPUT, FLAG_C, BR_TO, CONTROL_CMD_REG
 	}
 
-	private final MicroIP ip = new MicroIP("СМ", "Счётчик МК", 8);
+	private final MicroPointer ip = new MicroPointer("СМ", "Счётчик МК", 8);
 	private final Memory mem = new Memory("Память МК", 16, ip);
 	private final Valve clock = new Valve(mem);
 	private final Register instr = new Register("РМ", "Регистр микрокоманд", 16, clock);

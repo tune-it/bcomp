@@ -4,7 +4,7 @@
 
 package ru.ifmo.cs.bcomp;
 
-import ru.ifmo.cs.elements.DataDestination;
+import ru.ifmo.cs.components.DataDestination;
 
 /**
  *

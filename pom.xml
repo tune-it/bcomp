@@ -8,7 +8,7 @@
 	<name>BasicComputer</name>
 	<modules>
 		<module>bcomp</module>
-		<module>elements</module>
+		<module>components</module>
 		<module>bcomp-ui</module>
 		<module>bcomp-portlet</module>
 	</modules>

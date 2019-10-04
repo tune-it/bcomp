@@ -5,7 +5,7 @@
 package ru.ifmo.cs.bcomp;
 
 import java.util.EnumMap;
-import ru.ifmo.cs.elements.*;
+import ru.ifmo.cs.components.*;
 
 /**
  *

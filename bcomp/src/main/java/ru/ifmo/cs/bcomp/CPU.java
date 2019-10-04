@@ -7,7 +7,7 @@ package ru.ifmo.cs.bcomp;
 import java.util.EnumMap;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
-import ru.ifmo.cs.elements.*;
+import ru.ifmo.cs.components.*;
 
 /**
  *

@@ -5,9 +5,9 @@
 package ru.ifmo.cs.bcomp;
 
 import java.util.Arrays;
-import ru.ifmo.cs.elements.DataSource;
-import ru.ifmo.cs.elements.PseudoRegister;
-import ru.ifmo.cs.elements.Register;
+import ru.ifmo.cs.components.DataSource;
+import ru.ifmo.cs.components.PseudoRegister;
+import ru.ifmo.cs.components.Register;
 
 /**
  *

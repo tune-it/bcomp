@@ -14,8 +14,8 @@ import org.junit.Test;
 import static java.lang.Integer.parseInt;
 import static ru.ifmo.cs.bcomp.Utils.isHexNumeric;
 import static ru.ifmo.cs.bcomp.Utils.toHex;
-import ru.ifmo.cs.elements.DataDestination;
-import ru.ifmo.cs.elements.Register;
+import ru.ifmo.cs.components.DataDestination;
+import ru.ifmo.cs.components.Register;
 
 /**
  *
