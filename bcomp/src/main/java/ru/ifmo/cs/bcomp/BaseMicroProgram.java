@@ -10,15 +10,18 @@ import static ru.ifmo.cs.bcomp.ControlSignal.*;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-class BaseMicroProgram extends MicroProgram {
-    // PSEUDO CODE !!! NOT a *JAVA* code !!!
-    private static final int[][] mp = {
-        {0, 0, 0},
-        {"BEGIN", null, RDIP, LTOL, HTOH, WRAR, WRBR}, // IP -> AR, BR
-        {null, null, RDBR, PLS1, LTOL, HTOH, WRIP, LOAD}, // BR + 1 -> IP, MEM(AR) -> DR
-        {null, null, RDDR, LTOL, HTOH, WRCR}, // DR -> CR
-    };
-    
+class BaseMicroProgram /* extends MicroProgram */ {
+	private static final MicroCommand[] MP = {
+		new MicroCommand(),
+		new MicroCommand("BEGIN", RDIP, LTOL, HTOH, WRAR, WRBR), // IP -> AR, BR
+		new MicroCommand(RDBR, PLS1, LTOL, HTOH, WRIP, LOAD), // BR + 1 -> IP, MEM(AR) -> DR
+		new MicroCommand(RDDR, LTOL, HTOH, WRCR), // DR -> CR
+		new ControlMicroCommand("ADDRTYPE", 7, 1, RDCR, HTOL), // if CR(8 + 7) == 1 then GOTO ADDRTYPE
+		new ControlMicroCommand("ADDRTYPE", 6, 1, RDCR, HTOL), // if CR(8 + 6) == 1 then GOTO ADDRTYPE
+		new ControlMicroCommand("ADDRTYPE", 5, 1, RDCR, HTOL), // if CR(8 + 5) == 1 then GOTO ADDRTYPE
+		// Безадресная команда или команда ввода вывода
+	};
+
 /*
 	static final String NAME = "base";
 
@@ -217,6 +220,6 @@ class BaseMicroProgram extends MicroProgram {
 	};
 */
 	BaseMicroProgram() {
-		super("исходная", BaseInstrSet.instructions, mp);
+		//super("исходная", BaseInstrSet.instructions, mp);
 	}
 }
