@@ -4,11 +4,22 @@
 
 package ru.ifmo.cs.bcomp;
 
+import static ru.ifmo.cs.bcomp.ControlSignal.*;
+
 /**
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 class BaseMicroProgram extends MicroProgram {
+    // PSEUDO CODE !!! NOT a *JAVA* code !!!
+    private static final int[][] mp = {
+        {0, 0, 0},
+        {"BEGIN", null, RDIP, LTOL, HTOH, WRAR, WRBR}, // IP -> AR, BR
+        {null, null, RDBR, PLS1, LTOL, HTOH, WRIP, LOAD}, // BR + 1 -> IP, MEM(AR) -> DR
+        {null, null, RDDR, LTOL, HTOH, WRCR}, // DR -> CR
+    };
+    
+/*
 	static final String NAME = "base";
 
 	private static final String[][] mp = {
@@ -204,7 +215,7 @@ class BaseMicroProgram extends MicroProgram {
 		// Продолжение выполнения нереализованных команд
 		{"EXECCNT", "0000", null}
 	};
-
+*/
 	BaseMicroProgram() {
 		super("исходная", BaseInstrSet.instructions, mp);
 	}
