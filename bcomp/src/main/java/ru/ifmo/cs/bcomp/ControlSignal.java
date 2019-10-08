@@ -18,82 +18,82 @@ public enum ControlSignal {
 	 * Control signal 1:
 	 * Read Data Register
 	 */
-	R_DR,
+	RDDR,
 	/**
 	 * Control signal 2:
 	 * Read Instruction Pointer
 	 */
-	R_IP,
+	RDIP,
 	/**
 	 * Control signal 3:
 	 * Read Command Register
 	 */
-	R_CR,
+	RDCR,
 	/**
 	 * Control signal 4:
 	 * Read Stack Pointer
 	 */
-	R_SP,
+	RDSP,
 	/**
 	 * Control signal 5:
 	 * Read Accumulator
 	 */
-	R_AC,
+	RDAC,
 	/**
 	 * Control signal 6:
 	 * Read Program State register
 	 */
-	R_PS,
+	RDPS,
 	/**
 	 * Control signal 7:
 	 * Read Buffer Register
 	 */
-	R_BR,
+	RDBR,
 	/**
 	 * Control signal 8:
 	 * Read Input Register
 	 */
-	R_IR,
+	RDIR,
 	/**
 	 * Control signal 9:
 	 * Write to Data Register
 	 */
-	W_DR,
+	WRDR,
 	/**
 	 * Control signal 10:
 	 * Write to Instruction Pointer
 	 */
-	W_IP,
+	WRIP,
 	/**
 	 * Control signal 11:
 	 * Write to Command Register
 	 */
-	W_CR,
+	WRCR,
 	/**
 	 * Control signal 12:
 	 * Write to Stack Pointer
 	 */
-	W_SP,
+	WRSP,
 	/**
 	 * Control signal 13:
 	 * Write to Accumulator
 	 */
-	W_AC,
+	WRAC,
 	/**
 	 * Control signal 14:
 	 * Write to Program State register
 	 */
-	W_PS,
+	WRPS,
 	/**
 	 * Control signal 15:
 	 * Write to Buffer Register
 	 */
-	W_BR,
+	WRBR,
 	/**
 	 * Control signal 16:
 	 * Write to Address Register
 	 */
-	W_AR,
+	WRAR,
 	/**
 	 * Control signal 17:
 	 * Complement Left input
@@ -143,7 +143,7 @@ public enum ControlSignal {
 	 * Control signal 26:
 	 * SHift Left
 	 */
-	SH_L,
+	SHLT,
 	/**
 	 * Control signal 27:
 	 * Use old C as value for 0th bit (SH_L + SHL0 == ROL)
@@ -153,12 +153,12 @@ public enum ControlSignal {
 	 * Control signal 28:
 	 * SHift Right
 	 */
-	SH_R,
+	SHRT,
 	/**
 	 * Control signal 29:
 	 * ???
 	 */
-	SH15,
+	SHRF,
 	/**
 	 * Control signal 30:
 	 * Set flag C
@@ -178,12 +178,12 @@ public enum ControlSignal {
 	 * Control signal 33:
 	 * Read MEmory
 	 */
-	R_ME,
+	LOAD,
 	/**
 	 * Control signal 34:
 	 *
 	 */
-	W_ME,
+	STOR,
 	/**
 	 * Control signal 35:
 	 * Input output
@@ -198,12 +198,12 @@ public enum ControlSignal {
 	 * Control signal 37:
 	 * Disable interrupts
 	 */
-	CLRI,
+	DINT,
 	/**
 	 * Control signal 38:
 	 * Enable interrupts
 	 */
-	SETI,
+	EINT,
 	/**
 	 * Control signal 39:
 	 * Micro command type
