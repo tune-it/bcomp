@@ -8,6 +8,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.font.FontRenderContext;
+
+import ru.ifmo.cs.bcomp.CPU;
 import ru.ifmo.cs.bcomp.Utils;
 
 /**
@@ -57,40 +59,41 @@ public class DisplayStyles {
 
 	// Memory cell height
 	public static final int CELL_HEIGHT = 25;
-	public static final int REG_HEIGHT = 2 * CELL_HEIGHT + 3;
+	public static final int REG_HEIGHT =  CELL_HEIGHT + 3;
 	// Basic view
-	private static final int REG_1_WIDTH = 2 * FONT_COURIER_BOLD_25_WIDTH + 2;
-	private static final int REG_3_WIDTH = 4 * FONT_COURIER_BOLD_25_WIDTH + 2;
-	private static final int REG_4_WIDTH = 5 * FONT_COURIER_BOLD_25_WIDTH + 2;
-	private static final int REG_5_WIDTH = 6 * FONT_COURIER_BOLD_25_WIDTH + 2;
-	public static final int REG_8_WIDTH = (Utils.getBinaryWidth(8) + 1) * FONT_COURIER_BOLD_25_WIDTH + 2;
-	public static final int REG_9_WIDTH = (Utils.getBinaryWidth(9) + 1) * FONT_COURIER_BOLD_25_WIDTH + 2;
-	private static final int REG_11_WIDTH = (Utils.getBinaryWidth(11) + 1) * FONT_COURIER_BOLD_25_WIDTH + 2;
-	public static final int REG_16_WIDTH = (Utils.getBinaryWidth(16) + 1) * FONT_COURIER_BOLD_25_WIDTH + 2;
+	private static final int REG_1_WIDTH = 2 * FONT_COURIER_BOLD_23_WIDTH + 2;
+	private static final int REG_3_WIDTH = 4 * FONT_COURIER_BOLD_23_WIDTH + 2;
+	private static final int REG_4_WIDTH = 5 * FONT_COURIER_BOLD_23_WIDTH + 2;
+	private static final int REG_5_WIDTH = 6 * FONT_COURIER_BOLD_23_WIDTH + 2;
+	public static final int REG_8_WIDTH = (Utils.getBinaryWidth(8) + 1) * FONT_COURIER_BOLD_21_WIDTH + 2;
+	public static final int REG_9_WIDTH = (Utils.getBinaryWidth(9) + 1) * FONT_COURIER_BOLD_21_WIDTH + 2;
+	public static final int REG_11_WIDTH = (Utils.getBinaryWidth(11) + 1) * FONT_COURIER_BOLD_21_WIDTH + 2;
+	public static final int REG_16_WIDTH = (Utils.getBinaryWidth(16) + 1) * FONT_COURIER_BOLD_21_WIDTH + 2;
 	private static final int REG_16_HALF = REG_16_WIDTH / 2;
 	private static final int REG_HEIGHT_HALF = CELL_HEIGHT + 1;
 	// Bus width
 	public static final int BUS_WIDTH = 4;
 	public static final int ELEMENT_DELIM = 4 * BUS_WIDTH;
-	private static final int ARROW = BUS_WIDTH * 3 + 1;
+	 static final int ARROW = BUS_WIDTH * 3 + 1;
 	// Buttons coordinates
 	public static final int BUTTONS_HEIGHT = 30;
 	public static final int BUTTONS_SPACE = 2;
 	public static final int BUTTONS_Y = PANE_HEIGHT - BUTTONS_HEIGHT;
 	// Keyboards register
 	public static final int REG_KEY_X = 8;
-	public static final int REG_KEY_Y = BUTTONS_Y - REG_HEIGHT - ELEMENT_DELIM;
-	public static final int ACTIVE_BIT_X = REG_KEY_X + REG_16_WIDTH + ELEMENT_DELIM;
+	public static final int REG_KEY_Y = 126;
+	public static final int ACTIVE_BIT_X = 21 + REG_16_WIDTH ;
 
 	// ALU: Left input buses
 	public static final int BUS_LEFT_INPUT_X1 = REG_KEY_X + REG_16_HALF;
-	public static final int BUS_KEY_ALU = REG_KEY_Y - BUS_WIDTH - 1;
+	public static final int BUS_KEY_ALU = 470 - BUS_WIDTH - 1;
 	// Accum
-	public static final int REG_C_X_BV = BUS_LEFT_INPUT_X1 + 5 * BUS_WIDTH + 1;
-	public static final int REG_ACCUM_X_BV = REG_C_X_BV + REG_1_WIDTH - 1;
+	public static final int REG_C_X_BV =   5 * BUS_WIDTH + 1;
+	public static final int REG_ACCUM_X_BV = REG_C_X_BV + REG_1_WIDTH - 2;
 	public static final int REG_ACCUM_Y_BV = BUS_KEY_ALU - ELEMENT_DELIM - REG_HEIGHT + 5;
+	public static final int REG_DATA_X_BV = REG_ACCUM_X_BV+365;
 	// From ALU
-	public static final int FROM_ALU_X = REG_ACCUM_X_BV + 61;
+	public static final int FROM_ALU_X = REG_ACCUM_X_BV + 301;
 	public static final int TO_ACCUM_Y = REG_ACCUM_Y_BV - 3 * BUS_WIDTH - 2;
 	public static final int FROM_ALU_Y1 = TO_ACCUM_Y - 2 * BUS_WIDTH + 1;
 	public static final int FROM_ALU_Y = FROM_ALU_Y1 - 4 * BUS_WIDTH;
@@ -104,27 +107,30 @@ public class DisplayStyles {
 	public static final int BUS_FROM_ACCUM_X = REG_C_X_BV - BUS_WIDTH - 1;
 	public static final int BUS_FROM_ACCUM_Y = REG_ACCUM_Y_BV + REG_HEIGHT_HALF;
 	public static final int REG_IP_X_BV = REG_ACCUM_X_BV + 6 * FONT_COURIER_BOLD_25_WIDTH;
-	public static final int REG_IP_Y_BV = BUS_LEFT_INPUT_UP - ELEMENT_DELIM - REG_HEIGHT;
+	public static final int REG_DATA_Y_BV = 38;
+	public static final int REG_IP_Y_BV = REG_DATA_Y_BV + ELEMENT_DELIM + REG_HEIGHT;
+	public static final int REG_INSTR_Y_BV = REG_KEY_Y+ELEMENT_DELIM+REG_HEIGHT;
 	public static final int BUS_FROM_IP_X = REG_IP_X_BV - BUS_WIDTH - 1;
-	public static final int BUS_FROM_IP_Y = REG_IP_Y_BV + REG_HEIGHT_HALF;
-	public static final int BUS_RIGHT_X1 = BUS_FROM_IP_X - ELEMENT_DELIM;
+	public static final int BUS_FROM_IP_Y = REG_IP_Y_BV + REG_HEIGHT/2;
+	public static final int BUS_RIGHT_X1 = BUS_FROM_IP_X - ELEMENT_DELIM+260;
+
 	public static final int BUS_RIGHT_X = REG_C_X_BV + ALU_WIDTH - ALU_WIDTH / 4 + 2;
-	public static final int REG_DATA_Y_BV = REG_IP_Y_BV - ELEMENT_DELIM - REG_HEIGHT;
-	public static final int BUS_FROM_DATA_Y = REG_IP_Y_BV - ELEMENT_DELIM + BUS_WIDTH;
-	public static final int BUS_TO_DATA_Y = REG_DATA_Y_BV + REG_HEIGHT_HALF;
+	public static final int BUS_LEFT_X=BUS_RIGHT_X1-55;
+	public static final int BUS_FROM_DATA_Y = REG_DATA_Y_BV + ELEMENT_DELIM;
+	public static final int BUS_TO_DATA_Y = REG_DATA_Y_BV + REG_HEIGHT/2;
 	public static final int BUS_RIGHT_TO_X = REG_ACCUM_X_BV + REG_16_WIDTH + ELEMENT_DELIM + BUS_WIDTH;
-	public static final int REG_ADDR_Y_BV = REG_DATA_Y_BV - ELEMENT_DELIM - REG_HEIGHT;
-	public static final int BUS_TO_ADDR_Y = REG_ADDR_Y_BV + REG_HEIGHT_HALF;
+	public static final int REG_ADDR_Y_BV = REG_DATA_Y_BV + 3*ELEMENT_DELIM + 3*REG_HEIGHT+310;
+	public static final int BUS_TO_ADDR_Y = REG_ADDR_Y_BV + REG_HEIGHT_HALF-300;
 	public static final int BUS_TO_ADDR_X = REG_ACCUM_X_BV + REG_11_WIDTH + ARROW;
 	public static final int REG_INSTR_X_BV = BUS_RIGHT_TO_X + BUS_WIDTH + ELEMENT_DELIM + 1;
-	public static final int BUS_TO_INSTR_X = REG_INSTR_X_BV - ARROW - 1;
+	public static final int BUS_TO_INSTR_X = REG_INSTR_X_BV - ARROW - 1+360;
 	public static final int BUS_TO_DATA_X = REG_ACCUM_X_BV + REG_16_WIDTH + ARROW;
-	public static final int BUS_FROM_INSTR_Y = REG_ADDR_Y_BV + REG_HEIGHT + BUS_WIDTH;
+	public static final int BUS_FROM_INSTR_Y = REG_ADDR_Y_BV-300;
 	public static final int BUS_FROM_INSTR_X = REG_INSTR_X_BV + 2 * ELEMENT_DELIM + BUS_WIDTH;
-	public static final int MEM_X = 1;
-	public static final int MEM_Y = 1;
+	public static final int MEM_X = 720;
+	public static final int MEM_Y = REG_DATA_Y_BV;
 	private static final int MEM_WIDTH = 9 * FONT_COURIER_BOLD_25_WIDTH + 3;
-	public static final int BUS_ADDR_X1 = REG_ACCUM_X_BV - BUS_WIDTH - 1;
+	public static final int BUS_ADDR_X1 = BUS_TO_INSTR_X;
 	public static final int BUS_ADDR_X2 = MEM_X + MEM_WIDTH + ARROW;
 	public static final int BUS_READ_Y = REG_DATA_Y_BV + CELL_HEIGHT / 2 + 1;
 	public static final int BUS_WRITE_Y = BUS_READ_Y + REG_HEIGHT_HALF;

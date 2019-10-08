@@ -15,7 +15,7 @@ import ru.ifmo.cs.elements.*;
  */
 public class CPU {
 	public enum Reg {
-		ACCUM, BUF, DATA, ADDR, IP, INSTR, STATE, KEY, MIP, MINSTR
+		ACCUM, BUF, DATA, ADDR, IP, INSTR, STATE, KEY, MIP, MINSTR, SP
 	}
 
 	private final Bus aluOutput = new Bus(16);
@@ -33,6 +33,7 @@ public class CPU {
 	private final Register regIP = new Register("СК", "Счётчик команд", 11, getValve(ControlSignal.BUF_TO_IP, aluOutput));
 	private final Register regAccum = new Register("Акк", "Аккумулятор", 16, getValve(ControlSignal.BUF_TO_ACCUM, aluOutput));
 	private final Register regKey = new Register("КР", "Клавишный регистр", 16);
+	private final Register regSP = new Register("SP","Указатель стека", 11);
 	private final Register regBuf;
 	private final DataHandler valveRunState;
 	private final DataHandler valveSetProgram;
@@ -217,6 +218,8 @@ public class CPU {
 
 	public Register getRegister(Reg reg) {
 		switch (reg) {
+			case SP:
+				return regSP;
 		case ACCUM:
 			return regAccum;
 

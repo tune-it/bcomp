@@ -29,9 +29,9 @@ public class MemoryView extends BCompComponent {
 		this.mem = mem;
 
 		addrBitWidth = mem.getAddrWidth();
-		int addrWidth = FONT_COURIER_BOLD_25_WIDTH * (1 + Utils.getHexWidth(addrBitWidth));
+		int addrWidth = FONT_COURIER_BOLD_21_WIDTH * (1 + Utils.getHexWidth(addrBitWidth));
 		valueBitWidth = mem.getWidth();
-		int valueWidth = FONT_COURIER_BOLD_25_WIDTH * (1 + Utils.getHexWidth(valueBitWidth));
+		int valueWidth = FONT_COURIER_BOLD_21_WIDTH * (1 + Utils.getHexWidth(valueBitWidth));
 		lineX = 1 + addrWidth;
 
 		setBounds(x, y, 3 + addrWidth + valueWidth);

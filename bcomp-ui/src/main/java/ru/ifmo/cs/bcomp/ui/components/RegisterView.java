@@ -26,7 +26,7 @@ public class RegisterView extends BCompComponent implements DataDestination {
 	protected final JLabel value = addValueLabel();
 
 	public RegisterView(Register reg, Color colorTitleBG) {
-		super("", colorTitleBG);
+		super("",0, colorTitleBG);
 
 		this.reg = reg;
 	}
@@ -41,10 +41,10 @@ public class RegisterView extends BCompComponent implements DataDestination {
 		this.valuemask = DataWidth.getMask(regWidth);
 
 		setBounds(x, y, getValueWidth(regWidth, hex));
-		setTitle(hex ? reg.name : reg.fullname);
+		//setTitle(hex ? reg.name : reg.fullname);
 		setValue();
 
-		value.setBounds(1, getValueY(), width - 2, CELL_HEIGHT);
+		value.setBounds(1, 1, width - 2, CELL_HEIGHT);
 	}
 
 	public void setProperties(int x, int y, boolean hex) {

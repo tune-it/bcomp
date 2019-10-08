@@ -95,7 +95,7 @@ public class InputRegisterView extends RegisterView {
 				if (!value.isFocusOwner())
 					reqFocus();
 
-				int bitno = Utils.getBitNo(e.getX(), formattedWidth, FONT_COURIER_BOLD_25_WIDTH);
+				int bitno = Utils.getBitNo(e.getX(), formattedWidth, FONT_COURIER_BOLD_21_WIDTH);
 
 				if (bitno < 0)
 					return;

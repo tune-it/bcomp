@@ -17,10 +17,10 @@ public class ActiveBitView extends BCompComponent {
 	private final JLabel value = addValueLabel();
 
 	public ActiveBitView(int x, int y) {
-		super("Бит", COLOR_INPUT_TITLE);
+		super("Бит",0, COLOR_INPUT_TITLE);
 
-		setBounds(x, y, getValueWidth(8, true));
-		value.setBounds(1, getValueY(), width - 2, CELL_HEIGHT);
+		setBounds(x, y, getValueWidth(4, true));
+		value.setBounds(1, 1, width - 2, CELL_HEIGHT);
 	}
 
 	public void setValue(int value) {

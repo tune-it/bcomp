@@ -269,7 +269,7 @@ public class ComponentManager {
 				case KEY:
 					InputRegisterView regKey = new InputRegisterView(this, (Register)cpu.getRegister(reg));
 					regs.put(reg, regKey);
-					regKey.setProperties(REG_KEY_X, REG_KEY_Y, false);
+					regKey.setProperties(REG_C_X_BV ,REG_KEY_Y, false);
 					break;
 
 				case STATE:
