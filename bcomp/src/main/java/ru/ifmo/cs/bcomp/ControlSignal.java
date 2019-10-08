@@ -176,12 +176,12 @@ public enum ControlSignal {
 	SETV,
 	/**
 	 * Control signal 33:
-	 * Read MEmory
+	 * Load value from Memory to Data Register
 	 */
 	LOAD,
 	/**
 	 * Control signal 34:
-	 *
+	 * Store value from Data Register to Memory
 	 */
 	STOR,
 	/**
