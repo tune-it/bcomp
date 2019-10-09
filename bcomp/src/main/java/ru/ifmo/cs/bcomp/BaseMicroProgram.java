@@ -16,10 +16,64 @@ class BaseMicroProgram /* extends MicroProgram */ {
 		new MicroCommand("BEGIN", RDIP, LTOL, HTOH, WRAR, WRBR), // IP -> AR, BR
 		new MicroCommand(RDBR, PLS1, LTOL, HTOH, WRIP, LOAD), // BR + 1 -> IP, MEM(AR) -> DR
 		new MicroCommand(RDDR, LTOL, HTOH, WRCR), // DR -> CR
-		new ControlMicroCommand("ADDRTYPE", 7, 1, RDCR, HTOL), // if CR(8 + 7) == 1 then GOTO ADDRTYPE
-		new ControlMicroCommand("ADDRTYPE", 6, 1, RDCR, HTOL), // if CR(8 + 6) == 1 then GOTO ADDRTYPE
-		new ControlMicroCommand("ADDRTYPE", 5, 1, RDCR, HTOL), // if CR(8 + 5) == 1 then GOTO ADDRTYPE
-		// Безадресная команда или команда ввода вывода
+		new ControlMicroCommand("ADDRTYPE", 7, 1, RDCR, HTOL), // if CR(15) == 1 then GOTO CHKBR
+		new ControlMicroCommand("ADDRTYPE", 6, 1, RDCR, HTOL), // if CR(14) == 1 then GOTO ADDRTYPE
+		new ControlMicroCommand("ADDRTYPE", 5, 1, RDCR, HTOL), // if CR(13) == 1 then GOTO ADDRTYPE
+		// if CR(12) == 0 then GOTO ADDRLESS
+		// GOTO IO
+		// CHKBR: if CR(14) == 0 then GOTO ADDRTYPE
+		// if CR(13) == 0 then GOTO ADDRTYPE
+		// if CR(12) == 1 then GOTO BRANCHES -- закончили выборку и частичное декодирование
+		// ADDRTYPE: if CR(11) == 0 then GOTO LOADOPER -- адрес то уже в DR, муахахаха
+		// if CR(10) == 1 then GOTO OFFSET
+		// if CR(9) == 1 then GOTO INCDEC
+		// CR -> AR -- Type=100X
+		// LOAD
+		// if CR(8) == 1 then GOTO космос -- зарезервированный тип адресации? -> Type=1001
+		// CR -> AR -- Type=1000
+		// LOAD
+		// GOTO LOADOPER
+		// INCDEC: CR -> AR -- Type=101X
+		// LOAD
+		// if CR(8) == 1 then GOTO PREDEC
+		// DR + 1 -> BR -- Type=1010
+		// BR -> DR
+		// DR - 1 -> BR, STOR
+		// BR -> DR
+		// GOTO LOADOPER
+		// PREDEC: DR - 1 -> BR -- Type=1011
+		// BR -> DR
+		// STOR
+		// GOTO LOADOPER
+		// OFFSET: LTOL(CR) -> BR -- Type=11XX
+		// if CR(9) == 1 then GOTO CHECKDIRECT -- Type=111X
+		// if CR(8) == 1 then GOTO SPOFFSET -- Type=110X
+		// BR + IP -> CR -- Type=1110
+		// GOTO LOADOPER
+		// CHECKDIRECT: if CR(8) == 0 then GOTO космос -- Type=1110
+		// BR -> DR -- Type=1111
+		// GOTO EXECUTE
+		// SPOFFSET: BR + SP -> CR -- Type 1101 !!! Закончили выборку адреса
+		// LOADOPER: if CR(15) == 0 then GOTO LOADWANTED !!! Выборка операнда?
+		// if CR(14) == 1 then GOTO CMD11XX -- команды jump/call/st
+		// LOADWANTED: DR -> AR
+		// LOAD
+		// EXECUTE: -- Декодирование и цикл исполнения адресных команд кроме jump/call/st/FXXX
+		// ...
+		// CMD11XX: -- Цикл исполнения jump/call/st
+		// ...
+		// BRANCHES: -- Команды с "коротким" переходом
+		// ...
+		// ADDRLESS: -- безадресные команды
+		// ...
+		// IO: IO
+		// ...
+		// INT:
+		// ...
+		// SETIP:
+		// WRITE:
+		// READ:
+		// START:
 	};
 
 /*
