@@ -24,18 +24,14 @@ class BaseMicroProgram /* extends MicroProgram */ {
 		// CHKBR: if CR(14) == 0 then GOTO ADDRTYPE
 		// if CR(13) == 0 then GOTO ADDRTYPE
 		// if CR(12) == 1 then GOTO BRANCHES -- закончили выборку и частичное декодирование
-		// ADDRTYPE: if CR(11) == 0 then GOTO LOADOPER -- адрес то уже в DR, муахахаха
+		// ADDRTYPE: if CR(11) == 0 then GOTO LOADOPER -- адрес то уже в DR, муахахаха Type=0XXX
 		// if CR(10) == 1 then GOTO OFFSET
+		// CR -> AR
+		// MEM(AR) -> DR 
 		// if CR(9) == 1 then GOTO INCDEC
-		// CR -> AR -- Type=100X
-		// LOAD
 		// if CR(8) == 1 then GOTO космос -- зарезервированный тип адресации? -> Type=1001
-		// CR -> AR -- Type=1000
-		// LOAD
-		// GOTO LOADOPER
-		// INCDEC: CR -> AR -- Type=101X
-		// LOAD
-		// if CR(8) == 1 then GOTO PREDEC
+		// GOTO LOADOPER -- Type= 1000
+		// INCDEC: if CR(8) == 1 then GOTO PREDEC -- Type=101X
 		// DR + 1 -> BR -- Type=1010
 		// BR -> DR
 		// DR - 1 -> BR, STOR
@@ -57,12 +53,71 @@ class BaseMicroProgram /* extends MicroProgram */ {
 		// LOADOPER: if CR(15) == 0 then GOTO LOADWANTED !!! Выборка операнда?
 		// if CR(14) == 1 then GOTO CMD11XX -- команды jump/call/st
 		// LOADWANTED: DR -> AR
-		// LOAD
+		// MEM(AR) -> DR
 		// EXECUTE: -- Декодирование и цикл исполнения адресных команд кроме jump/call/st/FXXX
-		// ...
+		// if CR(15) = 1 then GOTO CMD1XXX
+		// if CR(14) = 1 then GOTO CMD01XX
+		// 13th bit already checked
+		// if CR(12) = 1 then GOTO OR
+		// AND: DR & AC -> BR, N, Z
+		//		GOTO MOVTOAC
+		// OR: ~DR & ~AC -> BR
+		//	~BR -> AC, N, Z
+		//	GOTO INT
+		// CMD01XX: if CR(13) = 1 then GOTO CMD011X
+		// if CR(12) = 1 then GOTO ADC
+		// ADD: DR + AC -> BR, C, N, Z, V
+		// GOTO MOVTOAC
+		// ADC: if C = 0 then GOTO ADD
+		// DR + AC + 1 -> BR, C, N, Z, V
+		// GOTO MOVTOAC
+		// CMD011X: if CR(12) = 1 then GOTO CMP
+		// SUB: ~DR + AC + 1 -> BR, C, N, Z, V !!! ACHTUNG !!! ACHTUNG !!! ACHTUNG !!!
+		// MOVTOAC: BR -> AC
+		// GOTO INT
+		// 11XX already checked!!!
+		// CMD1XXX: if CR(13) == 1 then GOTO CMD101X
+		//	if CR(12) == 1 then GOTO космос CMD1001
+		// LOOP: DR + ~0 -> BR
+		//	BR -> DR
+		//	DR -> MEM(AR)
+		//	if DR(15) = 0 then GOTO INT
+		// SKIPCMD: IP + 1 -> BR
+		//	BR -> IP
+		//	GOTO INT
+		// CMD101X: if CR(12) == 1 then GOTO SWAM
+		// LD: DR -> AC
+		//	GOTO INT
+		// SWAM: DR -> BR
+		//	AC -> DR
+		//	DR -> MEM(AR), BR -> AC
+		//	GOTO INT
 		// CMD11XX: -- Цикл исполнения jump/call/st
-		// ...
+		//	if CR(13) = 1 then GOTO ST
+		//	if CR(12) = 1 then GOTO CALL
+		// JUMP: DR -> IP
+		//	GOTO INT
+		// CALL: DR -> BR
+		//	IP -> DR
+		//  BR -> IP
+		// PUSHVALUE: SP -> AR
+		//	DR -> MEM(AR), SP - 1 -> BR
+		//	BR -> SP
+		//	GOTO INT
+		// ST: AC -> DR
+		//	DR -> MEM(AR)
+		//	GOTO INT
 		// BRANCHES: -- Команды с "коротким" переходом
+		//	if CR(11) = 1 then GOTO BR1XXX
+		//	if CR(10) = 1 then GOTO BR01XX
+		//	if CR(9) = 1 then GOTO BR001X
+		//	if CR(8) = 1 then GOTO BNE
+		// BEQ: if Z = 1 then GOTO INT
+		// BR: SEXT(CR) -> BR
+		//	BR + IP -> DR
+		//	DR -> IP
+		//	GOTO INT
+		// BNE: 
 		// ...
 		// ADDRLESS: -- безадресные команды
 		// ...
