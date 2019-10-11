@@ -117,18 +117,145 @@ class BaseMicroProgram /* extends MicroProgram */ {
 		//	BR + IP -> DR
 		//	DR -> IP
 		//	GOTO INT
-		// BNE: 
-		// ...
+		// BNE: if Z = 0 then GOTO INT
+		//	GOTO BR
+		// BR001X: if CR(8) then GOTO BPL
+		// BMI: if N = 0 then GOTO INT
+		//	GOTO BR
+		// BPL: if N = 1 then GOTO INT
+		//	GOTO BR
+		// BR01XX: if CR(9) = 1 then GOTO BR011X
+		//	if CR(8) = 1 then GOTO BCC
+		// BCS: if C = 0 then GOTO INT
+		//	GOTO BR
+		// BCC: if ЧТОТОТАММ = ЧЕМУТОТАМ then GOTO INT
+		//	GOTO BR
+		// BR011X: if CR(8) = 1 then GOTO BVC
+		// BVS: if ЧТОТОТАММ = ЧЕМУТОТАМ then GOTO INT
+		//	GOTO BR
+		// BVC: if ЧТОТОТАММ = ЧЕМУТОТАМ then GOTO INT
+		//	GOTO BR
+		// BR1XXX: if CR(10) = 1 then GOTO космос
+		// BR10XX: if CR(9) = 1 then GOTO космос
+		// BR100X: if CR(8) = 1 then GOTO BFC
+		// BFS: if ЧТОТОТАММ = ЧЕМУТОТАМ then GOTO INT
+		//	GOTO BR
+		// BFC: if ЧТОТОТАММ = ЧЕМУТОТАМ then GOTO INT
+		//	GOTO BR
+		// ----
 		// ADDRLESS: -- безадресные команды
-		// ...
-		// IO: IO
-		// ...
-		// INT:
-		// ...
+		//	if CR(11) = 1 then GOTO AL1XXX
+		// AL0XXX: if CR(10) = 1 then GOTO AL01XX
+		// AL00XX: if CR(9) = 1 then GOTO AL001X
+		// NOP: if CR(8) = 0 then GOTO INT // 
+		// HLT: HLT
+		// GOTO BEGIN
+		// AL001X: if CR(8) = 1 then GOTO AL0011
+		//	if CR(7) = 1 then GOTO CMA
+		// CLA: 0 + 0 -> AC, N, V, Z
+		//	GOTO INT
+		// CMA: ~AC + 0 -> BR, N, Z, V, C
+		//	GOTO MOVTOAC
+		// AL0011: if (CR7) = 1 then GOTO CMC
+		// CLC: 0 + 0 -> C
+		//	GOTO INT
+		// CMC: if C = 1 then GOTO CLC
+		//	~0 + ~0 -> C
+		//	GOTO INT
+		// AL01XX: if CR(9) = 1 then GOTO AL011X
+		// AL010X: if CR(8) = 1 then GOTO AL0101
+		// AL0100: if CR(7) = 1 then GOTO ROR
+		// ROL: ROL(AC) -> BR, C, N, Z
+		//	GOTO MOVTOAC
+		// ROR: ROR(AC) -> BR, C, N, Z
+		//	GOTO MOVTOAC
+		// AL0101: if CR(7) = 1 then GOTO ASR
+		// ASL: ASL(AC) -> BR, C, N, Z
+		//	GOTO MOVTOAC
+		// ASR: ASR(AC) -> BR, C, N, Z
+		//	GOTO MOVTOAC
+		// AL011X: if CR(8) = 1 then AL0111
+		// AL0110: if CR(7) = 1 then SWAB
+		// AL01100: if CR(6) = 1 then TST
+		// SXTB: SEXT(AC) -> BR, N, Z, V
+		//	GOTO MOVTOAC
+		// TST: AC -> N, Z, V, C???
+		//	GOTO INT
+		// SWAB: HTOL/LTOH (AC) -> BR, N, Z, V
+		//	GOTO MOVTOAC
+		// AL0111: if CR(7) = 1 then DEC
+		// AL01110: if CR(6) = 1 then NEG
+		// INC: AC + 1 -> BR, N, Z, V, C
+		//	GOTO MOVTOAC
+		// NEG: ~AC + 1 -> BR, N, Z, V, C
+		//	GOTO MOVTOAC
+		// DEC: AC + ~0 -> BR, N, Z, V, C
+		//	GOTO MOVTOAC
+		// AL1XXX: if CR(10) = 1 then AL11XX
+		// AL10XX: SP -> AR
+		//	MEM(AR) -> DR
+		//	if CR(9) = 1 then AL101X
+		// AL100X: if CR(8) = 1 then POPF
+		// POP: DR -> AC
+		// INCSP: SP + 1 -> BR
+		//	BR -> SP
+		//	GOTO INT
+		// POPF: DR -> PS
+		//	GOTO INCSP
+		// AL101X: if CR(8) = 1 then IRET
+		// RET: DR -> IP
+		//	GOTO INCSP
+		// IRET: DR -> PS
+		//	SP + 1 -> BR, AR
+		//	MEM(AR) -> DR; BR -> SP
+		//	GOTO RET
+		// AL11XX: if CR(9) = 1 then AL111X
+		// AL110X: if CR(8) = 1 then PUSHF
+		// PUSH: AC -> DR
+		//	GOTO PUSHVALUE
+		// PUSHF: PS -> DR
+		//	GOTO PUSHVALUE
+		// AL111X: if CR(8) = 1 then космос
+		// SWAP: SP -> AR
+		//	MEM(AR) -> DR
+		//	DR -> BR
+		//	AC -> DR
+		//	BR -> AC; DR -> MEM(AR)
+		//	GOTO INT
+		// IO: IO ---------------------
+		// INT: if RUN = 0 then HLT
+		//	if INT = 0 then BEGIN
+		//	SP + ~0 -> BR
+		//	BR -> AR, SP
+		//	IP -> DR
+		//	DR -> MEM(AR)
+		//	SP + ~0 -> BR
+		//	BR -> AR, SP
+		//	IP -> DR
+		//	DR -> MEM(AR)
+		//	0 -> AR
+		//	MEM(AR) -> DR
+		//	DR -> IP, DI
+		//	GOTO BEGIN
 		// SETIP:
+		//	IR -> IP
+		//	GOTO HLT
 		// WRITE:
+		//	IP -> AR
+		//	IR -> DR
+		//	DR -> MEM(AR); IP + 1 -> BR
+		//	BR -> IP
+		//	GOTO HLT
 		// READ:
+		//	IP -> AR
+		//	IR -> DR
+		//	MEM(AR) -> DR; IP + 1 -> BR
+		//	BR -> IP
+		//	GOTO HLT
 		// START:
+		//	0 -> AC, C, N, Z, V; DI; CLRF
+		//	~0 -> SP
+		//	GOTO INT
 	};
 
 /*
