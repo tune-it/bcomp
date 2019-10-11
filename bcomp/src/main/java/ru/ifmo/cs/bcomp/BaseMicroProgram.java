@@ -81,7 +81,7 @@ class BaseMicroProgram /* extends MicroProgram */ {
 		// LOOP: DR + ~0 -> BR
 		//	BR -> DR
 		//	DR -> MEM(AR)
-		//	if DR(15) = 0 then GOTO INT
+		//	if DR(15) = 1 then GOTO INT
 		// SKIPCMD: IP + 1 -> BR
 		//	BR -> IP
 		//	GOTO INT
@@ -100,9 +100,9 @@ class BaseMicroProgram /* extends MicroProgram */ {
 		// CALL: DR -> BR
 		//	IP -> DR
 		//  BR -> IP
-		// PUSHVALUE: SP -> AR
-		//	DR -> MEM(AR), SP - 1 -> BR
-		//	BR -> SP
+		// PUSHVALUE: SP - 1 -> BR
+		//	BR -> SP, AR
+		//	DR -> MEM(AR)
 		//	GOTO INT
 		// ST: AC -> DR
 		//	DR -> MEM(AR)
