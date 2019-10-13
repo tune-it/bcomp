@@ -12,9 +12,9 @@ import ru.ifmo.cs.components.DataDestination;
  */
 public class SignalListener {
 	public final DataDestination dest;
-	public final ControlSignal[] signals;
+	public final CS[] signals;
 
-	public SignalListener(DataDestination dest, ControlSignal ... signals) {
+	public SignalListener(DataDestination dest, CS ... signals) {
 		this.dest = dest;
 		this.signals = signals;
 	}

@@ -57,12 +57,12 @@ public class Utils {
 		return (width + 3) >> 2;
 	}
 
-	public static String toHex(int value, int width) {
-		int chars = getHexWidth(width);
+	public static String toHex(long value, long width) {
+		int chars = getHexWidth((int)width);
 		char[] buf = new char[chars];
 
 		while (chars > 0) {
-			buf[--chars] = digits[value & 0xf];
+			buf[--chars] = digits[(int)value & 0xf];
 			value >>= 4;
 		}
 

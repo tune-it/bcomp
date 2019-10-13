@@ -4,7 +4,10 @@
 
 package ru.ifmo.cs.bcomp;
 
+import java.util.EnumMap;
 import ru.ifmo.cs.components.DataDestination;
+import ru.ifmo.cs.components.Memory;
+import ru.ifmo.cs.components.Register;
 
 /**
  *
@@ -12,14 +15,14 @@ import ru.ifmo.cs.components.DataDestination;
  */
 public class BasicComp {
 	private final CPU cpu;
-	private final IOCtrl[] ioctrls;
-	private final IODevTimer timer;
+//	private final IOCtrl[] ioctrls;
+//	private final IODevTimer timer;
 
-	public BasicComp(MicroProgram mp) throws Exception {
-		cpu = new CPU(mp);
-		cpu.startCPU();
+	public BasicComp() throws Exception {
+		cpu = new CPU();
+		//cpu.startCPU();
 
-		CPU2IO cpu2io = cpu.getCPU2IO();
+/*		CPU2IO cpu2io = cpu.getCPU2IO();
 		ioctrls = new IOCtrl[] {
 			new IOCtrl(0, IOCtrl.Direction.OUT, cpu2io),
 			new IOCtrl(1, IOCtrl.Direction.OUT, cpu2io),
@@ -32,9 +35,26 @@ public class BasicComp {
 			new IOCtrl(8, IOCtrl.Direction.IN, cpu2io),
 			new IOCtrl(9, IOCtrl.Direction.INOUT, cpu2io),
 		};
-		timer = new IODevTimer(ioctrls[0]);
+		timer = new IODevTimer(ioctrls[0]);*/
 	}
 
+	public static void main(String[] args) {
+		CPU cpu = new CPU();
+		Memory mem = cpu.getMemory();
+		Memory microcode = cpu.getMicroCode();
+		EnumMap<Reg, Register> regs = cpu.getRegisters();
+
+		microcode.setValue(0,
+				(1L << CS.RDAC.ordinal()) |
+						(1L << CS.LTOL.ordinal()) |
+						(1L << CS.WRAR.ordinal()));
+		regs.get(Reg.AC).setValue(0xDEAD);
+		System.out.println("Before:\t" + Utils.toHex(regs.get(Reg.MR).getValue(), 40));
+		cpu.step();
+		System.out.println("After:\t" + Utils.toHex(regs.get(Reg.MR).getValue(), 40));
+	}
+
+/*
 	public CPU getCPU() {
 		return cpu;
 	}
@@ -174,7 +194,7 @@ public class BasicComp {
 			cpu.tickUnlock();
 		}
 	}
-
+*/ /*
 	public void addDestination(ControlSignal cs, DataDestination dest) {
 		ctrlDestination(cs, dest, false);
 	}
@@ -204,5 +224,5 @@ public class BasicComp {
 			cpu.tickUnlock();
 		}
 	}
-
+*/
 }

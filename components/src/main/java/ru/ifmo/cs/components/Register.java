@@ -8,28 +8,23 @@ package ru.ifmo.cs.components;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class Register extends DataStorage {
-	public Register(int width, DataSource ... inputs) {
-		super(width, inputs);
-	}
-	
-	public int getValue(int startbit) {
-		return (value >> startbit) & 1;
+public class Register extends DataPart {
+	public Register(long width) {
+		super(width);
 	}
 
-	public void setValue(int value, int startbit, int width) {
-		int valuemask = getMask(width);
-
-		setValue((this.value & (~(valuemask << startbit))) | ((value & valuemask) << startbit));
+	@Override
+	public synchronized void setValue(long value) {
+		this.value = value & mask;
 	}
 
-	public void setValue(int value, int startbit) {
-		setValue((this.value & (~(1 << startbit))) | ((value & 1) << startbit));
+	public synchronized void setValue(long value, long startbit, long mask) {
+		this.value = ((this.value & ~(mask << startbit)) | ((value & mask) << startbit)) & this.mask;
 	}
 
-	public void invertBit(int startbit) {
-		int bitpos = 1 << startbit;
+	public synchronized void invertBit(long startbit) {
+		long bit = 1L << startbit;
 
-		value = (value & ~bitpos) | (~(value & bitpos) & bitpos);
+		value = (value & ~bit) | (~(value & bit) & bit);
 	}
 }

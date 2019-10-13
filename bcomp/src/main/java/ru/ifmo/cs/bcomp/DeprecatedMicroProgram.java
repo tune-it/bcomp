@@ -8,7 +8,7 @@ package ru.ifmo.cs.bcomp;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class MicroProgram {
+public class DeprecatedMicroProgram {
 	public final String microprogramName;
 	public final Instruction[] instructionSet;
 	public final String[][] microprogram;

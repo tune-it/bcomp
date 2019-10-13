@@ -5,38 +5,39 @@
 package ru.ifmo.cs.components;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class DataHandler extends DataStorage {
-	private final ArrayList<DataDestination> dests = new ArrayList<DataDestination>();
+public class Control extends Component implements DataDestination {
+	private final ArrayList<DataDestination> dsts = new ArrayList<DataDestination>();
+	protected final long startbit;
+	protected final long ctrlbit;
 
-	public DataHandler(int width, DataSource ... inputs) {
-		super(width, inputs);
+	public Control(long width, long startbit, long ctrlbit, DataDestination ... dsts) {
+		super(width);
+		this.startbit = startbit;
+		this.ctrlbit = ctrlbit;
+
+		this.dsts.addAll(Arrays.asList(dsts));
 	}
 
-	public void addDestination(DataDestination dest) {
-		dests.add(dest);
+	public synchronized void addDestination(DataDestination ... dsts) {
+		this.dsts.addAll(Arrays.asList(dsts));
 	}
 
-	public void removeDestination(DataDestination dest) {
-		int index = dests.indexOf(dest);
+	public synchronized void removeDestination(DataDestination dst) {
+		int index = dsts.indexOf(dst);
 
 		if (index >= 0)
-			dests.remove(index);
+			dsts.remove(index);
 	}
 
 	@Override
-	public void setValue(int value) {
-		super.setValue(value);
-
-		for (DataDestination dest : dests)
-			dest.setValue(this.value);
-	}
-
-	public void resetValue() {
-		super.setValue(0);
+	public synchronized void setValue(long value) {
+		for (DataDestination dst : dsts)
+			dst.setValue(value >> startbit);
 	}
 }

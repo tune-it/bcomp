@@ -64,7 +64,7 @@ public class ControlUnit {
 		writeMIP.addDestination(ip);
 	}
 
-	public DataHandler createValve(ControlSignal cs, DataSource ... inputs) {
+	public DataHandler createValve(CS cs, DataSource ... inputs) {
 		switch (cs) {
 			case HALT:
 				return new Valve("В0", inputs[0], 3, vr01);

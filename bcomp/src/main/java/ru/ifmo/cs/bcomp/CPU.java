@@ -14,7 +14,115 @@ import ru.ifmo.cs.components.*;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class CPU {
+	private enum Buses {
+		RIGHT_INPUT,
+		LEFT_INPUT,
+		RIGHT_COMPLEMENT,
+		LEFT_COMPLEMENT,
+		ALU_OUT,
+		SWITCH_OUT,
+	}
 
+	private static final long MR_WIDTH = CS.TYPE.ordinal() + 1;
+	private static final long MP_WIDTH = 8;
+	private static final long AR_WIDTH = 11;
+	private static final long DATA_WIDTH = 16;
+
+	private final EnumMap<Reg, Register> regs = new EnumMap<Reg, Register>(Reg.class);
+	private final EnumMap<CS, Control> valves = new EnumMap<CS, Control>(CS.class);
+	private final EnumMap<Buses, Bus> buses = new EnumMap<Buses, Bus>(Buses.class);
+	private final Memory mem;
+	private final Memory microcode;
+
+	protected CPU() {
+		Register ac = new Register(DATA_WIDTH);
+		regs.put(Reg.AC, ac);
+		Register ar = new Register(AR_WIDTH);
+		regs.put(Reg.AR, ar);
+		Register br = new Register(DATA_WIDTH);
+		regs.put(Reg.BR, br);
+		Register cr = new Register(DATA_WIDTH);
+		regs.put(Reg.CR, cr);
+		Register dr = new Register(DATA_WIDTH);
+		regs.put(Reg.DR, dr);
+		Register ip = new Register(AR_WIDTH);
+		regs.put(Reg.IP, ip);
+		Register ir = new Register(DATA_WIDTH);
+		regs.put(Reg.IR, ir);
+		Register mp = new Register(MP_WIDTH);
+		regs.put(Reg.MP, mp);
+		Register mr = new Register(MR_WIDTH);
+		regs.put(Reg.MR, mr);
+		Register ps = new Register(DATA_WIDTH);
+		regs.put(Reg.PS, ps); // !!! FIX WIDTH !!!
+		Register sp = new Register(AR_WIDTH);
+		regs.put(Reg.SP, sp);
+
+		mem = new Memory(DATA_WIDTH, ar);
+		microcode = new Memory(MR_WIDTH, mp);
+
+		// Read microcommand
+		valves.put(CS.CLOCK0, new Valve(microcode, MR_WIDTH, 0, 0, mr));
+
+		Bus right = new Bus(DATA_WIDTH);
+		buses.put(Buses.RIGHT_INPUT, right);
+		Bus left = new Bus(DATA_WIDTH);
+		buses.put(Buses.LEFT_INPUT, left);
+
+		// Execute microcommand
+		valves.put(CS.CLOCK1,
+			new Valve(mr, MR_WIDTH, 0, 0,
+				getValve(dr, DATA_WIDTH, 0, CS.RDDR, right),
+				getValve(ip, DATA_WIDTH, 0, CS.RDIP, right),
+				getValve(cr, DATA_WIDTH, 0, CS.RDCR, right),
+				getValve(sp, DATA_WIDTH, 0, CS.RDSP, right),
+				getValve(ac, DATA_WIDTH, 0, CS.RDAC, left),
+				getValve(ps, DATA_WIDTH, 0, CS.RDPS, left),
+				getValve(br, DATA_WIDTH, 0, CS.RDBR, left),
+				getValve(ir, DATA_WIDTH, 0, CS.RDIR, left)
+			)
+		);
+
+		//valves.get(CS.CLOCK1).addDestination(mr);
+
+		//buses.put(Buses.RIGHT_INPUT,
+		//		new ValveCtrlInput(cr, DATA_WIDTH, 0, mr, CS.RDDR.ordinal());
+	}
+
+	private Control getValve(DataSource input, long width, long startbit, CS cs, DataDestination ... dsts) {
+		Control _valve = valves.get(cs);
+
+		if (_valve == null)
+			valves.put(cs, _valve = new Valve(input, width, startbit, cs.ordinal(), dsts));
+
+		return _valve;
+	}
+
+	public EnumMap<Reg, Register> getRegisters() {
+		return regs;
+	}
+
+	public Register getRegister(Reg reg) {
+		return regs.get(reg);
+	}
+
+	public Memory getMemory() {
+		return mem;
+	}
+
+	public Memory getMicroCode() {
+		return microcode;
+	}
+
+	public synchronized void step() {
+// !!! UNCOMMENT AFTER ALL BUSES DONE !!!
+//		for (Buses bus: Buses.values())
+//			buses.get(bus).resetValue();
+//
+		valves.get(CS.CLOCK0).setValue(1);
+		valves.get(CS.CLOCK1).setValue(1);
+	}
+/*
 	private final Bus aluOutput = new Bus(16);
 	private final Bus intrReq = new Bus(1);
 	private final Register regState = new Register("C", "РС", StateReg.WIDTH);
@@ -197,18 +305,18 @@ public class CPU {
 	void tickUnlock() {
 		tick.unlock();
 	}
-
+*/
 	/**
 	 * Use tickLock() before call this function
 	 */
-	void addDestination(ControlSignal cs, DataDestination dest) {
+/*	void addDestination(ControlSignal cs, DataDestination dest) {
 		valves.get(cs).addDestination(dest);
 	}
-
+*/
 	/**
 	 * Use tickLock() before call this function
 	 */
-	void removeDestination(ControlSignal cs, DataDestination dest) {
+/*	void removeDestination(ControlSignal cs, DataDestination dest) {
 		valves.get(cs).removeDestination(dest);
 	}
 
@@ -500,4 +608,5 @@ public class CPU {
 		super.finalize();
 		stopCPU();
 	}
+*/
 }

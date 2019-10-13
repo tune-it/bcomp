@@ -8,44 +8,33 @@ package ru.ifmo.cs.components;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class Memory extends DataWidth implements DataSource, DataDestination {
-	private int memory[];
-	private DataSource addr;
-	private int size;
+public class Memory extends Component implements DataSource, DataDestination {
+	private final long memory[];
+	private final Register ar;
 
-	public Memory(String name, int width, DataSource addr) {
+	public Memory(long width, Register ar) {
 		super(width);
 
-		memory = new int[size = 1 << (this.addr = addr).getWidth()];
+		memory = new long[1 << ((this.ar = ar).width)];
+
+		for (int i = 0; i < memory.length; memory[i++] = 0L);
 	}
 
-	public int getValue(int addr) {
+	public synchronized long getValue(int addr) {
 		return memory[addr];
 	}
 
 	@Override
-	public int getValue() {
-		return getValue(addr.getValue());
+	public synchronized long getValue() {
+		return getValue((int)ar.getValue());
 	}
 
-	public void setValue(int addr, int value) {
+	public synchronized void setValue(int addr, long value) {
 		memory[addr] = value & mask;
 	}
 
 	@Override
-	public void setValue(int value) {
-		setValue(addr.getValue(), value);
-	}
-
-	public int getSize() {
-		return size;
-	}
-
-	public int getAddrValue() {
-		return addr.getValue();
-	}
-
-	public int getAddrWidth() {
-		return addr.getWidth();
+	public synchronized void setValue(long value) {
+		setValue((int)ar.getValue(), value);
 	}
 }

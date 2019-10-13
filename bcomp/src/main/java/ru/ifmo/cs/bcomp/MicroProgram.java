@@ -4,21 +4,20 @@
 
 package ru.ifmo.cs.bcomp;
 
-import static ru.ifmo.cs.bcomp.ControlSignal.*;
+import static ru.ifmo.cs.bcomp.CS.*;
 
 /**
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-class BaseMicroProgram /* extends MicroProgram */ {
-	private static final MicroCommand[] MP = {
-		new MicroCommand(),
-		new MicroCommand("BEGIN", RDIP, LTOL, HTOH, WRAR, WRBR), // IP -> AR, BR
-		new MicroCommand(RDBR, PLS1, LTOL, HTOH, WRIP, LOAD), // BR + 1 -> IP, MEM(AR) -> DR
-		new MicroCommand(RDDR, LTOL, HTOH, WRCR), // DR -> CR
-		new ControlMicroCommand("ADDRTYPE", 7, 1, RDCR, HTOL), // if CR(15) == 1 then GOTO CHKBR
-		new ControlMicroCommand("ADDRTYPE", 6, 1, RDCR, HTOL), // if CR(14) == 1 then GOTO ADDRTYPE
-		new ControlMicroCommand("ADDRTYPE", 5, 1, RDCR, HTOL), // if CR(13) == 1 then GOTO ADDRTYPE
+public class MicroProgram {
+	private static final omc[] MP = {
+		new omc("BEGIN",	new CS[] {RDIP, LTOL, HTOH, WRAR, WRBR}),						// IP -> AR, BR
+		new omc(			new CS[] {RDBR, PLS1, LTOL, HTOH, WRIP, LOAD}),					// BR + 1 -> IP, MEM(AR) -> DR
+		new omc(			new CS[] {RDDR, LTOL, HTOH, WRCR}),								// DR -> CR
+		new CMC(			new CS[] {RDCR, HTOL}, 7, 1,						"ADDRTYPE"),	// if CR(15) == 1 then GOTO CHKBR
+		new CMC(			new CS[] {RDCR, HTOL}, 6, 1,						"ADDRTYPE"),	// if CR(14) == 1 then GOTO ADDRTYPE
+		new CMC(			new CS[] {RDCR, HTOL}, 5, 1,						"ADDRTYPE"),	// if CR(13) == 1 then GOTO ADDRTYPE
 		// if CR(12) == 0 then GOTO ADDRLESS
 		// GOTO IO
 		// CHKBR: if CR(14) == 0 then GOTO ADDRTYPE
@@ -455,7 +454,7 @@ class BaseMicroProgram /* extends MicroProgram */ {
 		{"EXECCNT", "0000", null}
 	};
 */
-	BaseMicroProgram() {
+	MicroProgram() {
 		//super("исходная", BaseInstrSet.instructions, mp);
 	}
 }

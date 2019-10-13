@@ -8,28 +8,18 @@ package ru.ifmo.cs.components;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class Valve extends DataCtrl {
+public class Valve extends Control {
 	private final DataSource input;
-	private final int startbit;
 
-	public Valve(DataSource input, int startbit, int width, int ctrlbit, DataSource ... ctrls) {
-		super(width, ctrlbit, ctrls);
+	public Valve(DataSource input, long width, long startbit, long ctrlbit, DataDestination ... dsts) {
+		super(width, startbit, ctrlbit, dsts);
 
 		this.input = input;
-		this.startbit = startbit;
-	}
-
-	public Valve(DataSource input, int ctrlbit, DataSource ... ctrls) {
-		this(input, 0, input.getWidth(), ctrlbit, ctrls);
-	}
-
-	public Valve(DataSource input, DataSource ... ctrls) {
-		this(input, 0, ctrls);
 	}
 
 	@Override
-	public void setValue(int ctrl) {
-		if (isOpen(ctrl))
-			super.setValue(input.getValue() >> startbit);
+	public synchronized void setValue(long value) {
+		if (((value >> ctrlbit) & 1L) == 1L)
+			super.setValue(input.getValue());
 	}
 }

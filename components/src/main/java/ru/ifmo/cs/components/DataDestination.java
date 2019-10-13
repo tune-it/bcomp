@@ -8,7 +8,6 @@ package ru.ifmo.cs.components;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public interface DataSource {
-	public long getValue();
+public interface DataDestination  {
+	public void setValue(long value);
 }
-

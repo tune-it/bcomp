@@ -12,13 +12,13 @@ import java.util.Set;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class MicroPrograms {
-	public static final String DEFAULT_MICROPROGRAM = BaseMicroProgram.NAME;
+	public static final String DEFAULT_MICROPROGRAM = MicroProgram.NAME;
 
 	private static final HashMap<String, Class> microprograms =
 		new HashMap<String, Class>();
 
 	static {
-		microprograms.put(BaseMicroProgram.NAME, BaseMicroProgram.class);
+		microprograms.put(MicroProgram.NAME, MicroProgram.class);
 		microprograms.put(OptimizedMicroProgram.NAME, OptimizedMicroProgram.class);
 		microprograms.put(ExtendedMicroProgram.NAME, ExtendedMicroProgram.class);
 	}
