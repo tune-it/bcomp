@@ -8,23 +8,24 @@ package ru.ifmo.cs.bcomp;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class MicroCommand {
+public class omc {
 	public final String label;
 	private final long microcmd;
+	private final CS[] signals;
 
-	public MicroCommand(String label, ControlSignal ... signals) {
+	public omc(String label, CS[] signals) {
 		long microcmd = 0L;
 
 		this.label = label;
 
-		for (ControlSignal cs : signals) {
+		for (CS cs : (this.signals = signals)) {
 			microcmd |= 1L << cs.ordinal();
 		}
 
 		this.microcmd = microcmd;
 	}
 
-	public MicroCommand(ControlSignal ... signals) {
+	public omc(CS[] signals) {
 		this(null, signals);
 	}
 

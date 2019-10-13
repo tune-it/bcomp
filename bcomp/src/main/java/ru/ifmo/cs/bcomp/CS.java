@@ -8,202 +8,202 @@ package ru.ifmo.cs.bcomp;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public enum ControlSignal {
+public enum CS {
 	/**
 	 * Control signal 0:
-	 * HALT
-	 */
-	HALT,
-	/**
-	 * Control signal 1:
 	 * Read Data Register
 	 */
 	RDDR,
 	/**
-	 * Control signal 2:
+	 * Control signal 1:
 	 * Read Instruction Pointer
 	 */
 	RDIP,
 	/**
-	 * Control signal 3:
+	 * Control signal 2:
 	 * Read Command Register
 	 */
 	RDCR,
 	/**
-	 * Control signal 4:
+	 * Control signal 3:
 	 * Read Stack Pointer
 	 */
 	RDSP,
 	/**
-	 * Control signal 5:
+	 * Control signal 4:
 	 * Read Accumulator
 	 */
 	RDAC,
 	/**
-	 * Control signal 6:
+	 * Control signal 5:
 	 * Read Program State register
 	 */
 	RDPS,
 	/**
-	 * Control signal 7:
+	 * Control signal 6:
 	 * Read Buffer Register
 	 */
 	RDBR,
 	/**
-	 * Control signal 8:
+	 * Control signal 7:
 	 * Read Input Register
 	 */
 	RDIR,
 	/**
-	 * Control signal 9:
-	 * Write to Data Register
-	 */
-	WRDR,
-	/**
-	 * Control signal 10:
-	 * Write to Instruction Pointer
-	 */
-	WRIP,
-	/**
-	 * Control signal 11:
-	 * Write to Command Register
-	 */
-	WRCR,
-	/**
-	 * Control signal 12:
-	 * Write to Stack Pointer
-	 */
-	WRSP,
-	/**
-	 * Control signal 13:
-	 * Write to Accumulator
-	 */
-	WRAC,
-	/**
-	 * Control signal 14:
-	 * Write to Program State register
-	 */
-	WRPS,
-	/**
-	 * Control signal 15:
-	 * Write to Buffer Register
-	 */
-	WRBR,
-	/**
-	 * Control signal 16:
-	 * Write to Address Register
-	 */
-	WRAR,
-	/**
-	 * Control signal 17:
+	 * Control signal 8:
 	 * Complement Left input
 	 */
 	COML,
 	/**
-	 * Control signal 18:
+	 * Control signal 9:
 	 * Complement Right input
 	 */
 	COMR,
 	/**
-	 * Control signal 19:
+	 * Control signal 10:
 	 * Summary OR And
 	 */
 	SORA,
 	/**
-	 * Control signal 20:
+	 * Control signal 11:
 	 * Plus one
 	 */
 	PLS1,
 	/**
-	 * Control signal 21:
+	 * Control signal 12:
 	 * Lower byte to lower
 	 */
 	LTOL,
 	/**
-	 * Control signal 22:
+	 * Control signal 13:
 	 * High byte to high
 	 */
 	HTOH,
 	/**
-	 * Control signal 23:
+	 * Control signal 14:
 	 * Lower byte to high
 	 */
 	LTOH,
 	/**
-	 * Control signal 24:
+	 * Control signal 15:
 	 * High byte to lower
 	 */
 	HTOL,
 	/**
-	 * Control signal 25:
+	 * Control signal 16:
 	 * Sign Extend from lower byte to high
 	 */
 	SEXT,
 	/**
-	 * Control signal 26:
+	 * Control signal 17:
 	 * SHift Left
 	 */
 	SHLT,
 	/**
-	 * Control signal 27:
+	 * Control signal 18:
 	 * Use old C as value for 0th bit (SH_L + SHL0 == ROL)
 	 */
 	SHL0,
 	/**
-	 * Control signal 28:
+	 * Control signal 19:
 	 * SHift Right
 	 */
 	SHRT,
 	/**
-	 * Control signal 29:
+	 * Control signal 20:
 	 * ???
 	 */
 	SHRF,
 	/**
-	 * Control signal 30:
+	 * Control signal 21:
 	 * Set flag C
 	 */
 	SETC,
 	/**
-	 * Control signal 31:
+	 * Control signal 22:
 	 * Set flags N and Z
 	 */
 	STNZ,
 	/**
-	 * Control signal 32:
+	 * Control signal 23:
 	 * Set flag oVerflow
 	 */
 	SETV,
 	/**
-	 * Control signal 33:
+	 * Control signal 24:
+	 * Write to Data Register
+	 */
+	WRDR,
+	/**
+	 * Control signal 25:
+	 * Write to Instruction Pointer
+	 */
+	WRIP,
+	/**
+	 * Control signal 26:
+	 * Write to Command Register
+	 */
+	WRCR,
+	/**
+	 * Control signal 27:
+	 * Write to Stack Pointer
+	 */
+	WRSP,
+	/**
+	 * Control signal 28:
+	 * Write to Accumulator
+	 */
+	WRAC,
+	/**
+	 * Control signal 29:
+	 * Write to Program State register
+	 */
+	WRPS,
+	/**
+	 * Control signal 30:
+	 * Write to Buffer Register
+	 */
+	WRBR,
+	/**
+	 * Control signal 31:
+	 * Write to Address Register
+	 */
+	WRAR,
+	/**
+	 * Control signal 32:
 	 * Load value from Memory to Data Register
 	 */
 	LOAD,
 	/**
-	 * Control signal 34:
+	 * Control signal 33:
 	 * Store value from Data Register to Memory
 	 */
 	STOR,
 	/**
-	 * Control signal 35:
+	 * Control signal 34:
 	 * Input output
 	 */
 	IO,
 	/**
-	 * Control signal 36:
+	 * Control signal 35:
 	 * Clear flags for all IO Controllers
 	 */
 	CLRF,
 	/**
-	 * Control signal 37:
+	 * Control signal 36:
 	 * Disable interrupts
 	 */
 	DINT,
 	/**
-	 * Control signal 38:
+	 * Control signal 37:
 	 * Enable interrupts
 	 */
 	EINT,
+	/**
+	 * Control signal 38:
+	 * HALT
+	 */
+	HALT,
 	/**
 	 * Control signal 39:
 	 * Micro command type
@@ -217,6 +217,10 @@ public enum ControlSignal {
 	 * Псевдосигнал: Установка программы
 	 */
 	SET_PROGRAM,
+	/**
+	 * Псевдосигнал (?): Тактовый генератор
+	 */
+	CLOCK,
 	/**
 	 * Псевдосигнал: Запрос прерывания
 	 */
