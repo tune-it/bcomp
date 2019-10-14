@@ -8,24 +8,20 @@ package ru.ifmo.cs.components;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class DataAnd extends DataHandler {
-	private final DataSource input1;
-	private final int startbit1;
-	private final DataSource input2;
+public class DataAnd extends Control {
+	private final DataSource left;
+	private final DataSource right;
 
-	public DataAnd(DataSource input1, int startbit1, DataSource input2, DataSource ... ctrls) {
-		super(1, ctrls);
+	public DataAnd(DataSource left, DataSource right, long width, long ctrlbit, DataDestination ... dsts) {
+		super(width, 0, ctrlbit, dsts);
 
-		this.input1 = input1;
-		this.startbit1 = startbit1;
-		this.input2 = input2;
+		this.left = left;
+		this.right = right;
 	}
 
 	@Override
-	public void setValue(int ctrl) {
-		if (((input1.getValue() >> startbit1) & 1) == 1)
-			super.setValue(input2.getValue());
-		else
-			super.setValue(0);
+	public synchronized void setValue(long value) {
+		if (isOpen(value))
+			super.setValue(left.getValue() & right.getValue() & mask);
 	}
 }

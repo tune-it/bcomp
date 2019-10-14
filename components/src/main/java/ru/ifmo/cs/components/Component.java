@@ -14,10 +14,10 @@ public class Component {
 
 	public Component(long width) {
 		this.width = width;
-		this.mask = getMask(width);
+		this.mask = calculateMask(width);
 	}
 
-	public static long getMask(long width) {
+	public static long calculateMask(long width) {
 		return (1L << width) - 1L;
 	}
 }

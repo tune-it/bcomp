@@ -8,7 +8,7 @@ package ru.ifmo.cs.components;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public abstract class PartWriter extends Component implements DataDestination {
+public class PartWriter extends Component implements DataDestination {
 	private final DataPart dst;
 	private final long startbit;
 
@@ -20,7 +20,7 @@ public abstract class PartWriter extends Component implements DataDestination {
 	}
 
 	@Override
-	public void setValue(long value) {
+	public synchronized void setValue(long value) {
 		dst.setValue(value, startbit, mask);
 	}
 }

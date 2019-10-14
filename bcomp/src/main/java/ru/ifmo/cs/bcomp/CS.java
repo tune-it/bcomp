@@ -51,24 +51,24 @@ public enum CS {
 	RDIR,
 	/**
 	 * Control signal 8:
-	 * Complement Left input
-	 */
-	COML,
-	/**
-	 * Control signal 9:
 	 * Complement Right input
 	 */
 	COMR,
 	/**
-	 * Control signal 10:
-	 * Summary OR And
+	 * Control signal 9:
+	 * Complement Left input
 	 */
-	SORA,
+	COML,
 	/**
-	 * Control signal 11:
+	 * Control signal 10:
 	 * Plus one
 	 */
 	PLS1,
+	/**
+	 * Control signal 11:
+	 * Summary OR And
+	 */
+	SORA,
 	/**
 	 * Control signal 12:
 	 * Lower byte to lower

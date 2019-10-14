@@ -35,6 +35,10 @@ public class Control extends Component implements DataDestination {
 			dsts.remove(index);
 	}
 
+	protected boolean isOpen(long value) {
+		return ((value >> ctrlbit) & 1L) == 1L;
+	}
+
 	@Override
 	public synchronized void setValue(long value) {
 		for (DataDestination dst : dsts)

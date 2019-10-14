@@ -40,9 +40,9 @@ public class ControlUnit {
 	static final int LABEL_STP = 8;
 
 	public ControlUnit(Bus aluOutput) {
-		Valve vr0 = new Valve(clock, new Inverter(15, clock));
+		Valve vr0 = new Valve(clock, new Complement(15, clock));
 
-		vr00 = new Valve(vr0, new Inverter(14, vr0));
+		vr00 = new Valve(vr0, new Complement(14, vr0));
 		decoders.put(Decoders.LEFT_INPUT, new DataDecoder(vr00, 12, 2));
 		decoders.put(Decoders.RIGHT_INPUT, new DataDecoder(vr00, 8, 2));
 
@@ -112,7 +112,7 @@ public class ControlUnit {
 				);
 
 			case ALU_AND:
-				return new DataAdder("В9", inputs[0], inputs[1], inputs[2],
+				return new DataAdd("В9", inputs[0], inputs[1], inputs[2],
 					new DataPart(5, vr00),
 					valve4ctrlcmd
 				);

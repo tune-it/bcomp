@@ -5,6 +5,7 @@
 package ru.ifmo.cs.bcomp;
 
 import java.util.EnumMap;
+import ru.ifmo.cs.components.Bus;
 import ru.ifmo.cs.components.DataDestination;
 import ru.ifmo.cs.components.Memory;
 import ru.ifmo.cs.components.Register;
@@ -43,15 +44,24 @@ public class BasicComp {
 		Memory mem = cpu.getMemory();
 		Memory microcode = cpu.getMicroCode();
 		EnumMap<Reg, Register> regs = cpu.getRegisters();
+		EnumMap<CPU.Buses, Bus> buses = cpu.getBuses();
 
 		microcode.setValue(0,
 				(1L << CS.RDAC.ordinal()) |
-						(1L << CS.LTOL.ordinal()) |
-						(1L << CS.WRAR.ordinal()));
+				(1L << CS.LTOL.ordinal()) |
+				(1L << CS.WRAR.ordinal()) |
+				(1L << CS.COMR.ordinal()));
 		regs.get(Reg.AC).setValue(0xDEAD);
+		regs.get(Reg.PS).setValue(0x1);
 		System.out.println("Before:\t" + Utils.toHex(regs.get(Reg.MR).getValue(), 40));
 		cpu.step();
 		System.out.println("After:\t" + Utils.toHex(regs.get(Reg.MR).getValue(), 40));
+
+		System.out.println("Right:\t" + Utils.toHex(buses.get(CPU.Buses.RIGHT_INPUT).getValue(), 16));
+		System.out.println("Left:\t" + Utils.toHex(buses.get(CPU.Buses.LEFT_INPUT).getValue(), 16));
+		System.out.println("RightL:\t" + Utils.toHex(buses.get(CPU.Buses.RIGHT_COMPLEMENT).getValue(), 16));
+		System.out.println("LeftL:\t" + Utils.toHex(buses.get(CPU.Buses.LEFT_COMPLEMENT).getValue(), 16));
+		System.out.println("ALU_OUT:\t" + Utils.toHex(buses.get(CPU.Buses.ALU_OUT).getValue(), 19));
 	}
 
 /*

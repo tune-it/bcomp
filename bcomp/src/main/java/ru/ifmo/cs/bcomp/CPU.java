@@ -14,7 +14,8 @@ import ru.ifmo.cs.components.*;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class CPU {
-	private enum Buses {
+	// !!! TEMPORARY PUBLIC !!! BUSES SHOULD BE NOT VISIBLE TO OTHERS !!!
+	public enum Buses {
 		RIGHT_INPUT,
 		LEFT_INPUT,
 		RIGHT_COMPLEMENT,
@@ -35,6 +36,8 @@ public class CPU {
 	private final Memory microcode;
 
 	protected CPU() {
+		Control c;
+
 		Register ac = new Register(DATA_WIDTH);
 		regs.put(Reg.AC, ac);
 		Register ar = new Register(AR_WIDTH);
@@ -68,40 +71,67 @@ public class CPU {
 		buses.put(Buses.RIGHT_INPUT, right);
 		Bus left = new Bus(DATA_WIDTH);
 		buses.put(Buses.LEFT_INPUT, left);
+		Bus rcom = new Bus(DATA_WIDTH);
+		buses.put(Buses.RIGHT_COMPLEMENT, rcom);
+		Bus lcom = new Bus(DATA_WIDTH);
+		buses.put(Buses.LEFT_COMPLEMENT, lcom);
+		Bus aluout = new Bus(DATA_WIDTH + 3);
+		buses.put(Buses.ALU_OUT, aluout);
 
 		// Execute microcommand
-		valves.put(CS.CLOCK1,
-			new Valve(mr, MR_WIDTH, 0, 0,
-				getValve(dr, DATA_WIDTH, 0, CS.RDDR, right),
-				getValve(ip, DATA_WIDTH, 0, CS.RDIP, right),
-				getValve(cr, DATA_WIDTH, 0, CS.RDCR, right),
-				getValve(sp, DATA_WIDTH, 0, CS.RDSP, right),
-				getValve(ac, DATA_WIDTH, 0, CS.RDAC, left),
-				getValve(ps, DATA_WIDTH, 0, CS.RDPS, left),
-				getValve(br, DATA_WIDTH, 0, CS.RDBR, left),
-				getValve(ir, DATA_WIDTH, 0, CS.RDIR, left)
-			)
+		Control clock = new Valve(mr, MR_WIDTH, 0, 0,
+			newValve(dr, DATA_WIDTH, 0, CS.RDDR, right),
+			newValve(ip, DATA_WIDTH, 0, CS.RDIP, right),
+			newValve(cr, DATA_WIDTH, 0, CS.RDCR, right),
+			newValve(sp, DATA_WIDTH, 0, CS.RDSP, right),
+			newValve(ac, DATA_WIDTH, 0, CS.RDAC, left),
+			newValve(ps, DATA_WIDTH, 0, CS.RDPS, left),
+			newValve(br, DATA_WIDTH, 0, CS.RDBR, left),
+			newValve(ir, DATA_WIDTH, 0, CS.RDIR, left)
 		);
+		valves.put(CS.CLOCK1, clock);
 
-		//valves.get(CS.CLOCK1).addDestination(mr);
+		// Pass normal value when CS.COMR is off
+		clock.addDestination(new Not(CS.COMR.ordinal(), new Valve(right, DATA_WIDTH, 0, 0, rcom)));
+		// Pass complemented value when CS.COMR is on
+		clock.addDestination(c = new Complement(right, DATA_WIDTH, 0, CS.COMR.ordinal(), rcom));
+		valves.put(CS.COMR, c);
 
-		//buses.put(Buses.RIGHT_INPUT,
-		//		new ValveCtrlInput(cr, DATA_WIDTH, 0, mr, CS.RDDR.ordinal());
+		// Pass normal value when CS.COML is off
+		clock.addDestination(new Not(CS.COML.ordinal(), new Valve(left, DATA_WIDTH, 0, 0, lcom)));
+		// Pass complemented value when CS.COML is on
+		clock.addDestination(c = new Complement(left, DATA_WIDTH, 0, CS.COML.ordinal(), lcom));
+		valves.put(CS.COMR, c);
+
+		// AND
+		clock.addDestination(c = new DataAnd(lcom, rcom, DATA_WIDTH, CS.SORA.ordinal(), aluout));
+		valves.put(CS.SORA, c);
+
+		// SUM
+		ValveValue carry = new ValveValue(CS.PLS1.ordinal());
+		clock.addDestination(carry);
+		valves.put(CS.PLS1, carry);
+		clock.addDestination(new Not(CS.SORA.ordinal(),
+			new DataAdd(lcom, rcom, carry, DATA_WIDTH, 0, aluout),
+			new Valve(ps, 1, 0, 0, new PartWriter(aluout, DATA_WIDTH + 2, 1))));
 	}
 
-	private Control getValve(DataSource input, long width, long startbit, CS cs, DataDestination ... dsts) {
-		Control _valve = valves.get(cs);
+	private Control newValve(DataSource input, long width, long startbit, CS cs, DataDestination ... dsts) {
+		Control valve = new Valve(input, width, startbit, cs.ordinal(), dsts);
 
-		if (_valve == null)
-			valves.put(cs, _valve = new Valve(input, width, startbit, cs.ordinal(), dsts));
-
-		return _valve;
+		valves.put(cs, valve);
+		return valve;
 	}
 
 	public EnumMap<Reg, Register> getRegisters() {
 		return regs;
 	}
 
+	// !!! TEMPORARY PUBLIC !!! BUSES SHOULD BE NOT VISIBLE TO OTHERS !!!
+	public EnumMap<Buses, Bus> getBuses() {
+		return buses;
+	}
+	
 	public Register getRegister(Reg reg) {
 		return regs.get(reg);
 	}
