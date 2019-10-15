@@ -20,5 +20,5 @@ public abstract class DataPart extends Component implements DataSource, DataDest
 		return value;
 	}
 
-	public abstract void setValue(long value, long startbit, long mask);
+	public abstract void setValue(long value, long mask, long startbit);
 }

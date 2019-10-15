@@ -18,7 +18,7 @@ public class Bus extends DataPart  {
 		this.value |= value & mask;
 	}
 
-	public synchronized void setValue(long value, long startbit, long mask) {
+	public synchronized void setValue(long value, long mask, long startbit) {
 		this.value |= ((value & mask) << startbit) & this.mask;
 	}
 

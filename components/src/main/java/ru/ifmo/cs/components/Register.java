@@ -18,7 +18,7 @@ public class Register extends DataPart {
 		this.value = value & mask;
 	}
 
-	public synchronized void setValue(long value, long startbit, long mask) {
+	public synchronized void setValue(long value, long mask, long startbit) {
 		this.value = ((this.value & ~(mask << startbit)) | ((value & mask) << startbit)) & this.mask;
 	}
 

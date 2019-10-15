@@ -12,7 +12,7 @@ public class PartWriter extends Component implements DataDestination {
 	private final DataPart dst;
 	private final long startbit;
 
-	public PartWriter(DataPart dst, long startbit, long width) {
+	public PartWriter(DataPart dst, long width, long startbit) {
 		super(width);
 
 		this.dst = dst;
@@ -21,6 +21,6 @@ public class PartWriter extends Component implements DataDestination {
 
 	@Override
 	public synchronized void setValue(long value) {
-		dst.setValue(value, startbit, mask);
+		dst.setValue(value, mask, startbit);
 	}
 }
