@@ -48,7 +48,7 @@ public class BasicComp {
 
 		microcode.setValue(0,
 				(1L << CS.RDAC.ordinal()) |
-				(1L << CS.LTOL.ordinal()) |
+				(1L << CS.HTOL.ordinal()) |
 				(1L << CS.WRAR.ordinal()) |
 				(1L << CS.COMR.ordinal()));
 		regs.get(Reg.AC).setValue(0xDEAD);
@@ -62,6 +62,7 @@ public class BasicComp {
 		System.out.println("RightL:\t" + Utils.toHex(buses.get(CPU.Buses.RIGHT_COMPLEMENT).getValue(), 16));
 		System.out.println("LeftL:\t" + Utils.toHex(buses.get(CPU.Buses.LEFT_COMPLEMENT).getValue(), 16));
 		System.out.println("ALU_OUT:\t" + Utils.toHex(buses.get(CPU.Buses.ALU_OUT).getValue(), 19));
+		System.out.println("SW_OUT:\t" + Utils.toHex(buses.get(CPU.Buses.SWITCH_OUT).getValue(), 16));
 	}
 
 /*

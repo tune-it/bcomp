@@ -25,6 +25,7 @@ public class CPU {
 	}
 
 	private static final long MR_WIDTH = CS.TYPE.ordinal() + 1;
+	private static final long VR_WIDTH = MR_WIDTH - 17;
 	private static final long MP_WIDTH = 8;
 	private static final long AR_WIDTH = 11;
 	private static final long DATA_WIDTH = 16;
@@ -77,6 +78,8 @@ public class CPU {
 		buses.put(Buses.LEFT_COMPLEMENT, lcom);
 		Bus aluout = new Bus(DATA_WIDTH + 3);
 		buses.put(Buses.ALU_OUT, aluout);
+		Bus swout = new Bus(DATA_WIDTH);
+		buses.put(Buses.SWITCH_OUT, swout);
 
 		// Execute microcommand
 		Control clock = new Valve(mr, MR_WIDTH, 0, 0,
@@ -114,6 +117,31 @@ public class CPU {
 		clock.addDestination(new Not(CS.SORA.ordinal(),
 			new DataAdd(lcom, rcom, carry, DATA_WIDTH, 0, aluout),
 			new Valve(ps, 1, 0, 0, new PartWriter(aluout, DATA_WIDTH + 2, 1))));
+
+		clock.addDestination(newValve(aluout, DATA_WIDTH / 2, 0, CS.LTOL, swout));
+		clock.addDestination(newValve(aluout, DATA_WIDTH / 2, DATA_WIDTH / 2, CS.HTOH,
+			new PartWriter(swout, DATA_WIDTH / 2, DATA_WIDTH / 2)));
+		clock.addDestination(newValve(aluout, DATA_WIDTH / 2, 0, CS.LTOH,
+			new PartWriter(swout, DATA_WIDTH / 2, DATA_WIDTH / 2)));
+		clock.addDestination(newValve(aluout, DATA_WIDTH / 2, DATA_WIDTH / 2, CS.HTOL, swout));
+
+		// Control Micro Command
+		Control vr0 = newValve(mr, VR_WIDTH, 16, CS.TYPE,
+			new DataDestination() {
+			public void setValue(long value) {
+				System.out.println("vr1 " + Utils.toHex(value, VR_WIDTH));
+			}
+		});
+		clock.addDestination(vr0);
+		// Operating Micro Command
+		clock.addDestination(new Not(CS.TYPE.ordinal(),
+			new Valve(mr, VR_WIDTH, 16, 0,
+			new DataDestination() {
+				public void setValue(long value) {
+					System.out.println("vr0 " + Utils.toHex(value, VR_WIDTH));
+				}
+			})
+		));
 	}
 
 	private Control newValve(DataSource input, long width, long startbit, CS cs, DataDestination ... dsts) {
