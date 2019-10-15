@@ -41,7 +41,9 @@ public class Control extends Component implements DataDestination {
 
 	@Override
 	public synchronized void setValue(long value) {
+		value = (value >> startbit ) & mask;
+
 		for (DataDestination dst : dsts)
-			dst.setValue(value >> startbit);
+			dst.setValue(value);
 	}
 }
