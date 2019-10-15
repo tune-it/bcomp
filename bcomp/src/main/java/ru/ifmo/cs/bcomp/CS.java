@@ -16,14 +16,14 @@ public enum CS {
 	RDDR,
 	/**
 	 * Control signal 1:
-	 * Read Instruction Pointer
-	 */
-	RDIP,
-	/**
-	 * Control signal 2:
 	 * Read Command Register
 	 */
 	RDCR,
+	/**
+	 * Control signal 2:
+	 * Read Instruction Pointer
+	 */
+	RDIP,
 	/**
 	 * Control signal 3:
 	 * Read Stack Pointer
@@ -36,14 +36,14 @@ public enum CS {
 	RDAC,
 	/**
 	 * Control signal 5:
-	 * Read Program State register
-	 */
-	RDPS,
-	/**
-	 * Control signal 6:
 	 * Read Buffer Register
 	 */
 	RDBR,
+	/**
+	 * Control signal 6:
+	 * Read Program State register
+	 */
+	RDPS,
 	/**
 	 * Control signal 7:
 	 * Read Input Register
@@ -76,19 +76,19 @@ public enum CS {
 	LTOL,
 	/**
 	 * Control signal 13:
-	 * High byte to high
-	 */
-	HTOH,
-	/**
-	 * Control signal 14:
 	 * Lower byte to high
 	 */
 	LTOH,
 	/**
-	 * Control signal 15:
+	 * Control signal 14:
 	 * High byte to lower
 	 */
 	HTOL,
+	/**
+	 * Control signal 15:
+	 * High byte to high
+	 */
+	HTOH,
 	/**
 	 * Control signal 16:
 	 * Sign Extend from lower byte to high
@@ -106,7 +106,7 @@ public enum CS {
 	SHL0,
 	/**
 	 * Control signal 19:
-	 * SHift Right
+	 * SHift RighT
 	 */
 	SHRT,
 	/**
@@ -136,14 +136,14 @@ public enum CS {
 	WRDR,
 	/**
 	 * Control signal 25:
-	 * Write to Instruction Pointer
-	 */
-	WRIP,
-	/**
-	 * Control signal 26:
 	 * Write to Command Register
 	 */
 	WRCR,
+	/**
+	 * Control signal 26:
+	 * Write to Instruction Pointer
+	 */
+	WRIP,
 	/**
 	 * Control signal 27:
 	 * Write to Stack Pointer
@@ -156,14 +156,14 @@ public enum CS {
 	WRAC,
 	/**
 	 * Control signal 29:
-	 * Write to Program State register
-	 */
-	WRPS,
-	/**
-	 * Control signal 30:
 	 * Write to Buffer Register
 	 */
 	WRBR,
+	/**
+	 * Control signal 30:
+	 * Write to Program State register
+	 */
+	WRPS,
 	/**
 	 * Control signal 31:
 	 * Write to Address Register

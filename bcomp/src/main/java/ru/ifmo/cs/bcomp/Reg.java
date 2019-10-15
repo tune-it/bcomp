@@ -13,13 +13,13 @@ public enum Reg {
 	 */
 	DR,
 	/**
-	 * Instruction Pointer
-	 */
-	IP,
-	/**
 	 * Command Register
 	 */
 	CR,
+	/**
+	 * Instruction Pointer
+	 */
+	IP,
 	/**
 	 * Stack Pointer
 	 */
@@ -29,13 +29,13 @@ public enum Reg {
 	 */
 	AC,
 	/**
-	 * Program State
-	 */
-	PS,
-	/**
 	 * Buffer Register
 	 */
 	BR,
+	/**
+	 * Program State
+	 */
+	PS,
 	/**
 	 * Input Register
 	 */
@@ -45,11 +45,11 @@ public enum Reg {
 	 */
 	AR,
 	/**
-	 * Micro command Register
+	 * Microcommand Register
 	 */
 	MR,
 	/**
-	 * Micro command Pointer
+	 * Microcommand Pointer
 	 */
 	MP,
 }

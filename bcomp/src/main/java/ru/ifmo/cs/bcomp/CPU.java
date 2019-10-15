@@ -39,28 +39,40 @@ public class CPU {
 	protected CPU() {
 		Control c;
 
-		Register ac = new Register(DATA_WIDTH);
-		regs.put(Reg.AC, ac);
-		Register ar = new Register(AR_WIDTH);
-		regs.put(Reg.AR, ar);
-		Register br = new Register(DATA_WIDTH);
-		regs.put(Reg.BR, br);
-		Register cr = new Register(DATA_WIDTH);
-		regs.put(Reg.CR, cr);
+		// Data Register
 		Register dr = new Register(DATA_WIDTH);
 		regs.put(Reg.DR, dr);
+		// Command Register
+		Register cr = new Register(DATA_WIDTH);
+		regs.put(Reg.CR, cr);
+		// Instruction Pointer
 		Register ip = new Register(AR_WIDTH);
 		regs.put(Reg.IP, ip);
-		Register ir = new Register(DATA_WIDTH);
-		regs.put(Reg.IR, ir);
-		Register mp = new Register(MP_WIDTH);
-		regs.put(Reg.MP, mp);
-		Register mr = new Register(MR_WIDTH);
-		regs.put(Reg.MR, mr);
-		Register ps = new Register(DATA_WIDTH);
-		regs.put(Reg.PS, ps); // !!! FIX WIDTH !!!
+		// Stack Pointer
 		Register sp = new Register(AR_WIDTH);
 		regs.put(Reg.SP, sp);
+		// ACcumulator
+		Register ac = new Register(DATA_WIDTH);
+		regs.put(Reg.AC, ac);
+		// Buffer Register
+		Register br = new Register(DATA_WIDTH);
+		regs.put(Reg.BR, br);
+		// Program State
+		Register ps = new Register(DATA_WIDTH);
+		regs.put(Reg.PS, ps); // !!! FIX WIDTH !!!
+		// Input Register
+		Register ir = new Register(DATA_WIDTH);
+		regs.put(Reg.IR, ir);
+		// Address Register
+		Register ar = new Register(AR_WIDTH);
+		regs.put(Reg.AR, ar);
+		// Microcommand Register
+		Register mr = new Register(MR_WIDTH);
+		regs.put(Reg.MR, mr);
+		// Microcommand Pointer
+		Register mp = new Register(MP_WIDTH);
+		regs.put(Reg.MP, mp);
+
 
 		mem = new Memory(DATA_WIDTH, ar);
 		microcode = new Memory(MR_WIDTH, mp);
@@ -84,12 +96,12 @@ public class CPU {
 		// Execute microcommand
 		Control clock = new Valve(mr, MR_WIDTH, 0, 0,
 			newValve(dr, DATA_WIDTH, 0, CS.RDDR, right),
-			newValve(ip, DATA_WIDTH, 0, CS.RDIP, right),
 			newValve(cr, DATA_WIDTH, 0, CS.RDCR, right),
+			newValve(ip, DATA_WIDTH, 0, CS.RDIP, right),
 			newValve(sp, DATA_WIDTH, 0, CS.RDSP, right),
 			newValve(ac, DATA_WIDTH, 0, CS.RDAC, left),
-			newValve(ps, DATA_WIDTH, 0, CS.RDPS, left),
 			newValve(br, DATA_WIDTH, 0, CS.RDBR, left),
+			newValve(ps, DATA_WIDTH, 0, CS.RDPS, left),
 			newValve(ir, DATA_WIDTH, 0, CS.RDIR, left)
 		);
 		valves.put(CS.CLOCK1, clock);
@@ -106,24 +118,25 @@ public class CPU {
 		clock.addDestination(c = new Complement(left, DATA_WIDTH, 0, CS.COML.ordinal(), lcom));
 		valves.put(CS.COMR, c);
 
+		// Plus 1
+		ValveValue carry = new ValveValue(CS.PLS1.ordinal());
+		clock.addDestination(carry);
+		valves.put(CS.PLS1, carry);
 		// AND
 		clock.addDestination(c = new DataAnd(lcom, rcom, DATA_WIDTH, CS.SORA.ordinal(), aluout));
 		valves.put(CS.SORA, c);
 
 		// SUM
-		ValveValue carry = new ValveValue(CS.PLS1.ordinal());
-		clock.addDestination(carry);
-		valves.put(CS.PLS1, carry);
 		clock.addDestination(new Not(CS.SORA.ordinal(),
 			new DataAdd(lcom, rcom, carry, DATA_WIDTH, 0, aluout),
 			new Valve(ps, 1, 0, 0, new PartWriter(aluout, 1, DATA_WIDTH + 2))));
 
 		clock.addDestination(newValve(aluout, 8, 0, CS.LTOL, swout));
-		clock.addDestination(newValve(aluout, 10, 8, CS.HTOH,
-			new PartWriter(swout, 10, 8)));
 		clock.addDestination(newValve(aluout, 8, 0, CS.LTOH,
 			new PartWriter(swout, 8, 8)));
-		clock.addDestination(newValve(aluout, DATA_WIDTH / 2, DATA_WIDTH / 2, CS.HTOL, swout));
+		clock.addDestination(newValve(aluout, 8, 8, CS.HTOL, swout));
+		clock.addDestination(newValve(aluout, 10, 8, CS.HTOH,
+			new PartWriter(swout, 10, 8)));
 
 		// Control Micro Command
 		Control vr0 = newValve(mr, VR_WIDTH, 16, CS.TYPE,
