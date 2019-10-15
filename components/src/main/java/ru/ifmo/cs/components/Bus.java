@@ -16,7 +16,6 @@ public class Bus extends DataPart  {
 	@Override
 	public synchronized void setValue(long value) {
 		this.value |= value & mask;
-		System.out.println("New value for " + this + " is " + Long.toHexString(this.value));
 	}
 
 	public synchronized void setValue(long value, long startbit, long mask) {
