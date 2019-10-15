@@ -78,7 +78,7 @@ public class CPU {
 		buses.put(Buses.LEFT_COMPLEMENT, lcom);
 		Bus aluout = new Bus(DATA_WIDTH + 3);
 		buses.put(Buses.ALU_OUT, aluout);
-		Bus swout = new Bus(DATA_WIDTH);
+		Bus swout = new Bus(DATA_WIDTH + 2);
 		buses.put(Buses.SWITCH_OUT, swout);
 
 		// Execute microcommand
@@ -116,13 +116,13 @@ public class CPU {
 		valves.put(CS.PLS1, carry);
 		clock.addDestination(new Not(CS.SORA.ordinal(),
 			new DataAdd(lcom, rcom, carry, DATA_WIDTH, 0, aluout),
-			new Valve(ps, 1, 0, 0, new PartWriter(aluout, DATA_WIDTH + 2, 1))));
+			new Valve(ps, 1, 0, 0, new PartWriter(aluout, 1, DATA_WIDTH + 2))));
 
-		clock.addDestination(newValve(aluout, DATA_WIDTH / 2, 0, CS.LTOL, swout));
-		clock.addDestination(newValve(aluout, DATA_WIDTH / 2, DATA_WIDTH / 2, CS.HTOH,
-			new PartWriter(swout, DATA_WIDTH / 2, DATA_WIDTH / 2)));
-		clock.addDestination(newValve(aluout, DATA_WIDTH / 2, 0, CS.LTOH,
-			new PartWriter(swout, DATA_WIDTH / 2, DATA_WIDTH / 2)));
+		clock.addDestination(newValve(aluout, 8, 0, CS.LTOL, swout));
+		clock.addDestination(newValve(aluout, 10, 8, CS.HTOH,
+			new PartWriter(swout, 10, 8)));
+		clock.addDestination(newValve(aluout, 8, 0, CS.LTOH,
+			new PartWriter(swout, 8, 8)));
 		clock.addDestination(newValve(aluout, DATA_WIDTH / 2, DATA_WIDTH / 2, CS.HTOL, swout));
 
 		// Control Micro Command
