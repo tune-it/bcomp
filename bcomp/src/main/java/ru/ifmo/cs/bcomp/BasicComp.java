@@ -48,13 +48,22 @@ public class BasicComp {
 
 		microcode.setValue(0,
 				(1L << CS.RDAC.ordinal()) |
-				(1L << CS.HTOH.ordinal()) |
-				(1L << CS.LTOL.ordinal()) |
+				(1L << CS.RDAC.ordinal()) |
+//				(1L << CS.SHLT.ordinal()) |
+//				(1L << CS.SHL0.ordinal()) |
+				(1L << CS.SHRT.ordinal()) |
+				(1L << CS.SHRF.ordinal()) |
+//				(1L << CS.HTOH.ordinal()) |
+//				(1L << CS.LTOL.ordinal()) |
 				(1L << CS.WRAR.ordinal()) |
-				(1L << CS.COMR.ordinal()));
+				(1L << CS.SETC.ordinal()) |
+//				(1L << CS.COMR.ordinal()) |
+				0);
 		regs.get(Reg.AC).setValue(0xDEAD);
+		regs.get(Reg.AC).setValue(0xA001);
 		regs.get(Reg.PS).setValue(0x1);
 		System.out.println("Before:\t" + Utils.toHex(regs.get(Reg.MR).getValue(), 40));
+		System.out.println("PS before =\t" + Utils.toHex(regs.get(Reg.PS).getValue(), 16));
 		cpu.step();
 		System.out.println("After:\t" + Utils.toHex(regs.get(Reg.MR).getValue(), 40));
 
@@ -64,6 +73,7 @@ public class BasicComp {
 		System.out.println("LeftL:\t" + Utils.toHex(buses.get(CPU.Buses.LEFT_COMPLEMENT).getValue(), 16));
 		System.out.println("ALU_OUT:\t" + Utils.toHex(buses.get(CPU.Buses.ALU_OUT).getValue(), 19));
 		System.out.println("SW_OUT:\t" + Utils.toHex(buses.get(CPU.Buses.SWITCH_OUT).getValue(), 18));
+		System.out.println("PS =\t" + Utils.toHex(regs.get(Reg.PS).getValue(), 16));
 	}
 
 /*

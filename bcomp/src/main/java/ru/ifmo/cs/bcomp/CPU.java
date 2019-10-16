@@ -122,6 +122,7 @@ public class CPU {
 		ValveValue carry = new ValveValue(CS.PLS1.ordinal());
 		clock.addDestination(carry);
 		valves.put(CS.PLS1, carry);
+
 		// AND
 		clock.addDestination(c = new DataAnd(lcom, rcom, DATA_WIDTH, CS.SORA.ordinal(), aluout));
 		valves.put(CS.SORA, c);
@@ -146,19 +147,39 @@ public class CPU {
 			}
 		});
 		clock.addDestination(vr0);
+
 		// Operating Micro Command
+		Control shrf;
+		PartWriter writeto15 = new PartWriter(swout, 1, DATA_WIDTH - 1);
+		valves.put(CS.SEXT, c = new SignExtender(aluout, 8, CS.SEXT.ordinal() - 16, swout));
 		clock.addDestination(new Not(CS.TYPE.ordinal(),
 			new Valve(mr, VR_WIDTH, 16, 0,
-			new DataDestination() {
-				public void setValue(long value) {
-					System.out.println("vr0 " + Utils.toHex(value, VR_WIDTH));
-				}
-			})
+				c,
+				newValveH(aluout, DATA_WIDTH, 0, CS.SHLT, new PartWriter(swout, DATA_WIDTH, 1)),
+				newValveH(aluout, 1, DATA_WIDTH + 2, CS.SHL0, swout),
+				newValveH(aluout, DATA_WIDTH - 1, 1, CS.SHRT, swout),
+				new ValveTwo(CS.SHRT.ordinal() - 16, CS.SHRF.ordinal() - 16,
+					shrf = new Valve(aluout, 1, DATA_WIDTH - 1, 0, writeto15),
+					new Not(0,
+						new Valve(aluout, 1, 0, 0, new PartWriter(swout, 1, DATA_WIDTH)),
+						new Valve(aluout, 1, DATA_WIDTH + 2, 0, writeto15)
+					)
+				),
+				newValveH(swout, 1, DATA_WIDTH, CS.SETC, new PartWriter(ps, 1, State.C.ordinal()))
+			)
 		));
+		valves.put(CS.SHRF, shrf);
 	}
 
 	private Control newValve(DataSource input, long width, long startbit, CS cs, DataDestination ... dsts) {
 		Control valve = new Valve(input, width, startbit, cs.ordinal(), dsts);
+
+		valves.put(cs, valve);
+		return valve;
+	}
+
+	private Control newValveH(DataSource input, long width, long startbit, CS cs, DataDestination ... dsts) {
+		Control valve = new Valve(input, width, startbit, cs.ordinal() - 16, dsts);
 
 		valves.put(cs, valve);
 		return valve;
