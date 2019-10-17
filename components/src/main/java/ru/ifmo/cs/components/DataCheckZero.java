@@ -8,20 +8,20 @@ package ru.ifmo.cs.components;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class DataCheckZero extends DataCtrl {
+public class DataCheckZero extends Control {
 	private final DataSource input;
-	private final int inputmask;
+	private final long inputmask;
 
-	public DataCheckZero(DataSource input, int width, int ctrlbit, DataSource ... ctrls) {
-		super(1, ctrlbit, ctrls);
+	public DataCheckZero(DataSource input, long width, long ctrlbit, DataDestination ... dsts) {
+		super(1, 0, ctrlbit, dsts);
 
 		this.input = input;
-		this.inputmask = getMask(width);
+		this.inputmask = calculateMask(width);
 	}
 
 	@Override
-	public void setValue(int ctrl) {
-		if (isOpen(ctrl))
+	public void setValue(long value) {
+		if (isOpen(value))
 			super.setValue((input.getValue() & inputmask) == 0 ? 1 : 0);
 	}
 }

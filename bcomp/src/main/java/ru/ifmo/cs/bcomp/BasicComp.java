@@ -47,21 +47,24 @@ public class BasicComp {
 		EnumMap<CPU.Buses, Bus> buses = cpu.getBuses();
 
 		microcode.setValue(0,
-				(1L << CS.RDAC.ordinal()) |
+				(1L << CS.RDDR.ordinal()) |
 				(1L << CS.RDAC.ordinal()) |
 //				(1L << CS.SHLT.ordinal()) |
 //				(1L << CS.SHL0.ordinal()) |
-				(1L << CS.SHRT.ordinal()) |
-				(1L << CS.SHRF.ordinal()) |
-//				(1L << CS.HTOH.ordinal()) |
-//				(1L << CS.LTOL.ordinal()) |
+//				(1L << CS.SHRT.ordinal()) |
+//				(1L << CS.SHRF.ordinal()) |
+				(1L << CS.HTOH.ordinal()) |
+				(1L << CS.LTOL.ordinal()) |
 				(1L << CS.WRAR.ordinal()) |
 				(1L << CS.SETC.ordinal()) |
+				(1L << CS.STNZ.ordinal()) |
+				(1L << CS.SETV.ordinal()) |
 //				(1L << CS.COMR.ordinal()) |
 				0);
-		regs.get(Reg.AC).setValue(0xDEAD);
-		regs.get(Reg.AC).setValue(0xA001);
-		regs.get(Reg.PS).setValue(0x1);
+//		regs.get(Reg.AC).setValue(0xDEAD);
+		regs.get(Reg.DR).setValue(0x0fff);
+		regs.get(Reg.AC).setValue(0x7000);
+//		regs.get(Reg.PS).setValue(0x1);
 		System.out.println("Before:\t" + Utils.toHex(regs.get(Reg.MR).getValue(), 40));
 		System.out.println("PS before =\t" + Utils.toHex(regs.get(Reg.PS).getValue(), 16));
 		cpu.step();
@@ -74,6 +77,7 @@ public class BasicComp {
 		System.out.println("ALU_OUT:\t" + Utils.toHex(buses.get(CPU.Buses.ALU_OUT).getValue(), 19));
 		System.out.println("SW_OUT:\t" + Utils.toHex(buses.get(CPU.Buses.SWITCH_OUT).getValue(), 18));
 		System.out.println("PS =\t" + Utils.toHex(regs.get(Reg.PS).getValue(), 16));
+		System.out.println("AR =\t" + Utils.toHex(regs.get(Reg.AR).getValue(), 16));
 	}
 
 /*

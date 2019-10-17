@@ -29,6 +29,7 @@ public class CPU {
 	private static final long MP_WIDTH = 8;
 	private static final long AR_WIDTH = 11;
 	private static final long DATA_WIDTH = 16;
+	private static final long PS_WIDTH = 16; // !!! FIX WIDTH !!! //
 
 	private final EnumMap<Reg, Register> regs = new EnumMap<Reg, Register>(Reg.class);
 	private final EnumMap<CS, Control> valves = new EnumMap<CS, Control>(CS.class);
@@ -58,8 +59,8 @@ public class CPU {
 		Register br = new Register(DATA_WIDTH);
 		regs.put(Reg.BR, br);
 		// Program State
-		Register ps = new Register(DATA_WIDTH);
-		regs.put(Reg.PS, ps); // !!! FIX WIDTH !!!
+		Register ps = new Register(PS_WIDTH);
+		regs.put(Reg.PS, ps);
 		// Input Register
 		Register ir = new Register(DATA_WIDTH);
 		regs.put(Reg.IR, ir);
@@ -150,6 +151,7 @@ public class CPU {
 
 		// Operating Micro Command
 		Control shrf;
+		Control setv;
 		PartWriter writeto15 = new PartWriter(swout, 1, DATA_WIDTH - 1);
 		valves.put(CS.SEXT, c = new SignExtender(aluout, 8, CS.SEXT.ordinal() - 16, swout));
 		clock.addDestination(new Not(CS.TYPE.ordinal(),
@@ -165,10 +167,22 @@ public class CPU {
 						new Valve(aluout, 1, DATA_WIDTH + 2, 0, writeto15)
 					)
 				),
-				newValveH(swout, 1, DATA_WIDTH, CS.SETC, new PartWriter(ps, 1, State.C.ordinal()))
+				newValveH(swout, 1, DATA_WIDTH, CS.SETC, new PartWriter(ps, 1, State.C.ordinal())),
+				newValveH(swout, 1, DATA_WIDTH - 1, CS.STNZ, new PartWriter(ps, 1, State.N.ordinal())),
+				new DataCheckZero(swout, DATA_WIDTH, CS.STNZ.ordinal() - 16, new PartWriter(ps, 1, State.Z.ordinal())),
+				setv = new Xor(swout, 2, DATA_WIDTH, CS.SETV.ordinal() - 16, new PartWriter(ps, 1, State.V.ordinal())),
+				newValveH(swout, DATA_WIDTH, 0, CS.WRDR, dr),
+				newValveH(swout, DATA_WIDTH, 0, CS.WRCR, cr),
+				newValveH(swout, AR_WIDTH, 0, CS.WRIP, ip),
+				newValveH(swout, AR_WIDTH, 0, CS.WRSP, sp),
+				newValveH(swout, DATA_WIDTH, 0, CS.WRAC, ac),
+				newValveH(swout, DATA_WIDTH, 0, CS.WRBR, br),
+				newValveH(swout, PS_WIDTH, 0, CS.WRPS, ps),
+				newValveH(swout, AR_WIDTH, 0, CS.WRAR, ar)
 			)
 		));
 		valves.put(CS.SHRF, shrf);
+		valves.put(CS.SETV, setv);
 	}
 
 	private Control newValve(DataSource input, long width, long startbit, CS cs, DataDestination ... dsts) {
