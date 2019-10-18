@@ -26,6 +26,10 @@ public enum State {
 	 */
 	N,
 	/**
+	 * Always zero
+	 */
+	PS0,
+	/**
 	 * Enable Interrupts
 	 */
 	EI,

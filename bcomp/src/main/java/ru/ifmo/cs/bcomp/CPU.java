@@ -37,14 +37,15 @@ public class CPU {
 	private final EnumMap<Reg, Register> regs = new EnumMap<Reg, Register>(Reg.class);
 	private final EnumMap<CS, Control> valves = new EnumMap<CS, Control>(CS.class);
 	private final EnumMap<Buses, Bus> buses = new EnumMap<Buses, Bus>(Buses.class);
+	private final MicroCode mc = new MicroCode();
 	private final Memory mem;
 	private final Memory microcode;
-	private final Register mp ;
+	private final Register mp;
 	private final Bus vv;
 	private final Bus expected;
 	private final Bus newmp;
 
-	protected CPU() {
+	protected CPU() throws Exception {
 		Control c;
 
 		// Data Register
@@ -209,6 +210,9 @@ public class CPU {
 				mp.setValue(vv.getValue() == expected.getValue() ? newmp.getValue() : 0);
 			}
 		});
+
+		for (int i = 0; i < mc.getMicroCodeLength(); i++)
+			microcode.setValue(i, mc.getMicroCommand(i));
 	}
 
 	private Control newValve(DataSource input, long width, long startbit, CS cs, DataDestination ... dsts) {

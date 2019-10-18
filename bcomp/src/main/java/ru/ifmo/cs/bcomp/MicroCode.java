@@ -5,78 +5,137 @@
 package ru.ifmo.cs.bcomp;
 
 import static ru.ifmo.cs.bcomp.CS.*;
+import static ru.ifmo.cs.bcomp.State.*;
 
 /**
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class MicroProgram {
-	private static final omc[] MP = {
-		new omc("BEGIN",	new CS[] {RDIP, LTOL, HTOH, WRAR, WRBR}),						// IP -> AR, BR
-		new omc(			new CS[] {RDBR, PLS1, LTOL, HTOH, WRIP, LOAD}),					// BR + 1 -> IP, MEM(AR) -> DR
-		new omc(			new CS[] {RDDR, LTOL, HTOH, WRCR}),								// DR -> CR
-		new CMC(			new CS[] {RDCR, HTOL}, 7, 1,						"ADDRTYPE"),	// if CR(15) == 1 then GOTO CHKBR
-		new CMC(			new CS[] {RDCR, HTOL}, 6, 1,						"ADDRTYPE"),	// if CR(14) == 1 then GOTO ADDRTYPE
-		new CMC(			new CS[] {RDCR, HTOL}, 5, 1,						"ADDRTYPE"),	// if CR(13) == 1 then GOTO ADDRTYPE
-		// if CR(12) == 0 then GOTO ADDRLESS
-		// GOTO IO
-		// CHKBR: if CR(14) == 0 then GOTO ADDRTYPE
-		// if CR(13) == 0 then GOTO ADDRTYPE
-		// if CR(12) == 1 then GOTO BRANCHES -- закончили выборку и частичное декодирование
-		// ADDRTYPE: if CR(11) == 0 then GOTO LOADOPER -- адрес то уже в DR, муахахаха Type=0XXX
-		// if CR(10) == 1 then GOTO OFFSET
-		// CR -> AR
-		// MEM(AR) -> DR 
-		// if CR(9) == 1 then GOTO INCDEC
-		// if CR(8) == 1 then GOTO космос -- зарезервированный тип адресации? -> Type=1001
-		// GOTO LOADOPER -- Type= 1000
-		// INCDEC: if CR(8) == 1 then GOTO PREDEC -- Type=101X
-		// DR + 1 -> BR -- Type=1010
-		// BR -> DR
-		// DR - 1 -> BR, STOR
-		// BR -> DR
-		// GOTO LOADOPER
-		// PREDEC: DR - 1 -> BR -- Type=1011
-		// BR -> DR
-		// STOR
-		// GOTO LOADOPER
-		// OFFSET: LTOL(CR) -> BR -- Type=11XX
-		// if CR(9) == 1 then GOTO CHECKDIRECT -- Type=111X
-		// if CR(8) == 1 then GOTO SPOFFSET -- Type=110X
-		// BR + IP -> CR -- Type=1110
-		// GOTO LOADOPER
-		// CHECKDIRECT: if CR(8) == 0 then GOTO космос -- Type=1110
-		// BR -> DR -- Type=1111
-		// GOTO EXECUTE
-		// SPOFFSET: BR + SP -> CR -- Type 1101 !!! Закончили выборку адреса
-		// LOADOPER: if CR(15) == 0 then GOTO LOADWANTED !!! Выборка операнда?
-		// if CR(14) == 1 then GOTO CMD11XX -- команды jump/call/st
-		// LOADWANTED: DR -> AR
-		// MEM(AR) -> DR
-		// EXECUTE: -- Декодирование и цикл исполнения адресных команд кроме jump/call/st/FXXX
-		// if CR(15) = 1 then GOTO CMD1XXX
-		// if CR(14) = 1 then GOTO CMD01XX
-		// 13th bit already checked
-		// if CR(12) = 1 then GOTO OR
-		// AND: DR & AC -> BR, N, Z
-		//		GOTO MOVTOAC
-		// OR: ~DR & ~AC -> BR
-		//	~BR -> AC, N, Z
-		//	GOTO INT
-		// CMD01XX: if CR(13) = 1 then GOTO CMD011X
-		// if CR(12) = 1 then GOTO ADC
-		// ADD: DR + AC -> BR, C, N, Z, V
-		// GOTO MOVTOAC
-		// ADC: if C = 0 then GOTO ADD
-		// DR + AC + 1 -> BR, C, N, Z, V
+public class MicroCode {
+	private class omc {
+		public final String label;
+		private final long microcmd;
+		private final CS[] signals;
+
+		public omc(String label, CS[] signals) {
+			long microcmd = 0L;
+
+			this.label = label;
+
+			for (CS cs : (this.signals = signals)) {
+				microcmd |= 1L << cs.ordinal();
+			}
+
+			this.microcmd = microcmd;
+		}
+
+		public omc(CS[] signals) {
+			this(null, signals);
+		}
+
+		public long getMicroCommand() throws Exception {
+			return microcmd;
+		}
+	}
+
+	private class CMC extends omc {
+		private final String labelto;
+		private final long microcmd;
+
+		public CMC(String label, CS[] signals, long startbit, long expected, String labelto) {
+			super(label, signals);
+
+			this.labelto = labelto;
+			microcmd = (1L << TYPE.ordinal()) + (1L << (startbit + 16)) + (expected << 32);
+		}
+
+		public CMC(CS[] signals, long startbit, long expected, String labelto) {
+			this(null, signals, startbit, expected, labelto);
+		}
+
+		@Override
+		public long getMicroCommand() throws Exception {
+			int addrto;
+
+			for (addrto = 0; addrto < MP.length; addrto++)
+				if (labelto.equals(MP[addrto].label))
+					break;
+
+			if (addrto == MP.length)
+				throw new Exception("Label '" + labelto + "' not found");
+
+			return microcmd | super.getMicroCommand() | (((long)addrto) << 24);
+		}
+	}
+
+	private final omc[] MP = {
+		new omc(			new CS[] {}),
+		new omc("BEGIN",	new CS[] {RDIP, HTOH, LTOL, WRAR, WRBR}),						// IP -> AR, BR
+		new omc(			new CS[] {RDBR, PLS1, HTOH, LTOL, WRIP, LOAD}),					// BR + 1 -> IP, MEM(AR) -> DR
+		new omc(			new CS[] {RDDR, HTOH, LTOL, WRCR}),								// DR -> CR
+		new CMC(			new CS[] {RDCR, HTOL}, 7, 1,						"CHKBR"),		// if CR(15) = 1 then GOTO CHKBR
+		new CMC(			new CS[] {RDCR, HTOL}, 6, 1,						"ADDRTYPE"),	// if CR(14) = 1 then GOTO ADDRTYPE
+		new CMC(			new CS[] {RDCR, HTOL}, 5, 1,						"ADDRTYPE"),	// if CR(13) = 1 then GOTO ADDRTYPE
+		new CMC(			new CS[] {RDCR, HTOL}, 4, 0,						"ADDRLESS"),	// if CR(12) = 0 then GOTO ADDRLESS
+		new CMC(			new CS[] {RDPS, LTOL}, PS0.ordinal(), 0,			"IO"),			// GOTO IO
+		new CMC("CHKBR",	new CS[] {RDCR, HTOL}, 6, 0,						"ADDRTYPE"),	// if CR(14) = 0 then GOTO ADDRTYPE
+		new CMC(			new CS[] {RDCR, HTOL}, 5, 0,						"ADDRTYPE"),	// if CR(13) = 0 then GOTO ADDRTYPE
+		new CMC(			new CS[] {RDCR, HTOL}, 4, 1,						"BRANCHES"),	// if CR(12) = 1 then GOTO BRANCHES
+		// закончили выборку и частичное декодирование
+		new CMC("ADDRTYPE",	new CS[] {RDCR, HTOL}, 3, 0,						"LOADOPER"),	// if CR(11) = 0 then GOTO LOADOPER
+		new CMC("T0XXX",	new CS[] {RDCR, HTOL}, 2, 1,						"T01XX"),		// if CR(10) = 1 then GOTO T01XX
+		new omc("T00XX",	new CS[] {RDCR, HTOH, LTOL, WRAR}),								// CR -> AR
+		new omc(			new CS[] {LOAD}),												// MEM(AR) -> DR 
+		new CMC(			new CS[] {RDCR, HTOL}, 1, 1,						"T001X"),		// if CR(9) = 1 then GOTO T001X
+		new	CMC("T000X",	new CS[] {RDCR, HTOL}, 0, 1,						"RESERVED"),	// if CR(8) = 1 then GOTO RESERVED
+		new CMC("T1000",	new CS[] {RDPS, LTOL}, PS0.ordinal(), 0,			"LOADOPER"),	// GOTO LOADOPER
+		new CMC("T101X",	new CS[] {RDCR, HTOL}, 0, 1,						"T1011"),		// if CR(8) = 1 then GOTO T1011
+		new omc("T1010",	new CS[] {RDDR, PLS1, HTOH, LTOL, WRDR}),						// DR + 1 -> DR
+		new omc(			new CS[] {STOR, RDDR, COML, HTOH, LTOL, WRBR}),					// DR -> MEM(AR); DR - 1 -> BR
+		new omc(			new CS[] {RDBR, HTOH, LTOL, WRDR}),								// BR -> DR
+		new CMC(			new CS[] {RDPS, LTOL}, PS0.ordinal(), 0,			"LOADOPER"),	// GOTO LOADOPER
+		new omc("T1011",	new CS[] {RDDR, COML, HTOH, LTOL, WRDR}),						// DR - 1 -> DR
+		new omc(			new CS[] {STOR}),												// DR -> MEM(AR)
+		new CMC(			new CS[] {RDPS, LTOL}, PS0.ordinal(), 0,			"LOADOPER"),	// GOTO LOADOPER
+		new omc("T11XX",	new CS[] {RDCR, LTOL, WRBR}),									// LTOL(CR) -> BR
+		new CMC(			new CS[] {RDCR, HTOL}, 1, 1,						"T111X"),		// if CR(9) = 1 then GOTO T111X
+		new CMC("T110X",	new CS[] {RDCR, HTOL}, 0, 1,						"T1101"),		// if CR(8) = 1 then GOTO T1101
+		new omc("T1110",	new	CS[] {RDBR, RDIP, HTOH, LTOL, WRDR}),						// BR + IP -> DR !!! RECHECK TARGET
+		new CMC(			new CS[] {RDPS, LTOL}, PS0.ordinal(), 0,			"LOADOPER"),	// GOTO LOADOPER
+		new CMC("T111X",	new CS[] {RDCR, HTOL}, 0, 0,						"RESERVED"),	// if CR(8) = 0 then GOTO RESERVED
+		new omc("T1111",	new CS[] {RDBR, HTOH, LTOL, WRDR}),								// BR -> DR
+		new CMC(			new CS[] {RDPS, LTOL}, PS0.ordinal(), 0,			"EXECUTE"),		// GOTO EXECUTE
+		new omc("T1101",	new CS[] {RDBR, RDSP, HTOH, LTOL, WRDR}),						// BR + SP -> DR !!! RECHECK TARGET
+		// Выборка операнда
+		new CMC("LOADOPER",	new CS[] {RDCR, HTOL}, 7, 0,						"RDVALUE"),		// if CR(15) = 0 then GOTO RDVALUE
+		new CMC(			new CS[] {RDCR, HTOL}, 6, 1,						"CMD11XX"),		// if CR(14) = 1 then GOTO CMD11XX
+		new omc("RDVALUE",	new CS[] {RDDR, HTOH, LTOL, WRAR}),								// DR -> AR
+		new omc(			new CS[] {LOAD}),												// MEM(AR) -> DR
+		// Декодирование и цикл исполнения адресных команд кроме JUMP/CALL/ST/FXXX
+		new CMC("EXECUTE",	new CS[] {RDCR, HTOL}, 7, 1,						"CMD1XXX"),		// if CR(15) = 1 then GOTO CMD1XXX
+		new CMC("CMD0XXX",	new CS[] {RDCR, HTOL}, 6, 1,						"CMD01XX"),		// if CR(14) = 1 then GOTO CMD01XX
+		// 13th bit already checked !!! CHECK LABEL NAME !!!
+		new CMC("CMD000X",	new CS[] {RDCR, HTOL}, 4, 1,						"OR"),			// if CR(12) = 1 then GOTO OR
+		new omc("AND",		new CS[] {RDAC, RDDR, SORA, HTOH, LTOL, STNZ, WRAC}),			// AND: AC & DR -> AC, N, Z
+		new CMC(			new CS[] {RDPS, LTOL}, PS0.ordinal(), 0,			"INT"),			// GOTO INT
+		new omc("OR",		new CS[] {RDAC, RDDR, COML, COMR, SORA, HTOH, LTOL, WRBR}),		// OR: ~AC & ~DR & -> BR
+		new omc(			new CS[] {RDBR, COML, HTOH, LTOL, STNZ, WRAC}),					//	~BR -> AC, N, Z
+		new CMC(			new CS[] {RDPS, LTOL}, PS0.ordinal(), 0,			"INT"),			// GOTO INT
+		new CMC("CMD01XX",	new CS[] {RDCR, HTOL}, 5, 1,						"CMD011X"),		// if CR(13) = 1 then GOTO CMD011X
+		new CMC("CMD010X",	new CS[] {RDCR, HTOL}, 4, 1,						"ADC"),			// if CR(12) = 1 then GOTO ADC
+		new omc("ADD",		new CS[] {RDAC, RDDR, HTOH, LTOL, STNZ, SETV, SETC, WRAC}),		// ADD: AC + DR -> AC, C, N, Z, V
+		new CMC(			new CS[] {RDPS, LTOL}, PS0.ordinal(), 0,			"INT"),			// GOTO INT
+		new CMC("ADC",		new CS[] {RDPS, LTOL}, C.ordinal(), 0,			"ADD"),			// if C = 0 then GOTO ADD
+		new omc(			new CS[] {RDAC, RDDR, PLS1, HTOH, LTOL, STNZ, SETV, SETC, WRAC}),// DR + AC + 1 -> BR, C, N, Z, V
+		new CMC(			new CS[] {RDPS, LTOL}, PS0.ordinal(), 0,			"INT"),			// GOTO INT
 		// GOTO MOVTOAC
 		// CMD011X: if CR(12) = 1 then GOTO CMP
 		// SUB: ~DR + AC + 1 -> BR, C, N, Z, V !!! ACHTUNG !!! ACHTUNG !!! ACHTUNG !!!
 		// MOVTOAC: BR -> AC
 		// GOTO INT
 		// 11XX already checked!!!
-		// CMD1XXX: if CR(13) == 1 then GOTO CMD101X
-		//	if CR(12) == 1 then GOTO космос CMD1001
+		// CMD1XXX: if CR(13) = 1 then GOTO CMD101X
+		//	if CR(12) = 1 then GOTO космос CMD1001
 		// LOOP: DR + ~0 -> BR
 		//	BR -> DR
 		//	DR -> MEM(AR)
@@ -84,7 +143,7 @@ public class MicroProgram {
 		// SKIPCMD: IP + 1 -> BR
 		//	BR -> IP
 		//	GOTO INT
-		// CMD101X: if CR(12) == 1 then GOTO SWAM
+		// CMD101X: if CR(12) = 1 then GOTO SWAM
 		// LD: DR -> AC
 		//	GOTO INT
 		// SWAM: DR -> BR
@@ -255,6 +314,7 @@ public class MicroProgram {
 		//	0 -> AC, C, N, Z, V; DI; CLRF
 		//	~0 -> SP
 		//	GOTO INT
+		new omc("RESERVED",	new  CS[] {})
 	};
 
 /*
@@ -454,7 +514,12 @@ public class MicroProgram {
 		{"EXECCNT", "0000", null}
 	};
 */
-	MicroProgram() {
-		//super("исходная", BaseInstrSet.instructions, mp);
+
+	public int getMicroCodeLength() {
+		return MP.length;
+	}
+
+	public long getMicroCommand(int addr) throws Exception {
+		return MP[addr].getMicroCommand();
 	}
 }

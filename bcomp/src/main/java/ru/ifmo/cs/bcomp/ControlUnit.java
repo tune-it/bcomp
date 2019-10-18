@@ -196,7 +196,7 @@ public class ControlUnit {
 		return -1;
 	}
 
-	public void compileMicroProgram(MicroProgram mpsrc) throws Exception {
+	public void compileMicroProgram(MicroCode mpsrc) throws Exception {
 		String[][] mp = mpsrc.microprogram;
 
 		for (int i = 0; i < labelsaddr.length; labelsaddr[i++] = 0);

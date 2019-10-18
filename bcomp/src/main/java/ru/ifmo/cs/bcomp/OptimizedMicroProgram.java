@@ -8,7 +8,7 @@ package ru.ifmo.cs.bcomp;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-class OptimizedMicroProgram extends MicroProgram {
+class OptimizedMicroProgram extends MicroCode {
 	static final String NAME = "optimized";
 
 	private static final String[][] mp = {

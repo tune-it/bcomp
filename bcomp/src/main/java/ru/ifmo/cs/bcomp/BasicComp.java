@@ -9,6 +9,7 @@ import ru.ifmo.cs.components.Bus;
 import ru.ifmo.cs.components.DataDestination;
 import ru.ifmo.cs.components.Memory;
 import ru.ifmo.cs.components.Register;
+import static ru.ifmo.cs.bcomp.Utils.toHex;
 
 /**
  *
@@ -39,46 +40,49 @@ public class BasicComp {
 		timer = new IODevTimer(ioctrls[0]);*/
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		CPU cpu = new CPU();
 		Memory mem = cpu.getMemory();
 		Memory microcode = cpu.getMicroCode();
 		EnumMap<Reg, Register> regs = cpu.getRegisters();
 		EnumMap<CPU.Buses, Bus> buses = cpu.getBuses();
 
-		microcode.setValue(0,
-				(1L << CS.RDDR.ordinal()) |
-				(1L << CS.RDAC.ordinal()) |
+		for (int i = 0; i < 16; i++)
+			System.out.println(toHex(i, 8) + " = " + toHex(microcode.getValue(i), 40));
+
+//		microcode.setValue(0,
+//				(1L << CS.RDDR.ordinal()) |
+//				(1L << CS.RDAC.ordinal()) |
 //				(1L << CS.SHLT.ordinal()) |
 //				(1L << CS.SHL0.ordinal()) |
 //				(1L << CS.SHRT.ordinal()) |
 //				(1L << CS.SHRF.ordinal()) |
-				(1L << CS.HTOH.ordinal()) |
-				(1L << CS.LTOL.ordinal()) |
-				(1L << CS.WRAR.ordinal()) |
-				(1L << CS.SETC.ordinal()) |
-				(1L << CS.STNZ.ordinal()) |
-				(1L << CS.SETV.ordinal()) |
+//				(1L << CS.HTOH.ordinal()) |
+//				(1L << CS.LTOL.ordinal()) |
+//				(1L << CS.WRAR.ordinal()) |
+//				(1L << CS.SETC.ordinal()) |
+//				(1L << CS.STNZ.ordinal()) |
+//				(1L << CS.SETV.ordinal()) |
 //				(1L << CS.COMR.ordinal()) |
-				0);
+//				0);
 //		regs.get(Reg.AC).setValue(0xDEAD);
-		regs.get(Reg.DR).setValue(0x0fff);
-		regs.get(Reg.AC).setValue(0x7000);
+//		regs.get(Reg.DR).setValue(0x0fff);
+//		regs.get(Reg.AC).setValue(0x7000);
 //		regs.get(Reg.PS).setValue(0x1);
-		System.out.println("Before:\t" + Utils.toHex(regs.get(Reg.MR).getValue(), 40));
-		System.out.println("PS before =\t" + Utils.toHex(regs.get(Reg.PS).getValue(), 16));
-		cpu.step();
-		System.out.println("After:\t" + Utils.toHex(regs.get(Reg.MR).getValue(), 40));
+//		System.out.println("Before:\t" + Utils.toHex(regs.get(Reg.MR).getValue(), 40));
+//		System.out.println("PS before =\t" + Utils.toHex(regs.get(Reg.PS).getValue(), 16));
+//		cpu.step();
+//		System.out.println("After:\t" + Utils.toHex(regs.get(Reg.MR).getValue(), 40));
 
-		System.out.println("Right:\t" + Utils.toHex(buses.get(CPU.Buses.RIGHT_INPUT).getValue(), 16));
-		System.out.println("Left:\t" + Utils.toHex(buses.get(CPU.Buses.LEFT_INPUT).getValue(), 16));
-		System.out.println("RightL:\t" + Utils.toHex(buses.get(CPU.Buses.RIGHT_COMPLEMENT).getValue(), 16));
-		System.out.println("LeftL:\t" + Utils.toHex(buses.get(CPU.Buses.LEFT_COMPLEMENT).getValue(), 16));
-		System.out.println("ALU_OUT:\t" + Utils.toHex(buses.get(CPU.Buses.ALU_OUT).getValue(), 19));
-		System.out.println("SW_OUT:\t" + Utils.toHex(buses.get(CPU.Buses.SWITCH_OUT).getValue(), 18));
-		System.out.println("PS =\t" + Utils.toHex(regs.get(Reg.PS).getValue(), 16));
-		System.out.println("AR =\t" + Utils.toHex(regs.get(Reg.AR).getValue(), 16));
-		System.out.println("MP =\t" + Utils.toHex(regs.get(Reg.MP).getValue(), 8));
+//		System.out.println("Right:\t" + Utils.toHex(buses.get(CPU.Buses.RIGHT_INPUT).getValue(), 16));
+//		System.out.println("Left:\t" + Utils.toHex(buses.get(CPU.Buses.LEFT_INPUT).getValue(), 16));
+//		System.out.println("RightL:\t" + Utils.toHex(buses.get(CPU.Buses.RIGHT_COMPLEMENT).getValue(), 16));
+//		System.out.println("LeftL:\t" + Utils.toHex(buses.get(CPU.Buses.LEFT_COMPLEMENT).getValue(), 16));
+//		System.out.println("ALU_OUT:\t" + Utils.toHex(buses.get(CPU.Buses.ALU_OUT).getValue(), 19));
+//		System.out.println("SW_OUT:\t" + Utils.toHex(buses.get(CPU.Buses.SWITCH_OUT).getValue(), 18));
+//		System.out.println("PS =\t" + Utils.toHex(regs.get(Reg.PS).getValue(), 16));
+//		System.out.println("AR =\t" + Utils.toHex(regs.get(Reg.AR).getValue(), 16));
+//		System.out.println("MP =\t" + Utils.toHex(regs.get(Reg.MP).getValue(), 8));
 	}
 
 /*
