@@ -78,6 +78,7 @@ public class BasicComp {
 		System.out.println("SW_OUT:\t" + Utils.toHex(buses.get(CPU.Buses.SWITCH_OUT).getValue(), 18));
 		System.out.println("PS =\t" + Utils.toHex(regs.get(Reg.PS).getValue(), 16));
 		System.out.println("AR =\t" + Utils.toHex(regs.get(Reg.AR).getValue(), 16));
+		System.out.println("MP =\t" + Utils.toHex(regs.get(Reg.MP).getValue(), 8));
 	}
 
 /*

@@ -22,6 +22,9 @@ public class CPU {
 		LEFT_COMPLEMENT,
 		ALU_OUT,
 		SWITCH_OUT,
+		VV,
+		EXPECTED,
+		NEWMP
 	}
 
 	private static final long MR_WIDTH = CS.TYPE.ordinal() + 1;
@@ -36,6 +39,10 @@ public class CPU {
 	private final EnumMap<Buses, Bus> buses = new EnumMap<Buses, Bus>(Buses.class);
 	private final Memory mem;
 	private final Memory microcode;
+	private final Register mp ;
+	private final Bus vv;
+	private final Bus expected;
+	private final Bus newmp;
 
 	protected CPU() {
 		Control c;
@@ -71,9 +78,7 @@ public class CPU {
 		Register mr = new Register(MR_WIDTH);
 		regs.put(Reg.MR, mr);
 		// Microcommand Pointer
-		Register mp = new Register(MP_WIDTH);
-		regs.put(Reg.MP, mp);
-
+		regs.put(Reg.MP, mp = new AutoIncRegister(MP_WIDTH));
 
 		mem = new Memory(DATA_WIDTH, ar);
 		microcode = new Memory(MR_WIDTH, mp);
@@ -93,6 +98,9 @@ public class CPU {
 		buses.put(Buses.ALU_OUT, aluout);
 		Bus swout = new Bus(DATA_WIDTH + 2);
 		buses.put(Buses.SWITCH_OUT, swout);
+		buses.put(Buses.VV, vv = new Bus(1));
+		buses.put(Buses.EXPECTED, expected = new Bus(1));
+		buses.put(Buses.NEWMP, newmp = new Bus(MP_WIDTH));
 
 		// Execute microcommand
 		Control clock = new Valve(mr, MR_WIDTH, 0, 0,
@@ -143,16 +151,21 @@ public class CPU {
 		// Control Micro Command
 		Control vr0 = newValve(mr, VR_WIDTH, 16, CS.TYPE,
 			new DataDestination() {
-			public void setValue(long value) {
-				System.out.println("vr1 " + Utils.toHex(value, VR_WIDTH));
+				public synchronized void setValue(long value) {
+					newmp.setValue((value >> 24) & Component.calculateMask(8));
+					expected.setValue((value >> 32) & 1L);
+				}
 			}
-		});
+		);
 		clock.addDestination(vr0);
+		for (long i = 0; i < 8; i++)
+			vr0.addDestination(new Valve(swout, 1, i, i, vv));
 
 		// Operating Micro Command
 		Control shrf;
 		Control setv;
 		PartWriter writeto15 = new PartWriter(swout, 1, DATA_WIDTH - 1);
+		PartWriter ei = new PartWriter(ps, 1, State.EI.ordinal());
 		valves.put(CS.SEXT, c = new SignExtender(aluout, 8, CS.SEXT.ordinal() - 16, swout));
 		clock.addDestination(new Not(CS.TYPE.ordinal(),
 			new Valve(mr, VR_WIDTH, 16, 0,
@@ -178,11 +191,24 @@ public class CPU {
 				newValveH(swout, DATA_WIDTH, 0, CS.WRAC, ac),
 				newValveH(swout, DATA_WIDTH, 0, CS.WRBR, br),
 				newValveH(swout, PS_WIDTH, 0, CS.WRPS, ps),
-				newValveH(swout, AR_WIDTH, 0, CS.WRAR, ar)
+				newValveH(swout, AR_WIDTH, 0, CS.WRAR, ar),
+				newValveH(mem, DATA_WIDTH, 0, CS.LOAD, dr),
+				newValveH(dr, DATA_WIDTH, 0, CS.STOR, mem),
+				newValveH(dr, DATA_WIDTH, 0, CS.IO),
+				newValveH(Consts.consts[1], 1, 0, CS.CLRF),
+				newValveH(Consts.consts[0], 1, 0, CS.DINT, ei),
+				newValveH(Consts.consts[1], 1, 0, CS.EINT, ei),
+				newValveH(Consts.consts[0], 1, 0, CS.HALT, new PartWriter(ps, 1, State.PROG.ordinal()))
 			)
 		));
 		valves.put(CS.SHRF, shrf);
 		valves.put(CS.SETV, setv);
+
+		clock.addDestination(new DataDestination() {
+			public void setValue(long value) {
+				mp.setValue(vv.getValue() == expected.getValue() ? newmp.getValue() : 0);
+			}
+		});
 	}
 
 	private Control newValve(DataSource input, long width, long startbit, CS cs, DataDestination ... dsts) {
@@ -221,10 +247,9 @@ public class CPU {
 	}
 
 	public synchronized void step() {
-// !!! UNCOMMENT AFTER ALL BUSES DONE !!!
-//		for (Buses bus: Buses.values())
-//			buses.get(bus).resetValue();
-//
+		for (Buses bus: Buses.values())
+			buses.get(bus).resetValue();
+
 		valves.get(CS.CLOCK0).setValue(1);
 		valves.get(CS.CLOCK1).setValue(1);
 	}
