@@ -155,7 +155,7 @@ public class CPU {
 		Control vr0 = newValve(mr, VR_WIDTH, 16, TYPE,
 			new DataDestination() {
 				public synchronized void setValue(long value) {
-					newmp.setValue((value >> 24) & Component.calculateMask(8));
+					newmp.setValue((value >> 24) & BasicComponent.calculateMask(8));
 					expected.setValue((value >> 32) & 1L);
 				}
 			}

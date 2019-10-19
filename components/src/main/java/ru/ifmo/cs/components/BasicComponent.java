@@ -8,11 +8,11 @@ package ru.ifmo.cs.components;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class Component {
+public class BasicComponent {
 	public final long width;
 	public final long mask;
 
-	public Component(long width) {
+	public BasicComponent(long width) {
 		this.width = width;
 		this.mask = calculateMask(width);
 	}

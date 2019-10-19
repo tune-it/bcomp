@@ -8,7 +8,7 @@ package ru.ifmo.cs.components;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class DataConst extends Component implements DataSource {
+public class DataConst extends BasicComponent implements DataSource {
 	private final long value;
 
 	public DataConst(long value, long width) {

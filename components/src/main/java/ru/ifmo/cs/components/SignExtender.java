@@ -4,7 +4,7 @@
 
 package ru.ifmo.cs.components;
 
-import static ru.ifmo.cs.components.Component.calculateMask;
+import static ru.ifmo.cs.components.BasicComponent.calculateMask;
 
 /**
  *

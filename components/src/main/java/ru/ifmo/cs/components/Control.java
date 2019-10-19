@@ -11,7 +11,7 @@ import java.util.Arrays;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class Control extends Component implements DataDestination {
+public class Control extends BasicComponent implements DataDestination {
 	private final ArrayList<DataDestination> dsts = new ArrayList<DataDestination>();
 	protected final long startbit;
 	protected final long ctrlbit;

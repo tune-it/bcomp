@@ -8,7 +8,7 @@ package ru.ifmo.cs.components;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class Memory extends Component implements DataSource, DataDestination {
+public class Memory extends BasicComponent implements DataSource, DataDestination {
 	private final long memory[];
 	private final Register ar;
 
