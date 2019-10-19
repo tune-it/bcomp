@@ -107,7 +107,7 @@ public class CPU {
 		buses.put(Buses.NEWMP, newmp = new Bus(MP_WIDTH));
 
 		// Execute microcommand
-		Control clock = new Valve(mr, MR_WIDTH, 0, 0,
+		Control clock1 = new Valve(mr, MR_WIDTH, 0, 0,
 			newValve(dr, DATA_WIDTH, 0, RDDR, right),
 			newValve(cr, DATA_WIDTH, 0, RDCR, right),
 			newValve(ip, DATA_WIDTH, 0, RDIP, right),
@@ -117,39 +117,39 @@ public class CPU {
 			newValve(ps, DATA_WIDTH, 0, RDPS, left),
 			newValve(ir, DATA_WIDTH, 0, RDIR, left)
 		);
-		valves.put(CLOCK1, clock);
+		valves.put(CLOCK1, clock1);
 
 		// Pass normal value when COMR is off
-		clock.addDestination(new Not(COMR.ordinal(), new Valve(right, DATA_WIDTH, 0, 0, rcom)));
+		clock1.addDestination(new Not(COMR.ordinal(), new Valve(right, DATA_WIDTH, 0, 0, rcom)));
 		// Pass complemented value when COMR is on
-		clock.addDestination(c = new Complement(right, DATA_WIDTH, 0, COMR.ordinal(), rcom));
+		clock1.addDestination(c = new Complement(right, DATA_WIDTH, 0, COMR.ordinal(), rcom));
 		valves.put(COMR, c);
 
 		// Pass normal value when COML is off
-		clock.addDestination(new Not(COML.ordinal(), new Valve(left, DATA_WIDTH, 0, 0, lcom)));
+		clock1.addDestination(new Not(COML.ordinal(), new Valve(left, DATA_WIDTH, 0, 0, lcom)));
 		// Pass complemented value when COML is on
-		clock.addDestination(c = new Complement(left, DATA_WIDTH, 0, COML.ordinal(), lcom));
+		clock1.addDestination(c = new Complement(left, DATA_WIDTH, 0, COML.ordinal(), lcom));
 		valves.put(COMR, c);
 
 		// Plus 1
 		ValveValue carry = new ValveValue(PLS1.ordinal());
-		clock.addDestination(carry);
+		clock1.addDestination(carry);
 		valves.put(PLS1, carry);
 
 		// AND
-		clock.addDestination(c = new DataAnd(lcom, rcom, DATA_WIDTH, SORA.ordinal(), aluout));
+		clock1.addDestination(c = new DataAnd(lcom, rcom, DATA_WIDTH, SORA.ordinal(), aluout));
 		valves.put(SORA, c);
 
 		// SUM
-		clock.addDestination(new Not(SORA.ordinal(),
+		clock1.addDestination(new Not(SORA.ordinal(),
 			new DataAdd(lcom, rcom, carry, DATA_WIDTH, 0, aluout),
 			new Valve(ps, 1, 0, 0, new PartWriter(aluout, 1, DATA_WIDTH + 2))));
 
-		clock.addDestination(newValve(aluout, 8, 0, LTOL, swout));
-		clock.addDestination(newValve(aluout, 8, 0, LTOH,
+		clock1.addDestination(newValve(aluout, 8, 0, LTOL, swout));
+		clock1.addDestination(newValve(aluout, 8, 0, LTOH,
 			new PartWriter(swout, 8, 8)));
-		clock.addDestination(newValve(aluout, 8, 8, HTOL, swout));
-		clock.addDestination(newValve(aluout, 10, 8, HTOH,
+		clock1.addDestination(newValve(aluout, 8, 8, HTOL, swout));
+		clock1.addDestination(newValve(aluout, 10, 8, HTOH,
 			new PartWriter(swout, 10, 8)));
 
 		// Control Micro Command
@@ -161,7 +161,7 @@ public class CPU {
 				}
 			}
 		);
-		clock.addDestination(vr0);
+		clock1.addDestination(vr0);
 		for (long i = 0; i < 8; i++)
 			vr0.addDestination(new Valve(swout, 1, i, i, vv));
 
@@ -171,7 +171,7 @@ public class CPU {
 		PartWriter writeto15 = new PartWriter(swout, 1, DATA_WIDTH - 1);
 		PartWriter ei = new PartWriter(ps, 1, EI.ordinal());
 		valves.put(SEXT, c = new SignExtender(aluout, 8, SEXT.ordinal() - 16, swout));
-		clock.addDestination(new Not(TYPE.ordinal(),
+		clock1.addDestination(new Not(TYPE.ordinal(),
 			new Valve(mr, VR_WIDTH, 16, 0,
 				c,
 				newValveH(aluout, DATA_WIDTH, 0, SHLT, new PartWriter(swout, DATA_WIDTH, 1)),
@@ -208,7 +208,7 @@ public class CPU {
 		valves.put(SHRF, shrf);
 		valves.put(SETV, setv);
 
-		clock.addDestination(new DataDestination() {
+		clock1.addDestination(new DataDestination() {
 			public void setValue(long value) {
 				mp.setValue(vv.getValue() == expected.getValue() ? newmp.getValue() : 0);
 			}
