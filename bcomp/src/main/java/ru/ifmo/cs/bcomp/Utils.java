@@ -92,4 +92,8 @@ public class Utils {
 	public static boolean isHexNumeric(String s) {
 		return isNumeric(s, 16);
 	}
+
+	public static CS[] cs(CS ... signals) {
+		return signals;
+	}
 }
