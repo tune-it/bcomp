@@ -27,4 +27,8 @@ public class Register extends DataPart {
 
 		value = (value & ~bit) | (~(value & bit) & bit);
 	}
+
+	public synchronized long getValue(long startbit) {
+		return (value >> startbit) & 1L;
+	}
 }
