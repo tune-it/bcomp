@@ -91,11 +91,11 @@ public class MicroCode {
 
 		// закончили выборку и частичное декодирование
 		new CMC("ADDRTYPE",	cs(RDCR, HTOL), 3, 0,							"LOADOPER"),// if CR(11) = 0 then GOTO LOADOPER
-		new CMC("T0XXX",	cs(RDCR, HTOL), 2, 1,							"T01XX"),	// if CR(10) = 1 then GOTO T01XX
-		new omc("T00XX",	cs(RDCR, HTOH, LTOL, WRAR)),									// CR -> AR
+		new CMC("T1XXX",	cs(RDCR, HTOL), 2, 1,							"T11XX"),	// if CR(10) = 1 then GOTO T11XX
+		new omc("T10XX",	cs(RDCR, HTOH, LTOL, WRAR)),									// CR -> AR
 		new omc(			cs(LOAD)),													// MEM(AR) -> DR 
-		new CMC(			cs(RDCR, HTOL), 1, 1,							"T001X"),	// if CR(9) = 1 then GOTO T001X
-		new	CMC("T000X",	cs(RDCR, HTOL), 0, 1,							"RESERVED"),// if CR(8) = 1 then GOTO RESERVED
+		new CMC(			cs(RDCR, HTOL), 1, 1,							"T101X"),	// if CR(9) = 1 then GOTO T101X
+		new	CMC("T100X",	cs(RDCR, HTOL), 0, 1,							"RESERVED"),// if CR(8) = 1 then GOTO RESERVED
 		new CMC("T1000",	cs(RDPS, LTOL), PS0.ordinal(), 0,				"LOADOPER"),// GOTO LOADOPER
 		new CMC("T101X",	cs(RDCR, HTOL), 0, 1,							"T1011"),	// if CR(8) = 1 then GOTO T1011
 		new omc("T1010",	cs(RDDR, PLS1, HTOH, LTOL, WRDR)),							// DR + 1 -> DR
@@ -132,13 +132,15 @@ public class MicroCode {
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"INT"),		// GOTO INT
 		new CMC("CMD01XX",	cs(RDCR, HTOL), 5, 1,							"CMD011X"),	// if CR(13) = 1 then GOTO CMD011X
 		new CMC("CMD010X",	cs(RDCR, HTOL), 4, 1,							"ADC"),		// if CR(12) = 1 then GOTO ADC
-		new omc("ADD",		cs(RDAC, RDDR, HTOH, LTOL, STNZ, SETV, SETC, WRAC)),			// AC + DR -> AC, C, N, Z, V
+		new omc("ADD",		cs(RDAC, RDDR, HTOH, LTOL, STNZ, SETV, SETC, WRAC)),			// AC + DR -> AC, N, Z, V, C
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"INT"),		// GOTO INT
 		new CMC("ADC",		cs(RDPS, LTOL), C.ordinal(), 0,					"ADD"),		// if C = 0 then GOTO ADD
 		new omc(			cs(RDAC, RDDR, PLS1, HTOH, LTOL, STNZ, SETV, SETC, WRAC)),	// DR + AC + 1 -> BR, C, N, Z, V
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"INT"),		// GOTO INT
 		new CMC("CMD011X",	cs(RDCR, HTOL), 4, 1,							"CMP"),		// if CR(12) = 1 then GOTO CMP
-		new omc("SUB",		cs(RDAC, RDDR, COMR, PLS1, STNZ, SETV, SETC, WRAC)),			// ~DR + AC + 1 -> AC, C, N, Z, V
+		new omc("SUB",		cs(RDAC, RDDR, COMR, PLS1, STNZ, SETV, SETC, WRAC)),			// ~DR + AC + 1 -> AC, N, Z, V, C
+		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"INT"),		// GOTO INT
+		new omc("CMP",		cs(RDAC, RDDR, COMR, PLS1, STNZ, SETV, SETC)),				// ~DR + AC + 1 -> N, Z, V, C
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"INT"),		// GOTO INT
 		// Warning - 11XX was already checked
 		new CMC("CMD1XXX",	cs(RDCR, HTOL), 5, 1,							"CMD101X"),	// if CR(13) = 1 then GOTO CMD101X
@@ -301,7 +303,6 @@ public class MicroCode {
 		new omc(			cs(RDDR, HTOH, LTOL, WRIP, DINT)),							// DR -> IP; DI
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"BEGIN"),	// GOTO BEGIN
 
-		//	GOTO BEGIN
 		// SETIP:
 		//	IR -> IP
 		//	GOTO HLT
