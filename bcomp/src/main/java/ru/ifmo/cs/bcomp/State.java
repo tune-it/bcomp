@@ -26,6 +26,10 @@ public enum State {
 	 */
 	N,
 	/**
+	 * IO flag???
+	 */
+	F,
+	/**
 	 * Always zero
 	 */
 	PS0,
