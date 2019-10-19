@@ -45,7 +45,6 @@ public class BasicComp {
 		Memory mem = cpu.getMemory();
 		Memory microcode = cpu.getMicroCode();
 		EnumMap<Reg, Register> regs = cpu.getRegisters();
-		EnumMap<CPU.Buses, Bus> buses = cpu.getBuses();
 
 		for (int i = 0; i < 16; i++)
 			System.out.println(toHex(i, 8) + " = " + toHex(microcode.getValue(i), 40));

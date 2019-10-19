@@ -17,7 +17,7 @@ import static ru.ifmo.cs.bcomp.State.*;
  */
 public class CPU {
 	// !!! TEMPORARY PUBLIC !!! BUSES SHOULD BE NOT VISIBLE TO OTHERS !!!
-	public enum Buses {
+	private enum Buses {
 		RIGHT_INPUT,
 		LEFT_INPUT,
 		RIGHT_COMPLEMENT,
@@ -46,6 +46,7 @@ public class CPU {
 	private final Bus vv;
 	private final Bus expected;
 	private final Bus newmp;
+	private final PartWriter stateProgram;
 
 	protected CPU() throws Exception {
 		Control c;
@@ -201,7 +202,7 @@ public class CPU {
 				newValveH(Consts.consts[1], 1, 0, CLRF),
 				newValveH(Consts.consts[0], 1, 0, DINT, ei),
 				newValveH(Consts.consts[1], 1, 0, EINT, ei),
-				newValveH(Consts.consts[0], 1, 0, HALT, new PartWriter(ps, 1, PROG.ordinal()))
+				newValveH(Consts.consts[0], 1, 0, HALT, stateProgram = new PartWriter(ps, 1, PROG.ordinal()))
 			)
 		));
 		valves.put(SHRF, shrf);
@@ -235,11 +236,6 @@ public class CPU {
 		return regs;
 	}
 
-	// !!! TEMPORARY PUBLIC !!! BUSES SHOULD BE NOT VISIBLE TO OTHERS !!!
-	public EnumMap<Buses, Bus> getBuses() {
-		return buses;
-	}
-	
 	public Register getRegister(Reg reg) {
 		return regs.get(reg);
 	}
