@@ -5,8 +5,6 @@
 package ru.ifmo.cs.bcomp;
 
 import java.util.EnumMap;
-import ru.ifmo.cs.components.Bus;
-import ru.ifmo.cs.components.DataDestination;
 import ru.ifmo.cs.components.Memory;
 import ru.ifmo.cs.components.Register;
 import static ru.ifmo.cs.bcomp.Utils.toHex;
@@ -22,7 +20,7 @@ public class BasicComp {
 
 	public BasicComp() throws Exception {
 		cpu = new CPU();
-		//cpu.startCPU();
+		cpu.startCPU();
 
 /*		CPU2IO cpu2io = cpu.getCPU2IO();
 		ioctrls = new IOCtrl[] {
@@ -41,14 +39,30 @@ public class BasicComp {
 	}
 
 	public static void main(String[] args) throws Exception {
-		CPU cpu = new CPU();
+		BasicComp bcomp = new BasicComp();
+		CPU cpu = bcomp.getCPU();
 		Memory mem = cpu.getMemory();
 		Memory microcode = cpu.getMicroCode();
 		EnumMap<Reg, Register> regs = cpu.getRegisters();
 
-		for (int i = 0; i < 16; i++)
-			System.out.println(toHex(i, 8) + " = " + toHex(microcode.getValue(i), 40));
+		cpu.executeSetAddr(0x100);
+		cpu.executeWrite(0x0200);
+		cpu.executeWrite(0x4105);
+		cpu.executeWrite(0x4106);
+		cpu.executeWrite(0xE107);
+		cpu.executeWrite(0x0100);
+		cpu.executeWrite(0xDEAD);
+		cpu.executeWrite(0xBEEF);
+		cpu.invertRunState();
+		cpu.executeSetAddr(0x100);
+		cpu.executeStart();
+		System.out.println("IP =\t\t" + toHex(regs.get(Reg.IP).getValue(), 11));
+		System.out.println("AR =\t\t" + toHex(regs.get(Reg.AR).getValue(), 11));
+		System.out.println("AC =\t\t" + toHex(regs.get(Reg.AC).getValue(), 16));
+		System.out.println("CR =\t\t" + toHex(regs.get(Reg.CR).getValue(), 16));
+		System.out.println("MEM(107) =\t" + toHex(mem.getValue(0x107), 16));
 
+		cpu.stopCPU();
 //		microcode.setValue(0,
 //				(1L << CS.RDDR.ordinal()) |
 //				(1L << CS.RDAC.ordinal()) |
@@ -84,11 +98,11 @@ public class BasicComp {
 //		System.out.println("MP =\t" + Utils.toHex(regs.get(Reg.MP).getValue(), 8));
 	}
 
-/*
 	public CPU getCPU() {
 		return cpu;
 	}
 
+/*
 	public IOCtrl[] getIOCtrls() {
 		return ioctrls;
 	}

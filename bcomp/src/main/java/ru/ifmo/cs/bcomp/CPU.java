@@ -5,6 +5,7 @@
 package ru.ifmo.cs.bcomp;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 import ru.ifmo.cs.components.*;
@@ -35,18 +36,64 @@ public class CPU {
 	private static final long AR_WIDTH = 11;
 	private static final long DATA_WIDTH = 16;
 	private static final long PS_WIDTH = 16; // !!! FIX WIDTH !!! //
+	public static final String[] OPERATIONS = {
+		"SETIP",
+		"WRITE",
+		"READ",
+		"START"
+	};
 
 	private final EnumMap<Reg, Register> regs = new EnumMap<Reg, Register>(Reg.class);
 	private final EnumMap<CS, Control> valves = new EnumMap<CS, Control>(CS.class);
 	private final EnumMap<Buses, Bus> buses = new EnumMap<Buses, Bus>(Buses.class);
+	private final HashMap<String, Integer> labels = new HashMap<String, Integer>();
 	private final MicroCode mc = new MicroCode();
 	private final Memory mem;
 	private final Memory microcode;
+	private final Register ps;
+	private final Register ir;
 	private final Register mp;
 	private final Bus vv;
 	private final Bus expected;
 	private final Bus newmp;
 	private final PartWriter stateProgram;
+	private volatile boolean clock = true;
+
+	private final ReentrantLock tick = new ReentrantLock();
+	private final ReentrantLock lock = new ReentrantLock();
+	private final Condition lockStart = lock.newCondition();
+	private final Condition lockFinish = lock.newCondition();
+
+	private final Thread cpu = new Thread(new Runnable() {
+		@Override
+		public void run() {
+			lock.lock();
+			
+			try {
+				for (;;) {
+					lockFinish.signalAll();
+					lockStart.await();
+
+					if (clock)
+						stateProgram.setValue(1);
+
+					do {
+						tick.lock();
+						try {
+							step();
+						} finally {
+							tick.unlock();
+						}
+					} while (ps.getValue(State.PROG.ordinal()) == 1);
+				}
+			} catch (InterruptedException e) {
+				return;
+			} finally {
+				lock.unlock();
+			}
+		}
+	}, "BComp");
+
 
 	protected CPU() throws Exception {
 		Control c;
@@ -70,11 +117,9 @@ public class CPU {
 		Register br = new Register(DATA_WIDTH);
 		regs.put(Reg.BR, br);
 		// Program State
-		Register ps = new Register(PS_WIDTH);
-		regs.put(Reg.PS, ps);
+		regs.put(Reg.PS, ps = new Register(PS_WIDTH));
 		// Input Register
-		Register ir = new Register(DATA_WIDTH);
-		regs.put(Reg.IR, ir);
+		regs.put(Reg.IR, ir = new Register(DATA_WIDTH));
 		// Address Register
 		Register ar = new Register(AR_WIDTH);
 		regs.put(Reg.AR, ar);
@@ -156,8 +201,8 @@ public class CPU {
 		Control vr0 = newValve(mr, VR_WIDTH, 16, TYPE,
 			new DataDestination() {
 				public synchronized void setValue(long value) {
-					newmp.setValue((value >> 24) & BasicComponent.calculateMask(8));
-					expected.setValue((value >> 32) & 1L);
+					newmp.setValue((value >> 8) & BasicComponent.calculateMask(8));
+					expected.setValue((value >> 16) & 1L);
 				}
 			}
 		);
@@ -216,6 +261,11 @@ public class CPU {
 
 		for (int i = 0; i < mc.getMicroCodeLength(); i++)
 			microcode.setValue(i, mc.getMicroCommand(i));
+
+		for (String operation : OPERATIONS)
+			labels.put(operation, findLabel(operation));
+
+		mp.setValue(findLabel("HLT"));
 	}
 
 	private Control newValve(DataSource input, long width, long startbit, CS cs, DataDestination ... dsts) {
@@ -255,139 +305,11 @@ public class CPU {
 		valves.get(CLOCK0).setValue(1);
 		valves.get(CLOCK1).setValue(1);
 	}
-/*
-	private final Bus aluOutput = new Bus(16);
-	private final Bus intrReq = new Bus(1);
-	private final Register regState = new Register("C", "РС", StateReg.WIDTH);
-	private final ControlUnit cu = new ControlUnit(aluOutput);
-	private final EnumMap<ControlSignal, DataHandler> valves =
-		new EnumMap<ControlSignal, DataHandler> (ControlSignal.class);
-	private final Register regAddr = new Register("РА", "Регистр адреса", 11, getValve(ControlSignal.BUF_TO_ADDR, aluOutput));
-	private final Memory mem = new Memory("Память", 16, regAddr);
-	private final Register regData = new Register("РД", "Регистр данных", 16,
-		getValve(ControlSignal.BUF_TO_DATA, aluOutput),
-		getValve(ControlSignal.MEMORY_READ, mem));
-	private final Register regInstr = new Register("РК", "Регистр команд", 16, getValve(ControlSignal.BUF_TO_INSTR, aluOutput));
-	private final Register regIP = new Register("СК", "Счётчик команд", 11, getValve(ControlSignal.BUF_TO_IP, aluOutput));
-	private final Register regAccum = new Register("Акк", "Аккумулятор", 16, getValve(ControlSignal.BUF_TO_ACCUM, aluOutput));
-	private final Register regKey = new Register("КР", "Клавишный регистр", 16);
-	private final Register regBuf;
-	private final DataHandler valveRunState;
-	private final DataHandler valveSetProgram;
-	private final CPU2IO cpu2io;
-	private volatile boolean clock = true;
-	private final MicroProgram mp;
 
-	private final ReentrantLock tick = new ReentrantLock();
-	private final ReentrantLock lock = new ReentrantLock();
-	private final Condition lockStart = lock.newCondition();
-	private final Condition lockFinish = lock.newCondition();
-
-	private Runnable tickStartListener = null;
-	private Runnable tickFinishListener = null;
-	private Runnable cpuStartListener = null;
-	private Runnable cpuStopListener = null;
-
-	private final Thread cpu = new Thread(new Runnable() {
-		@Override
-		public void run() {
-			lock.lock();
-			try {
-				for (;;) {
-					lockFinish.signalAll();
-					lockStart.await();
-
-					if (cpuStartListener != null)
-						cpuStartListener.run();
-
-					if (clock)
-						valveSetProgram.setValue(1);
-
-					do {
-						if (tickStartListener != null)
-							tickStartListener.run();
-
-						tick.lock();
-						try {
-							cu.step();
-						} finally {
-							tick.unlock();
-						}
-
-						if (tickFinishListener != null)
-							tickFinishListener.run();
-					} while (regState.getValue(StateReg.FLAG_PROG) == 1);
-
-					if (cpuStopListener != null)
-						cpuStopListener.run();
-				}
-			} catch (InterruptedException e) {
-				return;
-			} finally {
-				lock.unlock();
-			}
-		}
-	}, "BComp");
-
-	public CPU(MicroProgram mp) throws Exception {
-		getValve(ControlSignal.MEMORY_WRITE, regData).addDestination(mem);
-
-		regState.setValue(2);
-
-		Bus aluRight = new Bus(
-			getValve(ControlSignal.DATA_TO_ALU, regData),
-			getValve(ControlSignal.INSTR_TO_ALU, regInstr),
-			getValve(ControlSignal.IP_TO_ALU, regIP));
-
-		Bus aluLeft = new Bus(
-			getValve(ControlSignal.ACCUM_TO_ALU, regAccum),
-			getValve(ControlSignal.STATE_TO_ALU, regState),
-			getValve(ControlSignal.KEY_TO_ALU, regKey));
-
-		DataSource notLeft = getValve(ControlSignal.INVERT_LEFT, aluLeft);
-		DataSource notRight = getValve(ControlSignal.INVERT_RIGHT, aluRight);
-
-		DataSource aluplus1 = getValve(ControlSignal.ALU_PLUS_1, Consts.consts[1]);
-		regBuf = new Register("БР", "Буферный регистр", 17,
-			getValve(ControlSignal.ALU_AND, notLeft, notRight, aluplus1),
-			getValve(ControlSignal.SHIFT_RIGHT, regAccum, regState),
-			getValve(ControlSignal.SHIFT_LEFT, regAccum, regState));
-		aluOutput.addInput(regBuf);
-
-		StateReg regStateEI = new StateReg(regState, StateReg.FLAG_EI,
-			getValve(ControlSignal.DISABLE_INTERRUPTS, Consts.consts[0]),
-			getValve(ControlSignal.ENABLE_INTERRUPTS, Consts.consts[1]));
-
-		StateReg regStateC = new StateReg(regState, StateReg.FLAG_C,
-			getValve(ControlSignal.BUF_TO_STATE_C, regBuf),
-			getValve(ControlSignal.CLEAR_STATE_C, Consts.consts[0]),
-			getValve(ControlSignal.SET_STATE_C, Consts.consts[1]));
-
-		StateReg regStateN =
-			new StateReg(regState, StateReg.FLAG_N, getValve(ControlSignal.BUF_TO_STATE_N, regBuf));
-		StateReg regStateZ =
-			new StateReg(regState, StateReg.FLAG_Z, getValve(ControlSignal.BUF_TO_STATE_Z, regBuf));
-
-		StateReg regStateProg = new StateReg(regState, StateReg.FLAG_PROG,
-			getValve(ControlSignal.HALT, Consts.consts[0]),
-			valveSetProgram = getValve(ControlSignal.SET_PROGRAM));
-
-		DataHandler intrctrl = getValve(ControlSignal.SET_REQUEST_INTERRUPT, regState, intrReq,
-			getValve(ControlSignal.DISABLE_INTERRUPTS), getValve(ControlSignal.ENABLE_INTERRUPTS));
-		StateReg intrwrite = new StateReg(regState, StateReg.FLAG_INTR, intrctrl);
-
-		cpu2io = new CPU2IO(regAccum, regState, intrReq,
-			getValve(ControlSignal.INPUT_OUTPUT, regData),
-			getValve(ControlSignal.CLEAR_ALL_FLAGS, Consts.consts[1]),
-			intrctrl);
-
-		valveRunState = getValve(ControlSignal.SET_RUN_STATE);
-		StateReg regStateRun = new StateReg(regState, StateReg.FLAG_RUN, valveRunState);
-
-		cu.compileMicroProgram(this.mp = mp);
-		cu.jump(ControlUnit.LABEL_STP);
-	}
-
+	/**
+	 * Start CPU thread
+	 * @throws InterruptedException 
+	 */
 	void startCPU() throws InterruptedException {
 		lock.lock();
 		try {
@@ -398,37 +320,15 @@ public class CPU {
 		}
 	}
 
+	/**
+	 * Stop CPU thread
+	 */
 	public void stopCPU() {
 		cpu.interrupt();
 	}
 
-	private DataHandler getValve(ControlSignal cs, DataSource ... inputs) {
-		DataHandler valve = valves.get(cs);
-
-		if (valve == null)
-			valves.put(cs, valve = cu.createValve(cs, inputs));
-
-		return valve;
-	}
-
-	public CPU2IO getCPU2IO() {
-		return cpu2io;
-	}
-
-	public void setTickStartListener(Runnable tickStartListener) {
-		this.tickStartListener = tickStartListener;
-	}
-
-	public void setTickFinishListener(Runnable tickFinishListener) {
-		this.tickFinishListener = tickFinishListener;
-	}
-
-	public void setCPUStartListener(Runnable cpuStartListener) {
-		this.cpuStartListener = cpuStartListener;
-	}
-
-	public void setCPUStopListener(Runnable cpuStopListener) {
-		this.cpuStopListener = cpuStopListener;
+	public boolean isLocked() {
+		return lock.isLocked();
 	}
 
 	void tickLock() {
@@ -438,131 +338,27 @@ public class CPU {
 	void tickUnlock() {
 		tick.unlock();
 	}
-*/
+
 	/**
-	 * Use tickLock() before call this function
+	 * Add listener for specified control signal
+	 * <p>Use tickLock() before call this method
 	 */
-/*	void addDestination(ControlSignal cs, DataDestination dest) {
+	void addDestination(CS cs, DataDestination dest) {
 		valves.get(cs).addDestination(dest);
 	}
-*/
+
 	/**
-	 * Use tickLock() before call this function
+	 * Remove listener for specified control signal
+	 * <p>Use tickLock() before call this method
 	 */
-/*	void removeDestination(ControlSignal cs, DataDestination dest) {
+	void removeDestination(CS cs, DataDestination dest) {
 		valves.get(cs).removeDestination(dest);
-	}
-
-	public Register getRegister(Reg reg) {
-		switch (reg) {
-		case ACCUM:
-			return regAccum;
-
-		case BUF:
-			return regBuf;
-
-		case DATA:
-			return regData;
-
-		case ADDR:
-			return regAddr;
-
-		case IP:
-			return regIP;
-
-		case INSTR:
-			return regInstr;
-
-		case STATE:
-			return regState;
-
-		case KEY:
-			return regKey;
-
-		case MIP:
-			return cu.getIP();
-
-		case MINSTR:
-			return cu.getInstr();
-		}
-
-		return null;
-	}
-
-	public Reg findRegister(String reg) {
-		if (regAccum.name.equals(reg))
-			return Reg.ACCUM;
-
-		if (regBuf.name.equals(reg))
-			return Reg.BUF;
-
-		if (regData.name.equals(reg))
-			return Reg.DATA;
-
-		if (regAddr.name.equals(reg))
-			return Reg.ADDR;
-
-		if (regIP.name.equals(reg))
-			return Reg.IP;
-
-		if (regInstr.name.equals(reg))
-			return Reg.INSTR;
-
-		if (regState.name.equals(reg))
-			return Reg.STATE;
-
-		if (regKey.name.equals(reg))
-			return Reg.KEY;
-
-		if (cu.getIP().name.equals(reg))
-			return Reg.MIP;
-
-		if (cu.getInstr().name.equals(reg))
-			return Reg.MINSTR;
-
-		return null;
-	}
-
-	public int getRegValue(Reg reg) {
-		return getRegister(reg).getValue();
-	}
-
-	public int getRegWidth(Reg reg) {
-		return getRegister(reg).getWidth();
-	}
-
-	public int getStateValue(int startbit) {
-		return regState.getValue(startbit);
-	}
-
-	public boolean isRunning() {
-		return lock.isLocked();
-	}
-
-	public Memory getMemory() {
-		return mem;
-	}
-
-	public int getMemoryValue(int addr) {
-		return mem.getValue(addr);
-	}
-
-	public Memory getMicroMemory() {
-		return cu.getMemory();
-	}
-
-	public int getMicroMemoryValue(int addr) {
-		return cu.getMemoryValue(addr);
-	}
-
-	public void setRegKey(int value) {
-		regKey.setValue(value);
 	}
 
 	public void setRunState(boolean state) {
 		tick.lock();
 		try {
-			valveRunState.setValue(state ? 1 : 0);
+			ps.setValue(state ? 1 : 0, 1, State.RUN.ordinal());
 		} finally {
 			tick.unlock();
 		}
@@ -571,10 +367,22 @@ public class CPU {
 	public void invertRunState() {
 		tick.lock();
 		try {
-			valveRunState.setValue(~regState.getValue(StateReg.FLAG_RUN));
+			ps.invertBit(State.RUN.ordinal());
 		} finally {
 			tick.unlock();
 		}
+	}
+
+	public long getRegValue(Reg reg) {
+		return regs.get(reg).getValue();
+	}
+
+	public long getRegWidth(Reg reg) {
+		return regs.get(reg).width;
+	}
+
+	public long getProgramState(State state) {
+		return ps.getValue(state.ordinal());
 	}
 
 	public boolean getClockState() {
@@ -586,7 +394,7 @@ public class CPU {
 		try {
 			this.clock = clock;
 			if (!clock)
-				valveSetProgram.setValue(0);
+				stateProgram.setValue(0);
 		} finally {
 			tick.unlock();
 		}
@@ -597,15 +405,23 @@ public class CPU {
 		return clock;
 	}
 
-	private void jump(int label) {
-		if (label != ControlUnit.NO_LABEL)
-			cu.jump(label);
+	public final int findLabel(String label) throws Exception {
+		return mc.findLabel(label);
 	}
 
-	private boolean startFrom(int label) {
+	/**
+	 * Jump to specified address
+	 * <p>lock should be acquired before calling
+	 */
+	private void jump(int addr) {
+		if (addr > 0)
+			mp.setValue(addr);
+	}
+
+	private boolean startFrom(int addr) {
 		if (lock.tryLock()) {
 			try {
-				jump(label);
+				jump(addr);
 				lockStart.signal();
 			} finally {
 				lock.unlock();
@@ -616,26 +432,26 @@ public class CPU {
 	}
 
 	public boolean startSetAddr() {
-		return startFrom(ControlUnit.LABEL_ADDR);
+		return startFrom(labels.get("SETIP"));
 	}
 
 	public boolean startWrite() {
-		return startFrom(ControlUnit.LABEL_WRITE);
+		return startFrom(labels.get("WRITE"));
 	}
 
 	public boolean startRead() {
-		return startFrom(ControlUnit.LABEL_READ);
+		return startFrom(labels.get("READ"));
 	}
 
 	public boolean startStart() {
-		return startFrom(ControlUnit.LABEL_START);
+		return startFrom(labels.get("START"));
 	}
 
 	public boolean startContinue() {
-		return startFrom(ControlUnit.NO_LABEL);
+		return startFrom(0);
 	}
 
-	private boolean runFrom(int label) {
+	private boolean executeFrom(int label) {
 		if (lock.tryLock()) {
 			try {
 				jump(label);
@@ -650,40 +466,40 @@ public class CPU {
 		return false;
 	}
 
-	public boolean runSetAddr() {
-		return runFrom(ControlUnit.LABEL_ADDR);
+	public boolean executeSetAddr() {
+		return executeFrom(labels.get("SETIP"));
 	}
 
-	public boolean runSetAddr(int addr) {
-		setRegKey(addr);
-		return runSetAddr();
+	public boolean executeSetAddr(int value) {
+		ir.setValue(value);
+		return executeSetAddr();
 	}
 
-	public boolean runWrite() {
-		return runFrom(ControlUnit.LABEL_WRITE);
+	public boolean executeWrite() {
+		return executeFrom(labels.get("WRITE"));
 	}
 
-	public boolean runWrite(int value) {
-		setRegKey(value);
-		return runWrite();
+	public boolean executeWrite(int value) {
+		ir.setValue(value);
+		return executeWrite();
 	}
 
-	public boolean runRead() {
-		return runFrom(ControlUnit.LABEL_READ);
+	public boolean executeRead() {
+		return executeFrom(labels.get("READ"));
 	}
 
-	public boolean runStart() {
-		return runFrom(ControlUnit.LABEL_START);
+	public boolean executeStart() {
+		return executeFrom(labels.get("START"));
 	}
 
-	public boolean runContinue() {
-		return runFrom(ControlUnit.NO_LABEL);
+	public boolean executeContinue() {
+		return executeFrom(0);
 	}
 
-	public boolean runSetMAddr() {
+	public boolean executeSetMP() {
 		if (lock.tryLock()) {
 			try {
-				cu.setIP(regKey.getValue());
+				mp.setValue(ir.getValue());
 			} finally {
 				lock.unlock();
 			}
@@ -692,10 +508,11 @@ public class CPU {
 		return false;
 	}
 
-	public boolean runMWrite() {
+	public boolean executeMCWrite() {
 		if (lock.tryLock()) {
 			try {
-				cu.setMemory(regKey.getValue());
+				microcode.setValue(ir.getValue());
+				ir.setValue(0);
 			} finally {
 				lock.unlock();
 			}
@@ -704,42 +521,14 @@ public class CPU {
 		return false;
 	}
 
-	public boolean runMRead() {
-		if (lock.tryLock()) {
-			try {
-				cu.readInstr();
-			} finally {
-				lock.unlock();
-			}
-			return true;
-		}
-		return false;
-	}
-
-	public MicroProgram getMicroProgram() {
-		return mp;
-	}
-
-	public String getMicroProgramName() {
-		return mp.microprogramName;
-	}
-
-	public int getIntrCycleStartAddr() {
-		return cu.getIntrCycleStartAddr();
-	}
-
-	public Instruction[] getInstructionSet() {
-		return mp.instructionSet;
-	}
-
+	/*
 	public RunningCycle getRunningCycle() {
 		return cu.getCycle();
-	}
+	} */
 
 	@Override
 	protected void finalize() throws Throwable {
 		super.finalize();
 		stopCPU();
 	}
-*/
 }
