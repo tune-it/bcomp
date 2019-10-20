@@ -67,10 +67,14 @@ public class MicroCode {
 	}
 
 	private final omc[] MP = {
+		// Пустая ячейка
 		new omc(			cs()),
+
+		// Выборка команды
 		new omc("BEGIN",	cs(RDIP, HTOH, LTOL, WRAR, WRBR)),							// IP -> AR, BR
 		new omc(			cs(RDBR, PLS1, HTOH, LTOL, WRIP, LOAD)),						// BR + 1 -> IP, MEM(AR) -> DR
 		new omc(			cs(RDDR, HTOH, LTOL, WRCR)),									// DR -> CR
+		// Частичное декодирование
 		new CMC(			cs(RDCR, HTOL), 7, 1,							"CHKBR"),	// if CR(15) = 1 then GOTO CHKBR
 		new CMC(			cs(RDCR, HTOL), 6, 1,							"ADDRTYPE"),// if CR(14) = 1 then GOTO ADDRTYPE
 		new CMC(			cs(RDCR, HTOL), 5, 1,							"ADDRTYPE"),// if CR(13) = 1 then GOTO ADDRTYPE
@@ -80,7 +84,7 @@ public class MicroCode {
 		new CMC(			cs(RDCR, HTOL), 5, 0,							"ADDRTYPE"),// if CR(13) = 0 then GOTO ADDRTYPE
 		new CMC(			cs(RDCR, HTOL), 4, 1,							"BRANCHES"),// if CR(12) = 1 then GOTO BRANCHES
 
-		// закончили выборку и частичное декодирование
+		// Выборка адреса
 		new CMC("ADDRTYPE",	cs(RDCR, HTOL), 3, 0,							"LOADOPER"),// if CR(11) = 0 then GOTO LOADOPER
 		new CMC("T1XXX",	cs(RDCR, HTOL), 2, 1,							"T11XX"),	// if CR(10) = 1 then GOTO T11XX
 		new omc("T10XX",	cs(RDCR, HTOH, LTOL, WRAR)),									// CR -> AR
@@ -99,18 +103,19 @@ public class MicroCode {
 		new omc("T11XX",	cs(RDCR, LTOL, WRBR)),										// LTOL(CR) -> BR
 		new CMC(			cs(RDCR, HTOL), 1, 1,							"T111X"),	// if CR(9) = 1 then GOTO T111X
 		new CMC("T110X",	cs(RDCR, HTOL), 0, 1,							"T1101"),	// if CR(8) = 1 then GOTO T1101
-		new omc("T1110",	cs(RDBR, RDIP, HTOH, LTOL, WRDR)),							// BR + IP -> DR !!! RECHECK TARGET
+		new omc("T1110",	cs(RDBR, RDIP, HTOH, LTOL, WRDR)),							// BR + IP -> DR
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"LOADOPER"),// GOTO LOADOPER
 		new CMC("T111X",	cs(RDCR, HTOL), 0, 0,							"RESERVED"),// if CR(8) = 0 then GOTO RESERVED
 		new omc("T1111",	cs(RDBR, SEXT, WRDR)),										// BR -> DR
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"EXECUTE"),	// GOTO EXECUTE
-		new omc("T1101",	cs(RDBR, RDSP, HTOH, LTOL, WRDR)),							// BR + SP -> DR !!! RECHECK TARGET
+		new omc("T1101",	cs(RDBR, RDSP, HTOH, LTOL, WRDR)),							// BR + SP -> DR
 
 		// Выборка операнда
 		new CMC("LOADOPER",	cs(RDCR, HTOL), 7, 0,							"RDVALUE"),	// if CR(15) = 0 then GOTO RDVALUE
 		new CMC(			cs(RDCR, HTOL), 6, 1,							"CMD11XX"),	// if CR(14) = 1 then GOTO CMD11XX
 		new omc("RDVALUE",	cs(RDDR, HTOH, LTOL, WRAR)),									// DR -> AR
 		new omc(			cs(LOAD)),													// MEM(AR) -> DR
+
 		// Декодирование и цикл исполнения адресных команд кроме JUMP/CALL/ST/FXXX
 		new CMC("EXECUTE",	cs(RDCR, HTOL), 7, 1,							"CMD1XXX"),	// if CR(15) = 1 then GOTO CMD1XXX
 		new CMC("CMD0XXX",	cs(RDCR, HTOL), 6, 1,							"CMD01XX"),	// if CR(14) = 1 then GOTO CMD01XX
@@ -310,7 +315,7 @@ public class MicroCode {
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"HLT"),		// GOTO HLT
 		new omc("START",	cs(STNZ, SETV, SETC, WRAC, WRSP, DINT, CLRF)),				//	0 -> AC, SP, C, N, Z, V; DI; CLRF
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"INT"),		// GOTO INT
-		new omc("RESERVED",	new  CS[] {})
+		new omc("RESERVED",	cs())
 	};
 
 	public int getMicroCodeLength() {
