@@ -26,12 +26,10 @@ public class Xor extends Control {
 		if (isOpen(value)) {
 			long src = input.getValue() >> inputstartbit;
 			long res = src & 1;
-			System.out.println("start: " + Long.toHexString(res));
 
 			for (long i = 1; i < inputwidth; i++) {
 				src >>= 1;
 				res ^= src & 1;
-			System.out.println("new: " + Long.toHexString(res));
 			}
 
 			super.setValue(res);
