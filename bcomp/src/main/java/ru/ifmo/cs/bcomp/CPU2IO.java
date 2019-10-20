@@ -11,6 +11,7 @@ import ru.ifmo.cs.components.*;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class CPU2IO {
+	/*
 	private final DummyValve valveio;
 	private final Bus addr = new Bus(8);
 	private final BusSplitter order;
@@ -74,5 +75,5 @@ public class CPU2IO {
 
 	public void addValveClearFlag(DataDestination valve) {
 		valveClearAll.addDestination(valve);
-	}
+	} */
 }

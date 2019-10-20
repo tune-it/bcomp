@@ -11,6 +11,7 @@ import java.util.ArrayList;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class Assembler {
+	/*
 	private class Label {
 		private final String label;
 		private Integer addr;
@@ -278,5 +279,5 @@ public class Assembler {
 	public int getBeginAddr() throws Exception {
 		return getLabelAddr("BEGIN");
 	}
-
+*/
 }

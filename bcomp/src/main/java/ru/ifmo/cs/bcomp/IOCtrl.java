@@ -12,6 +12,7 @@ import ru.ifmo.cs.components.*;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class IOCtrl {
+	/*
 	public enum Direction {
 		IN, OUT, INOUT
 	};
@@ -105,4 +106,5 @@ public class IOCtrl {
 		for (DataHandler valve : signals.get(cs))
 			valve.removeDestination(dest);
 	}
+*/
 }

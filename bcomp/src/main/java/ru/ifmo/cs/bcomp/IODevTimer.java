@@ -8,7 +8,7 @@ package ru.ifmo.cs.bcomp;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class IODevTimer {
+public class IODevTimer { /*
 	private final IOCtrl ctrl;
 	private Thread timer;
 	private volatile boolean running = true;
@@ -55,4 +55,5 @@ public class IODevTimer {
 			System.out.println("Can't join thread: " + ex.getMessage());
 		}
 	}
+*/
 }
