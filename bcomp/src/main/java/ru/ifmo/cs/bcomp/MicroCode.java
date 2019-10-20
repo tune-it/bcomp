@@ -102,7 +102,7 @@ public class MicroCode {
 		new omc("T1110",	cs(RDBR, RDIP, HTOH, LTOL, WRDR)),							// BR + IP -> DR !!! RECHECK TARGET
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"LOADOPER"),// GOTO LOADOPER
 		new CMC("T111X",	cs(RDCR, HTOL), 0, 0,							"RESERVED"),// if CR(8) = 0 then GOTO RESERVED
-		new omc("T1111",	cs(RDBR, HTOH, LTOL, WRDR)),									// BR -> DR
+		new omc("T1111",	cs(RDBR, SEXT, WRDR)),										// BR -> DR
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"EXECUTE"),	// GOTO EXECUTE
 		new omc("T1101",	cs(RDBR, RDSP, HTOH, LTOL, WRDR)),							// BR + SP -> DR !!! RECHECK TARGET
 

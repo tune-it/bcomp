@@ -46,13 +46,11 @@ public class BasicComp {
 		EnumMap<Reg, Register> regs = cpu.getRegisters();
 
 		cpu.executeSetAddr(0x100);
-		cpu.executeWrite(0x0200);
-		cpu.executeWrite(0x4105);
-		cpu.executeWrite(0x4106);
-		cpu.executeWrite(0xE107);
+		cpu.executeWrite(0xA104);
+		cpu.executeWrite(0x4F01);
+		cpu.executeWrite(0xE105);
 		cpu.executeWrite(0x0100);
 		cpu.executeWrite(0xDEAD);
-		cpu.executeWrite(0xBEEF);
 		cpu.invertRunState();
 		cpu.executeSetAddr(0x100);
 		cpu.executeStart();
@@ -60,7 +58,7 @@ public class BasicComp {
 		System.out.println("AR =\t\t" + toHex(regs.get(Reg.AR).getValue(), 11));
 		System.out.println("AC =\t\t" + toHex(regs.get(Reg.AC).getValue(), 16));
 		System.out.println("CR =\t\t" + toHex(regs.get(Reg.CR).getValue(), 16));
-		System.out.println("MEM(107) =\t" + toHex(mem.getValue(0x107), 16));
+		System.out.println("MEM(105) =\t" + toHex(mem.getValue(0x105), 16));
 
 		cpu.stopCPU();
 //		microcode.setValue(0,
