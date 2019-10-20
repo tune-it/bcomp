@@ -160,7 +160,8 @@ public class MicroCode {
 		new omc(			cs(RDBR, HTOH, LTOL, WRIP)),									// BR -> IP
 		new omc("PUSHVAL",	cs(RDSP, COML, HTOH, LTOL, WRSP, WRAR)),						// SP - 1 -> SP, AR
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"STORE"),	// GOTO STORE
-		new omc("ST",		cs(RDAC, HTOH, LTOL, WRDR)),									// AC -> DR
+		new omc("ST",		cs(RDDR, HTOH, LTOL, WRAR)),									// DR -> AR
+		new omc(			cs(RDAC, HTOH, LTOL, WRDR)),									// AC -> DR
 		new omc("STORE",	cs(STOR)),													// DR -> MEM(AR)
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"INT"),		// GOTO INT
 		// Команды с "коротким" переходом
