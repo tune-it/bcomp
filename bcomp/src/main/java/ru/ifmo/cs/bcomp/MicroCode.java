@@ -71,53 +71,53 @@ public class MicroCode {
 		new omc(			cs()),
 
 		// Выборка команды
-		new omc("BEGIN",	cs(RDIP, HTOH, LTOL, WRAR, WRBR)),							// IP -> AR, BR
+		new omc("INFETCH",	cs(RDIP, HTOH, LTOL, WRAR, WRBR)),							// IP -> AR, BR
 		new omc(			cs(RDBR, PLS1, HTOH, LTOL, WRIP, LOAD)),						// BR + 1 -> IP, MEM(AR) -> DR
 		new omc(			cs(RDDR, HTOH, LTOL, WRCR)),									// DR -> CR
 		// Частичное декодирование
 		new CMC(			cs(RDCR, HTOL), 7, 1,							"CHKBR"),	// if CR(15) = 1 then GOTO CHKBR
-		new CMC(			cs(RDCR, HTOL), 6, 1,							"ADDRTYPE"),// if CR(14) = 1 then GOTO ADDRTYPE
-		new CMC(			cs(RDCR, HTOL), 5, 1,							"ADDRTYPE"),// if CR(13) = 1 then GOTO ADDRTYPE
+		new CMC(			cs(RDCR, HTOL), 6, 1,							"ADFETCH"),	// if CR(14) = 1 then GOTO ADFETCH
+		new CMC(			cs(RDCR, HTOL), 5, 1,							"ADFETCH"),	// if CR(13) = 1 then GOTO ADFETCH
 		new CMC(			cs(RDCR, HTOL), 4, 0,							"ADDRLESS"),// if CR(12) = 0 then GOTO ADDRLESS
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"IO"),		// GOTO IO
-		new CMC("CHKBR",	cs(RDCR, HTOL), 6, 0,							"ADDRTYPE"),// if CR(14) = 0 then GOTO ADDRTYPE
-		new CMC(			cs(RDCR, HTOL), 5, 0,							"ADDRTYPE"),// if CR(13) = 0 then GOTO ADDRTYPE
+		new CMC("CHKBR",	cs(RDCR, HTOL), 6, 0,							"ADFETCH"),	// if CR(14) = 0 then GOTO ADFETCH
+		new CMC(			cs(RDCR, HTOL), 5, 0,							"ADFETCH"),	// if CR(13) = 0 then GOTO ADFETCH
 		new CMC(			cs(RDCR, HTOL), 4, 1,							"BRANCHES"),// if CR(12) = 1 then GOTO BRANCHES
 
 		// Выборка адреса
-		new CMC("ADDRTYPE",	cs(RDCR, HTOL), 3, 0,							"LOADOPER"),// if CR(11) = 0 then GOTO LOADOPER
+		new CMC("ADFETCH",	cs(RDCR, HTOL), 3, 0,							"OPFETCH"),	// if CR(11) = 0 then GOTO OPFETCH
 		new omc("T1XXX",	cs(RDCR, SEXT, WRBR)),										// LTOL(CR) -> BR
 		new CMC(			cs(RDCR, HTOL), 2, 1,							"T11XX"),	// if CR(10) = 1 then GOTO T11XX
 		new omc("T10XX",	cs(RDBR, RDIP, HTOH, LTOL, WRAR)),							// CR -> AR
 		new omc(			cs(LOAD)),													// MEM(AR) -> DR 
 		new CMC(			cs(RDCR, HTOL), 1, 1,							"T101X"),	// if CR(9) = 1 then GOTO T101X
 		new	CMC("T100X",	cs(RDCR, HTOL), 0, 1,							"RESERVED"),// if CR(8) = 1 then GOTO RESERVED
-		new CMC("T1000",	cs(RDPS, LTOL), PS0.ordinal(), 0,				"LOADOPER"),// GOTO LOADOPER
+		new CMC("T1000",	cs(RDPS, LTOL), PS0.ordinal(), 0,				"OPFETCH"),	// GOTO OPFETCH
 		new CMC("T101X",	cs(RDCR, HTOL), 0, 1,							"T1011"),	// if CR(8) = 1 then GOTO T1011
 		new omc("T1010",	cs(RDDR, PLS1, HTOH, LTOL, WRDR)),							// DR + 1 -> DR
 		new omc(			cs(STOR)),													// DR -> MEM(AR)
 		new omc(			cs(RDDR, COML, HTOH, LTOL, WRDR)),							// DR - 1 -> DR
-		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"LOADOPER"),// GOTO LOADOPER
+		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"OPFETCH"),	// GOTO OPFETCH
 		new omc("T1011",	cs(RDDR, COML, HTOH, LTOL, WRDR)),							// DR - 1 -> DR
 		new omc(			cs(STOR)),													// DR -> MEM(AR)
-		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"LOADOPER"),// GOTO LOADOPER
+		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"OPFETCH"),	// GOTO OPFETCH
 		new CMC("T11XX",	cs(RDCR, HTOL), 1, 1,							"T111X"),	// if CR(9) = 1 then GOTO T111X
 		new CMC("T110X",	cs(RDCR, HTOL), 0, 1,							"RESERVED"),// if CR(8) = 1 then GOTO T1101
 		new omc("T1100",	cs(RDBR, RDSP, HTOH, LTOL, WRDR)),							// BR + SP -> DR
-		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"LOADOPER"),// GOTO LOADOPER
+		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"OPFETCH"),	// GOTO OPFETCH
 		new CMC("T111X",	cs(RDCR, HTOL), 0, 0,							"T1110"),	// if CR(8) = 0 then GOTO RESERVED
 		new omc("T1111",	cs(RDBR, HTOH, LTOL, WRDR)),									// BR -> DR
-		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"EXECUTE"),	// GOTO EXECUTE
+		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"EXEC"),	// GOTO EXEC
 		new omc("T1110",	cs(RDBR, RDSP, HTOH, LTOL, WRDR)),							// BR + SP -> DR
 
 		// Выборка операнда
-		new CMC("LOADOPER",	cs(RDCR, HTOL), 7, 0,							"RDVALUE"),	// if CR(15) = 0 then GOTO RDVALUE
+		new CMC("OPFETCH",	cs(RDCR, HTOL), 7, 0,							"RDVALUE"),	// if CR(15) = 0 then GOTO RDVALUE
 		new CMC(			cs(RDCR, HTOL), 6, 1,							"CMD11XX"),	// if CR(14) = 1 then GOTO CMD11XX
 		new omc("RDVALUE",	cs(RDDR, HTOH, LTOL, WRAR)),									// DR -> AR
 		new omc(			cs(LOAD)),													// MEM(AR) -> DR
 
 		// Декодирование и цикл исполнения адресных команд кроме JUMP/CALL/ST/FXXX
-		new CMC("EXECUTE",	cs(RDCR, HTOL), 7, 1,							"CMD1XXX"),	// if CR(15) = 1 then GOTO CMD1XXX
+		new CMC("EXEC",		cs(RDCR, HTOL), 7, 1,							"CMD1XXX"),	// if CR(15) = 1 then GOTO CMD1XXX
 		new CMC("CMD0XXX",	cs(RDCR, HTOL), 6, 1,							"CMD01XX"),	// if CR(14) = 1 then GOTO CMD01XX
 		// 13th bit already checked !!! CHECK LABEL NAME !!!
 		new CMC("CMD000X",	cs(RDCR, HTOL), 4, 1,							"OR"),		// if CR(12) = 1 then GOTO OR
@@ -211,7 +211,7 @@ public class MicroCode {
 		new CMC("AL00XX",	cs(RDCR, HTOL), 1, 1,							"AL001X"),	// if CR(9) = 1 then GOTO AL001X
 		new CMC("AL000X",	cs(RDCR, HTOL), 0, 0,							"INT"),		// if CR(8) = 0 then GOTO INT (NOP)
 		new omc("HLT",		cs(HALT)),													// HLT: HALT
-		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"BEGIN"),	// GOTO BEGIN
+		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"INFETCH"),	// GOTO INFETCH
 		new CMC("AL001X",	cs(RDCR, HTOL), 0, 1,							"AL0011"),	// if CR(8) = 1 then GOTO AL0011
 		new CMC("AL0010",	cs(RDCR, LTOL), 7, 1,							"CMA"),		// if CR(7) = 1 then GOTO CMA
 		new omc("CLA",		cs(STNZ, SETV, WRAC)),										// 0 -> AC, N, V, Z
@@ -289,7 +289,7 @@ public class MicroCode {
 
 		// Цикл прерывания
 		new CMC("INT",		cs(RDPS, HTOL), RUN.ordinal() - 8, 0,			"HLT"),		// if RUN = 0 then GOTO HLT
-		new CMC(			cs(RDPS, HTOL), INTR.ordinal() - 8, 0,			"BEGIN"),	// if INT = 0 then GOTO BEGIN
+		new CMC(			cs(RDPS, HTOL), INTR.ordinal() - 8, 0,			"INFETCH"),	// if INT = 0 then GOTO INFETCH
 		new omc(			cs(RDSP, COML, HTOH, LTOL, WRSP, WRAR)),						// SP + ~0 -> SP, AR
 		new omc(			cs(RDIP, HTOH, LTOL, WRDR)),									// IP -> DR
 		new omc(			cs(STOR)),													// DR -> MEM(AR)
@@ -299,7 +299,7 @@ public class MicroCode {
 		new omc(			cs(WRAR)),													// 0 -> AR
 		new omc(			cs(LOAD)),													// MEM(AR) -> DR
 		new omc(			cs(RDDR, HTOH, LTOL, WRIP, DINT)),							// DR -> IP; DI
-		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"BEGIN"),	// GOTO BEGIN
+		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"INFETCH"),	// GOTO INFETCH
 
 		// Ввод адреса
 		new omc("SETIP",	cs(RDIR, HTOH, LTOL, WRIP)),									// IR -> IP
