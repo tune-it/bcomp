@@ -86,29 +86,29 @@ public class MicroCode {
 
 		// Выборка адреса
 		new CMC("ADDRTYPE",	cs(RDCR, HTOL), 3, 0,							"LOADOPER"),// if CR(11) = 0 then GOTO LOADOPER
-		new CMC("T1XXX",	cs(RDCR, HTOL), 2, 1,							"T11XX"),	// if CR(10) = 1 then GOTO T11XX
-		new omc("T10XX",	cs(RDCR, HTOH, LTOL, WRAR)),									// CR -> AR
+		new omc("T1XXX",	cs(RDCR, SEXT, WRBR)),										// LTOL(CR) -> BR
+		new CMC(			cs(RDCR, HTOL), 2, 1,							"T11XX"),	// if CR(10) = 1 then GOTO T11XX
+		new omc("T10XX",	cs(RDBR, RDIP, HTOH, LTOL, WRAR)),							// CR -> AR
 		new omc(			cs(LOAD)),													// MEM(AR) -> DR 
 		new CMC(			cs(RDCR, HTOL), 1, 1,							"T101X"),	// if CR(9) = 1 then GOTO T101X
 		new	CMC("T100X",	cs(RDCR, HTOL), 0, 1,							"RESERVED"),// if CR(8) = 1 then GOTO RESERVED
 		new CMC("T1000",	cs(RDPS, LTOL), PS0.ordinal(), 0,				"LOADOPER"),// GOTO LOADOPER
 		new CMC("T101X",	cs(RDCR, HTOL), 0, 1,							"T1011"),	// if CR(8) = 1 then GOTO T1011
 		new omc("T1010",	cs(RDDR, PLS1, HTOH, LTOL, WRDR)),							// DR + 1 -> DR
-		new omc(			cs(STOR, RDDR, COML, HTOH, LTOL, WRBR)),						// DR -> MEM(AR); DR - 1 -> BR
-		new omc(			cs(RDBR, HTOH, LTOL, WRDR)),									// BR -> DR
+		new omc(			cs(STOR)),													// DR -> MEM(AR)
+		new omc(			cs(RDDR, COML, HTOH, LTOL, WRDR)),							// DR - 1 -> DR
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"LOADOPER"),// GOTO LOADOPER
 		new omc("T1011",	cs(RDDR, COML, HTOH, LTOL, WRDR)),							// DR - 1 -> DR
 		new omc(			cs(STOR)),													// DR -> MEM(AR)
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"LOADOPER"),// GOTO LOADOPER
-		new omc("T11XX",	cs(RDCR, LTOL, WRBR)),										// LTOL(CR) -> BR
-		new CMC(			cs(RDCR, HTOL), 1, 1,							"T111X"),	// if CR(9) = 1 then GOTO T111X
-		new CMC("T110X",	cs(RDCR, HTOL), 0, 1,							"T1101"),	// if CR(8) = 1 then GOTO T1101
-		new omc("T1110",	cs(RDBR, RDIP, HTOH, LTOL, WRDR)),							// BR + IP -> DR
+		new CMC("T11XX",	cs(RDCR, HTOL), 1, 1,							"T111X"),	// if CR(9) = 1 then GOTO T111X
+		new CMC("T110X",	cs(RDCR, HTOL), 0, 1,							"RESERVED"),// if CR(8) = 1 then GOTO T1101
+		new omc("T1100",	cs(RDBR, RDSP, HTOH, LTOL, WRDR)),							// BR + SP -> DR
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"LOADOPER"),// GOTO LOADOPER
-		new CMC("T111X",	cs(RDCR, HTOL), 0, 0,							"RESERVED"),// if CR(8) = 0 then GOTO RESERVED
-		new omc("T1111",	cs(RDBR, SEXT, WRDR)),										// BR -> DR
+		new CMC("T111X",	cs(RDCR, HTOL), 0, 0,							"T1110"),	// if CR(8) = 0 then GOTO RESERVED
+		new omc("T1111",	cs(RDBR, HTOH, LTOL, WRDR)),									// BR -> DR
 		new CMC(			cs(RDPS, LTOL), PS0.ordinal(), 0,				"EXECUTE"),	// GOTO EXECUTE
-		new omc("T1101",	cs(RDBR, RDSP, HTOH, LTOL, WRDR)),							// BR + SP -> DR
+		new omc("T1110",	cs(RDBR, RDSP, HTOH, LTOL, WRDR)),							// BR + SP -> DR
 
 		// Выборка операнда
 		new CMC("LOADOPER",	cs(RDCR, HTOL), 7, 0,							"RDVALUE"),	// if CR(15) = 0 then GOTO RDVALUE
