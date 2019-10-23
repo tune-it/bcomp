@@ -36,11 +36,15 @@ public class CPU {
 	private static final long AR_WIDTH = 11;
 	private static final long DATA_WIDTH = 16;
 	private static final long PS_WIDTH = 16; // !!! FIX WIDTH !!! //
-	public static final String[] OPERATIONS = {
+	private static final String[] LABELS = {
 		"SETIP",
 		"WRITE",
 		"READ",
-		"START"
+		"START",
+		"ADFETCH",
+		"OPFETCH",
+		"EXEC",
+		"INT",
 	};
 
 	private final EnumMap<Reg, Register> regs = new EnumMap<Reg, Register>(Reg.class);
@@ -262,8 +266,8 @@ public class CPU {
 		for (int i = 0; i < mc.getMicroCodeLength(); i++)
 			microcode.setValue(i, mc.getMicroCommand(i));
 
-		for (String operation : OPERATIONS)
-			labels.put(operation, findLabel(operation));
+		for (String label : LABELS)
+			labels.put(label, findLabel(label));
 
 		mp.setValue(findLabel("HLT"));
 	}
