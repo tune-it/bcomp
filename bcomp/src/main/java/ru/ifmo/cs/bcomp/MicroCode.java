@@ -131,12 +131,12 @@ public class MicroCode {
         new omc("ADD",      cs(RDAC, RDDR, HTOH, LTOL, STNZ, SETV, SETC, WRAC)),        // AC + DR -> AC, N, Z, V, C
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("ADC",      cs(RDPS, LTOL), C.ordinal(), 0,                 "ADD"),     // if C = 0 then GOTO ADD
-        new omc(            cs(RDAC, RDDR, PLS1, HTOH, LTOL, STNZ, SETV, SETC, WRAC)),  // DR + AC + 1 -> BR, C, N, Z, V
+        new omc(            cs(RDAC, RDDR, PLS1, HTOH, LTOL, STNZ, SETV, SETC, WRAC)),  // AC + DR + 1 -> BR, C, N, Z, V
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("CMD011X",  cs(RDCR, HTOL), 4, 1,                           "CMP"),     // if CR(12) = 1 then GOTO CMP
-        new omc("SUB",      cs(RDAC, RDDR, COMR, PLS1, STNZ, SETV, SETC, WRAC)),        // ~DR + AC + 1 -> AC, N, Z, V, C
+        new omc("SUB",      cs(RDAC, RDDR, COMR, PLS1, STNZ, SETV, SETC, WRAC)),        // AC + ~DR + 1 -> AC, N, Z, V, C
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new omc("CMP",      cs(RDAC, RDDR, COMR, PLS1, STNZ, SETV, SETC)),              // ~DR + AC + 1 -> N, Z, V, C
+        new omc("CMP",      cs(RDAC, RDDR, COMR, PLS1, STNZ, SETV, SETC)),              // AC + ~DR + 1 -> N, Z, V, C
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         // Warning - 11XX was already checked
         new CMC("CMD1XXX",  cs(RDCR, HTOL), 5, 1,                           "CMD101X"), // if CR(13) = 1 then GOTO CMD101X
