@@ -474,7 +474,7 @@ public class CPU {
 		return executeFrom(labels.get("SETIP"));
 	}
 
-	public boolean executeSetAddr(int value) {
+	public boolean executeSetAddr(long value) {
 		ir.setValue(value);
 		return executeSetAddr();
 	}
@@ -483,7 +483,7 @@ public class CPU {
 		return executeFrom(labels.get("WRITE"));
 	}
 
-	public boolean executeWrite(int value) {
+	public boolean executeWrite(long value) {
 		ir.setValue(value);
 		return executeWrite();
 	}
