@@ -44,21 +44,32 @@ public class BasicComp {
 		Memory mem = cpu.getMemory();
 		Memory microcode = cpu.getMicroCode();
 		EnumMap<Reg, Register> regs = cpu.getRegisters();
+		long[] values = {-30000, -10, 0, 10, 30000};
 
 		cpu.executeSetAddr(0x100);
-		cpu.executeWrite(0xA104);
-		cpu.executeWrite(0x4F01);
-		cpu.executeWrite(0xE105);
+		cpu.executeWrite(0xA103);
+		cpu.executeWrite(0x7104);
 		cpu.executeWrite(0x0100);
-		cpu.executeWrite(0xDEAD);
-		cpu.invertRunState();
-		cpu.executeSetAddr(0x100);
-		cpu.executeStart();
-		System.out.println("IP =\t\t" + toHex(regs.get(Reg.IP).getValue(), 11));
-		System.out.println("AR =\t\t" + toHex(regs.get(Reg.AR).getValue(), 11));
-		System.out.println("AC =\t\t" + toHex(regs.get(Reg.AC).getValue(), 16));
-		System.out.println("CR =\t\t" + toHex(regs.get(Reg.CR).getValue(), 16));
-		System.out.println("MEM(105) =\t" + toHex(mem.getValue(0x105), 16));
+		cpu.setRunState(true);
+
+		for (long x : values)
+			for (long y : values) {
+				cpu.executeSetAddr(0x103);
+				cpu.executeWrite(x);
+				cpu.executeWrite(y);
+				cpu.executeSetAddr(0x100);
+				cpu.executeStart();
+				System.out.println(
+					" C = " + cpu.getProgramState(State.C) +
+					" V = " + cpu.getProgramState(State.V) +
+					" (" + toHex(x, 16) + ") - (" + toHex(y, 16) +
+					") Original: (" + x + ") - (" + y + ")");
+			}
+
+//		System.out.println("AR =\t\t" + toHex(regs.get(Reg.AR).getValue(), 11));
+//		System.out.println("AC =\t\t" + toHex(regs.get(Reg.AC).getValue(), 16));
+//		System.out.println("CR =\t\t" + toHex(regs.get(Reg.CR).getValue(), 16));
+//		System.out.println("MEM(105) =\t" + toHex(mem.getValue(0x105), 16));
 
 		cpu.stopCPU();
 //		microcode.setValue(0,
