@@ -17,7 +17,6 @@ import static ru.ifmo.cs.bcomp.State.*;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class CPU {
-	// !!! TEMPORARY PUBLIC !!! BUSES SHOULD BE NOT VISIBLE TO OTHERS !!!
 	private enum Buses {
 		RIGHT_INPUT,
 		LEFT_INPUT,
