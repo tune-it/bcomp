@@ -76,17 +76,17 @@ public class MicroCode {
         new omc(            cs(RDDR, HTOH, LTOL, WRCR)),                                // DR -> CR
         // Частичное декодирование
         new CMC(            cs(RDCR, HTOL), 7, 1,                           "CHKBR"),   // if CR(15) = 1 then GOTO CHKBR
-        new CMC(            cs(RDCR, HTOL), 6, 1,                           "CHKABS"), // if CR(14) = 1 then GOTO CHKABS
-        new CMC(            cs(RDCR, HTOL), 5, 1,                           "CHKABS"), // if CR(13) = 1 then GOTO CHKABS
+        new CMC(            cs(RDCR, HTOL), 6, 1,                           "CHKABS"),  // if CR(14) = 1 then GOTO CHKABS
+        new CMC(            cs(RDCR, HTOL), 5, 1,                           "CHKABS"),  // if CR(13) = 1 then GOTO CHKABS
         new CMC(            cs(RDCR, HTOL), 4, 0,                           "ADDRLESS"),// if CR(12) = 0 then GOTO ADDRLESS
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "IO"),      // GOTO IO
-        new CMC("CHKBR",    cs(RDCR, HTOL), 6, 0,                           "CHKABS"), // if CR(14) = 0 then GOTO CHKABS
-        new CMC(            cs(RDCR, HTOL), 5, 0,                           "CHKABS"), // if CR(13) = 0 then GOTO CHKABS
+        new CMC("CHKBR",    cs(RDCR, HTOL), 6, 0,                           "CHKABS"),  // if CR(14) = 0 then GOTO CHKABS
+        new CMC(            cs(RDCR, HTOL), 5, 0,                           "CHKABS"),  // if CR(13) = 0 then GOTO CHKABS
         new CMC(            cs(RDCR, HTOL), 4, 1,                           "BRANCHES"),// if CR(12) = 1 then GOTO BRANCHES
-        new CMC("CHKABS",  cs(RDCR, HTOL), 3, 0,                           "OPFETCH"), // if CR(11) = 0 then GOTO OPFETCH
+        new CMC("CHKABS",   cs(RDCR, HTOL), 3, 0,                           "OPFETCH"), // if CR(11) = 0 then GOTO OPFETCH
 
         // Выборка адреса
-        new omc("ADFETCH",    cs(RDCR, SEXT, WRBR)),                                      // LTOL(CR) -> BR
+        new omc("ADFETCH",  cs(RDCR, SEXT, WRBR)),                                      // LTOL(CR) -> BR
         new CMC(            cs(RDCR, HTOL), 2, 1,                           "T11XX"),   // if CR(10) = 1 then GOTO T11XX
         new omc("T10XX",    cs(RDBR, RDIP, HTOH, LTOL, WRAR)),                          // CR -> AR
         new omc(            cs(LOAD)),                                                  // MEM(AR) -> DR
