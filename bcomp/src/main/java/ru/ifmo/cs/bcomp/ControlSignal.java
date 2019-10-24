@@ -8,7 +8,7 @@ package ru.ifmo.cs.bcomp;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public enum CS {
+public enum ControlSignal {
 	/**
 	 * Control signal 0:
 	 * Read Data Register

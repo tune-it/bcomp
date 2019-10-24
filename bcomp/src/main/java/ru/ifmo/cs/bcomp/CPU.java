@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 import ru.ifmo.cs.components.*;
-import static ru.ifmo.cs.bcomp.CS.*;
+import static ru.ifmo.cs.bcomp.ControlSignal.*;
 import static ru.ifmo.cs.bcomp.State.*;
 
 /**
@@ -47,7 +47,7 @@ public class CPU {
 	};
 
 	private final EnumMap<Reg, Register> regs = new EnumMap<Reg, Register>(Reg.class);
-	private final EnumMap<CS, Control> valves = new EnumMap<CS, Control>(CS.class);
+	private final EnumMap<ControlSignal, Control> valves = new EnumMap<ControlSignal, Control>(ControlSignal.class);
 	private final EnumMap<Buses, Bus> buses = new EnumMap<Buses, Bus>(Buses.class);
 	private final HashMap<String, Integer> labels = new HashMap<String, Integer>();
 	private final MicroCode mc = new MicroCode();
@@ -271,14 +271,14 @@ public class CPU {
 		mp.setValue(findLabel("HLT"));
 	}
 
-	private Control newValve(DataSource input, long width, long startbit, CS cs, DataDestination ... dsts) {
+	private Control newValve(DataSource input, long width, long startbit, ControlSignal cs, DataDestination ... dsts) {
 		Control valve = new Valve(input, width, startbit, cs.ordinal(), dsts);
 
 		valves.put(cs, valve);
 		return valve;
 	}
 
-	private Control newValveH(DataSource input, long width, long startbit, CS cs, DataDestination ... dsts) {
+	private Control newValveH(DataSource input, long width, long startbit, ControlSignal cs, DataDestination ... dsts) {
 		Control valve = new Valve(input, width, startbit, cs.ordinal() - 16, dsts);
 
 		valves.put(cs, valve);
@@ -346,7 +346,7 @@ public class CPU {
 	 * Add listener for specified control signal
 	 * <p>Use tickLock() before call this method
 	 */
-	void addDestination(CS cs, DataDestination dest) {
+	void addDestination(ControlSignal cs, DataDestination dest) {
 		valves.get(cs).addDestination(dest);
 	}
 
@@ -354,7 +354,7 @@ public class CPU {
 	 * Remove listener for specified control signal
 	 * <p>Use tickLock() before call this method
 	 */
-	void removeDestination(CS cs, DataDestination dest) {
+	void removeDestination(ControlSignal cs, DataDestination dest) {
 		valves.get(cs).removeDestination(dest);
 	}
 

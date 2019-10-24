@@ -93,7 +93,7 @@ public class Utils {
 		return isNumeric(s, 16);
 	}
 
-	public static CS[] cs(CS ... signals) {
+	public static ControlSignal[] cs(ControlSignal ... signals) {
 		return signals;
 	}
 }

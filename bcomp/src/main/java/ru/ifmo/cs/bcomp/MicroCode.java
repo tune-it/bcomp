@@ -4,7 +4,7 @@
 
 package ru.ifmo.cs.bcomp;
 
-import static ru.ifmo.cs.bcomp.CS.*;
+import static ru.ifmo.cs.bcomp.ControlSignal.*;
 import static ru.ifmo.cs.bcomp.State.*;
 import static ru.ifmo.cs.bcomp.Utils.cs;
 
@@ -16,21 +16,21 @@ public class MicroCode {
     private class omc {
         public final String label;
         private final long microcmd;
-        private final CS[] signals;
+        private final ControlSignal[] signals;
 
-        public omc(String label, CS[] signals) {
+        public omc(String label, ControlSignal[] signals) {
             long microcmd = 0L;
 
             this.label = label;
 
-            for (CS cs : (this.signals = signals)) {
+            for (ControlSignal cs : (this.signals = signals)) {
                 microcmd |= 1L << cs.ordinal();
             }
 
             this.microcmd = microcmd;
         }
 
-        public omc(CS[] signals) {
+        public omc(ControlSignal[] signals) {
             this(null, signals);
         }
 
@@ -49,14 +49,14 @@ public class MicroCode {
         private final String labelto;
         private final long microcmd;
 
-        public CMC(String label, CS[] signals, long startbit, long expected, String labelto) {
+        public CMC(String label, ControlSignal[] signals, long startbit, long expected, String labelto) {
             super(label, signals);
 
             this.labelto = labelto;
             microcmd = (1L << TYPE.ordinal()) + (1L << (startbit + 16)) + (expected << 32);
         }
 
-        public CMC(CS[] signals, long startbit, long expected, String labelto) {
+        public CMC(ControlSignal[] signals, long startbit, long expected, String labelto) {
             this(null, signals, startbit, expected, labelto);
         }
 
