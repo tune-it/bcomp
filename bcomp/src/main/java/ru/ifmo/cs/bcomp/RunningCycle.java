@@ -12,19 +12,23 @@ public enum RunningCycle {
 	/**
 	 * Выборка команды
 	 */
-	INSTR_FETCH,
+	INFETCH,
 	/**
 	 * Выборка адреса
 	 */
-	ADDR_FETCH,
+	ADFETCH,
+	/**
+	 * Выборка операнда
+	 */
+	OPFETCH,
 	/**
 	 * Исполнение
 	 */
-	EXECUTION,
+	EXEC,
 	/**
 	 * Прерывание
 	 */
-	INTERRUPT,
+	INT,
 	/**
 	 * Пультовая операция
 	 */

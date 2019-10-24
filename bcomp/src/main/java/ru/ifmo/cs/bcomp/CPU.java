@@ -4,6 +4,7 @@
 
 package ru.ifmo.cs.bcomp;
 
+import java.nio.IntBuffer;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.concurrent.locks.Condition;
@@ -11,6 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import ru.ifmo.cs.components.*;
 import static ru.ifmo.cs.bcomp.ControlSignal.*;
 import static ru.ifmo.cs.bcomp.State.*;
+import static ru.ifmo.cs.bcomp.RunningCycle.*;
 
 /**
  *
@@ -44,6 +46,8 @@ public class CPU {
 		"OPFETCH",
 		"EXEC",
 		"INT",
+		"RESERVED",
+		"HLT",
 	};
 
 	private final EnumMap<Reg, Register> regs = new EnumMap<Reg, Register>(Reg.class);
@@ -524,10 +528,32 @@ public class CPU {
 		return false;
 	}
 
-	/*
 	public RunningCycle getRunningCycle() {
-		return cu.getCycle();
-	} */
+		long ip = regs.get(Reg.IP).getValue();
+
+		if (ip == labels.get("HLT"))
+			return NONE;
+
+		if (ip < labels.get("ADFETCH"))
+			return INFETCH;
+
+		if (ip < labels.get("OPFETCH"))
+			return ADFETCH;
+
+		if (ip < labels.get("EXEC"))
+			return OPFETCH;
+
+		if (ip < labels.get("INT"))
+			return EXEC;
+
+		if (ip < labels.get("SETIP"))
+			return INT;
+
+		if (ip < labels.get("RESERVED"))
+			return PANEL;
+
+		return NONE;
+	}
 
 	@Override
 	protected void finalize() throws Throwable {
