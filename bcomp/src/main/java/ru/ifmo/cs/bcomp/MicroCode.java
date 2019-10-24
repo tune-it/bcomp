@@ -89,7 +89,7 @@ public class MicroCode {
         new omc("ADFETCH",    cs(RDCR, SEXT, WRBR)),                                      // LTOL(CR) -> BR
         new CMC(            cs(RDCR, HTOL), 2, 1,                           "T11XX"),   // if CR(10) = 1 then GOTO T11XX
         new omc("T10XX",    cs(RDBR, RDIP, HTOH, LTOL, WRAR)),                          // CR -> AR
-        new omc(            cs(LOAD)),                                                  // MEM(AR) -> DR 
+        new omc(            cs(LOAD)),                                                  // MEM(AR) -> DR
         new CMC(            cs(RDCR, HTOL), 1, 1,                           "T101X"),   // if CR(9) = 1 then GOTO T101X
         new CMC("T100X",    cs(RDCR, HTOL), 0, 1,                           "RESERVED"),// if CR(8) = 1 then GOTO RESERVED
         new CMC("T1000",    cs(RDPS, LTOL), PS0.ordinal(), 0,               "OPFETCH"), // GOTO OPFETCH
@@ -136,7 +136,7 @@ public class MicroCode {
         new CMC("CMD011X",  cs(RDCR, HTOL), 4, 1,                           "CMP"),     // if CR(12) = 1 then GOTO CMP
         new omc("SUB",      cs(RDAC, RDDR, COMR, PLS1, HTOH, LTOL, STNZ, SETV, SETC, WRAC)),// AC + ~DR + 1 -> AC, N, Z, V, C
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new omc("CMP",      cs(RDAC, RDDR, COMR, PLS1, HTOH, LTOL, STNZ, SETV, SETC)),	// AC + ~DR + 1 -> N, Z, V, C
+        new omc("CMP",      cs(RDAC, RDDR, COMR, PLS1, HTOH, LTOL, STNZ, SETV, SETC)),  // AC + ~DR + 1 -> N, Z, V, C
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         // Warning - 11XX was already checked
         new CMC("CMD1XXX",  cs(RDCR, HTOL), 5, 1,                           "CMD101X"), // if CR(13) = 1 then GOTO CMD101X
@@ -314,7 +314,7 @@ public class MicroCode {
         new omc(            cs(RDIR, HTOH, LTOL, WRDR)),                                // IR -> DR
         new omc(            cs(RDIP, PLS1, HTOH, LTOL, WRIP, LOAD)),                    // MEM(AR) -> DR; IP + 1 -> IP
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "HLT"),     // GOTO HLT
-        new omc("START",    cs(STNZ, SETV, SETC, WRAC, WRSP, DINT, CLRF)),              //    0 -> AC, SP, C, N, Z, V; DI; CLRF
+        new omc("START",    cs(STNZ, SETV, SETC, WRDR, WRCR, WRSP, WRAC, WRBR, WRAR, DINT, CLRF)),// 0 -> all registers; DI; CLRF
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new omc("RESERVED", cs())
     };
