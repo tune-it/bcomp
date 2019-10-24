@@ -41,10 +41,10 @@ public class CPU {
 		"WRITE",
 		"READ",
 		"START",
-		"ADFETCH",
-		"OPFETCH",
-		"EXEC",
-		"INT",
+		ADFETCH.name(),
+		OPFETCH.name(),
+		EXEC.name(),
+		INT.name(),
 		"RESERVED",
 		"HLT",
 	};
@@ -533,25 +533,25 @@ public class CPU {
 		if (ip == labels.get("HLT"))
 			return NONE;
 
-		if (ip < labels.get("ADFETCH"))
-			return INFETCH;
+		if (ip >= labels.get("RESERVED"))
+			return NONE;
 
-		if (ip < labels.get("OPFETCH"))
-			return ADFETCH;
-
-		if (ip < labels.get("EXEC"))
-			return OPFETCH;
-
-		if (ip < labels.get("INT"))
-			return EXEC;
-
-		if (ip < labels.get("SETIP"))
-			return INT;
-
-		if (ip < labels.get("RESERVED"))
+		if (ip >= labels.get("SETIP"))
 			return PANEL;
 
-		return NONE;
+		if (ip >= labels.get(INT.name()))
+			return INT;
+
+		if (ip >= labels.get(EXEC.name()))
+			return EXEC;
+
+		if (ip >= labels.get(OPFETCH.name()))
+			return OPFETCH;
+
+		if (ip >= labels.get(ADFETCH.name()))
+			return ADFETCH;
+
+		return INFETCH;
 	}
 
 	@Override
