@@ -233,8 +233,8 @@ public class MicroCode {
         new omc("ROR",      cs(RDAC, SHRT, SHRF, STNZ, SETC, WRAC)),                    // ROR(AC) -> AC, C, N, Z
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("AL0101",   cs(RDCR, LTOL), 7, 1,                           "ASR"),     // if CR(7) = 1 then GOTO ASR
-        new omc("ASL",      cs(RDAC, HTOH, LTOL, WRBR)),                                // AC -> BR
-        new omc(            cs(RDAC, RDBR, STNZ, SETV, SETC, WRAC)),                    // AC + BR -> AC, N, Z, V, C
+        new omc("ASL",      cs(RDAC, HTOH, LTOL, WRDR)),                                // AC -> DR
+        new omc(            cs(RDAC, RDDR, HTOH, LTOL, STNZ, SETV, SETC, WRAC)),        // AC + DR -> AC, N, Z, V, C
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new omc("ASR",      cs(RDAC, SHRT, STNZ, SETV, SETC, WRAC)),                    // ASR(AC) -> AC, N, Z, V, C
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
