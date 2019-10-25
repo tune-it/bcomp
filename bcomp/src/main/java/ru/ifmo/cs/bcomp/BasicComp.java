@@ -111,6 +111,27 @@ public class BasicComp {
 		return cpu;
 	}
 
+	public void addDestination(SignalListener[] listeners) {
+		cpu.tickLock();
+		try {
+			for (SignalListener listener : listeners)
+				for (ControlSignal signal : listener.signals)
+					cpu.addDestination(signal, listener.dest);
+		} finally {
+			cpu.tickUnlock();
+		}
+	}
+
+	public void removeDestination(SignalListener[] listeners) {
+		cpu.tickLock();
+		try {
+			for (SignalListener listener : listeners)
+				for (ControlSignal signal : listener.signals)
+					cpu.removeDestination(signal, listener.dest);
+		} finally {
+			cpu.tickUnlock();
+		}
+	}
 /*
 	public IOCtrl[] getIOCtrls() {
 		return ioctrls;
@@ -247,35 +268,13 @@ public class BasicComp {
 			cpu.tickUnlock();
 		}
 	}
-*/ /*
+
 	public void addDestination(ControlSignal cs, DataDestination dest) {
 		ctrlDestination(cs, dest, false);
 	}
 
 	public void removeDestination(ControlSignal cs, DataDestination dest) {
 		ctrlDestination(cs, dest, true);
-	}
-
-	public void addDestination(SignalListener[] listeners) {
-		cpu.tickLock();
-		try {
-			for (SignalListener listener : listeners)
-				for (ControlSignal signal : listener.signals)
-					addDestination(signal, listener.dest);
-		} finally {
-			cpu.tickUnlock();
-		}
-	}
-
-	public void removeDestination(SignalListener[] listeners) {
-		cpu.tickLock();
-		try {
-			for (SignalListener listener : listeners)
-				for (ControlSignal signal : listener.signals)
-					removeDestination(signal, listener.dest);
-		} finally {
-			cpu.tickUnlock();
-		}
 	}
 */
 }
