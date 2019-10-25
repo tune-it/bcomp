@@ -514,6 +514,19 @@ public class CPU {
 		return false;
 	}
 
+	public boolean executeMCRead() {
+		if (lock.tryLock()) {
+			try {
+				valves.get(CLOCK0).setValue(1);
+				ir.setValue(0);
+			} finally {
+				lock.unlock();
+			}
+			return true;
+		}
+		return false;
+	}
+
 	public RunningCycle getRunningCycle() {
 		long ip = regs.get(Reg.IP).getValue();
 		RunningCycle[] cycles = RunningCycle.values();
