@@ -57,6 +57,9 @@ public class CPU {
 	private final Condition lockStart = lock.newCondition();
 	private final Condition lockFinish = lock.newCondition();
 
+	private volatile Runnable tickStartListener = null;
+	private volatile Runnable tickFinishListener = null;
+	private volatile Runnable cpuStartListener = null;
 	private volatile Runnable cpuStopListener = null;
 
 	private final Thread cpu = new Thread(new Runnable() {
@@ -69,16 +72,25 @@ public class CPU {
 					lockFinish.signalAll();
 					lockStart.await();
 
+					if (cpuStartListener != null)
+						cpuStartListener.run();
+
 					if (clock)
 						stateProgram.setValue(1);
 
 					do {
+						if (tickStartListener != null)
+							tickStartListener.run();
+
 						tick.lock();
 						try {
 							step();
 						} finally {
 							tick.unlock();
 						}
+
+						if (tickFinishListener != null)
+							tickFinishListener.run();
 					} while (ps.getValue(State.PROG.ordinal()) == 1);
 
 					if (cpuStopListener != null)
@@ -351,6 +363,18 @@ public class CPU {
 	 */
 	public void removeDestination(ControlSignal cs, DataDestination dest) {
 		valves.get(cs).removeDestination(dest);
+	}
+
+	public void setTickStartListener(Runnable tickStartListener) {
+		this.tickStartListener = tickStartListener;
+	}
+
+	public void setTickFinishListener(Runnable tickFinishListener) {
+		this.tickFinishListener = tickFinishListener;
+	}
+
+	public void setCPUStartListener(Runnable cpuStartListener) {
+		this.cpuStartListener = cpuStartListener;
 	}
 
 	public void setCPUStopListener(Runnable cpuStopListener) {
