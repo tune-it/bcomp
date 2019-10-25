@@ -26,6 +26,7 @@ import ru.ifmo.cs.bcomp.CPU;
 import static ru.ifmo.cs.bcomp.ControlSignal.*;
 import ru.ifmo.cs.bcomp.Reg;
 import static ru.ifmo.cs.bcomp.Reg.*;
+import static ru.ifmo.cs.bcomp.State.*;
 import ru.ifmo.cs.bcomp.IOCtrl;
 import ru.ifmo.cs.bcomp.SignalListener;
 //import ru.ifmo.cs.bcomp.ui.io.Keyboard;
@@ -229,22 +230,24 @@ public class Nightmare {
 		*/
 
 		for (Reg reg : Reg.values())
-			regs.put(reg, new RegisterView(reg, cpu.getRegister(reg)));
+			if ((reg != MP) && (reg != MR))
+				regs.put(reg, new RegisterView(reg, cpu.getRegister(reg)));
 
 		listeners = new SignalListener[] {
-			new SignalListener(regs.get(PS), SETC, STNZ, SETV, DINT, EINT, HALT),
 			new SignalListener(regs.get(DR), WRDR, LOAD),
 			new SignalListener(regs.get(CR), WRCR),
 			new SignalListener(regs.get(IP), WRIP),
+			new SignalListener(regs.get(SP), WRSP),
 			new SignalListener(regs.get(AC), WRAC),
 			new SignalListener(regs.get(BR), WRBR),
+			new SignalListener(regs.get(PS), SETC, SETV, STNZ, DINT, EINT, HALT),
 			new SignalListener(regs.get(AR), WRAR),
 		};
 
 		bcomp.addDestination(listeners);
-		cpu.addDestination(CLOCK1, new DataDestination() {
+		cpu.setTickFinishListener(new Runnable() {
 			@Override
-			public void setValue(long value) {
+			public void run() {
 				if (delayPeriods[currentDelay] != 0)
 					try {
 						Thread.sleep(delayPeriods[currentDelay]);
@@ -255,13 +258,14 @@ public class Nightmare {
 		JFrame frame = new JFrame("БЭВМ");
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-		JPanel panel = new JPanel(new GridLayout(9, 1));
-		panel.add(regs.get(AR));
+		JPanel panel = new JPanel(new GridLayout(10, 1));
 		panel.add(regs.get(DR));
 		panel.add(regs.get(CR));
 		panel.add(regs.get(IP));
-		panel.add(regs.get(BR));
+		panel.add(regs.get(SP));
+		panel.add(regs.get(AR));
 		panel.add(regs.get(AC));
+		panel.add(regs.get(BR));
 		panel.add(regs.get(PS));
 		panel.add(regs.get(IR));
 		JLabel hints = new JLabel(
@@ -447,6 +451,7 @@ public class Nightmare {
 
 				case KeyEvent.VK_F9:
 					cpu.invertRunState();
+					regs.get(PS).bits[RUN.ordinal()].repaint();
 					break;
 
 				case KeyEvent.VK_F11:
@@ -465,6 +470,6 @@ public class Nightmare {
 
 	public static void main(String[] args) throws Exception {
 		Nightmare nightmare = new Nightmare();
-			return;
+		return;
 	}
 }
