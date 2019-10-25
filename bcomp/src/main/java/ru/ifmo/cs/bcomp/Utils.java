@@ -16,15 +16,15 @@ public class Utils {
 
 	private final static String[] flags = { "0", "1" };
 
-	public static String toBinaryFlag(int value) {
-		return flags[value];
+	public static String toBinaryFlag(long value) {
+		return flags[(int)value];
 	}
 
 	public static int getBinaryWidth(int width) {
 		return width + ((width - 1) >> 2);
 	}
 
-	public static String toBinary(int value, int width) {
+	public static String toBinary(long value, int width) {
 		int chars = getBinaryWidth(width);
 		char[] buf = new char[chars];
 		int pos = chars;
@@ -32,7 +32,7 @@ public class Utils {
 		for (int i = 0; i < width; i++) {
 			if ((i != 0) && (i & 3) == 0)
 				buf[--pos] = ' ';
-			buf[--pos] = digits[value & 1];
+			buf[--pos] = digits[(int)(value & 1)];
 			value >>= 1;
 		}
 
@@ -62,7 +62,7 @@ public class Utils {
 		char[] buf = new char[chars];
 
 		while (chars > 0) {
-			buf[--chars] = digits[(int)value & 0xf];
+			buf[--chars] = digits[(int)(value & 0xf)];
 			value >>= 4;
 		}
 
