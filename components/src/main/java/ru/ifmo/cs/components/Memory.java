@@ -20,8 +20,8 @@ public class Memory extends BasicComponent implements DataSource, DataDestinatio
 		for (int i = 0; i < memory.length; memory[i++] = 0L);
 	}
 
-	public synchronized long getValue(int addr) {
-		return memory[addr];
+	public synchronized long getValue(long addr) {
+		return memory[(int)addr];
 	}
 
 	@Override
