@@ -10,31 +10,52 @@ package ru.ifmo.cs.bcomp;
  */
 public enum RunningCycle {
 	/**
+	 * Instruction fetch
 	 * Выборка команды
 	 */
 	INFETCH,
 	/**
+	 * Address fetch
 	 * Выборка адреса
 	 */
 	ADFETCH,
 	/**
+	 * Operator fetch
 	 * Выборка операнда
 	 */
 	OPFETCH,
 	/**
+	 * Execution
 	 * Исполнение
 	 */
 	EXEC,
 	/**
+	 * Interrupt
 	 * Прерывание
 	 */
 	INT,
 	/**
-	 * Пультовая операция
+	 * Set address
+	 * Ввод адреса
 	 */
-	PANEL,
+	SETIP,
 	/**
-	 * HALT
+	 * Write
+	 * Запись
 	 */
-	NONE
+	WRITE,
+	/**
+	 * Read
+	 * Чтение
+	 */
+	READ,
+	/**
+	 * Start
+	 * Пуск
+	 */
+	START,
+	/**
+	 * Reserved for future expantion
+	 */
+	RESERVED,
 }

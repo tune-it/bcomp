@@ -5,7 +5,6 @@
 package ru.ifmo.cs.bcomp;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 import ru.ifmo.cs.components.*;
@@ -36,23 +35,11 @@ public class CPU {
 	private static final long AR_WIDTH = 11;
 	private static final long DATA_WIDTH = 16;
 	private static final long PS_WIDTH = 16; // !!! FIX WIDTH !!! //
-	private static final String[] LABELS = {
-		"SETIP",
-		"WRITE",
-		"READ",
-		"START",
-		ADFETCH.name(),
-		OPFETCH.name(),
-		EXEC.name(),
-		INT.name(),
-		"RESERVED",
-		"HLT",
-	};
 
 	private final EnumMap<Reg, Register> regs = new EnumMap<Reg, Register>(Reg.class);
 	private final EnumMap<ControlSignal, Control> valves = new EnumMap<ControlSignal, Control>(ControlSignal.class);
 	private final EnumMap<Buses, Bus> buses = new EnumMap<Buses, Bus>(Buses.class);
-	private final HashMap<String, Integer> labels = new HashMap<String, Integer>();
+	private final EnumMap<RunningCycle, Integer> labels = new EnumMap<RunningCycle, Integer>(RunningCycle.class);
 	private final MicroCode mc = new MicroCode();
 	private final Memory mem;
 	private final Memory microcode;
@@ -74,7 +61,7 @@ public class CPU {
 		@Override
 		public void run() {
 			lock.lock();
-			
+
 			try {
 				for (;;) {
 					lockFinish.signalAll();
@@ -268,8 +255,8 @@ public class CPU {
 		for (int i = 0; i < mc.getMicroCodeLength(); i++)
 			microcode.setValue(i, mc.getMicroCommand(i));
 
-		for (String label : LABELS)
-			labels.put(label, findLabel(label));
+		for (RunningCycle cycle : RunningCycle.values())
+			labels.put(cycle, findLabel(cycle.name()));
 
 		mp.setValue(findLabel("HLT"));
 	}
@@ -314,7 +301,7 @@ public class CPU {
 
 	/**
 	 * Start CPU thread
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
 	void startCPU() throws InterruptedException {
 		lock.lock();
@@ -438,19 +425,19 @@ public class CPU {
 	}
 
 	public boolean startSetAddr() {
-		return startFrom(labels.get("SETIP"));
+		return startFrom(labels.get(SETIP));
 	}
 
 	public boolean startWrite() {
-		return startFrom(labels.get("WRITE"));
+		return startFrom(labels.get(WRITE));
 	}
 
 	public boolean startRead() {
-		return startFrom(labels.get("READ"));
+		return startFrom(labels.get(READ));
 	}
 
 	public boolean startStart() {
-		return startFrom(labels.get("START"));
+		return startFrom(labels.get(START));
 	}
 
 	public boolean startContinue() {
@@ -473,7 +460,7 @@ public class CPU {
 	}
 
 	public boolean executeSetAddr() {
-		return executeFrom(labels.get("SETIP"));
+		return executeFrom(labels.get(SETIP));
 	}
 
 	public boolean executeSetAddr(long value) {
@@ -482,7 +469,7 @@ public class CPU {
 	}
 
 	public boolean executeWrite() {
-		return executeFrom(labels.get("WRITE"));
+		return executeFrom(labels.get(WRITE));
 	}
 
 	public boolean executeWrite(long value) {
@@ -491,11 +478,11 @@ public class CPU {
 	}
 
 	public boolean executeRead() {
-		return executeFrom(labels.get("READ"));
+		return executeFrom(labels.get(READ));
 	}
 
 	public boolean executeStart() {
-		return executeFrom(labels.get("START"));
+		return executeFrom(labels.get(START));
 	}
 
 	public boolean executeContinue() {
@@ -529,34 +516,13 @@ public class CPU {
 
 	public RunningCycle getRunningCycle() {
 		long ip = regs.get(Reg.IP).getValue();
+		RunningCycle[] cycles = RunningCycle.values();
+		int i;
 
-		if (ip == labels.get("HLT"))
-			return NONE;
+		for (i = cycles.length - 1; i > 0; i--)
+			if (ip > labels.get(cycles[i]))
+				return cycles[i];
 
-		if (ip >= labels.get("RESERVED"))
-			return NONE;
-
-		if (ip >= labels.get("SETIP"))
-			return PANEL;
-
-		if (ip >= labels.get(INT.name()))
-			return INT;
-
-		if (ip >= labels.get(EXEC.name()))
-			return EXEC;
-
-		if (ip >= labels.get(OPFETCH.name()))
-			return OPFETCH;
-
-		if (ip >= labels.get(ADFETCH.name()))
-			return ADFETCH;
-
-		return INFETCH;
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		super.finalize();
-		stopCPU();
+		return cycles[i];
 	}
 }
