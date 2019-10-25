@@ -324,11 +324,11 @@ public class CPU {
 		return lock.isLocked();
 	}
 
-	void tickLock() {
+	public void tickLock() {
 		tick.lock();
 	}
 
-	void tickUnlock() {
+	public void tickUnlock() {
 		tick.unlock();
 	}
 
@@ -336,7 +336,7 @@ public class CPU {
 	 * Add listener for specified control signal
 	 * <p>Use tickLock() before call this method
 	 */
-	void addDestination(ControlSignal cs, DataDestination dest) {
+	public void addDestination(ControlSignal cs, DataDestination dest) {
 		valves.get(cs).addDestination(dest);
 	}
 
@@ -344,7 +344,7 @@ public class CPU {
 	 * Remove listener for specified control signal
 	 * <p>Use tickLock() before call this method
 	 */
-	void removeDestination(ControlSignal cs, DataDestination dest) {
+	public void removeDestination(ControlSignal cs, DataDestination dest) {
 		valves.get(cs).removeDestination(dest);
 	}
 
