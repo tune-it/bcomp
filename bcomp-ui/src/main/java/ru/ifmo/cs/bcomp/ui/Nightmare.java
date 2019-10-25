@@ -23,17 +23,18 @@ import javax.swing.WindowConstants;
 import ru.ifmo.cs.bcomp.Assembler;
 import ru.ifmo.cs.bcomp.BasicComp;
 import ru.ifmo.cs.bcomp.CPU;
-import ru.ifmo.cs.bcomp.ControlSignal;
+import static ru.ifmo.cs.bcomp.ControlSignal.*;
+import ru.ifmo.cs.bcomp.Reg;
+import static ru.ifmo.cs.bcomp.Reg.*;
 import ru.ifmo.cs.bcomp.IOCtrl;
-import ru.ifmo.cs.bcomp.MicroProgram;
 import ru.ifmo.cs.bcomp.SignalListener;
-import ru.ifmo.cs.bcomp.ui.io.Keyboard;
-import ru.ifmo.cs.bcomp.ui.io.Numpad;
-import ru.ifmo.cs.bcomp.ui.io.SevenSegmentDisplay;
-import ru.ifmo.cs.bcomp.ui.io.TextPrinter;
-import ru.ifmo.cs.bcomp.ui.io.Ticker;
-import ru.ifmo.cs.elements.DataDestination;
-import ru.ifmo.cs.elements.Register;
+//import ru.ifmo.cs.bcomp.ui.io.Keyboard;
+//import ru.ifmo.cs.bcomp.ui.io.Numpad;
+//import ru.ifmo.cs.bcomp.ui.io.SevenSegmentDisplay;
+//import ru.ifmo.cs.bcomp.ui.io.TextPrinter;
+//import ru.ifmo.cs.bcomp.ui.io.Ticker;
+import ru.ifmo.cs.components.DataDestination;
+import ru.ifmo.cs.components.Register;
 
 /**
  *
@@ -50,10 +51,11 @@ public class Nightmare {
 
 	private final BasicComp bcomp;
 	private final CPU cpu;
-	private final IOCtrl[] ioctrls;
-	private EnumMap<CPU.Reg, RegisterView> regs = new EnumMap<CPU.Reg, RegisterView>(CPU.Reg.class);
+	//private final IOCtrl[] ioctrls;
+	private EnumMap<Reg, RegisterView> regs = new EnumMap<Reg, RegisterView>(Reg.class);
 	private final SignalListener[] listeners;
 
+	/*
 	private BasicIOView io1 = null;
 	private BasicIOView io2 = null;
 	private BasicIOView io3 = null;
@@ -63,6 +65,7 @@ public class Nightmare {
 	private Keyboard kbd = null;
 	private Numpad numpad = null;
 	private GUI pairgui = null;
+	*/
 
 	private class BitView extends JComponent {
 		private final Register reg;
@@ -90,20 +93,21 @@ public class Nightmare {
 		private final Register reg;
 		private final BitView[] bits;
 
-		private RegisterView(Register reg) {
+		private RegisterView(Reg r, Register reg) {
 			super(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 
-			JLabel label = new JLabel((this.reg = reg).fullname);
+			this.reg = reg;
+			JLabel label = new JLabel(r.toString());
 			label.setFont(LABEL_FONT);
 			add(label);
 
-			bits = new BitView[reg.width];
+			bits = new BitView[(int)reg.width];
 
-			for (int i = reg.width - 1; i >= 0; i--)
-				add(bits[i] = new BitView(reg, i));
+			for (long i = reg.width - 1; i >= 0; i--)
+				add(bits[(int)i] = new BitView(reg, (int)i));
 		}
 
-		public void setValue(int value) {
+		public void setValue(long value) {
 			for (int i = 0; i < reg.width; bits[i++].repaint());
 		}
 
@@ -112,7 +116,7 @@ public class Nightmare {
 			bits[startbit].repaint();
 		}
 	}
-
+/*
 	private class BasicIOView {
 		private final IOCtrl ioctrl;
 		private final JFrame frame;
@@ -195,12 +199,14 @@ public class Nightmare {
 			frame.requestFocus();
 		}
 	}
+*/
 
-	public Nightmare(MicroProgram mp) throws Exception {
-		this.bcomp = new BasicComp(mp);
+	public Nightmare() throws Exception {
+		this.bcomp = new BasicComp();
 		this.cpu = bcomp.getCPU();
-		this.ioctrls = bcomp.getIOCtrls();
+		//this.ioctrls = bcomp.getIOCtrls();
 
+		/*
 		try {
 			String code = System.getProperty("code", null);
 			File file = new File(code);
@@ -220,56 +226,25 @@ public class Nightmare {
 					fin.close();
 			}
 		} catch (Exception e) { }
+		*/
 
-		for (CPU.Reg reg : CPU.Reg.values())
-			regs.put(reg, new RegisterView(cpu.getRegister(reg)));
+		for (Reg reg : Reg.values())
+			regs.put(reg, new RegisterView(reg, cpu.getRegister(reg)));
 
 		listeners = new SignalListener[] {
-			new SignalListener(regs.get(CPU.Reg.STATE),
-				ControlSignal.BUF_TO_STATE_C,
-				ControlSignal.CLEAR_STATE_C,
-				ControlSignal.SET_STATE_C,
-				ControlSignal.HALT,
-				ControlSignal.BUF_TO_STATE_N,
-				ControlSignal.BUF_TO_STATE_Z,
-				ControlSignal.DISABLE_INTERRUPTS,
-				ControlSignal.ENABLE_INTERRUPTS,
-				ControlSignal.IO0_TSF,
-				ControlSignal.IO1_TSF,
-				ControlSignal.IO2_TSF,
-				ControlSignal.IO3_TSF,
-				ControlSignal.IO4_TSF,
-				ControlSignal.IO5_TSF,
-				ControlSignal.IO6_TSF,
-				ControlSignal.IO7_TSF,
-				ControlSignal.IO8_TSF,
-				ControlSignal.IO9_TSF,
-				ControlSignal.SET_RUN_STATE,
-				ControlSignal.SET_PROGRAM,
-				ControlSignal.SET_REQUEST_INTERRUPT),
-			new SignalListener(regs.get(CPU.Reg.ADDR), ControlSignal.BUF_TO_ADDR),
-			new SignalListener(regs.get(CPU.Reg.DATA), ControlSignal.BUF_TO_DATA, ControlSignal.MEMORY_READ),
-			new SignalListener(regs.get(CPU.Reg.INSTR), ControlSignal.BUF_TO_INSTR),
-			new SignalListener(regs.get(CPU.Reg.IP), ControlSignal.BUF_TO_IP),
-			new SignalListener(regs.get(CPU.Reg.ACCUM),
-				ControlSignal.BUF_TO_ACCUM,
-				ControlSignal.IO2_IN,
-				ControlSignal.IO3_IN,
-				ControlSignal.IO7_IN,
-				ControlSignal.IO8_IN,
-				ControlSignal.IO9_IN
-			),
-			new SignalListener(regs.get(CPU.Reg.BUF),
-				ControlSignal.ALU_AND,
-				ControlSignal.SHIFT_RIGHT,
-				ControlSignal.SHIFT_LEFT
-			)
+			new SignalListener(regs.get(PS), SETC, STNZ, SETV, DINT, EINT, HALT),
+			new SignalListener(regs.get(DR), WRDR, LOAD),
+			new SignalListener(regs.get(CR), WRCR),
+			new SignalListener(regs.get(IP), WRIP),
+			new SignalListener(regs.get(AC), WRAC),
+			new SignalListener(regs.get(BR), WRBR),
+			new SignalListener(regs.get(AR), WRAR),
 		};
 
 		bcomp.addDestination(listeners);
-		cpu.setTickFinishListener(new Runnable() {
+		cpu.addDestination(CLOCK1, new DataDestination() {
 			@Override
-			public void run() {
+			public void setValue(long value) {
 				if (delayPeriods[currentDelay] != 0)
 					try {
 						Thread.sleep(delayPeriods[currentDelay]);
@@ -281,14 +256,14 @@ public class Nightmare {
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		JPanel panel = new JPanel(new GridLayout(9, 1));
-		panel.add(regs.get(CPU.Reg.ADDR));
-		panel.add(regs.get(CPU.Reg.DATA));
-		panel.add(regs.get(CPU.Reg.INSTR));
-		panel.add(regs.get(CPU.Reg.IP));
-		panel.add(regs.get(CPU.Reg.BUF));
-		panel.add(regs.get(CPU.Reg.ACCUM));
-		panel.add(regs.get(CPU.Reg.STATE));
-		panel.add(regs.get(CPU.Reg.KEY));
+		panel.add(regs.get(AR));
+		panel.add(regs.get(DR));
+		panel.add(regs.get(CR));
+		panel.add(regs.get(IP));
+		panel.add(regs.get(BR));
+		panel.add(regs.get(AC));
+		panel.add(regs.get(PS));
+		panel.add(regs.get(IR));
 		JLabel hints = new JLabel(
 			"F4 Ввод адреса F5 Запись F6 Чтение F7 Пуск F8 Продолжение F9 Работа/Останов Shift-F9 Такт");
 		hints.setFont(HINTS_FONT);
@@ -303,7 +278,7 @@ public class Nightmare {
 					case KeyEvent.VK_Q:
 						System.exit(0);
 						break;
-
+/*
 					case KeyEvent.VK_1:
 					case KeyEvent.VK_F1:
 						if (io1 == null)
@@ -359,8 +334,8 @@ public class Nightmare {
 							numpad = new Numpad(ioctrls[8]);
 						numpad.activate();
 						break;
+*/
 					}
-
 					return;
 				}
 
@@ -375,69 +350,69 @@ public class Nightmare {
 
 				switch (e.getKeyCode()) {
 				case KeyEvent.VK_0:
-					regs.get(CPU.Reg.KEY).invertBit(0);
+					regs.get(IR).invertBit(0);
 					break;
 
 				case KeyEvent.VK_1:
-					regs.get(CPU.Reg.KEY).invertBit(1);
+					regs.get(IR).invertBit(1);
 					break;
 
 				case KeyEvent.VK_2:
-					regs.get(CPU.Reg.KEY).invertBit(2);
+					regs.get(IR).invertBit(2);
 					break;
 
 				case KeyEvent.VK_3:
-					regs.get(CPU.Reg.KEY).invertBit(3);
+					regs.get(IR).invertBit(3);
 					break;
 
 				case KeyEvent.VK_4:
-					regs.get(CPU.Reg.KEY).invertBit(4);
+					regs.get(IR).invertBit(4);
 					break;
 
 				case KeyEvent.VK_5:
-					regs.get(CPU.Reg.KEY).invertBit(5);
+					regs.get(IR).invertBit(5);
 					break;
 
 				case KeyEvent.VK_6:
-					regs.get(CPU.Reg.KEY).invertBit(6);
+					regs.get(IR).invertBit(6);
 					break;
 
 				case KeyEvent.VK_7:
-					regs.get(CPU.Reg.KEY).invertBit(7);
+					regs.get(IR).invertBit(7);
 					break;
 
 				case KeyEvent.VK_8:
-					regs.get(CPU.Reg.KEY).invertBit(8);
+					regs.get(IR).invertBit(8);
 					break;
 
 				case KeyEvent.VK_9:
-					regs.get(CPU.Reg.KEY).invertBit(9);
+					regs.get(IR).invertBit(9);
 					break;
 
 				case KeyEvent.VK_A:
-					regs.get(CPU.Reg.KEY).invertBit(10);
+					regs.get(IR).invertBit(10);
 					break;
 
 				case KeyEvent.VK_B:
-					regs.get(CPU.Reg.KEY).invertBit(11);
+					regs.get(IR).invertBit(11);
 					break;
 
 				case KeyEvent.VK_C:
-					regs.get(CPU.Reg.KEY).invertBit(12);
+					regs.get(IR).invertBit(12);
 					break;
 
 				case KeyEvent.VK_D:
-					regs.get(CPU.Reg.KEY).invertBit(13);
+					regs.get(IR).invertBit(13);
 					break;
 
 				case KeyEvent.VK_E:
-					regs.get(CPU.Reg.KEY).invertBit(14);
+					regs.get(IR).invertBit(14);
 					break;
 
 				case KeyEvent.VK_F:
-					regs.get(CPU.Reg.KEY).invertBit(15);
+					regs.get(IR).invertBit(15);
 					break;
-
+/*
 				case KeyEvent.VK_F1:
 					ioctrls[1].setFlag();
 					break;
@@ -449,7 +424,7 @@ public class Nightmare {
 				case KeyEvent.VK_F3:
 					ioctrls[3].setFlag();
 					break;
-
+*/
 				case KeyEvent.VK_F4:
 					cpu.startSetAddr();
 					break;
@@ -486,5 +461,10 @@ public class Nightmare {
 		frame.pack();
 		frame.setVisible(true);
 		frame.requestFocus();
+	}
+
+	public static void main(String[] args) throws Exception {
+		Nightmare nightmare = new Nightmare();
+			return;
 	}
 }
