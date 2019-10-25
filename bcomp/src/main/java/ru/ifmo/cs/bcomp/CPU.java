@@ -57,6 +57,8 @@ public class CPU {
 	private final Condition lockStart = lock.newCondition();
 	private final Condition lockFinish = lock.newCondition();
 
+	private volatile Runnable cpuStopListener = null;
+
 	private final Thread cpu = new Thread(new Runnable() {
 		@Override
 		public void run() {
@@ -78,6 +80,9 @@ public class CPU {
 							tick.unlock();
 						}
 					} while (ps.getValue(State.PROG.ordinal()) == 1);
+
+					if (cpuStopListener != null)
+						cpuStopListener.run();
 				}
 			} catch (InterruptedException e) {
 				return;
@@ -346,6 +351,10 @@ public class CPU {
 	 */
 	public void removeDestination(ControlSignal cs, DataDestination dest) {
 		valves.get(cs).removeDestination(dest);
+	}
+
+	public void setCPUStopListener(Runnable cpuStopListener) {
+		this.cpuStopListener = cpuStopListener;
 	}
 
 	public void setRunState(boolean state) {
