@@ -11,6 +11,7 @@ package ru.ifmo.cs.components;
 public class Memory extends BasicComponent implements DataSource, DataDestination {
 	private final long memory[];
 	private final Register ar;
+	private volatile long lastaccessed;
 
 	public Memory(long width, Register ar) {
 		super(width);
@@ -26,7 +27,7 @@ public class Memory extends BasicComponent implements DataSource, DataDestinatio
 
 	@Override
 	public synchronized long getValue() {
-		return getValue((int)ar.getValue());
+		return getValue(lastaccessed = ar.getValue());
 	}
 
 	public synchronized void setValue(long addr, long value) {
@@ -35,10 +36,14 @@ public class Memory extends BasicComponent implements DataSource, DataDestinatio
 
 	@Override
 	public synchronized void setValue(long value) {
-		setValue(ar.getValue(), value);
+		setValue(lastaccessed = ar.getValue(), value);
 	}
 
 	public long getAddrWidth() {
 		return ar.width;
+	}
+
+	public long getLastAccessedAddress() {
+		return lastaccessed;
 	}
 }
