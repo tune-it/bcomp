@@ -37,4 +37,8 @@ public class Memory extends BasicComponent implements DataSource, DataDestinatio
 	public synchronized void setValue(long value) {
 		setValue((int)ar.getValue(), value);
 	}
+
+	public long getAddrWidth() {
+		return ar.width;
+	}
 }
