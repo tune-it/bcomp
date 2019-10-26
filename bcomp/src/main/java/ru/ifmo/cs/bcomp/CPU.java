@@ -257,7 +257,7 @@ public class CPU {
 				newValveH(Consts.consts[1], 1, 0, CLRF),
 				newValveH(Consts.consts[0], 1, 0, DINT, ei),
 				newValveH(Consts.consts[1], 1, 0, EINT, ei),
-				newValveH(Consts.consts[0], 1, 0, HALT, stateProgram = new PartWriter(ps, 1, PROG.ordinal()))
+				newValveH(Consts.consts[0], 1, 0, ControlSignal.HALT, stateProgram = new PartWriter(ps, 1, PROG.ordinal()))
 			)
 		));
 		valves.put(SHRF, shrf);
@@ -561,7 +561,7 @@ public class CPU {
 	}
 
 	public RunningCycle getRunningCycle() {
-		long ip = regs.get(Reg.IP).getValue();
+		long ip = mp.getValue();
 		RunningCycle[] cycles = RunningCycle.values();
 		int i;
 

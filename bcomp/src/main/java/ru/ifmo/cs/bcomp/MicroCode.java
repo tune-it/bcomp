@@ -210,8 +210,7 @@ public class MicroCode {
         new CMC("AL0XXX",   cs(RDCR, HTOL), 2, 1,                           "AL01XX"),  // if CR(10) = 1 then GOTO AL01XX
         new CMC("AL00XX",   cs(RDCR, HTOL), 1, 1,                           "AL001X"),  // if CR(9) = 1 then GOTO AL001X
         new CMC("AL000X",   cs(RDCR, HTOL), 0, 0,                           "INT"),     // if CR(8) = 0 then GOTO INT (NOP)
-        new omc("HLT",      cs(HALT)),                                                  // HLT: HALT
-        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INFETCH"), // GOTO INFETCH
+        new CMC("HLT",      cs(RDPS, LTOL), PS0.ordinal(), 0,               "HALT"),    // GOTO HALT
         new CMC("AL001X",   cs(RDCR, HTOL), 0, 1,                           "AL0011"),  // if CR(8) = 1 then GOTO AL0011
         new CMC("AL0010",   cs(RDCR, LTOL), 7, 1,                           "CMA"),     // if CR(7) = 1 then GOTO CMA
         new omc("CLA",      cs(STNZ, SETV, WRAC)),                                      // 0 -> AC, N, V, Z
@@ -288,7 +287,7 @@ public class MicroCode {
         new omc("IO",       cs(IO)),                                                    // IO
 
         // Цикл прерывания
-        new CMC("INT",      cs(RDPS, HTOL), RUN.ordinal() - 8, 0,           "HLT"),     // if RUN = 0 then GOTO HLT
+        new CMC("INT",      cs(RDPS, HTOL), RUN.ordinal() - 8, 0,           "HALT"),    // if RUN = 0 then GOTO HALT
         new CMC(            cs(RDPS, HTOL), INTR.ordinal() - 8, 0,          "INFETCH"), // if INT = 0 then GOTO INFETCH
         new omc(            cs(RDSP, COML, HTOH, LTOL, WRSP, WRAR)),                    // SP + ~0 -> SP, AR
         new omc(            cs(RDIP, HTOH, LTOL, WRDR)),                                // IP -> DR
@@ -301,22 +300,26 @@ public class MicroCode {
         new omc(            cs(RDDR, HTOH, LTOL, WRIP, DINT)),                          // DR -> IP; DI
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INFETCH"), // GOTO INFETCH
 
-        // Ввод адреса
-        new omc("SETIP",    cs(RDIR, HTOH, LTOL, WRIP)),                                // IR -> IP
-        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "HLT"),     // GOTO HLT
-        // Запись
-        new omc("WRITE",    cs(RDIP, HTOH, LTOL, WRAR)),                                // IP -> AR
-        new omc(            cs(RDIR, HTOH, LTOL, WRDR)),                                // IR -> DR
-        new omc(            cs(RDIP, PLS1, HTOH, LTOL, WRIP, STOR)),                    // DR -> MEM(AR); IP + 1 -> IP
-        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "HLT"),     // GOTO HLT
+        // Пуск
+        new omc("START",    cs(STNZ, SETV, SETC, WRDR, WRCR, WRSP, WRAC, WRBR, WRAR, DINT, CLRF)),// 0 -> all registers; DI; CLRF
+        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         // Чтение
         new omc("READ",     cs(RDIP, HTOH, LTOL, WRAR)),                                // IP -> AR
         new omc(            cs(RDIR, HTOH, LTOL, WRDR)),                                // IR -> DR
         new omc(            cs(RDIP, PLS1, HTOH, LTOL, WRIP, LOAD)),                    // MEM(AR) -> DR; IP + 1 -> IP
-        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "HLT"),     // GOTO HLT
-        new omc("START",    cs(STNZ, SETV, SETC, WRDR, WRCR, WRSP, WRAC, WRBR, WRAR, DINT, CLRF)),// 0 -> all registers; DI; CLRF
-        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new omc("RESERVED", cs())
+        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "HALT"),    // GOTO HALT
+        // Запись
+        new omc("WRITE",    cs(RDIP, HTOH, LTOL, WRAR)),                                // IP -> AR
+        new omc(            cs(RDIR, HTOH, LTOL, WRDR)),                                // IR -> DR
+        new omc(            cs(RDIP, PLS1, HTOH, LTOL, WRIP, STOR)),                    // DR -> MEM(AR); IP + 1 -> IP
+        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "HALT"),    // GOTO HALT
+        // Ввод адреса
+        new omc("SETIP",    cs(RDIR, HTOH, LTOL, WRIP)),                                // IR -> IP
+        // HALT
+        new omc("HALT",     cs(HALT)),                                                  // HLT: HALT
+        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INFETCH"), // GOTO INFETCH
+        // Reserved address space for user defined microcode
+        new omc("RESERVED", cs()),
     };
 
     public int getMicroCodeLength() {
