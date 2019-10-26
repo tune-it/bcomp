@@ -29,13 +29,13 @@ public class Memory extends BasicComponent implements DataSource, DataDestinatio
 		return getValue((int)ar.getValue());
 	}
 
-	public synchronized void setValue(int addr, long value) {
-		memory[addr] = value & mask;
+	public synchronized void setValue(long addr, long value) {
+		memory[(int)addr] = value & mask;
 	}
 
 	@Override
 	public synchronized void setValue(long value) {
-		setValue((int)ar.getValue(), value);
+		setValue(ar.getValue(), value);
 	}
 
 	public long getAddrWidth() {
