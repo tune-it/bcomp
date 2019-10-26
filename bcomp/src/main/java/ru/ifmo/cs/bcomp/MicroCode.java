@@ -337,4 +337,8 @@ public class MicroCode {
 
         throw new Exception("Label '" + label + "' not found");
     }
+
+	public String getLabel(int addr) {
+		return MP[addr].label;
+	}
 }
