@@ -59,7 +59,7 @@ public enum RunningCycle {
 	 */
 	HALT,
 	/**
-	 * Reserved for future expantion
+	 * Reserved for future extension
 	 */
 	RESERVED,
 }
