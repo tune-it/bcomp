@@ -5,6 +5,7 @@
 package ru.ifmo.cs.bcomp;
 
 import java.util.ArrayList;
+import static ru.ifmo.cs.bcomp.Utils.toHex;
 import static ru.ifmo.cs.bcomp.ControlSignal.*;
 import static ru.ifmo.cs.bcomp.State.*;
 import static ru.ifmo.cs.bcomp.Utils.cs;
@@ -19,24 +20,93 @@ public class MCDecoder {
 	private static ControlSignal[] RIGHT = {RDDR, RDCR, RDIP, RDSP};
 
 	public final static String[] decodeMC(CPU cpu, long addr) {
-		String[] res = new String[2];
+		MicroCode mc = cpu.getMicroCodeSource();
+		String[] res = new String[3];
 		ArrayList<ControlSignal> cs = new ArrayList<ControlSignal>();
 		long cmd = cpu.getMicroCode().getValue(addr);
 
-		res[0] = cpu.getMicroCodeSource().getLabel((int)addr);
+		res[0] = mc.getLabel((int)addr);
+		res[1] = toHex(cmd, 40);
 
 		for (int i = 0; i < 16; i++)
 			if ((cmd & (1L << i)) != 0)
 				cs.add(signals[i]);
 
-		if ((cmd & (1L << TYPE.ordinal())) == 0)
+		if ((cmd & (1L << TYPE.ordinal())) == 0) {
 			for (int i = 16; i < TYPE.ordinal(); i++)
 				if ((cmd & (1L << i)) != 0)
 					cs.add(signals[i]);
 
-		res[1] = getSwOutput(cs);
+			res[2] = decodeOMC(cs);
+		} else
+			res[2] = decodeCMC(mc, cs, (cmd >> 16) & 0xff, (cmd >> 24) & 0xff, (cmd >> 32) & 1);
 
 		return res;
+	}
+
+	private static String decodeCMC(MicroCode mc, ArrayList<ControlSignal> cs, long checkbit, long addr, long expected) {
+		String label = mc.getLabel((int)addr);
+		String aluOutput = getAluOutput(cs);
+		String bit = null;
+		String to = (label == null ? "" : label + " @ ") + toHex(addr, 8);
+		int i;
+
+		for (i = 0; i < 8; i++, checkbit >>= 1)
+			if ((checkbit & 1) == 1)
+				break;
+
+		if (cs.contains(HTOL))
+			i += 8;
+
+		if (aluOutput.equals("PS")) {
+			if (i == State.PS0.ordinal())
+				return "GOTO " + to;
+
+			for (State state : State.values())
+				if (i == state.ordinal()) {
+					bit = state.name();
+					System.out.println(bit); }
+		} else
+			bit = "" + i;
+
+		return "if " + aluOutput + "(" + bit + ") = " + expected + " then GOTO " + to;
+	}
+
+	private static String decodeOMC(ArrayList<ControlSignal> cs) {
+		ArrayList<String> operations = new ArrayList<String>();
+		String writelist = getWriteList(cs);
+		String result = null;
+
+		if (writelist != null) {
+			String swOutput = getSwOutput(cs);
+			operations.add((swOutput == null ? "0" : swOutput) + " → " + writelist);
+		}
+
+		if (cs.contains(STOR))
+			operations.add("DR → MEM(AR)");
+
+		if (cs.contains(LOAD))
+			operations.add("MEM(AR) → DR");
+
+		if (cs.contains(IO))
+			operations.add("IO");
+
+		if (cs.contains(CLRF))
+			operations.add("Clear flags");
+
+		if (cs.contains(DINT))
+			operations.add("Disable interrupts");
+
+		if (cs.contains(EINT))
+			operations.add("Enable interrupts");
+
+		if (cs.contains(HALT))
+			operations.add("Halt");
+
+		for (String op : operations)
+			result = result == null ? op : result + "; " + op;
+
+		return result;
 	}
 
 	private static String getInput(ArrayList<ControlSignal> cs, ControlSignal[] rdsignals) {
@@ -136,5 +206,30 @@ public class MCDecoder {
 		}
 
 		return null;
+	}
+
+	private static String getWriteList(ArrayList<ControlSignal> cs) {
+		ArrayList<String> dsts = new ArrayList<String>();
+		String result = null;
+
+		for (int i = WRDR.ordinal(); i <= WRAR.ordinal(); i++)
+			if (cs.contains(signals[i]))
+				dsts.add(signals[i].name().substring(2));
+
+		if (cs.contains(STNZ)) {
+			dsts.add("N");
+			dsts.add("Z");
+		}
+
+		if (cs.contains(SETV))
+			dsts.add("V");
+
+		if (cs.contains(SETC))
+			dsts.add("C");
+
+		for (String dst : dsts)
+			result = result == null ? dst : (result + ", " + dst);
+
+		return result;
 	}
 }
