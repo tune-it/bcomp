@@ -393,7 +393,7 @@ public class CLI {
 		}
 	}
 
-	protected String fetchLine(){
+	protected String fetchLine() throws Exception {
 		return input.nextLine();
 	}
 
