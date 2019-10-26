@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package ru.ifmo.cs.bcomp;
+package ru.ifmo.cs.bcomp.assembler;
 
 import java.util.ArrayList;
 

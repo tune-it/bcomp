@@ -7,8 +7,9 @@
 	<packaging>pom</packaging>
 	<name>BasicComputer</name>
 	<modules>
-		<module>bcomp</module>
 		<module>components</module>
+		<module>bcomp</module>
+		<module>bcomp-assembler</module>
 		<module>bcomp-ui</module>
 		<module>bcomp-portlet</module>
 	</modules>
