@@ -43,7 +43,7 @@ public class BCompApp {
 		}
 
 		if (app.equals("decoder")) {
-			MPDecoder mpdecoder = new MPDecoder(mp);
+			MicroCodeDecoder mpdecoder = new MicroCodeDecoder(mp);
 			mpdecoder.decode();
 			return;
 		}
