@@ -288,7 +288,7 @@ public class MicroCode {
 
         // Цикл прерывания
         new CMC("INT",      cs(RDPS, HTOL), RUN.ordinal() - 8, 0,           "HALT"),    // if RUN = 0 then GOTO HALT
-        new CMC(            cs(RDPS, HTOL), INTR.ordinal() - 8, 0,          "INFETCH"), // if INT = 0 then GOTO INFETCH
+        new CMC(            cs(RDPS, LTOL), INTR.ordinal(), 0    ,          "INFETCH"), // if INTR = 0 then GOTO INFETCH
         new omc(            cs(RDSP, COML, HTOH, LTOL, WRSP, WRAR)),                    // SP + ~0 -> SP, AR
         new omc(            cs(RDIP, HTOH, LTOL, WRDR)),                                // IP -> DR
         new omc(            cs(STOR)),                                                  // DR -> MEM(AR)
