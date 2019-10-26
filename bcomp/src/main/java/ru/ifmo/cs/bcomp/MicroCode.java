@@ -339,6 +339,6 @@ public class MicroCode {
     }
 
 	public String getLabel(int addr) {
-		return MP[addr].label;
+		return addr < MP.length ? MP[addr].label : null;
 	}
 }
