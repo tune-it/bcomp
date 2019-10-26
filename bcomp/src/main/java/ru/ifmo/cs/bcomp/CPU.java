@@ -308,6 +308,10 @@ public class CPU {
 		return microcode;
 	}
 
+	public MicroCode getMicroCodeSource() {
+		return mc;
+	}
+
 	public synchronized void step() {
 		for (Buses bus: Buses.values())
 			buses.get(bus).resetValue();
