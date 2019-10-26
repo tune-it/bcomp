@@ -63,9 +63,8 @@ public class MCDecoder {
 				return "GOTO " + to;
 
 			for (State state : State.values())
-				if (i == state.ordinal()) {
+				if (i == state.ordinal())
 					bit = state.name();
-					System.out.println(bit); }
 		} else
 			bit = "" + i;
 
