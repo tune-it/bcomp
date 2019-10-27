@@ -112,8 +112,8 @@ public class CLI {
 			space = "   ";
 			hdr += Reg.CR.name() + space;
 			hdr += Reg.DR.name() + space;
-			hdr += Reg.AC.name() + space;
-			hdr += Reg.BR.name() + "  ";
+			hdr += Reg.BR.name() + space;
+			hdr += Reg.AC.name() + "  ";
 			hdr += "NZVC ";
 			hdr += (cpu.getClockState() ? "Адр Знчн" : "СчМК");
 			println(hdr);
@@ -396,14 +396,13 @@ public class CLI {
 			}
 
 			try {
-				value = -1;
-				if (Utils.isHexNumeric(cmd))
+				if (Utils.isHexNumeric(cmd)) {
 					value = Integer.parseInt(cmd, 16);
+					cpu.getRegister(Reg.IR).setValue(value); //cpu.setRegKey(value);
+				} else
+					println("Неизвестная команда " + cmd);
 //					else
 //						value = asm.getLabelAddr(cmd.toUpperCase());
-
-				if(value > 0)
-					cpu.getRegister(Reg.IR).setValue(value); //cpu.setRegKey(value);
 			} catch (Exception e) {
 				println("Неизвестная команда " + cmd);
 			}
