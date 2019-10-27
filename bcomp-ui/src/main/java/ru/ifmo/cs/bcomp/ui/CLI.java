@@ -93,16 +93,31 @@ public class CLI {
 		return Utils.toHex(cpu.getRegValue(reg), cpu.getRegWidth(reg));
 	}
 
-	private String getFormattedState(State flag) {
-		return Utils.toBinaryFlag(cpu.getProgramState(flag));
-	}
-
 	// XXX: Получать имена регистров из их свойств
 	private void printRegsTitle() {
 		if (printRegsTitle) {
-			println(cpu.getClockState() ?
-				"Адр Знчн  СК  РА  РК   РД    А  C Адр Знчн" :
-				"Адр МК   СК  РА  РК   РД    А  C   БР  N Z СчМК");
+//			println(cpu.getClockState() ?
+//				"Адр Знчн  СК  РА  РК   РД   SP    А  C Адр Знчн" :
+//				"Адр МК   СК  РА  РК   РД    А  C   БР  N Z СчМК");
+
+			//Адр Знчн  IR  AR  CR   DR   SP   AC   BR  NZVC Адр Знчн
+			//Адр МК   IR  AR  CR   DR   SP   AC   BR  NZVC СчМК
+
+			String space = "  ";
+			String hdr = "Адр ";
+			hdr += (cpu.getClockState() ? "Знчн" : "МК ") + space;
+			hdr += Reg.IP.name() + space;
+			hdr += Reg.AR.name() + space;
+			hdr += Reg.SP.name() + space;
+			space = "   ";
+			hdr += Reg.CR.name() + space;
+			hdr += Reg.DR.name() + space;
+			hdr += Reg.AC.name() + space;
+			hdr += Reg.BR.name() + "  ";
+			hdr += "NZVC ";
+			hdr += (cpu.getClockState() ? "Адр Знчн" : "СчМК");
+			println(hdr);
+
 			printRegsTitle = false;
 		}
 	}
@@ -123,24 +138,26 @@ public class CLI {
 //		println(getMicroMemory(addr) + " " + mp.decodeCmd(cpu.getMicroCode().getValue(addr))); //TODO decodeCmd ?
 	}
 
-	private String getRegs() {
-		return getReg(Reg.IP) + " " +
-			getReg(Reg.AR) + " " +
-			getReg(Reg.CR) + " " +
-			getReg(Reg.DR) + " " +
-			getReg(Reg.AC) + " " +
-			getFormattedState(State.C);
-	}
-
 	private void printRegs(String add) {
-		println(cpu.getClockState() ?
-			getMemory(addr) + " " + getRegs() + add :
-			getMicroMemory(addr) + " " +
-				getRegs() + " " +
-				getReg(Reg.BR) + " " +
-				getFormattedState(State.N) + " " +
-				getFormattedState(State.Z) + "  " +
-				getReg(Reg.MP));
+//		println(cpu.getClockState() ?
+//			getMemory(addr) + " " + getRegs() + add :
+//			getMicroMemory(addr) + " " +
+//				getRegs() + " " +
+//				getReg(Reg.BR) + " " +
+//				getFormattedState(State.N) + " " +
+//				getFormattedState(State.Z) + "  " +
+//				getReg(Reg.MP));
+		String line = (cpu.getClockState() ? getMemory(addr) : getMicroMemory(addr)) + " ";
+		line += getReg(Reg.IP) + " ";
+		line += getReg(Reg.AR) + " ";
+		line += getReg(Reg.SP) + " ";
+		line += getReg(Reg.CR) + " ";
+		line += getReg(Reg.DR) + " ";
+		line += getReg(Reg.BR) + " ";
+		line += getReg(Reg.AC) + " ";
+		line += Utils.toBinary(cpu.getRegValue(Reg.PS) & 0xF,4);
+		line += (cpu.getClockState() ? add : "  " + getReg(Reg.MP));
+		println(line);
 	}
 
 	private void printIO(int ioaddr) {
@@ -165,7 +182,7 @@ public class CLI {
 			throw new Exception("операция не выполнена: выполняется программа");
 	}
 
-	private void printHelp() {
+	protected void printHelp() {
 		println("Доступные команды:\n" +
 			"a[ddress]\t- Пультовая операция \"Ввод адреса\"\n" +
 			"w[rite]\t\t- Пультовая операция \"Запись\"\n" +
@@ -191,7 +208,7 @@ public class CLI {
 		);
 	}
 
-	Scanner input = new Scanner(System.in);
+	private Scanner input = new Scanner(System.in);
 	public void cli() {
 		String line;
 
