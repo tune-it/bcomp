@@ -332,25 +332,26 @@ public class ComponentManager {
 		cpu.addDestination(ControlSignal.SETC, new DataDestination() {
 			@Override
 			public void setValue(long value) {
-				flagViews[3].setActive(regs.get(Reg.PS).getReg().getValue(0)==1);
+				flagViews[3].setActive(cpu.getRegister(Reg.PS).getValue(0)==1);
 			}
 		});
 
 		cpu.addDestination(ControlSignal.SETV, new DataDestination() {
 			@Override
 			public void setValue(long value) {
-				flagViews[2].setActive(regs.get(Reg.PS).getReg().getValue(1)==1);
+				flagViews[2].setActive(cpu.getRegister(Reg.PS).getValue(1)==1);
 			}
 		});
 
 		cpu.addDestination(ControlSignal.STNZ, new DataDestination() {
 			@Override
 			public void setValue(long value) {
-				System.out.println(regs.get(Reg.PS).getReg().getValue(2));
-			flagViews[1].setActive(regs.get(Reg.PS).getReg().getValue(2)==1);//z
-			flagViews[0].setActive(regs.get(Reg.PS).getReg().getValue(3)==1);//n
+			flagViews[1].setActive(cpu.getRegister(Reg.AC).getValue()==0);//z
+			flagViews[0].setActive(cpu.getRegister(Reg.AC).getValue(15)==1);//n
 			}
 		});
+
+
 
 
 
@@ -454,7 +455,9 @@ public class ComponentManager {
 	}
 
 	public void cmdStart() {
+
 		cpu.startStart();
+
 	}
 
 	public void cmdInvertRunState() {
