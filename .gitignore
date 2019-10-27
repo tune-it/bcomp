@@ -1,5 +1,4 @@
-/components/target/
-/bcomp/target/
-/bcomp-ui/target/
-/bcomp-assembler/target/
-/bcomp-portlet/target/
+/*/target/
+/*/*.iml
+/*.iml
+/.idea/
