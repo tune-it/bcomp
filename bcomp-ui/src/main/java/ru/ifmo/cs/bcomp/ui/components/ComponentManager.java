@@ -101,7 +101,7 @@ public class ComponentManager {
 			rbTact.addActionListener(buttonProperties[6].listener);
 			rbTact.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			rbTact.setFocusPainted(false);
-			rbRanStop.setFocusable(false);
+			rbTact.setFocusable(false);
 			add(rbTact,constraints);
 		}
 	}
@@ -346,6 +346,7 @@ public class ComponentManager {
 		cpu.addDestination(ControlSignal.STNZ, new DataDestination() {
 			@Override
 			public void setValue(long value) {
+				System.out.println(regs.get(Reg.PS).getReg().getValue(2));
 			flagViews[1].setActive(regs.get(Reg.PS).getReg().getValue(2)==1);//z
 			flagViews[0].setActive(regs.get(Reg.PS).getReg().getValue(3)==1);//n
 			}
