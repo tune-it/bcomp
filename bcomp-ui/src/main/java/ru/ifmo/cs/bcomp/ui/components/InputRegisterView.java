@@ -127,7 +127,7 @@ public class InputRegisterView extends RegisterView {
 	}
 
 	private void setBit(int value) {
-		reg.setValue(value);
+		reg.setValue(value,1,bitno);
 		moveRight();
 	}
 

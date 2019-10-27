@@ -86,6 +86,7 @@ public class ComponentManager {
 			rbRanStop.addActionListener(buttonProperties[5].listener);
 			rbRanStop.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			rbRanStop.setFocusPainted(false);
+			rbRanStop.setFocusable(false);
 			add(rbRanStop,constraints);
 			constraints.gridx++;
 
@@ -96,7 +97,7 @@ public class ComponentManager {
 			rbTact.addActionListener(buttonProperties[6].listener);
 			rbTact.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			rbTact.setFocusPainted(false);
-
+			rbRanStop.setFocusable(false);
 			add(rbTact,constraints);
 		}
 	}
@@ -109,18 +110,19 @@ public class ComponentManager {
 				cmdEnterAddr();
 			}
 		}),
+			new ButtonProperties( new String[] { "F6 Чтение" }, new ActionListener() {
+
+		public void actionPerformed(ActionEvent e) {
+			cmdRead();
+		}
+	}),
 		new ButtonProperties( new String[] { "F5 Запись" }, new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				cmdWrite();
 			}
 		}),
-		new ButtonProperties( new String[] { "F6 Чтение" }, new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
-				cmdRead();
-			}
-		}),
 		new ButtonProperties( new String[] { "F7 Пуск" }, new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {

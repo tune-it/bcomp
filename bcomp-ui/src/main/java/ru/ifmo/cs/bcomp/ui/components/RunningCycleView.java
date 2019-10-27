@@ -25,7 +25,7 @@ public class RunningCycleView extends BCompComponent {
 		"Operand fetch",
 		"Execution",
 		"Interrupt",
-		"Remote operanion",
+		"Remote operation",
 		"Program"
 	};
 	private final JLabel[] labels = new JLabel[cycles.length];
