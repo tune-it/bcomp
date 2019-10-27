@@ -565,12 +565,12 @@ public class CPU {
 	}
 
 	public RunningCycle getRunningCycle() {
-		long ip = mp.getValue();
+		long addr = mp.getValue();
 		RunningCycle[] cycles = RunningCycle.values();
 		int i;
 
 		for (i = cycles.length - 1; i > 0; i--)
-			if (ip > labels.get(cycles[i]))
+			if (addr > labels.get(cycles[i]))
 				return cycles[i];
 
 		return cycles[i];
