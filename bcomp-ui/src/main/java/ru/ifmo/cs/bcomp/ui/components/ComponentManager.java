@@ -346,7 +346,6 @@ public class ComponentManager {
 		cpu.addDestination(ControlSignal.STNZ, new DataDestination() {
 			@Override
 			public void setValue(long value) {
-
 			flagViews[1].setActive(regs.get(Reg.PS).getReg().getValue(2)==1);//z
 			flagViews[0].setActive(regs.get(Reg.PS).getReg().getValue(3)==1);//n
 			}
@@ -462,6 +461,7 @@ public class ComponentManager {
 		long state=	cpu.getProgramState(State.RUN);
 		rbRanStop.setSelected(state==1);
 		rbRanStop.setText(buttonProperties[BUTTON_RUN].texts[(int)state]);
+		regs.get(Reg.PS).setValue();
 	}
 
 	public void cmdInvertClockState() {
