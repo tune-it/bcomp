@@ -343,6 +343,7 @@ public class ComponentManager {
 			}
 		});
 
+
 		cpu.addDestination(ControlSignal.STNZ, new DataDestination() {
 			@Override
 			public void setValue(long value) {
