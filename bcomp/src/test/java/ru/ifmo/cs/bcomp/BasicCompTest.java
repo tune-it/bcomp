@@ -22,7 +22,7 @@ import ru.ifmo.cs.components.Register;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class BasicCompTest {
-	private static final String[] SHARED_TESTS = {
+/*	private static final String[] SHARED_TESTS = {
 		// Пультовые операции
 		"ADDR 100;chk:СК=100",
 		"WRITE DEAD;chk:СК=011,РА=010,РД=DEAD,010=DEAD",
@@ -380,5 +380,5 @@ public class BasicCompTest {
 			assertEquals(
 				testinfo + "флаг " + StateReg.NAME[flag],
 				flags.get(flag).intValue(), cpu.getStateValue(flag));
-	}
+	} */
 }
