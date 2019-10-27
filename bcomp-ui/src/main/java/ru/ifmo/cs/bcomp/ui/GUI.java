@@ -13,10 +13,14 @@ import javax.swing.event.ChangeListener;
 import ru.ifmo.cs.bcomp.BasicComp;
 import ru.ifmo.cs.bcomp.CPU;
 import ru.ifmo.cs.bcomp.IOCtrl;
-import ru.ifmo.cs.bcomp.MicroProgram;
-import ru.ifmo.cs.bcomp.MicroPrograms;
+
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.PANE_SIZE;
 import ru.ifmo.cs.bcomp.ui.components.*;
+
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 /**
  *
@@ -28,43 +32,28 @@ public class GUI extends JApplet {
 	private ActivateblePanel activePanel = null;
 	private final BasicComp bcomp;
 	private final CPU cpu;
-	private final GUI pairgui;
 
-	public GUI(final MicroProgram mp, final GUI pairgui) throws Exception {
-		this.bcomp = new BasicComp(mp);
-		this.cpu = bcomp.getCPU();
-		this.pairgui = pairgui;
-	}
-
-	public GUI(MicroProgram mp) throws Exception {
-		this(mp, null);
-	}
 
 	public GUI() throws Exception {
-		this(MicroPrograms.getMicroProgram(MicroPrograms.DEFAULT_MICROPROGRAM));
+		this.bcomp = new BasicComp();
+		this.cpu = bcomp.getCPU();
 	}
 
-	public GUI(final GUI pairgui) throws Exception {
-		this(pairgui.getCPU().getMicroProgram(), pairgui);
-	}
 
 	@Override
 	public void init() {
 		cmanager = new ComponentManager(this);
-		bcomp.startTimer();
+
 
 		ActivateblePanel[] panes = {
 			new BasicView(this),
-			new IOView(this, pairgui),
-			new MPView(this),
-			new AssemblerView(this)
 		};
 
 		tabs = new JTabbedPane();
 		tabs.addKeyListener(cmanager.getKeyListener());
 
 		tabs.addChangeListener(new ChangeListener() {
-			@Override
+
 			public void stateChanged(ChangeEvent e) {
 				if (activePanel != null)
 					activePanel.panelDeactivate();
@@ -74,8 +63,30 @@ public class GUI extends JApplet {
 			}
 		});
 
+		tabs.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				super.focusGained(e);
+				for (ActivateblePanel panel : panes) {
+					panel.redrawArrows();
+				}
+			}
+		});
+
+		tabs.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent componentEvent) {
+				super.componentResized(componentEvent);
+				for (ActivateblePanel panel : panes) {
+					panel.revalidate();
+					panel.repaint();
+					panel.redrawArrows();
+				}
+			}
+		});
 		for (ActivateblePanel pane : panes) {
 			pane.setPreferredSize(PANE_SIZE);
+
 			tabs.addTab(pane.getPanelName(), pane);
 		}
 
@@ -89,13 +100,14 @@ public class GUI extends JApplet {
 
 	public void gui() throws Exception {
 		JFrame frame = new JFrame("БЭВМ");
-		if (pairgui == null)
+
 			frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.getContentPane().add(this);
 		init();
 		frame.pack();
-		frame.setResizable(false);
+
 		frame.setVisible(true);
+		frame.setMinimumSize(frame.getSize());
 		start();
 	}
 
@@ -108,14 +120,11 @@ public class GUI extends JApplet {
 	}
 
 	public IOCtrl[] getIOCtrls() {
-		return bcomp.getIOCtrls();
+		return null;
 	}
 
 	public ComponentManager getComponentManager() {
 		return cmanager;
 	}
 
-	public String getMicroProgramName() {
-		return cpu.getMicroProgramName();
-	}
 }
