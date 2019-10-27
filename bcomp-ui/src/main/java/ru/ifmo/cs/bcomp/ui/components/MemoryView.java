@@ -8,7 +8,7 @@ import java.awt.Graphics;
 import javax.swing.JLabel;
 import ru.ifmo.cs.bcomp.Utils;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
-import ru.ifmo.cs.elements.Memory;
+import ru.ifmo.cs.components.Memory;
 
 /**
  *
@@ -25,13 +25,13 @@ public class MemoryView extends BCompComponent {
 	private JLabel[] values = new JLabel[16];
 
 	public MemoryView(Memory mem, int x, int y) {
-		super(mem.name, 16);
+		super("RAM", 16);
 		this.mem = mem;
 
-		addrBitWidth = mem.getAddrWidth();
-		int addrWidth = FONT_COURIER_BOLD_25_WIDTH * (1 + Utils.getHexWidth(addrBitWidth));
-		valueBitWidth = mem.getWidth();
-		int valueWidth = FONT_COURIER_BOLD_25_WIDTH * (1 + Utils.getHexWidth(valueBitWidth));
+		addrBitWidth = (int)mem.getAddrWidth() ;
+		int addrWidth = FONT_COURIER_BOLD_21_WIDTH * (1 + Utils.getHexWidth(addrBitWidth));
+		valueBitWidth =(int) mem.width;
+		int valueWidth = FONT_COURIER_BOLD_21_WIDTH * (1 + Utils.getHexWidth(valueBitWidth));
 		lineX = 1 + addrWidth;
 
 		setBounds(x, y, 3 + addrWidth + valueWidth);
@@ -49,6 +49,7 @@ public class MemoryView extends BCompComponent {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawLine(lineX, CELL_HEIGHT + 2, lineX, height - 2);
+		g.drawLine(1, CELL_HEIGHT + 1, width - 2, CELL_HEIGHT + 1);
 	}
 
 	void updateValue(JLabel label, int value) {
@@ -56,7 +57,7 @@ public class MemoryView extends BCompComponent {
 	}
 
 	private void updateValue(int offset) {
-		updateValue(values[offset], mem.getValue(lastPage + offset));
+		updateValue(values[offset],(int) mem.getValue(lastPage + offset));
 	}
 
 	public void updateMemory() {
@@ -71,7 +72,7 @@ public class MemoryView extends BCompComponent {
 	}
 
 	private int getPage() {
-		return getPage(mem.getAddrValue());
+		return getPage((int)mem.getAddrWidth());
 	}
 
 	public void updateLastAddr() {
@@ -79,16 +80,17 @@ public class MemoryView extends BCompComponent {
 	}
 
 	public void eventRead() {
-		int addr = getPage();
+		int addr = (int)mem.getLastAccessedAddress();
+		int page = getPage(addr);
 
-		if (addr != lastPage) {
-			lastPage = addr;
+		if (page != lastPage) {
+			lastPage = page;
 			updateMemory();
 		}
 	}
 
 	public void eventWrite() {
-		int addr = mem.getAddrValue();
+		int addr = (int)mem.getLastAccessedAddress();
 		int page = getPage(addr);
 
 		if (page != lastPage) {
@@ -97,4 +99,6 @@ public class MemoryView extends BCompComponent {
 		} else
 			updateValue(addr - page);
 	}
+
+
 }

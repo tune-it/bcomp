@@ -17,10 +17,10 @@ import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 public class BCompComponent extends BorderedComponent {
 	protected JLabel title;
 
-	private BCompComponent(String title, int ncells, Color color) {
+	 BCompComponent(String title, int ncells, Color color) {
 		super(3 + CELL_HEIGHT * (ncells + 1));
 
-		this.title = addLabel(title, FONT_COURIER_BOLD_21, color);
+		this.title = addLabel(title, FONT_COURIER_BOLD_18, color);
 	}
 
 	public BCompComponent(String title, Color colorTitleBG) {
@@ -32,14 +32,14 @@ public class BCompComponent extends BorderedComponent {
 	}
 
 	private final JLabel addValueLabel(String value, Color color) {
-		return addLabel(value, FONT_COURIER_BOLD_25, color);
+		return addLabel(value, FONT_COURIER_BOLD_21, color);
 	}
 
 	protected final JLabel addValueLabel(Color color) {
 		return addValueLabel("", color);
 	}
 
-	protected final JLabel addValueLabel(String value) {
+	protected  JLabel addValueLabel(String value) {
 		return addValueLabel(value, COLOR_VALUE);
 	}
 
@@ -57,12 +57,10 @@ public class BCompComponent extends BorderedComponent {
 		return 2 + CELL_HEIGHT * (n + 1);
 	}
 
-	protected static int getValueY() {
-		return 2 + CELL_HEIGHT;
-	}
+
 
 	private int getPixelWidth(int chars) {
-		return 2 + FONT_COURIER_BOLD_25_WIDTH * (1 + chars);
+		return 2 + FONT_COURIER_BOLD_21_WIDTH * (1 + chars);
 	}
 
 	protected int getValueWidth(int width) {
@@ -80,6 +78,6 @@ public class BCompComponent extends BorderedComponent {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawLine(1, CELL_HEIGHT + 1, width - 2, CELL_HEIGHT + 1);
+
 	}
 }

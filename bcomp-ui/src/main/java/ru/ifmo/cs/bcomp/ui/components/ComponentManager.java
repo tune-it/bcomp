@@ -4,19 +4,19 @@
 
 package ru.ifmo.cs.bcomp.ui.components;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+
 import ru.ifmo.cs.bcomp.*;
 import ru.ifmo.cs.bcomp.ui.GUI;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
-import ru.ifmo.cs.elements.DataDestination;
-import ru.ifmo.cs.elements.Register;
+
+
+import ru.ifmo.cs.components.DataDestination;
+import ru.ifmo.cs.components.Register;
 
 /**
  *
@@ -30,85 +30,116 @@ public class ComponentManager {
 			this.signal = signal;
 		}
 
-		@Override
-		public void setValue(int value) {
+		public void setValue(long value) {
 			openBuses.add(signal);
 		}
 	}
 
 	private class ButtonProperties {
-		public final int width;
-		public final String[] texts;
+		 final String[] texts;
 		public final ActionListener listener;
 
-		public ButtonProperties(int width, String[] texts, ActionListener listener) {
-			this.width = width;
+		public ButtonProperties(String[] texts, ActionListener listener) {
+
 			this.texts = texts;
 			this.listener = listener;
 		}
 	}
-
+	private JRadioButton rbRanStop;
+	private JRadioButton rbTact;
 	private class ButtonsPanel extends JComponent {
 		public ButtonsPanel() {
 			setBounds(0, BUTTONS_Y, PANE_WIDTH, BUTTONS_HEIGHT);
-
-			int buttonsX = 1;
-
+			setLayout(new GridBagLayout());
+			GridBagConstraints constraints = new GridBagConstraints() {{
+				anchor = GridBagConstraints.WEST;
+				fill=GridBagConstraints.HORIZONTAL;
+				gridx = 0;
+				gridy = 0;
+				weightx = 1;
+				insets=new Insets(1,1,1,1);
+			}};
 			buttons = new JButton[buttonProperties.length];
 
-			for (int i = 0; i < buttons.length; i++) {
+			for (int i = 0; i < buttons.length-2; i++) {
 				buttons[i] = new JButton(buttonProperties[i].texts[0]);
 				buttons[i].setForeground(buttonColors[0]);
 				buttons[i].setFont(FONT_COURIER_PLAIN_12);
-				buttons[i].setBounds(buttonsX, 0, buttonProperties[i].width, BUTTONS_HEIGHT);
-				buttonsX += buttonProperties[i].width + BUTTONS_SPACE;
 				buttons[i].setFocusable(false);
 				buttons[i].addActionListener(buttonProperties[i].listener);
-				add(buttons[i]);
+				buttons[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
+				constraints.gridwidth=i==0?2:1;
+				if (i>0) constraints.gridy=1;
+				if (i==2) constraints.gridx=0;
+				add(buttons[i], constraints);
+				if (i==2) constraints.gridx+=3; else   constraints.gridx++;
+
 			}
+			constraints.gridy=0;
+			constraints.gridx=3;
+			constraints.fill=GridBagConstraints.NONE;
+			constraints.anchor=GridBagConstraints.CENTER;
+			rbRanStop=new JRadioButton(buttonProperties[5].texts[0]);
+			rbRanStop.setFont(FONT_COURIER_PLAIN_12);
+			rbRanStop.setBackground(new Color(200, 221, 242));
+			rbRanStop.setBorderPainted(false);
+			rbRanStop.addActionListener(buttonProperties[5].listener);
+			rbRanStop.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			rbRanStop.setFocusPainted(false);
+			add(rbRanStop,constraints);
+			constraints.gridx++;
+
+			rbTact=new JRadioButton((buttonProperties[6].texts[0]));
+			rbTact.setFont(FONT_COURIER_PLAIN_12);
+			rbTact.setBackground(new Color(200, 221, 242));
+			rbTact.setBorderPainted(false);
+			rbTact.addActionListener(buttonProperties[6].listener);
+			rbTact.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			rbTact.setFocusPainted(false);
+
+			add(rbTact,constraints);
 		}
 	}
 
 	private Color[] buttonColors = new Color[] { COLOR_TEXT, COLOR_ACTIVE };
 	private ButtonProperties[] buttonProperties = {
-		new ButtonProperties(135, new String[] { "F4 Ввод адреса" }, new ActionListener() {
-			@Override
+		new ButtonProperties(new String[] { "F4 Ввод адреса" }, new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 				cmdEnterAddr();
 			}
 		}),
-		new ButtonProperties(115, new String[] { "F5 Запись" }, new ActionListener() {
-			@Override
+		new ButtonProperties( new String[] { "F5 Запись" }, new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 				cmdWrite();
 			}
 		}),
-		new ButtonProperties(115, new String[] { "F6 Чтение" }, new ActionListener() {
-			@Override
+		new ButtonProperties( new String[] { "F6 Чтение" }, new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 				cmdRead();
 			}
 		}),
-		new ButtonProperties(90, new String[] { "F7 Пуск" }, new ActionListener() {
-			@Override
+		new ButtonProperties( new String[] { "F7 Пуск" }, new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 				cmdStart();
 			}
 		}),
-		new ButtonProperties(135, new String[] { "F8 Продолжение" }, new ActionListener() {
-			@Override
+		new ButtonProperties( new String[] { "F8 Продолжение" }, new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 				cmdContinue();
 			}
 		}),
-		new ButtonProperties(110, new String[] { "F9 Останов", "F9 Работа" }, new ActionListener() {
-			@Override
+		new ButtonProperties( new String[] { "F9 Останов", "F9  Работа" }, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cmdInvertRunState();
 			}
 		}),
-		new ButtonProperties(130, new String[] { "Shift+F9 Такт" }, new ActionListener() {
-			@Override
+		new ButtonProperties(new String[] { "Shift+F9 Такт" }, new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 				cmdInvertClockState();
 			}
@@ -119,21 +150,6 @@ public class ComponentManager {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
-				case KeyEvent.VK_F1:
-					if (e.isShiftDown())
-						cmdAbout();
-					else
-						cmdSetIOFlag(1);
-					break;
-
-				case KeyEvent.VK_F2:
-					cmdSetIOFlag(2);
-					break;
-
-				case KeyEvent.VK_F3:
-					cmdSetIOFlag(3);
-					break;
-
 				case KeyEvent.VK_F4:
 					cmdEnterAddr();
 					break;
@@ -191,41 +207,35 @@ public class ComponentManager {
 	private final CPU cpu;
 	private final IOCtrl[] ioctrls;
 	private final MemoryView mem;
-	private final MicroMemoryView micromem;
-	private EnumMap<CPU.Reg, RegisterView> regs = new EnumMap<CPU.Reg, RegisterView>(CPU.Reg.class);
+	private FlagView[] flagViews=new FlagView[4];
+	private EnumMap<Reg, RegisterView> regs = new EnumMap<Reg, RegisterView>(Reg.class);
+	private RegisterView input2=new RegisterView(new Register(16));
 	private ActiveBitView activeBit = new ActiveBitView(ACTIVE_BIT_X, REG_KEY_Y);
 	private volatile BCompPanel activePanel;
 	private final long[] delayPeriods = { 0, 1, 5, 10, 25, 50, 100, 1000 };
 	private volatile int currentDelay = 3;
 	private volatile int savedDelay;
 	private final Object lockActivePanel = new Object();
-	private final JCheckBox cucheckbox;
+
 	private volatile boolean cuswitch = false;
 	private final SignalListener[] listeners;
 	private ArrayList<ControlSignal> openBuses = new ArrayList<ControlSignal>();
 	private static final ControlSignal[] busSignals = {
-		ControlSignal.DATA_TO_ALU,
-		ControlSignal.INSTR_TO_ALU,
-		ControlSignal.IP_TO_ALU,
-		ControlSignal.ACCUM_TO_ALU,
-		ControlSignal.STATE_TO_ALU,
-		ControlSignal.KEY_TO_ALU,
-		ControlSignal.BUF_TO_ADDR,
-		ControlSignal.BUF_TO_DATA,
-		ControlSignal.BUF_TO_INSTR,
-		ControlSignal.BUF_TO_IP,
-		ControlSignal.BUF_TO_ACCUM,
-		ControlSignal.MEMORY_READ,
-		ControlSignal.MEMORY_WRITE,
-		ControlSignal.INPUT_OUTPUT,
-		ControlSignal.IO0_TSF,
-		ControlSignal.IO1_TSF,
-		ControlSignal.IO1_OUT,
-		ControlSignal.IO2_TSF,
-		ControlSignal.IO2_IN,
-		ControlSignal.IO3_TSF,
-		ControlSignal.IO3_IN,
-		ControlSignal.IO3_OUT
+		ControlSignal.RDDR,
+		ControlSignal.RDCR,
+		ControlSignal.RDIP,
+		ControlSignal.RDAC,
+		ControlSignal.RDPS,
+		ControlSignal.RDIR,
+		ControlSignal.WRAR,
+		ControlSignal.WRDR,
+		ControlSignal.WRCR,
+		ControlSignal.WRIP,
+		ControlSignal.WRAC,
+		ControlSignal.LOAD,
+		ControlSignal.STOR,
+		ControlSignal.WRPS,
+		ControlSignal.IO,
 	};
 
 	public ComponentManager(GUI gui) {
@@ -257,53 +267,54 @@ public class ComponentManager {
 				if (delayPeriods[currentDelay] != 0)
 					try {
 						Thread.sleep(delayPeriods[currentDelay]);
-					} catch (InterruptedException e) { }
+					} catch (InterruptedException e) {
+					}
 			}
 		});
 
 		for (ControlSignal cs : busSignals)
-			bcomp.addDestination(cs, new SignalHandler(cs));
+			cpu.addDestination(cs, new SignalHandler(cs));
 
-		for (CPU.Reg reg : CPU.Reg.values()) {
+		for(int i=0;i<4;i++) {
+			flagViews[i]=new FlagView(0,0,25,25);
+			flagViews[i].setPreferredSize(flagViews[i].getSize());
+		}
+		flagViews[0].setTitle("N");flagViews[1].setTitle("Z");flagViews[2].setTitle("V");flagViews[3].setTitle("C");
+
+		for (Reg reg : Reg.values()) {
 			switch (reg) {
-				case KEY:
-					InputRegisterView regKey = new InputRegisterView(this, (Register)cpu.getRegister(reg));
+				case IR:
+					InputRegisterView regKey = new InputRegisterView(this, cpu.getRegister(reg));
 					regs.put(reg, regKey);
-					regKey.setProperties(REG_KEY_X, REG_KEY_Y, false);
+					regKey.setProperties(REG_KEY_X, REG_KEY_Y, false, false);
 					break;
 
-				case STATE:
-					regs.put(reg, new StateRegisterView(cpu.getRegister(reg)));
-					break;
 
 				default:
 					regs.put(reg, new RegisterView(cpu.getRegister(reg)));
 			}
 		}
 
+
+
 		listeners = new SignalListener[] {
-			new SignalListener(regs.get(CPU.Reg.STATE),
-				ControlSignal.BUF_TO_STATE_C, ControlSignal.CLEAR_STATE_C, ControlSignal.SET_STATE_C),
-			new SignalListener(regs.get(CPU.Reg.ADDR), ControlSignal.BUF_TO_ADDR),
-			new SignalListener(regs.get(CPU.Reg.DATA), ControlSignal.BUF_TO_DATA, ControlSignal.MEMORY_READ),
-			new SignalListener(regs.get(CPU.Reg.INSTR), ControlSignal.BUF_TO_INSTR),
-			new SignalListener(regs.get(CPU.Reg.IP), ControlSignal.BUF_TO_IP),
-			new SignalListener(regs.get(CPU.Reg.ACCUM),
-				ControlSignal.BUF_TO_ACCUM,
-				ControlSignal.IO2_IN,
-				ControlSignal.IO3_IN,
-				ControlSignal.IO7_IN,
-				ControlSignal.IO8_IN,
-				ControlSignal.IO9_IN
-			)
+			new SignalListener(regs.get(Reg.AR), ControlSignal.WRAR),
+			new SignalListener(regs.get(Reg.DR), ControlSignal.WRDR, ControlSignal.LOAD),
+			new SignalListener(regs.get(Reg.CR), ControlSignal.WRCR),
+			new SignalListener(regs.get(Reg.IP), ControlSignal.WRIP),
+			new SignalListener(regs.get(Reg.AC), ControlSignal.WRAC),
+			new SignalListener(regs.get(Reg.PS),ControlSignal.RDPS,ControlSignal.WRPS,ControlSignal.WRAC),
+
 		};
 
-		mem = new MemoryView(cpu.getMemory(), MEM_X, MEM_Y);
-		micromem = new MicroMemoryView(cpu, MICROMEM_X, MEM_Y);
 
-		bcomp.addDestination(ControlSignal.MEMORY_READ, new DataDestination() {
-			@Override
-			public void setValue(int value) {
+
+		mem = new MemoryView(cpu.getMemory(), MEM_X, MEM_Y);
+
+
+		cpu.addDestination(ControlSignal.LOAD, new DataDestination() {
+
+			public void setValue(long value) {
 				if (activePanel != null)
 					mem.eventRead();
 				else
@@ -311,9 +322,39 @@ public class ComponentManager {
 			}
 		});
 
-		bcomp.addDestination(ControlSignal.MEMORY_WRITE, new DataDestination() {
+
+
+		cpu.addDestination(ControlSignal.SETC, new DataDestination() {
 			@Override
-			public void setValue(int value) {
+			public void setValue(long value) {
+				flagViews[3].setActive(regs.get(Reg.PS).getReg().getValue(0)==1);
+			}
+		});
+
+		cpu.addDestination(ControlSignal.SETV, new DataDestination() {
+			@Override
+			public void setValue(long value) {
+				flagViews[2].setActive(regs.get(Reg.PS).getReg().getValue(1)==1);
+			}
+		});
+		cpu.addDestination(ControlSignal.STNZ, new DataDestination() {
+			@Override
+			public void setValue(long value) {
+				flagViews[1].setActive(regs.get(Reg.PS).getReg().getValue(2)==1);
+			}
+		});
+		cpu.addDestination(ControlSignal.STNZ, new DataDestination() {
+			@Override
+			public void setValue(long value) {
+				flagViews[0].setActive(regs.get(Reg.PS).getReg().getValue(3)==1);
+			}
+		});
+
+
+
+		cpu.addDestination(ControlSignal.STOR, new DataDestination() {
+
+			public void setValue(long value) {
 				if (activePanel != null)
 					mem.eventWrite();
 				else
@@ -321,28 +362,49 @@ public class ComponentManager {
 			}
 		});
 
-		cucheckbox = new JCheckBox("Ввод в Устройство управления");
-		cucheckbox.setOpaque(false);
-		cucheckbox.addKeyListener(keyListener);
-		cucheckbox.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				cuswitch = e.getStateChange() == ItemEvent.SELECTED;
-			}
-		});
+
+
+
+
+
+
 	}
 
 	public void panelActivate(BCompPanel component) {
 		synchronized (lockActivePanel) {
 			activePanel = component;
-			bcomp.addDestination(activePanel.getSignalListeners());
 			bcomp.addDestination(listeners);
 		}
+		buttonsPanel.setPreferredSize(buttonsPanel.getSize());
 
-		component.add(mem);
-		component.add(buttonsPanel);
-		component.add(activeBit);
-		component.add(regs.get(CPU.Reg.KEY));
+
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.gridx = 2;
+		constraints.gridy = 0;
+		constraints.gridheight=2;
+		constraints.insets=new Insets(0,0,0,30);
+
+		input2.setProperties(0,0,false,true);
+		input2.setTitle("IR");
+		input2.setPreferredSize(input2.getSize());
+
+		regs.get(Reg.IR).setPreferredSize(regs.get(Reg.IR).getSize());
+		regs.get(Reg.IR).setMinimumSize(regs.get(Reg.IR).getSize());
+		buttonsPanel.add(regs.get(Reg.IR), constraints);
+
+
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.insets = new Insets(0, REG_16_WIDTH+26, 0, 20);//помещаем бит рядом с кл регистром
+		activeBit.setPreferredSize(activeBit.getSize());
+		activeBit.setMinimumSize(activeBit.getSize());
+		buttonsPanel.add(activeBit, constraints);
+		mem.setPreferredSize(mem.getSize());
+
+		component.add(buttonsPanel, BorderLayout.SOUTH);
+
+
 
 		mem.updateMemory();
 		cuswitch = false;
@@ -351,11 +413,7 @@ public class ComponentManager {
 	}
 
 	public void panelDeactivate() {
-		synchronized (lockActivePanel) {
-			bcomp.removeDestination(listeners);
-			bcomp.removeDestination(activePanel.getSignalListeners());
-			activePanel = null;
-		}
+
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -363,11 +421,15 @@ public class ComponentManager {
 	}
 
 	public void switchFocus() {
-		((InputRegisterView)regs.get(CPU.Reg.KEY)).setActive();
+		((InputRegisterView)regs.get(Reg.IR)).setActive();
 	}
 
-	public RegisterView getRegisterView(CPU.Reg reg) {
+	public RegisterView getRegisterView(Reg reg) {
 		return regs.get(reg);
+	}
+
+	public FlagView getFlagView(int i) {
+		return flagViews[i];
 	}
 
 	public void cmdContinue() {
@@ -375,30 +437,17 @@ public class ComponentManager {
 	}
 
 	public void cmdEnterAddr() {
-		if (cuswitch) {
-			cpu.runSetMAddr();
-			regs.get(CPU.Reg.MIP).setValue();
-		} else
+
 			cpu.startSetAddr();
 	}
 
 	public void cmdWrite() {
-		if (cuswitch) {
-			micromem.updateLastAddr();
-			cpu.runMWrite();
-			micromem.updateMemory();
-			regs.get(CPU.Reg.MIP).setValue();
-		} else
+
 			cpu.startWrite();
 	}
 
 	public void cmdRead() {
-		if (cuswitch) {
-			micromem.eventRead();
-			cpu.runMRead();
-			regs.get(CPU.Reg.MIP).setValue();
-			regs.get(CPU.Reg.MINSTR).setValue();
-		} else
+
 			cpu.startRead();
 	}
 
@@ -408,19 +457,16 @@ public class ComponentManager {
 
 	public void cmdInvertRunState() {
 		cpu.invertRunState();
-		int state = cpu.getStateValue(StateReg.FLAG_RUN);
-		buttons[BUTTON_RUN].setForeground(buttonColors[state]);
-		buttons[BUTTON_RUN].setText(buttonProperties[BUTTON_RUN].texts[state]);
+		long state=	cpu.getProgramState(State.RUN);
+		rbRanStop.setSelected(state==1);
+		rbRanStop.setText(buttonProperties[BUTTON_RUN].texts[(int)state]);
 	}
 
 	public void cmdInvertClockState() {
 		boolean state = cpu.invertClockState();
-		buttons[BUTTON_CLOCK].setForeground(buttonColors[state ? 0 : 1]);
+		rbTact.setSelected(!state);
 	}
 
-	public void cmdSetIOFlag(int dev) {
-		ioctrls[dev].setFlag();
-	}
 
 	public void cmdNextDelay() {
 		currentDelay = currentDelay < delayPeriods.length - 1 ? currentDelay + 1 : 0;
@@ -439,20 +485,16 @@ public class ComponentManager {
 		currentDelay = savedDelay;
 	}
 
-	public void cmdAbout() {
-		JOptionPane.showMessageDialog(gui,
-			"Эмулятор Базовой ЭВМ. Версия r" + GUI.class.getPackage().getImplementationVersion() +
-			"\n\nЗагружена " + gui.getMicroProgramName() + " микропрограмма",
-			"О программе", JOptionPane.INFORMATION_MESSAGE);
-	}
+//	public void cmdAbout() {
+//		JOptionPane.showMessageDialog(gui,
+//			"Эмулятор Базовой ЭВМ. Версия r" + GUI.class.getPackage().getImplementationVersion() +
+//			"\n\nЗагружена " + gui.getMicroProgramName() + " микропрограмма",
+//			"О программе", JOptionPane.INFORMATION_MESSAGE);
+//	}
 
-	public MicroMemoryView getMicroMemory() {
-		return micromem;
-	}
 
-	public JCheckBox getMPCheckBox() {
-		return cucheckbox;
-	}
+
+
 
 	public ActiveBitView getActiveBit() {
 		return activeBit;
@@ -468,5 +510,11 @@ public class ComponentManager {
 
 	public void clearActiveSignals() {
 		openBuses.clear();
+	}
+	public MemoryView getMem(){
+		return mem;
+	}
+	public RegisterView getInput2(){
+		return input2;
 	}
 }

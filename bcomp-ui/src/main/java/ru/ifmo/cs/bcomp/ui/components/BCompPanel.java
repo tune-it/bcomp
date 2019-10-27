@@ -4,11 +4,17 @@
 
 package ru.ifmo.cs.bcomp.ui.components;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Map;
+
 import ru.ifmo.cs.bcomp.ControlSignal;
+
+import ru.ifmo.cs.bcomp.Reg;
 import ru.ifmo.cs.bcomp.SignalListener;
+
+import javax.swing.*;
+
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.COLOR_ACTIVE;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.COLOR_BUS;
 
@@ -19,13 +25,24 @@ import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.COLOR_BUS;
 public abstract class BCompPanel extends ActivateblePanel {
 	protected final ComponentManager cmanager;
 	private final RegisterProperties[] regProps;
-	private final BusView[] buses;
-	private SignalListener[] listeners;
+	protected Map<String, BusView> busesMap;
 
-	public BCompPanel(ComponentManager cmanager, RegisterProperties[] regProps, BusView[] buses) {
+	private SignalListener[] listeners;
+	protected RegPanel regPanel;
+	FlagView[] flags;
+
+
+	public BCompPanel(ComponentManager cmanager, RegisterProperties[] regProps, Map baseMap) {
+		setLayout(new BorderLayout());
 		this.cmanager = cmanager;
 		this.regProps = regProps;
-		this.buses = buses;
+		this.busesMap=baseMap;
+		regPanel=new RegPanel();
+	}
+	protected class RegPanel extends JComponent {
+		RegPanel() {
+			setLayout(new GridBagLayout());
+		}
 	}
 
 	protected void setSignalListeners(SignalListener[] listeners) {
@@ -40,12 +57,11 @@ public abstract class BCompPanel extends ActivateblePanel {
 		ArrayList<BusView> openbuses = new ArrayList<BusView>();
 		ArrayList<ControlSignal> signals = cmanager.getActiveSignals();
 
-		for (BusView bus : buses) {
+		for (BusView bus : busesMap.values()) {
 			for (ControlSignal signal : bus.getSignals())
-				if (signals.contains(signal)) {
+				if (signals.contains(signal))
 					openbuses.add(bus);
-					continue;
-				}
+
 			bus.draw(g, COLOR_BUS);
 		}
 
@@ -57,7 +73,7 @@ public abstract class BCompPanel extends ActivateblePanel {
 		Graphics g = getGraphics();
 		ArrayList<ControlSignal> signals = cmanager.getActiveSignals();
 
-		for (BusView bus : buses)
+		for (BusView bus : busesMap.values())
 			for (ControlSignal signal : bus.getSignals())
 				if (signals.contains(signal))
 					bus.draw(g, color);
@@ -73,13 +89,21 @@ public abstract class BCompPanel extends ActivateblePanel {
 
 	@Override
 	public void panelActivate() {
-		for (RegisterProperties prop : regProps) {
-			RegisterView reg = cmanager.getRegisterView(prop.reg);
-			reg.setProperties(prop.x, prop.y, prop.hex);
-			add(reg);
-		}
+//		for (RegisterProperties prop : regProps) {
+//			RegisterView reg = cmanager.getRegisterView(prop.reg);
+//			reg.setProperties(prop.x, prop.y, prop.hex);
+//			add(reg);
+//		}
 
 		cmanager.panelActivate(this);
+		cmanager.getRegisterView(Reg.IR).setTitle("IR");
+		for (RegisterProperties prop : regProps) {
+			RegisterView reg = cmanager.getRegisterView(prop.reg);
+			reg.setProperties(prop.x, prop.y, prop.hex,prop.isLeft);
+			reg.setPreferredSize(reg.getSize());
+			reg.setTitle(prop.reg.toString());
+			regPanel.add(reg, prop.constraints);
+		}
 	}
 
 	@Override

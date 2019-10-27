@@ -1,13 +1,18 @@
 /*
- * $Id$
+ * $Id: BusView.java 501 2019-10-11 08:23:26Z MATPOCKuH@mini $
  */
 
 package ru.ifmo.cs.bcomp.ui.components;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
+
+
 import ru.ifmo.cs.bcomp.ControlSignal;
+
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.BUS_WIDTH;
+import static java.lang.Math.*;
+import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.COLOR_BACKGROUND;
+
 
 /**
  *
@@ -15,16 +20,22 @@ import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.BUS_WIDTH;
  */
 public class BusView {
 	private final ControlSignal[] signals;
-	private final int xs[];
-	private final int ys[];
-	private final int widths[];
-	private final int heights[];
-	private final int[] arrowX = new int[3];
-	private final int[] arrowY = new int[3];
+	private int xs[];
+	private int ys[];
+	private int widths[];
+	private int heights[];
+	private int[] arrowX = new int[3];
+	private int[] arrowY = new int[3];
+
+	private boolean isVisible = true;
 
 	public BusView(int[][] points, ControlSignal ... signals) {
 		this.signals = signals;
 
+		calcBounds(points);
+	}
+
+	public void calcBounds(int[][] points) {
 		int npoints = points.length - 1;
 		int x1, x2 = 0, y1, y2 = 0, width = 0, height = 0;
 
@@ -42,7 +53,7 @@ public class BusView {
 
 			if (width != 0) {
 				xs[i] = (width < 0) ? x1 - BUS_WIDTH : x2 - BUS_WIDTH;
-				widths[i] = (width < 0 ? -width : width) + 2 * BUS_WIDTH + 1;
+				widths[i] = abs(width) + 2 * BUS_WIDTH + 1;
 				ys[i] = y1 - BUS_WIDTH;
 				heights[i] = 2 * BUS_WIDTH + 1;
 			} else {
@@ -51,7 +62,7 @@ public class BusView {
 				xs[i] = x1 - BUS_WIDTH;
 				widths[i] = 2 * BUS_WIDTH + 1;
 				ys[i] = (height < 0) ? y1 - BUS_WIDTH : y2 - BUS_WIDTH;
-				heights[i] = (height < 0 ? -height : height) + 2 * BUS_WIDTH + 1;
+				heights[i] = abs(height) + 2 * BUS_WIDTH + 1;
 			}
 		}
 
@@ -83,13 +94,19 @@ public class BusView {
 	}
 
 	public void draw(Graphics g, Color color) {
-		g.setColor(color);
+		if (isVisible) {
+			g.setColor(color);
+		} else {
+			g.setColor(COLOR_BACKGROUND);
+		}
 		g.drawPolygon(arrowX, arrowY, arrowX.length);
 		g.fillPolygon(arrowX, arrowY, arrowX.length);
 
 		for (int i = 0; i < xs.length; i++)
 			g.fillRect(xs[i], ys[i], widths[i], heights[i]);
 	}
+
+
 
 	public ControlSignal[] getSignals() {
 		return signals;

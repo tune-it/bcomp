@@ -7,7 +7,7 @@ package ru.ifmo.cs.bcomp.ui.components;
 import java.awt.event.*;
 import ru.ifmo.cs.bcomp.Utils;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
-import ru.ifmo.cs.elements.Register;
+import ru.ifmo.cs.components.Register;
 
 /**
  *
@@ -23,13 +23,13 @@ public class InputRegisterView extends RegisterView {
 	private int formattedWidth;
 
 	public InputRegisterView(ComponentManager cmgr, Register reg) {
-		super(reg, COLOR_INPUT_TITLE);
+		super(reg, COLOR_TITLE);
 
 		this.cmanager = cmgr;
 		this.reg = reg;
 		activeBitView = cmanager.getActiveBit();
 
-		bitno = (regWidth = reg.getWidth()) - 1;
+		bitno = (regWidth =(int) reg.width) - 1;
 		formattedWidth = Utils.getBinaryWidth(regWidth);
 
 		addMouseListener(new MouseAdapter() {
@@ -95,7 +95,7 @@ public class InputRegisterView extends RegisterView {
 				if (!value.isFocusOwner())
 					reqFocus();
 
-				int bitno = Utils.getBitNo(e.getX(), formattedWidth, FONT_COURIER_BOLD_25_WIDTH);
+				int bitno = Utils.getBitNo(e.getX(), formattedWidth, FONT_COURIER_BOLD_21_WIDTH);
 
 				if (bitno < 0)
 					return;
@@ -127,7 +127,7 @@ public class InputRegisterView extends RegisterView {
 	}
 
 	private void setBit(int value) {
-		reg.setValue(value, bitno);
+		reg.setValue(value);
 		moveRight();
 	}
 
@@ -135,12 +135,14 @@ public class InputRegisterView extends RegisterView {
 	public void setValue() {
 		if (active) {
 			StringBuilder str = new StringBuilder(HTML +
-				Utils.toBinary(reg.getValue(), regWidth) + HTML_END);
+				Utils.toBinary((int)reg.getValue(), regWidth) + HTML_END);
 
 			int pos = 6 + formattedWidth - Utils.getBinaryWidth(bitno + 1);
 			str.insert(pos + 1, COLOR_END);
+			cmanager.getInput2().setValue(str.toString());
 			str.insert(pos, COLOR_ACTIVE_BIT);
 			setValue(str.toString());
+
 		} else
 			super.setValue();
 	}

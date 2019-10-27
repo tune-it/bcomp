@@ -14,4 +14,5 @@ public abstract class ActivateblePanel extends JComponent {
 	public abstract void panelActivate();
 	public abstract void panelDeactivate();
 	public abstract String getPanelName();
+	public abstract void redrawArrows();
 }
