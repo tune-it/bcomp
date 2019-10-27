@@ -121,14 +121,14 @@ public enum ControlSignal {
 	SETC,
 	/**
 	 * Control signal 22:
-	 * Set flags N and Z
-	 */
-	STNZ,
-	/**
-	 * Control signal 23:
 	 * Set flag oVerflow
 	 */
 	SETV,
+	/**
+	 * Control signal 23:
+	 * Set flags N and Z
+	 */
+	STNZ,
 	/**
 	 * Control signal 24:
 	 * Write to Data Register
