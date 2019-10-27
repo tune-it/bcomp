@@ -12,6 +12,10 @@ import javax.swing.*;
 
 import ru.ifmo.cs.bcomp.*;
 import ru.ifmo.cs.bcomp.ui.GUI;
+
+import static ru.ifmo.cs.bcomp.ControlSignal.*;
+import static ru.ifmo.cs.bcomp.ControlSignal.EINT;
+import static ru.ifmo.cs.bcomp.ControlSignal.HALT;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 
 
@@ -290,8 +294,6 @@ public class ComponentManager {
 					regs.put(reg, regKey);
 					regKey.setProperties(REG_KEY_X, REG_KEY_Y, false, false);
 					break;
-
-
 				default:
 					regs.put(reg, new RegisterView(cpu.getRegister(reg)));
 			}
@@ -305,7 +307,8 @@ public class ComponentManager {
 			new SignalListener(regs.get(Reg.CR), ControlSignal.WRCR),
 			new SignalListener(regs.get(Reg.IP), ControlSignal.WRIP),
 			new SignalListener(regs.get(Reg.AC), ControlSignal.WRAC),
-			new SignalListener(regs.get(Reg.PS),ControlSignal.RDPS,ControlSignal.WRPS,ControlSignal.WRAC),
+			new SignalListener(regs.get(Reg.PS),
+					RDPS,WRPS,SETC, SETV, STNZ, DINT, EINT, HALT),
 
 		};
 
@@ -339,16 +342,13 @@ public class ComponentManager {
 				flagViews[2].setActive(regs.get(Reg.PS).getReg().getValue(1)==1);
 			}
 		});
+
 		cpu.addDestination(ControlSignal.STNZ, new DataDestination() {
 			@Override
 			public void setValue(long value) {
-				flagViews[1].setActive(regs.get(Reg.PS).getReg().getValue(2)==1);
-			}
-		});
-		cpu.addDestination(ControlSignal.STNZ, new DataDestination() {
-			@Override
-			public void setValue(long value) {
-				flagViews[0].setActive(regs.get(Reg.PS).getReg().getValue(3)==1);
+
+			flagViews[1].setActive(regs.get(Reg.PS).getReg().getValue(2)==1);//z
+			flagViews[0].setActive(regs.get(Reg.PS).getReg().getValue(3)==1);//n
 			}
 		});
 
