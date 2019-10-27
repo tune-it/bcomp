@@ -398,6 +398,6 @@ public class CLI {
 	}
 
 	protected void println(String str){
-		System.out.println(str + "\n");
+		System.out.println(str);
 	}
 }
