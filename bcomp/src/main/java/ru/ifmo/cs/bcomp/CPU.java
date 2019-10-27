@@ -240,9 +240,9 @@ public class CPU {
 					)
 				),
 				newValveH(swout, 1, DATA_WIDTH, SETC, new PartWriter(ps, 1, C.ordinal())),
-				newValveH(swout, 1, DATA_WIDTH - 1, STNZ, new PartWriter(ps, 1, N.ordinal())),
-				new DataCheckZero(swout, DATA_WIDTH, STNZ.ordinal() - 16, new PartWriter(ps, 1, Z.ordinal())),
 				setv = new Xor(swout, 2, DATA_WIDTH, SETV.ordinal() - 16, new PartWriter(ps, 1, V.ordinal())),
+				new DataCheckZero(swout, DATA_WIDTH, STNZ.ordinal() - 16, new PartWriter(ps, 1, Z.ordinal())),
+				newValveH(swout, 1, DATA_WIDTH - 1, STNZ, new PartWriter(ps, 1, N.ordinal())),
 				newValveH(swout, DATA_WIDTH, 0, WRDR, dr),
 				newValveH(swout, DATA_WIDTH, 0, WRCR, cr),
 				newValveH(swout, AR_WIDTH, 0, WRIP, ip),
