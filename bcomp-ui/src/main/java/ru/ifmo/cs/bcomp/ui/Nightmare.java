@@ -467,9 +467,4 @@ public class Nightmare {
 		frame.setVisible(true);
 		frame.requestFocus();
 	}
-
-	public static void main(String[] args) throws Exception {
-		Nightmare nightmare = new Nightmare();
-		return;
-	}
 }

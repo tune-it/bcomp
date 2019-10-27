@@ -35,9 +35,4 @@ public class MicroCodeDecoder {
 				decoded[1] + "\t" + decoded[2]);
 		}
 	}
-
-	public static void main(String[] args) throws Exception {
-		new MicroCodeDecoder().decode();
-	}
-
 }
