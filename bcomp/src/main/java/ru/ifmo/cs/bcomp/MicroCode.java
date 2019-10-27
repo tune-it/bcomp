@@ -228,14 +228,13 @@ public class MicroCode {
         new CMC("AL0100",   cs(RDCR, LTOL), 7, 1,                           "ROR"),     // if CR(7) = 1 then GOTO ROR
         new omc("ROL",      cs(RDAC, SHLT, SHL0, STNZ, SETC, WRAC)),                    // ROL(AC) -> AC, C, N, Z
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        // !!! CHECK: may be need move SHRF to ASR command
-        new omc("ROR",      cs(RDAC, SHRT, SHRF, STNZ, SETC, WRAC)),                    // ROR(AC) -> AC, C, N, Z
+        new omc("ROR",      cs(RDAC, SHRT, STNZ, SETC, WRAC)),                    // ROR(AC) -> AC, C, N, Z
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("AL0101",   cs(RDCR, LTOL), 7, 1,                           "ASR"),     // if CR(7) = 1 then GOTO ASR
         new omc("ASL",      cs(RDAC, HTOH, LTOL, WRDR)),                                // AC -> DR
         new omc(            cs(RDAC, RDDR, HTOH, LTOL, STNZ, SETV, SETC, WRAC)),        // AC + DR -> AC, N, Z, V, C
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new omc("ASR",      cs(RDAC, SHRT, STNZ, SETV, SETC, WRAC)),                    // ASR(AC) -> AC, N, Z, V, C
+        new omc("ASR",      cs(RDAC, SHRT, SHRF, STNZ, SETV, SETC, WRAC)),                    // ASR(AC) -> AC, N, Z, V, C
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("AL011X",   cs(RDCR, HTOL), 0, 1,                           "AL0111"),  // if CR(8) = 1 then GOTO AL0111
         new CMC("AL0110",   cs(RDCR, LTOL), 7, 1,                           "SWAB"),    // if CR(7) = 1 then GOTO SWAB
