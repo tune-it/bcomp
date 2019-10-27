@@ -327,7 +327,7 @@ public class BasicView extends BCompPanel {
 		constraintsF.insets=new Insets(101+CELL_HEIGHT, 80, 0, 0);
 		regPanel.add(cmanager.getFlagView(2),constraintsF);
 
-		cmanager.getFlagView(1).setActive(true);
+
 
 		GridBagConstraints constraintsIN2=new GridBagConstraints(){{
 			gridy=3;
