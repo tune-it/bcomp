@@ -347,8 +347,8 @@ public class ComponentManager {
 		cpu.addDestination(ControlSignal.STNZ, new DataDestination() {
 			@Override
 			public void setValue(long value) {
-			flagViews[1].setActive(cpu.getRegister(Reg.AC).getValue()==0);//z
-			flagViews[0].setActive(cpu.getRegister(Reg.AC).getValue(15)==1);//n
+			flagViews[1].setActive(cpu.getProgramState(State.Z)!=0);//z
+			flagViews[0].setActive(cpu.getProgramState(State.N)!=0);//n
 			}
 		});
 
