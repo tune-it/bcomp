@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="bcomp-portlet:war">
+    <output-path>$PROJECT_DIR$/bcomp-portlet/target</output-path>
+    <root id="archive" name="bcomp-portlet-1.war">
+      <element id="artifact" artifact-name="bcomp-portlet:war exploded" />
+    </root>
+  </artifact>
+</component>

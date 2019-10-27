@@ -1,0 +1,24 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="bcomp-portlet:war exploded">
+    <output-path>$PROJECT_DIR$/bcomp-portlet/target/bcomp-portlet-1</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="bcomp-portlet" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="archive" name="bcomp-1.jar">
+            <element id="module-output" name="bcomp" />
+          </element>
+          <element id="archive" name="components-1.jar">
+            <element id="module-output" name="components" />
+          </element>
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/bcomp-portlet/target/bcomp-portlet-1/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="bcomp-portlet/web/Web" />
+    </root>
+  </artifact>
+</component>
