@@ -4,8 +4,7 @@
 
 package ru.ifmo.cs.bcomp.ui;
 
-import ru.ifmo.cs.bcomp.MicroProgram;
-import ru.ifmo.cs.bcomp.MicroPrograms;
+
 
 /**
  *
@@ -17,39 +16,35 @@ public class BCompApp {
 		String app;
 
 		try {
-			mpname = System.getProperty("mp", MicroPrograms.DEFAULT_MICROPROGRAM);
+
 			app = System.getProperty("mode", "gui");
 		} catch (Exception e) {
-			mpname = MicroPrograms.DEFAULT_MICROPROGRAM;
+
 			app = "gui";
 		}
 
-		MicroProgram mp = MicroPrograms.getMicroProgram(mpname);
-		if (mp == null) {
-			System.err.println("Invalid microprogram selected");
-			System.exit(1);
-		}
+
 
 		if (app.equals("gui")) {
-			GUI gui = new GUI(mp);
+			GUI gui = new GUI();
 			gui.gui();
 			return;
 		}
 
 		if (app.equals("cli")) {
-			CLI cli = new CLI(mp);
+			CLI cli = new CLI();
 			cli.cli();
 			return;
 		}
 
 		if (app.equals("decoder")) {
-			MicroCodeDecoder mpdecoder = new MicroCodeDecoder(mp);
+			MicroCodeDecoder mpdecoder = new MicroCodeDecoder();
 			mpdecoder.decode();
 			return;
 		}
 
 		if (app.equals("nightmare")) {
-			Nightmare nightmare = new Nightmare(mp);
+			Nightmare nightmare = new Nightmare();
 			return;
 		}
 
