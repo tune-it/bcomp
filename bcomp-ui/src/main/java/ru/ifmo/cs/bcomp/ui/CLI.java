@@ -96,12 +96,8 @@ public class CLI {
 	// XXX: Получать имена регистров из их свойств
 	private void printRegsTitle() {
 		if (printRegsTitle) {
-//			println(cpu.getClockState() ?
-//				"Адр Знчн  СК  РА  РК   РД   SP    А  C Адр Знчн" :
-//				"Адр МК   СК  РА  РК   РД    А  C   БР  N Z СчМК");
-
-			//Адр Знчн  IR  AR  CR   DR   SP   AC   BR  NZVC Адр Знчн
-			//Адр МК   IR  AR  CR   DR   SP   AC   BR  NZVC СчМК
+			//Адр Знчн  IR  AR  SP  CR   DR   BR   AC  NZVC Адр Знчн
+			//Адр МК   IR  AR  SP  CR   DR   BR   AC  NZVC СчМК
 
 			String space = "  ";
 			String hdr = "Адр ";
@@ -135,18 +131,11 @@ public class CLI {
 			println("Адр МК");
 			printMicroTitle = false;
 		}
-//		println(getMicroMemory(addr) + " " + mp.decodeCmd(cpu.getMicroCode().getValue(addr))); //TODO decodeCmd ?
+//		println(getMicroMemory(addr) + " " + mp.decodeCmd(cpu.getMicroCode().getValue(addr)));
+		println(getMicroMemory(addr) + " " + MCDecoder.decodeMC(cpu, addr)[2]);
 	}
 
 	private void printRegs(String add) {
-//		println(cpu.getClockState() ?
-//			getMemory(addr) + " " + getRegs() + add :
-//			getMicroMemory(addr) + " " +
-//				getRegs() + " " +
-//				getReg(Reg.BR) + " " +
-//				getFormattedState(State.N) + " " +
-//				getFormattedState(State.Z) + "  " +
-//				getReg(Reg.MP));
 		String line = (cpu.getClockState() ? getMemory(addr) : getMicroMemory(addr)) + " ";
 		line += getReg(Reg.IP) + " ";
 		line += getReg(Reg.AR) + " ";
@@ -252,8 +241,7 @@ public class CLI {
 				break;
 
 			if (checkCmd(cmd, "exit") || checkCmd(cmd, "quit"))
-//				System.exit(0);
-				Runtime.getRuntime().exit(0);
+				Runtime.getRuntime().exit(0); // System.exit(0);
 
 			if (checkCmd(cmd, "?") || checkCmd(cmd, "help")) {
 				printHelp();
@@ -360,8 +348,8 @@ public class CLI {
 					println("Введите текст программы. Для окончания введите END");
 
 					for (;;) {
-//						line = input.nextLine();
-						line = fetchLine();
+						line = fetchLine(); // line = input.nextLine();
+
 
 						if (line.equalsIgnoreCase("END"))
 							break;
@@ -375,9 +363,9 @@ public class CLI {
 //						println("Программа начинается с адреса " + Utils.toHex(asm.getBeginAddr(), 11));
 					printOnStop = true;
 
-					try {
+//					try {
 //							println("Результат по адресу " + Utils.toHex(asm.getLabelAddr("R"), 11));
-					} catch (Exception e) { }
+//					} catch (Exception e) { }
 
 					continue;
 				}
