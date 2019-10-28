@@ -44,6 +44,16 @@ public class MCDecoder {
 		return res;
 	}
 
+	public static String getFormattedMC(CPU cpu, long addr) {
+		String[] decoded = MCDecoder.decodeMC(cpu, addr);
+
+		return 
+			toHex(addr, 8) + " " +
+			decoded[1] + "\t" + 
+			(decoded[0] == null ? "\t\t" : decoded[0] + (decoded[0].length() > 7 ? "\t" : "\t\t")) +
+			(decoded[2] == null ? "No operations" : decoded[2]);
+	}
+
 	private static String decodeCMC(MicroCode mc, ArrayList<ControlSignal> cs, long checkbit, long addr, long expected) {
 		String label = mc.getLabel((int)addr);
 		String aluOutput = getAluOutput(cs);
