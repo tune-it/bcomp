@@ -538,10 +538,10 @@ public class CPU {
 		return false;
 	}
 
-	public boolean executeMCWrite() {
+	public boolean executeMCWrite(long value) {
 		if (lock.tryLock()) {
 			try {
-				microcode.setValue(ir.getValue());
+				microcode.setValue(value);
 				mp.setValue(0);
 			} finally {
 				lock.unlock();

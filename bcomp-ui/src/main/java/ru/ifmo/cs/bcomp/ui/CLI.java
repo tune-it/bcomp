@@ -174,9 +174,9 @@ public class CLI {
 			"ru[n]\t\t- Переключение режима Работа/Останов\n" +
 			"cl[ock]\t\t- Переключение режима потактового выполнения\n" +
 			"ma[ddress]\t- Переход на микрокоманду\n" +
-			"mw[rite]\t- Запись микрокоманды\n" +
+			"mw[rite] value\t- Запись микрокоманды\n" +
 			"mr[ead]\t\t- Чтение микрокоманды\n" +
-			"md[ecode]\t\t- Декодировать текущую микрокоманду\n" +
+			"md[ecode]\t- Декодировать текущую микрокоманду\n" +
 			"io\t\t- Вывод состояния всех ВУ\n" +
 			"io addr\t\t- Вывод состояния указанного ВУ\n" +
 			"io addr value\t- Запись value в указанное ВУ\n" +
@@ -185,7 +185,7 @@ public class CLI {
 			"sleep value\t- Задержка между тактами при фоновом выполнении\n" +
 			"{exit|quit}\t- Выход из эмулятора\n" +
 			"(0000-FFFF)\t- Ввод шестнадцатеричного значения в клавишный регистр\n" +
-			"(метка)\t\t- Ввод адреса метки в клавишный регистр"
+			"labelname\t- Ввод адреса метки в клавишный регистр"
 		);
 	}
 
@@ -290,8 +290,12 @@ public class CLI {
 				}
 
 				if (checkCmd(cmd, "mwrite")) {
+					if (i == cmds.length - 1)
+						throw new Exception("команда mwrite требует аргумент");
+
+					long mc = Long.parseLong(cmds[++i], 16);
 					long addr = cpu.getRegValue(Reg.MP);
-					checkResult(cpu.executeMCWrite());
+					checkResult(cpu.executeMCWrite(mc));
 					printMicroMemory(addr);
 					continue;
 				}
