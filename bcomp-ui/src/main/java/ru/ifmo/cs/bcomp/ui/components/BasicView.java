@@ -363,7 +363,6 @@ public class BasicView extends BCompPanel {
 	@Override
 	public void stepFinish() {
 		super.stepFinish();
-		cycleview.update();
 	}
 
 	public void redrawArrows() {
