@@ -9,6 +9,7 @@ import ru.ifmo.cs.bcomp.CPU;
 import ru.ifmo.cs.bcomp.MCDecoder;
 import ru.ifmo.cs.bcomp.MicroCode;
 import static ru.ifmo.cs.bcomp.RunningCycle.*;
+import static ru.ifmo.cs.bcomp.Utils.toHex;
 
 /**
  *
@@ -31,8 +32,11 @@ public class MicroCodeDecoder {
 		for (int addr = infetch; addr < reserved; addr++) {
 			String[] decoded = MCDecoder.decodeMC(cpu, addr);
 
-			System.out.println((decoded[0] == null ? "\t\t" : decoded[0] + (decoded[0].length() > 7 ? "\t" : "\t\t")) +
-				decoded[1] + "\t" + decoded[2]);
+			System.out.println(
+				toHex(addr, 8) + " " +
+				decoded[1] + "\t" + 
+				(decoded[0] == null ? "\t\t" : decoded[0] + (decoded[0].length() > 7 ? "\t" : "\t\t")) +
+				decoded[2]);
 		}
 	}
 }
