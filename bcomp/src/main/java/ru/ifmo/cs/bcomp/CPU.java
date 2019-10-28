@@ -275,7 +275,7 @@ public class CPU {
 		for (RunningCycle cycle : RunningCycle.values())
 			labels.put(cycle, findLabel(cycle.name()));
 
-		mp.setValue(findLabel("HLT"));
+		mp.setValue(labels.get(RunningCycle.HALT));
 	}
 
 	private Control newValve(DataSource input, long width, long startbit, ControlSignal cs, DataDestination ... dsts) {
