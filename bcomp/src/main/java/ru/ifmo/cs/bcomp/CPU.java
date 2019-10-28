@@ -542,7 +542,7 @@ public class CPU {
 		if (lock.tryLock()) {
 			try {
 				microcode.setValue(ir.getValue());
-				ir.setValue(0);
+				mp.setValue(0);
 			} finally {
 				lock.unlock();
 			}
@@ -555,7 +555,7 @@ public class CPU {
 		if (lock.tryLock()) {
 			try {
 				valves.get(CLOCK0).setValue(1);
-				ir.setValue(0);
+				mp.setValue(0);
 			} finally {
 				lock.unlock();
 			}
