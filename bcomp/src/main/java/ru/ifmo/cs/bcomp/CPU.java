@@ -570,7 +570,7 @@ public class CPU {
 		int i;
 
 		for (i = cycles.length - 1; i > 0; i--)
-			if (addr > labels.get(cycles[i]))
+			if (addr >= labels.get(cycles[i]))
 				return cycles[i];
 
 		return cycles[i];
