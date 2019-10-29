@@ -240,7 +240,7 @@ public class Nightmare {
 			new SignalListener(regs.get(SP), WRSP),
 			new SignalListener(regs.get(AC), WRAC),
 			new SignalListener(regs.get(BR), WRBR),
-			new SignalListener(regs.get(PS), WRPS, SETC, SETV, STNZ, DINT, EINT, HALT),
+			new SignalListener(regs.get(PS), WRPS, SETC, SETV, STNZ, DINT, EINT, HALT, SET_PROGRAM),
 			new SignalListener(regs.get(AR), WRAR),
 		};
 

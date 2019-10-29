@@ -211,6 +211,7 @@ public enum ControlSignal {
 	TYPE,
 	/**
 	 * Псевдосигнал: Переключение работа/останов
+	 * @deprecated
 	 */
 	SET_RUN_STATE,
 	/**

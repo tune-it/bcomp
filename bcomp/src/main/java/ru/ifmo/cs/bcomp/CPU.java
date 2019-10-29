@@ -49,7 +49,6 @@ public class CPU {
 	private final Bus vv;
 	private final Bus expected;
 	private final Bus newmp;
-	private final PartWriter stateProgram;
 	private volatile boolean clock = true;
 
 	private final ReentrantLock tick = new ReentrantLock();
@@ -76,7 +75,7 @@ public class CPU {
 						cpuStartListener.run();
 
 					if (clock)
-						stateProgram.setValue(1);
+						valves.get(SET_PROGRAM).setValue(1);
 
 					do {
 						if (tickStartListener != null)
@@ -91,7 +90,7 @@ public class CPU {
 
 						if (tickFinishListener != null)
 							tickFinishListener.run();
-					} while (ps.getValue(State.PROG.ordinal()) == 1);
+					} while (ps.getValue(PROG.ordinal()) == 1);
 
 					if (cpuStopListener != null)
 						cpuStopListener.run();
@@ -225,6 +224,7 @@ public class CPU {
 		Control setv;
 		PartWriter writeto15 = new PartWriter(swout, 1, DATA_WIDTH - 1);
 		PartWriter ei = new PartWriter(ps, 1, EI.ordinal());
+		PartWriter stateProgram = new PartWriter(ps, 1, PROG.ordinal());
 		valves.put(SEXT, c = new SignExtender(aluout, 8, SEXT.ordinal() - 16, swout));
 		clock1.addDestination(new Not(TYPE.ordinal(),
 			new Valve(mr, VR_WIDTH, 16, 0,
@@ -257,11 +257,12 @@ public class CPU {
 				newValveH(Consts.consts[1], 1, 0, CLRF),
 				newValveH(Consts.consts[0], 1, 0, DINT, ei),
 				newValveH(Consts.consts[1], 1, 0, EINT, ei),
-				newValveH(Consts.consts[0], 1, 0, HALT, stateProgram = new PartWriter(ps, 1, PROG.ordinal()))
+				newValveH(Consts.consts[0], 1, 0, HALT, stateProgram)
 			)
 		));
 		valves.put(SHRF, shrf);
 		valves.put(SETV, setv);
+		valves.put(SET_PROGRAM, new Valve(Consts.consts[1], 1, 0, 0, stateProgram));
 
 		clock1.addDestination(new DataDestination() {
 			public void setValue(long value) {
@@ -275,7 +276,7 @@ public class CPU {
 		for (RunningCycle cycle : RunningCycle.values())
 			labels.put(cycle, findLabel(cycle.name()));
 
-		mp.setValue(labels.get(STOP));
+		mp.setValue(labels.get(STOP) + 1);
 	}
 
 	private Control newValve(DataSource input, long width, long startbit, ControlSignal cs, DataDestination ... dsts) {
