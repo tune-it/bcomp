@@ -29,7 +29,7 @@ public class ALUView extends JComponent {
 			0, 0, offset, 0, 0, height - 1, height - 1
 		};
 
-		JLabel title = new JLabel("АЛУ", JLabel.CENTER);
+		JLabel title = new JLabel("ALU", JLabel.CENTER);
 		title.setFont(FONT_COURIER_BOLD_45);
 		title.setBounds(offset, offset, width - 2 * offset, height - offset);
 		add(title);

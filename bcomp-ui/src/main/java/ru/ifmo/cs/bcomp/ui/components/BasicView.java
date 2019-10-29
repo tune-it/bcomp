@@ -4,18 +4,17 @@
 
 package ru.ifmo.cs.bcomp.ui.components;
 
-import ru.ifmo.cs.bcomp.CPU;
-import ru.ifmo.cs.bcomp.ControlSignal;
+import ru.ifmo.cs.bcomp.*;
 
-import ru.ifmo.cs.bcomp.Reg;
-import ru.ifmo.cs.bcomp.SignalListener;
 import ru.ifmo.cs.bcomp.ui.GUI;
+import ru.ifmo.cs.components.DataDestination;
 
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.HashMap;
 
+import static ru.ifmo.cs.bcomp.ControlSignal.*;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 
 /**
@@ -112,138 +111,28 @@ public class BasicView extends BCompPanel {
 					}})
 			},
 				new HashMap<String, BusView>() {{
-
-
-					put("BR_2_ALU", new BusView(new int[][]{
-							{BUS_RIGHT_X1, BUS_FROM_DATA_Y},
-							{BUS_RIGHT_X1, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_DOWN}
-					}, ControlSignal.RDBR));
-					put("ALU_2_BR", new BusView(new int[][]{
-							{BUS_RIGHT_X1, BUS_FROM_DATA_Y},
-							{BUS_RIGHT_X1, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_DOWN}
-					}, ControlSignal.WRBR));
-					put("PS_2_ALU", new BusView(new int[][]{
-							{BUS_RIGHT_X1, BUS_FROM_DATA_Y},
-							{BUS_RIGHT_X1, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_DOWN}
-					}, ControlSignal.RDPS));
-					put("ALU_2_PS", new BusView(new int[][]{
-							{BUS_RIGHT_X1, BUS_FROM_DATA_Y},
-							{BUS_RIGHT_X1, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_DOWN}
-					}, ControlSignal.WRPS));
-					put("COMM_2_ALL", new BusView(new int[][]{
-							{BUS_RIGHT_X1, BUS_FROM_DATA_Y},
-							{BUS_RIGHT_X1, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_DOWN}
-					}, ControlSignal.WRBR, ControlSignal.WRAC,ControlSignal.WRIP,ControlSignal.WRCR,ControlSignal.WRDR,ControlSignal.WRAR,ControlSignal.WRPS,ControlSignal.WRSP));
-					put("ALU_2_COMM", new BusView(new int[][]{
-							{BUS_RIGHT_X1, BUS_FROM_DATA_Y},
-							{BUS_RIGHT_X1, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_DOWN}
-					},ControlSignal.WRBR, ControlSignal.WRAC,ControlSignal.WRIP,ControlSignal.WRCR,ControlSignal.WRDR,ControlSignal.WRAR,ControlSignal.WRPS,ControlSignal.WRSP ));
-					put("DR_2_ALU", new BusView(new int[][]{
-							{BUS_RIGHT_X1, BUS_FROM_DATA_Y},
-							{BUS_RIGHT_X1, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_DOWN}
-					}, ControlSignal.RDDR));
-					put("CR_2_ALU", new BusView(new int[][]{
-							{BUS_FROM_INSTR_X, BUS_FROM_INSTR_Y},
-							{BUS_FROM_INSTR_X, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_DOWN}
-					}, ControlSignal.RDCR));
-					put("IP_2_ALU", new BusView(new int[][]{
-							{BUS_FROM_IP_X, BUS_FROM_IP_Y},
-							{BUS_RIGHT_X1, BUS_FROM_IP_Y},
-							{BUS_RIGHT_X1, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_DOWN}
-					}, ControlSignal.RDIP));
-					put("SP_2_ALU", new BusView(new int[][]{
-							{BUS_FROM_IP_X, BUS_FROM_IP_Y},
-							{BUS_RIGHT_X1, BUS_FROM_IP_Y},
-							{BUS_RIGHT_X1, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_UP},
-							{BUS_RIGHT_X, BUS_LEFT_INPUT_DOWN}
-					}, ControlSignal.RDSP));
-					put("AC_2_ALU", new BusView(new int[][]{
-							{BUS_FROM_ACCUM_X, BUS_FROM_ACCUM_Y},
-							{BUS_LEFT_INPUT_X1, BUS_FROM_ACCUM_Y},
-							{BUS_LEFT_INPUT_X1, BUS_LEFT_INPUT_UP},
-							{BUS_LEFT_INPUT_X, BUS_LEFT_INPUT_UP},
-							{BUS_LEFT_INPUT_X, BUS_LEFT_INPUT_DOWN}
-					}, ControlSignal.RDAC));
-					put("IR_2_ALU", new BusView(new int[][]{
-							{BUS_LEFT_INPUT_X1, BUS_KEY_ALU},
-							{BUS_LEFT_INPUT_X1, BUS_LEFT_INPUT_UP},
-							{BUS_LEFT_INPUT_X, BUS_LEFT_INPUT_UP},
-							{BUS_LEFT_INPUT_X, BUS_LEFT_INPUT_DOWN}
-					}, ControlSignal.RDIR));
-					put("ALU_2_AR", new BusView(new int[][]{
-							{FROM_ALU_X, FROM_ALU_Y},
-							{FROM_ALU_X, FROM_ALU_Y1},
-							{BUS_RIGHT_TO_X, FROM_ALU_Y1},
-							{BUS_RIGHT_TO_X, BUS_TO_ADDR_Y},
-							{BUS_TO_ADDR_X, BUS_TO_ADDR_Y}
-					}, ControlSignal.WRAR));
-					put("ALU_2_DR", new BusView(new int[][]{
-							{FROM_ALU_X, FROM_ALU_Y},
-							{FROM_ALU_X, FROM_ALU_Y1},
-							{BUS_RIGHT_TO_X, FROM_ALU_Y1},
-							{BUS_RIGHT_TO_X, BUS_TO_DATA_Y},
-							{BUS_TO_DATA_X, BUS_TO_DATA_Y}
-					}, ControlSignal.WRDR));
-					put("ALU_2_CR", new BusView(new int[][]{
-							{FROM_ALU_X, FROM_ALU_Y},
-							{FROM_ALU_X, FROM_ALU_Y1},
-							{BUS_RIGHT_TO_X, FROM_ALU_Y1},
-							{BUS_RIGHT_TO_X, BUS_TO_ADDR_Y},
-							{BUS_TO_INSTR_X, BUS_TO_ADDR_Y}
-					}, ControlSignal.WRCR));
-					put("ALU_2_IP", new BusView(new int[][]{
-							{FROM_ALU_X, FROM_ALU_Y},
-							{FROM_ALU_X, FROM_ALU_Y1},
-							{BUS_RIGHT_TO_X, FROM_ALU_Y1},
-							{BUS_RIGHT_TO_X, BUS_FROM_IP_Y},
-							{BUS_TO_DATA_X, BUS_FROM_IP_Y}
-					}, ControlSignal.WRIP));
-					put("ALU_2_SP", new BusView(new int[][]{
-							{FROM_ALU_X, FROM_ALU_Y},
-							{FROM_ALU_X, FROM_ALU_Y1},
-							{BUS_RIGHT_TO_X, FROM_ALU_Y1},
-							{BUS_RIGHT_TO_X, BUS_FROM_IP_Y},
-							{BUS_TO_DATA_X, BUS_FROM_IP_Y}
-					}, ControlSignal.WRSP));
-					put("ALU_2_AC", new BusView(new int[][]{
-							{FROM_ALU_X, FROM_ALU_Y},
-							{FROM_ALU_X, TO_ACCUM_Y}
-					}, ControlSignal.WRAC));
-					put("MEM_IO", new BusView(new int[][]{
-							{BUS_ADDR_X1, BUS_TO_ADDR_Y},
-							{BUS_ADDR_X2, BUS_TO_ADDR_Y}
-					}, ControlSignal.LOAD, ControlSignal.STOR));
-					put("MEM_R", new BusView(new int[][]{
-							{BUS_READ_X2, BUS_READ_Y},
-							{BUS_READ_X1, BUS_READ_Y}
-					}, ControlSignal.LOAD));
-					put("MEM_W", new BusView(new int[][]{
-							{BUS_ADDR_X1, BUS_WRITE_Y},
-							{BUS_ADDR_X2, BUS_WRITE_Y}
-					}, ControlSignal.STOR));
-                    put("CU", new BusView(new int[][]{
-                            {BUS_INSTR_TO_CU_X, BUS_FROM_INSTR_Y},
-                            {BUS_INSTR_TO_CU_X, BUS_INSTR_TO_CU_Y}
-                    }));
+					put("BR_2_ALU", new BusView( RDBR));
+					put("ALU_2_BR", new BusView(WRBR));
+					put("PS_2_ALU", new BusView(RDPS));
+					put("ALU_2_PS", new BusView( WRPS));
+					put("COMM_2_ALL", new BusView( WRBR, WRAC,WRIP,WRCR,WRDR,WRAR,WRPS,WRSP));
+					put("ALU_2_COMM", new BusView(WRBR, WRAC,WRIP,WRCR,WRDR,WRAR,WRPS,WRSP ));
+					put("DR_2_ALU", new BusView( RDDR));
+					put("CR_2_ALU", new BusView( RDCR));
+					put("IP_2_ALU", new BusView(RDIP));
+					put("SP_2_ALU", new BusView( RDSP));
+					put("AC_2_ALU", new BusView( RDAC));
+					put("IR_2_ALU", new BusView(RDIR));
+					put("ALU_2_AR", new BusView( WRAR));
+					put("ALU_2_DR", new BusView( WRDR));
+					put("ALU_2_CR", new BusView( WRCR));
+					put("ALU_2_IP", new BusView( WRIP));
+					put("ALU_2_SP", new BusView(WRSP));
+					put("ALU_2_AC", new BusView( WRAC));
+					put("MEM_IO", new BusView( LOAD, STOR));
+					put("MEM_R", new BusView( LOAD));
+					put("MEM_W", new BusView(STOR));
+					put("CU", new BusView());
 
 				}}
 		);
@@ -327,7 +216,19 @@ public class BasicView extends BCompPanel {
 		constraintsF.insets=new Insets(101+CELL_HEIGHT, 80, 0, 0);
 		regPanel.add(cmanager.getFlagView(2),constraintsF);
 
+		cpu.addDestination(SET_PROGRAM, new DataDestination() {
+			@Override
+			public void setValue(long value) {
+				cycleview.updateProg(true);
+			}
+		});
 
+		cpu.addDestination(HALT, new DataDestination() {
+			@Override
+			public void setValue(long value) {
+				cycleview.updateProg(false);
+			}
+		});
 
 		GridBagConstraints constraintsIN2=new GridBagConstraints(){{
 			gridy=3;
@@ -343,8 +244,7 @@ public class BasicView extends BCompPanel {
 				redrawArrows();
 			}
 		});
-
-
+	redrawArrows();
 	}
 
 
@@ -539,7 +439,7 @@ public class BasicView extends BCompPanel {
 					});
 					break;
 				case "MEM_R":
-					bus.calcBounds(cmanager.getMem().getY()<30?
+					bus.calcBounds(cmanager.getMem().getY()<35?
 							new int[][]{
 									{regPanelX+cmanager.getMem().getX()-5, cmanager.getMem().getY()+10},
 									{regPanelX+data.getX() +REG_16_WIDTH/2-10, cmanager.getMem().getY()+10},
@@ -554,7 +454,7 @@ public class BasicView extends BCompPanel {
 					break;
 				case "MEM_W":
 					bus.calcBounds(
-							cmanager.getMem().getY()<30?
+							cmanager.getMem().getY()<35?
 									new int[][]{{regPanelX+data.getX()+REG_16_WIDTH/2+10, data.getY()-5 },
 											{regPanelX+data.getX() + REG_16_WIDTH/2+10, cmanager.getMem().getY()+25},
 											{regPanelX+cmanager.getMem().getX()-13, cmanager.getMem().getY()+25},

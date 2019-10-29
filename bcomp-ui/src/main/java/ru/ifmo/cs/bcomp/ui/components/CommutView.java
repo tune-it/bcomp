@@ -16,7 +16,7 @@ public class CommutView extends JComponent {
 
         this.x=x;this.y=y;this.wight=width;this.height=height;
 
-        JLabel title = new JLabel("Коммутатор", JLabel.CENTER);
+        JLabel title = new JLabel("Commutator", JLabel.CENTER);
         title.setFont(FONT_COURIER_BOLD_21);
         title.setBounds(x, y, width, height);
         add(title);

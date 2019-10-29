@@ -8,14 +8,14 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.swing.*;
 
 import ru.ifmo.cs.bcomp.*;
 import ru.ifmo.cs.bcomp.ui.GUI;
 
 import static ru.ifmo.cs.bcomp.ControlSignal.*;
-import static ru.ifmo.cs.bcomp.ControlSignal.EINT;
-import static ru.ifmo.cs.bcomp.ControlSignal.HALT;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 
 
@@ -57,33 +57,34 @@ public class ComponentManager {
 			setLayout(new GridBagLayout());
 			GridBagConstraints constraints = new GridBagConstraints() {{
 				anchor = GridBagConstraints.WEST;
-				fill=GridBagConstraints.HORIZONTAL;
+				fill = GridBagConstraints.HORIZONTAL;
 				gridx = 0;
 				gridy = 0;
 				weightx = 1;
-				insets=new Insets(1,1,1,1);
+				insets = new Insets(1, 1, 1, 1);
 			}};
 			buttons = new JButton[buttonProperties.length];
 
-			for (int i = 0; i < buttons.length-2; i++) {
+			for (int i = 0; i < buttons.length - 2; i++) {
 				buttons[i] = new JButton(buttonProperties[i].texts[0]);
 				buttons[i].setForeground(buttonColors[0]);
 				buttons[i].setFont(FONT_COURIER_PLAIN_12);
 				buttons[i].setFocusable(false);
 				buttons[i].addActionListener(buttonProperties[i].listener);
 				buttons[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
-				constraints.gridwidth=i==0?2:1;
-				if (i>0) constraints.gridy=1;
-				if (i==2) constraints.gridx=0;
+				constraints.gridwidth = i == 0 ? 2 : 1;
+				if (i > 0) constraints.gridy = 1;
+				if (i == 2) constraints.gridx = 0;
 				add(buttons[i], constraints);
-				if (i==2) constraints.gridx+=3; else   constraints.gridx++;
+				if (i == 2) constraints.gridx += 3;
+				else constraints.gridx++;
 
 			}
-			constraints.gridy=0;
-			constraints.gridx=3;
-			constraints.fill=GridBagConstraints.NONE;
-			constraints.anchor=GridBagConstraints.CENTER;
-			rbRanStop=new JRadioButton(buttonProperties[5].texts[0]);
+			constraints.gridy = 0;
+			constraints.gridx = 3;
+			constraints.fill = GridBagConstraints.NONE;
+			constraints.anchor = GridBagConstraints.CENTER;
+			rbRanStop = new JRadioButton(buttonProperties[5].texts[0]);
 			rbRanStop.setFont(FONT_COURIER_PLAIN_12);
 			rbRanStop.setBackground(new Color(200, 221, 242));
 			rbRanStop.setBorderPainted(false);
@@ -91,10 +92,10 @@ public class ComponentManager {
 			rbRanStop.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			rbRanStop.setFocusPainted(false);
 			rbRanStop.setFocusable(false);
-			add(rbRanStop,constraints);
+			add(rbRanStop, constraints);
 			constraints.gridx++;
 
-			rbTact=new JRadioButton((buttonProperties[6].texts[0]));
+			rbTact = new JRadioButton((buttonProperties[6].texts[0]));
 			rbTact.setFont(FONT_COURIER_PLAIN_12);
 			rbTact.setBackground(new Color(200, 221, 242));
 			rbTact.setBorderPainted(false);
@@ -102,49 +103,49 @@ public class ComponentManager {
 			rbTact.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			rbTact.setFocusPainted(false);
 			rbTact.setFocusable(false);
-			add(rbTact,constraints);
+			add(rbTact, constraints);
 		}
 	}
-
+	private ResourceBundle res=ResourceBundle.getBundle("ru.ifmo.cs.bcomp.ui.components.loc", Locale.getDefault());
 	private Color[] buttonColors = new Color[] { COLOR_TEXT, COLOR_ACTIVE };
 	private ButtonProperties[] buttonProperties = {
-		new ButtonProperties(new String[] { "F4 Ввод адреса" }, new ActionListener() {
+		new ButtonProperties(new String[] { res.getString("setip") }, new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				cmdEnterAddr();
 			}
 		}),
-			new ButtonProperties( new String[] { "F6 Чтение" }, new ActionListener() {
+			new ButtonProperties( new String[] { res.getString("read") }, new ActionListener() {
 
 		public void actionPerformed(ActionEvent e) {
 			cmdRead();
 		}
 	}),
-		new ButtonProperties( new String[] { "F5 Запись" }, new ActionListener() {
+		new ButtonProperties( new String[] { res.getString("write") }, new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				cmdWrite();
 			}
 		}),
 
-		new ButtonProperties( new String[] { "F7 Пуск" }, new ActionListener() {
+		new ButtonProperties( new String[] { res.getString("start") }, new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				cmdStart();
 			}
 		}),
-		new ButtonProperties( new String[] { "F8 Продолжение" }, new ActionListener() {
+		new ButtonProperties( new String[] { res.getString("continue") }, new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				cmdContinue();
 			}
 		}),
-		new ButtonProperties( new String[] { "F9 Останов", "F9  Работа" }, new ActionListener() {
+		new ButtonProperties( new String[] { res.getString("stop"), res.getString("run") }, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cmdInvertRunState();
 			}
 		}),
-		new ButtonProperties(new String[] { "Shift+F9 Такт" }, new ActionListener() {
+		new ButtonProperties(new String[] { res.getString("tick") }, new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				cmdInvertClockState();
@@ -308,7 +309,7 @@ public class ComponentManager {
 			new SignalListener(regs.get(Reg.IP), ControlSignal.WRIP),
 			new SignalListener(regs.get(Reg.AC), ControlSignal.WRAC),
 			new SignalListener(regs.get(Reg.PS),
-					RDPS,WRPS,SETC, SETV, STNZ, DINT, EINT, HALT),
+					RDPS,WRPS,SETC, SETV, STNZ, DINT, EINT, HALT,SET_PROGRAM),
 
 		};
 
@@ -332,14 +333,14 @@ public class ComponentManager {
 		cpu.addDestination(ControlSignal.SETC, new DataDestination() {
 			@Override
 			public void setValue(long value) {
-				flagViews[3].setActive(cpu.getRegister(Reg.PS).getValue(0)==1);
+				flagViews[3].setActive(cpu.getProgramState(State.C)==1);
 			}
 		});
 
 		cpu.addDestination(ControlSignal.SETV, new DataDestination() {
 			@Override
 			public void setValue(long value) {
-				flagViews[2].setActive(cpu.getRegister(Reg.PS).getValue(1)==1);
+				flagViews[2].setActive(cpu.getProgramState(State.V)==1);
 			}
 		});
 

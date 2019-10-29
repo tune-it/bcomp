@@ -29,10 +29,9 @@ public class BusView {
 
 	private boolean isVisible = true;
 
-	public BusView(int[][] points, ControlSignal ... signals) {
+	public BusView( ControlSignal ... signals) {
 		this.signals = signals;
 
-		calcBounds(points);
 	}
 
 	public void calcBounds(int[][] points) {
