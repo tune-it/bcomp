@@ -443,12 +443,12 @@ public class CPU {
 	 * Jump to specified address
 	 * <p>lock should be acquired before calling
 	 */
-	private void jump(int addr) {
+	private void jump(long addr) {
 		if (addr > 0)
 			mp.setValue(addr);
 	}
 
-	private boolean startFrom(int addr) {
+	private boolean startFrom(long addr) {
 		if (lock.tryLock()) {
 			try {
 				jump(addr);
@@ -481,7 +481,7 @@ public class CPU {
 		return startFrom(0);
 	}
 
-	private boolean executeFrom(int label) {
+	private boolean executeFrom(long label) {
 		if (lock.tryLock()) {
 			try {
 				jump(label);
