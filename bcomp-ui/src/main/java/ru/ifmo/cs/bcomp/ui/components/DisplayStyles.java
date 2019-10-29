@@ -29,7 +29,7 @@ public class DisplayStyles {
             fontPlain = Font.createFont(Font.TRUETYPE_FONT, DisplayStyles.class.getClassLoader().getResourceAsStream("Roboto-Regular.ttf"));
             fontBold = Font.createFont(Font.TRUETYPE_FONT, DisplayStyles.class.getClassLoader().getResourceAsStream("Roboto-Medium.ttf"));
         } catch (Exception ex) {
-
+            ex.printStackTrace();
             fontPlain = new Font("Courier New", Font.PLAIN, 24);
             fontBold = new Font("Courier New", Font.BOLD, 24);
 

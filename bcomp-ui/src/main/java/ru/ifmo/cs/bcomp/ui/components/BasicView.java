@@ -51,7 +51,6 @@ public class BasicView extends BCompPanel {
 							weightx = 0.5;
 							weighty = 0.5;
 							insets = new Insets(60, 40, 0, 0);
-							// anchor = GridBagConstraints.WEST;
 
 						}}
 
@@ -63,8 +62,7 @@ public class BasicView extends BCompPanel {
 							gridx = 4;
 							weightx = 0.5;
 							weighty = 0.5;
-							insets = new Insets(0, 0, 0, 37);
-							//  anchor = GridBagConstraints.WEST;
+							insets = new Insets(0, 0, 0, 33);
 
 						}}
 						),
@@ -75,7 +73,6 @@ public class BasicView extends BCompPanel {
 							gridx = 4;
 							weightx = 0.5;
 							weighty = 0.5;
-							//anchor = GridBagConstraints.WEST;
 							insets = new Insets(0, 40, 0, 0);
 						}}
 						),
@@ -85,8 +82,7 @@ public class BasicView extends BCompPanel {
 							gridy = 0;
 							gridx = 3;
 							weighty = 0.5;
-							weightx=0.5;
-							// anchor=EAST;
+							weightx = 0.5;
 							insets = new Insets(60, 23, 0, 60);
 						}}),
 					new RegisterProperties(Reg.SP, REG_ACCUM_X_BV, 0, false,false,
@@ -95,19 +91,19 @@ public class BasicView extends BCompPanel {
 								gridy = 3;
 								gridx = 4;
 								weighty = 0.5;
-								insets = new Insets(0, 0, 80, 37);
+								insets = new Insets(0, 0, 80, 33);
 							}}),
 					new RegisterProperties(Reg.BR,0,0,false,true,
 							new GridBagConstraints(){{
-						gridy=1;
-						gridx=3;
-						insets=new Insets(0,3,0,40);
+						gridy = 1;
+						gridx = 3;
+						insets = new Insets(0,3,0,40);
 					}}),
 					new RegisterProperties(Reg.PS,0,0,false, true,
 							new GridBagConstraints(){{
-						gridy=2;
-						gridx=3;
-						insets=new Insets(0,3,0,40);
+						gridy = 2;
+						gridx = 3;
+						insets = new Insets(0,3,0,40);
 					}})
 			},
 				new HashMap<String, BusView>() {{
@@ -115,70 +111,73 @@ public class BasicView extends BCompPanel {
 					put("ALU_2_BR", new BusView(WRBR));
 					put("PS_2_ALU", new BusView(RDPS));
 					put("ALU_2_PS", new BusView( WRPS));
-					put("COMM_2_ALL", new BusView( WRBR, WRAC,WRIP,WRCR,WRDR,WRAR,WRPS,WRSP));
-					put("ALU_2_COMM", new BusView(WRBR, WRAC,WRIP,WRCR,WRDR,WRAR,WRPS,WRSP ));
-					put("DR_2_ALU", new BusView( RDDR));
-					put("CR_2_ALU", new BusView( RDCR));
+					put("COMM_2_ALL", new BusView( WRBR,WRAC,WRIP,WRCR,WRDR,WRAR,WRPS,WRSP));
+					put("ALU_2_COMM", new BusView(WRBR,WRAC,WRIP,WRCR,WRDR,WRAR,WRPS,WRSP ));
+					put("DR_2_ALU", new BusView(RDDR));
+					put("CR_2_ALU", new BusView(RDCR));
 					put("IP_2_ALU", new BusView(RDIP));
-					put("SP_2_ALU", new BusView( RDSP));
-					put("AC_2_ALU", new BusView( RDAC));
+					put("SP_2_ALU", new BusView(RDSP));
+					put("AC_2_ALU", new BusView(RDAC));
 					put("IR_2_ALU", new BusView(RDIR));
-					put("ALU_2_AR", new BusView( WRAR));
-					put("ALU_2_DR", new BusView( WRDR));
-					put("ALU_2_CR", new BusView( WRCR));
-					put("ALU_2_IP", new BusView( WRIP));
+					put("ALU_2_AR", new BusView(WRAR));
+					put("ALU_2_DR", new BusView(WRDR));
+					put("ALU_2_CR", new BusView(WRCR));
+					put("ALU_2_IP", new BusView(WRIP));
 					put("ALU_2_SP", new BusView(WRSP));
-					put("ALU_2_AC", new BusView( WRAC));
-					put("MEM_IO", new BusView( LOAD, STOR));
-					put("MEM_R", new BusView( LOAD));
+					put("ALU_2_AC", new BusView(WRAC));
+					put("MEM_IO", new BusView(LOAD,STOR));
+					put("MEM_R", new BusView(LOAD));
 					put("MEM_W", new BusView(STOR));
 					put("CU", new BusView());
-
 				}}
 		);
 		add(regPanel,BorderLayout.CENTER);
 		cpu = gui.getCPU();
 
-		setSignalListeners(new SignalListener[] { });
+		setSignalListeners(new SignalListener[] {
+				new SignalListener(new DataDestination() {
+					@Override
+					public void setValue(long value) {
+						cycleview.updateProg(cpu.getProgramState(State.PROG) == 1);
+					}
+				},HALT,SET_PROGRAM)
+		});
 
 		GridBagConstraints constraintsALU = new GridBagConstraints() {{
-			gridx =3;
+			gridx  = 3;
 			gridy = 4;
-			gridwidth=2;
-			weightx=0.5;
-			weighty=0.5;
+			gridwidth = 2;
+			weightx = 0.5;
+			weighty = 0.5;
 			anchor = GridBagConstraints.NORTH;
 			insets = new Insets(0, 30, 100, 0);
 		}};
-		alu=new ALUView(REG_C_X_BV, ALU_Y, ALU_WIDTH, ALU_HEIGHT);
+		alu = new ALUView(REG_C_X_BV, ALU_Y, ALU_WIDTH, ALU_HEIGHT);
 		alu.setPreferredSize(alu.getSize());
 		regPanel.add(alu,constraintsALU);
 
 		GridBagConstraints constraintsComm = new GridBagConstraints() {{
-			gridx =3;
+			gridx  = 3;
 			gridy = 4;
-			gridwidth=2;
-			weightx=0.5;
-			weighty=0.5;
+			gridwidth = 2;
+			weightx = 0.5;
+			weighty = 0.5;
 
 			anchor = GridBagConstraints.NORTH;
 			insets = new Insets(ALU_HEIGHT+17, 30, 0, 0);
 		}};
-		commutView=new CommutView(0,0,150,30);
+		commutView = new CommutView(0,0,150,30);
 		commutView.setPreferredSize(commutView.getSize());
 		regPanel.add(commutView,constraintsComm);
 
 		GridBagConstraints constraintsCycle = new GridBagConstraints() {{
 			gridx = 4;
 			gridy = 3;
-
-			gridheight=2;
+			gridheight = 2;
 
 			anchor = GridBagConstraints.CENTER;
 			insets = new Insets(20, 90, 0, 0);
 		}};
-
-
 		cycleview = new RunningCycleView(cpu, REG_INSTR_X_BV, CYCLEVIEW_Y);
 		cycleview.setPreferredSize(cycleview.getSize());
 		regPanel.add(cycleview, constraintsCycle);
@@ -186,12 +185,11 @@ public class BasicView extends BCompPanel {
 		GridBagConstraints constraintMem = new GridBagConstraints() {{
 			gridx = 5;
 			gridy = 0;
-			gridheight=5;
-			weighty=0;
+			gridheight = 5;
+			weighty = 0;
 			anchor = GridBagConstraints.CENTER;
 			insets = new Insets(0, 0, 0, 0);
 		}};
-
 		regPanel.add(cmanager.getMem(),constraintMem);
 
 
@@ -199,41 +197,25 @@ public class BasicView extends BCompPanel {
 			fill = GridBagConstraints.NONE;
 			gridy = 4;
 			gridx = 3;
-			gridwidth=2;
+			gridwidth = 2;
 			weightx = 0.5;
 			weighty = 0;
-			anchor=NORTH;
+			anchor = NORTH;
 			insets = new Insets(101+CELL_HEIGHT, 0, 0, 20);
 		}};
-
-
-
 		regPanel.add(cmanager.getFlagView(1),constraintsF);
-		constraintsF.insets.right+=60;
+		constraintsF.insets.right+= 60;
 		regPanel.add(cmanager.getFlagView(0),constraintsF);
-		constraintsF.insets.right=0;constraintsF.insets.left=140;
+		constraintsF.insets.right = 0;
+		constraintsF.insets.left = 140;
 		regPanel.add(cmanager.getFlagView(3),constraintsF);
-		constraintsF.insets=new Insets(101+CELL_HEIGHT, 80, 0, 0);
+		constraintsF.insets = new Insets(101+CELL_HEIGHT, 80, 0, 0);
 		regPanel.add(cmanager.getFlagView(2),constraintsF);
 
-		cpu.addDestination(SET_PROGRAM, new DataDestination() {
-			@Override
-			public void setValue(long value) {
-				cycleview.updateProg(true);
-			}
-		});
-
-		cpu.addDestination(HALT, new DataDestination() {
-			@Override
-			public void setValue(long value) {
-				cycleview.updateProg(false);
-			}
-		});
-
-		GridBagConstraints constraintsIN2=new GridBagConstraints(){{
-			gridy=3;
-			gridx=3;
-			insets=new Insets(0,3,80,40);
+		GridBagConstraints constraintsIN2 = new GridBagConstraints(){{
+			gridy = 3;
+			gridx = 3;
+			insets = new Insets(0,3,80,40);
 		}};
 		regPanel.add(cmanager.getInput2(),constraintsIN2);
 
@@ -257,7 +239,7 @@ public class BasicView extends BCompPanel {
 
 	@Override
 	public String getPanelName() {
-		return "Базовая ЭВМ";
+		return cmanager.getRes().getString("basename");
 	}
 
 	@Override
@@ -266,13 +248,12 @@ public class BasicView extends BCompPanel {
 	}
 
 	public void redrawArrows() {
-		busesMap.keySet().forEach(key -> {
+		for(String key:busesMap.keySet()) {
 			BusView bus = busesMap.get(key);
 			RegisterView data = cmanager.getRegisterView(Reg.DR);
 			RegisterView addr = cmanager.getRegisterView(Reg.AR);
 			RegisterView instr = cmanager.getRegisterView(Reg.CR);
 			RegisterView accum = cmanager.getRegisterView(Reg.AC);
-			RegisterView keyReg = cmanager.getRegisterView(Reg.IR);
 			RegisterView ipReg = cmanager.getRegisterView(Reg.IP);
 			RegisterView spReg = cmanager.getRegisterView(Reg.SP);
 			RegisterView buf = cmanager.getRegisterView(Reg.BR);
@@ -474,6 +455,6 @@ public class BasicView extends BCompPanel {
 					});
 					break;
 			}
-		});
+		}
 	}
 }

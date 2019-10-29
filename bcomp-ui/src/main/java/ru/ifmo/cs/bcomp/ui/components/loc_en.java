@@ -16,6 +16,7 @@ public class loc_en extends ListResourceBundle {
             {"continue","F8 Continue"},
             {"tick","Shift+F9 Tick"},
             {"run","F9  Run"},
-            {"stop","F9 Stop  "}
+            {"stop","F9 Stop  "},
+            {"basename","Basic computer"}
     };
 }
