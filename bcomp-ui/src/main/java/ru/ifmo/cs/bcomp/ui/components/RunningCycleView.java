@@ -32,7 +32,7 @@ public class RunningCycleView extends BCompComponent {
 	private EnumMap<RunningCycle, Integer> cycles= new EnumMap<RunningCycle, Integer>(RunningCycle.class);
 
 	private final JLabel[] labels = new JLabel[cycleslabels.length];
-	private RunningCycle lastcycle = RunningCycle.HALT;
+	private RunningCycle lastcycle = RunningCycle.STOP;
 	private long lastprogram = 0;
 
 	public RunningCycleView(CPU cpu, int x, int y) {
@@ -62,9 +62,9 @@ public class RunningCycleView extends BCompComponent {
 		long newprogram = cpu.getProgramState(State.PROG);
 
 		if (newcycle != lastcycle) {
-			if (lastcycle != RunningCycle.HALT)
+			if (lastcycle != RunningCycle.STOP)
 				labels[cycles.get(lastcycle)].setForeground(COLOR_TEXT);
-			if (newcycle != RunningCycle.HALT)
+			if (newcycle != RunningCycle.STOP)
 			labels[cycles.get(newcycle)].setForeground(COLOR_ACTIVE);
 			lastcycle = newcycle;
 		}

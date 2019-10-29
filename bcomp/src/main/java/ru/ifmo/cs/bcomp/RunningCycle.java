@@ -55,9 +55,9 @@ public enum RunningCycle {
 	 */
 	SETIP,
 	/**
-	 * HALT
+	 * STOP
 	 */
-	HALT,
+	STOP,
 	/**
 	 * Reserved for future extension
 	 */

@@ -257,7 +257,7 @@ public class CPU {
 				newValveH(Consts.consts[1], 1, 0, CLRF),
 				newValveH(Consts.consts[0], 1, 0, DINT, ei),
 				newValveH(Consts.consts[1], 1, 0, EINT, ei),
-				newValveH(Consts.consts[0], 1, 0, ControlSignal.HALT, stateProgram = new PartWriter(ps, 1, PROG.ordinal()))
+				newValveH(Consts.consts[0], 1, 0, HALT, stateProgram = new PartWriter(ps, 1, PROG.ordinal()))
 			)
 		));
 		valves.put(SHRF, shrf);
@@ -275,7 +275,7 @@ public class CPU {
 		for (RunningCycle cycle : RunningCycle.values())
 			labels.put(cycle, findLabel(cycle.name()));
 
-		mp.setValue(labels.get(RunningCycle.HALT));
+		mp.setValue(labels.get(STOP));
 	}
 
 	private Control newValve(DataSource input, long width, long startbit, ControlSignal cs, DataDestination ... dsts) {
@@ -424,7 +424,7 @@ public class CPU {
 		try {
 			this.clock = clock;
 			if (!clock)
-				valves.get(ControlSignal.HALT).setValue(1L << (ControlSignal.HALT.ordinal() - 16));
+				valves.get(HALT).setValue(1L << (HALT.ordinal() - 16));
 		} finally {
 			tick.unlock();
 		}
