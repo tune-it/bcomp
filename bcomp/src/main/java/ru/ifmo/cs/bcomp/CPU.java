@@ -424,7 +424,7 @@ public class CPU {
 		try {
 			this.clock = clock;
 			if (!clock)
-				stateProgram.setValue(0);
+				valves.get(ControlSignal.HALT).setValue(1L << (ControlSignal.HALT.ordinal() - 16));
 		} finally {
 			tick.unlock();
 		}
