@@ -12,11 +12,12 @@ import ru.ifmo.cs.components.DataDestination;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.HashMap;
+import java.util.EnumMap;
+
 
 import static ru.ifmo.cs.bcomp.ControlSignal.*;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
-
+import static ru.ifmo.cs.bcomp.ui.components.BusNames.*;
 /**
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
@@ -106,29 +107,29 @@ public class BasicView extends BCompPanel {
 						insets = new Insets(0,3,0,40);
 					}})
 			},
-				new HashMap<String, BusView>() {{
-					put("BR_2_ALU", new BusView( RDBR));
-					put("ALU_2_BR", new BusView(WRBR));
-					put("PS_2_ALU", new BusView(RDPS));
-					put("ALU_2_PS", new BusView( WRPS));
-					put("COMM_2_ALL", new BusView( WRBR,WRAC,WRIP,WRCR,WRDR,WRAR,WRPS,WRSP));
-					put("ALU_2_COMM", new BusView(WRBR,WRAC,WRIP,WRCR,WRDR,WRAR,WRPS,WRSP ));
-					put("DR_2_ALU", new BusView(RDDR));
-					put("CR_2_ALU", new BusView(RDCR));
-					put("IP_2_ALU", new BusView(RDIP));
-					put("SP_2_ALU", new BusView(RDSP));
-					put("AC_2_ALU", new BusView(RDAC));
-					put("IR_2_ALU", new BusView(RDIR));
-					put("ALU_2_AR", new BusView(WRAR));
-					put("ALU_2_DR", new BusView(WRDR));
-					put("ALU_2_CR", new BusView(WRCR));
-					put("ALU_2_IP", new BusView(WRIP));
-					put("ALU_2_SP", new BusView(WRSP));
-					put("ALU_2_AC", new BusView(WRAC));
-					put("MEM_IO", new BusView(LOAD,STOR));
-					put("MEM_R", new BusView(LOAD));
-					put("MEM_W", new BusView(STOR));
-					put("CU", new BusView());
+				new EnumMap<BusNames, BusView>(BusNames.class){{
+					put(BR_ALU, new BusView( RDBR));
+					put(COMM_BR, new BusView(WRBR));
+					put(PS_ALU, new BusView(RDPS));
+					put(COMM_PS, new BusView( WRPS));
+					put(COMM_ALL, new BusView( WRBR,WRAC,WRIP,WRCR,WRDR,WRAR,WRPS,WRSP));
+					put(ALU_COMM, new BusView(WRBR,WRAC,WRIP,WRCR,WRDR,WRAR,WRPS,WRSP ));
+					put(DR_ALU, new BusView(RDDR));
+					put(CR_ALU, new BusView(RDCR));
+					put(IP_ALU, new BusView(RDIP));
+					put(SP_ALU, new BusView(RDSP));
+					put(AC_ALU, new BusView(RDAC));
+					put(IR_ALU, new BusView(RDIR));
+					put(COMM_AR, new BusView(WRAR));
+					put(COMM_DR, new BusView(WRDR));
+					put(COMM_CR, new BusView(WRCR));
+					put(COMM_IP, new BusView(WRIP));
+					put(COMM_SP, new BusView(WRSP));
+					put(COMM_AC, new BusView(WRAC));
+					put(MEM_IO, new BusView(LOAD,STOR));
+					put(MEM_R, new BusView(LOAD));
+					put(MEM_W, new BusView(STOR));
+					put(CU, new BusView());
 				}}
 		);
 		add(regPanel,BorderLayout.CENTER);
@@ -248,7 +249,7 @@ public class BasicView extends BCompPanel {
 	}
 
 	public void redrawArrows() {
-		for(String key:busesMap.keySet()) {
+		for(BusNames key :busesMap.keySet()) {
 			BusView bus = busesMap.get(key);
 			RegisterView data = cmanager.getRegisterView(Reg.DR);
 			RegisterView addr = cmanager.getRegisterView(Reg.AR);
@@ -260,49 +261,49 @@ public class BasicView extends BCompPanel {
 			RegisterView rs = cmanager.getRegisterView(Reg.PS);
 			int regPanelX  = regPanel.getX();
 			switch (key) {
-				case "DR_2_ALU":
+				case DR_ALU:
 					bus.calcBounds(new int[][]{
 							{regPanelX+data.getX()-5 , data.getY() + REG_HEIGHT/2},
 							{regPanelX+alu.getX()+ALU_WIDTH*5/8,data.getY() +REG_HEIGHT/2},
 							{regPanelX+alu.getX()+ALU_WIDTH*5/8, alu.getY()-13},
 					});
 					break;
-				case "CR_2_ALU":
+				case CR_ALU:
 					bus.calcBounds(new int[][]{
 							{regPanelX+instr.getX() -5, instr.getY() + REG_HEIGHT/2},
 							{regPanelX+alu.getX()+ALU_WIDTH*5/8,instr.getY() +REG_HEIGHT/2},
 							{regPanelX+alu.getX()+ALU_WIDTH*5/8, alu.getY()-13},
 					});
 					break;
-				case "IP_2_ALU":
+				case IP_ALU:
 					bus.calcBounds(new int[][]{
 							{regPanelX+ipReg.getX()-5 , ipReg.getY() + REG_HEIGHT/2},
 							{regPanelX+alu.getX()+ALU_WIDTH*5/8,ipReg.getY() +REG_HEIGHT/2},
 							{regPanelX+alu.getX()+ALU_WIDTH*5/8, alu.getY()-13},
 					});
 					break;
-				case "SP_2_ALU":
+				case SP_ALU:
 					bus.calcBounds(new int[][]{
 							{regPanelX+spReg.getX()-5 , spReg.getY() + REG_HEIGHT/2},
 							{regPanelX+alu.getX()+ALU_WIDTH*5/8,spReg.getY() +REG_HEIGHT/2},
 							{regPanelX+alu.getX()+ALU_WIDTH*5/8, alu.getY()-13},
 					});
 					break;
-				case "AC_2_ALU":
+				case AC_ALU:
 					bus.calcBounds(new int[][]{
 							{regPanelX+accum.getX()+REG_16_WIDTH+4 , accum.getY() +REG_HEIGHT/2},
 							{regPanelX+alu.getX()+ALU_WIDTH*3/8, accum.getY() +REG_HEIGHT/2},
 							{regPanelX+alu.getX()+ ALU_WIDTH*3/8, alu.getY()-13},
 					});
 					break;
-				case "BR_2_ALU":
+				case BR_ALU:
 					bus.calcBounds(new int[][]{
 							{regPanelX+buf.getX()+REG_16_WIDTH+4 , buf.getY() +REG_HEIGHT/2},
 							{regPanelX+alu.getX()+ALU_WIDTH*3/8, buf.getY() +REG_HEIGHT/2},
 							{regPanelX+alu.getX()+ ALU_WIDTH*3/8, alu.getY()-13},
 					});
 					break;
-				case "PS_2_ALU":
+				case PS_ALU:
 					bus.calcBounds(new int[][]{
 							{regPanelX+rs.getX()+REG_16_WIDTH+4 , rs.getY() +REG_HEIGHT/2},
 							{regPanelX+alu.getX()+ALU_WIDTH*3/8, rs.getY() +REG_HEIGHT/2},
@@ -311,7 +312,7 @@ public class BasicView extends BCompPanel {
 					break;
 
 
-				case "IR_2_ALU":
+				case IR_ALU:
 					bus.calcBounds(new int[][]{
 							{regPanelX+accum.getX()+REG_16_WIDTH+4, cmanager.getInput2().getY() +REG_HEIGHT/2},
 							{regPanelX+alu.getX()+ALU_WIDTH*3/8, cmanager.getInput2().getY() +REG_HEIGHT/2},
@@ -319,7 +320,7 @@ public class BasicView extends BCompPanel {
 
 					});
 					break;
-				case "ALU_2_AR":
+				case COMM_AR:
 					bus.calcBounds(new int[][]{
 
 							{regPanelX+alu.getX()+ ALU_WIDTH / 2,commutView.getY()+commutView.getHeight()+4},
@@ -328,7 +329,7 @@ public class BasicView extends BCompPanel {
 
 					});
 					break;
-				case "ALU_2_DR":
+				case COMM_DR:
 					bus.calcBounds(new int[][]{
 
 							{regPanelX+alu.getX()+ ALU_WIDTH / 2,commutView.getY()+commutView.getHeight()+4},
@@ -338,7 +339,7 @@ public class BasicView extends BCompPanel {
 							{regPanelX+data.getX()  + REG_16_WIDTH + 13, data.getY() + REG_HEIGHT / 2}
 					});
 					break;
-				case "ALU_2_CR":
+				case COMM_CR:
 					bus.calcBounds(new int[][]{
 
 							{regPanelX+alu.getX()+ ALU_WIDTH / 2,commutView.getY()+commutView.getHeight()+4},
@@ -351,7 +352,7 @@ public class BasicView extends BCompPanel {
 							{regPanelX+instr.getX()  + REG_16_WIDTH + 13, instr.getY() + REG_HEIGHT / 2}
 					});
 					break;
-				case "ALU_2_IP":
+				case COMM_IP:
 					bus.calcBounds(new int[][]{
 
 							{regPanelX+alu.getX()+ ALU_WIDTH / 2,commutView.getY()+commutView.getHeight()+4},
@@ -361,7 +362,7 @@ public class BasicView extends BCompPanel {
 							{regPanelX+ipReg.getX()  + REG_11_WIDTH + 13, ipReg.getY() + REG_HEIGHT / 2}
 					});
 					break;
-				case "ALU_2_SP":
+				case COMM_SP:
 					bus.calcBounds(new int[][]{
 							//   {regPanelX+alu.getX() + ALU_WIDTH / 2, alu.getY() + ALU_HEIGHT + 4},
 							// {regPanelX+alu.getX()+ ALU_WIDTH / 2,commutView.getY()},
@@ -372,13 +373,13 @@ public class BasicView extends BCompPanel {
 							{regPanelX+spReg.getX()  + REG_11_WIDTH + 13, spReg.getY() + REG_HEIGHT / 2}
 					});
 					break;
-				case "COMM_2_ALL":
+				case COMM_ALL:
 					bus.calcBounds(new int[][]{
 							{regPanelX+alu.getX()+ ALU_WIDTH / 2,commutView.getY()+commutView.getHeight()+4},
 							{regPanelX+alu.getX()+ ALU_WIDTH / 2,alu.getY() + ALU_HEIGHT + 74},
 					});
 					break;
-				case "ALU_2_AC":
+				case COMM_AC:
 					bus.calcBounds(new int[][]{
 
 							{regPanelX+alu.getX()+ ALU_WIDTH / 2,commutView.getY()+commutView.getHeight()+4},
@@ -389,12 +390,12 @@ public class BasicView extends BCompPanel {
 							{regPanelX+accum.getX()-13, accum.getY() + REG_HEIGHT / 2}
 					});
 					break;
-				case "ALU_2_COMM" :
+				case ALU_COMM :
 					bus.calcBounds(new int[][]{
 							{regPanelX+alu.getX()+ALU_WIDTH/2,alu.getY()+ALU_HEIGHT+4},
 							{regPanelX+alu.getX()+ALU_WIDTH/2,commutView.getY()-13}
 					}); break;
-				case "ALU_2_BR":
+				case COMM_BR:
 					bus.calcBounds(new int[][]{
 							{regPanelX+alu.getX()+ ALU_WIDTH / 2,commutView.getY()+commutView.getHeight()+4},
 							{regPanelX+alu.getX()+ ALU_WIDTH / 2,alu.getY() + ALU_HEIGHT + 90},
@@ -403,7 +404,7 @@ public class BasicView extends BCompPanel {
 							{regPanelX+accum.getX()-20, buf.getY() + REG_HEIGHT / 2},
 							{regPanelX+accum.getX()-13, buf.getY() + REG_HEIGHT / 2}
 					}); break;
-				case "ALU_2_PS":
+				case COMM_PS:
 					bus.calcBounds(new int[][]{
 							{regPanelX+alu.getX()+ ALU_WIDTH / 2,commutView.getY()+commutView.getHeight()+4},
 							{regPanelX+alu.getX()+ ALU_WIDTH / 2,alu.getY() + ALU_HEIGHT + 90},
@@ -413,13 +414,13 @@ public class BasicView extends BCompPanel {
 							{regPanelX+accum.getX()-13, rs.getY() + REG_HEIGHT / 2}
 					});
 					break;
-				case "MEM_IO":
+				case MEM_IO:
 					bus.calcBounds(new int[][]{
 							{regPanelX+cmanager.getMem().getX() + MEM_WIDTH/4, addr.getY()-5 },
 							{regPanelX+cmanager.getMem().getX()+MEM_WIDTH/4, cmanager.getMem().getY() + CELL_HEIGHT*17+15},
 					});
 					break;
-				case "MEM_R":
+				case MEM_R:
 					bus.calcBounds(cmanager.getMem().getY()<35?
 							new int[][]{
 									{regPanelX+cmanager.getMem().getX()-5, cmanager.getMem().getY()+10},
@@ -433,7 +434,7 @@ public class BasicView extends BCompPanel {
 							{regPanelX+data.getX()+REG_16_WIDTH/2-10, data.getY()-13 }
 					});
 					break;
-				case "MEM_W":
+				case MEM_W:
 					bus.calcBounds(
 							cmanager.getMem().getY()<35?
 									new int[][]{{regPanelX+data.getX()+REG_16_WIDTH/2+10, data.getY()-5 },
@@ -448,7 +449,7 @@ public class BasicView extends BCompPanel {
 											{regPanelX+cmanager.getMem().getX()+MEM_WIDTH/2-10, cmanager.getMem().getY()-13},
 									});
 					break;
-				case "CU":
+				case CU:
 					bus.calcBounds(new int[][]{
 							{cycleview.getX() + MEM_WIDTH*3/2 , instr.getY() + REG_HEIGHT + 1},
 							{cycleview.getX() + MEM_WIDTH *3/2, cycleview.getY() - 14}

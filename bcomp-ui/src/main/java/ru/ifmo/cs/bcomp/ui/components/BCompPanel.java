@@ -6,6 +6,7 @@ package ru.ifmo.cs.bcomp.ui.components;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.Map;
 
 import ru.ifmo.cs.bcomp.ControlSignal;
@@ -25,7 +26,7 @@ import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.COLOR_BUS;
 public abstract class BCompPanel extends ActivateblePanel {
 	protected final ComponentManager cmanager;
 	private final RegisterProperties[] regProps;
-	protected Map<String, BusView> busesMap;
+	protected Map<BusNames, BusView> busesMap;
 
 	private SignalListener[] listeners;
 	protected RegPanel regPanel;
