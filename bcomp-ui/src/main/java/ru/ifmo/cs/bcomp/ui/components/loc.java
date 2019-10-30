@@ -2,7 +2,7 @@ package ru.ifmo.cs.bcomp.ui.components;
 
 import java.util.ListResourceBundle;
 
-public class loc_en extends ListResourceBundle {
+public class loc extends ListResourceBundle {
     @Override
     protected Object[][] getContents() {
         return contents;
