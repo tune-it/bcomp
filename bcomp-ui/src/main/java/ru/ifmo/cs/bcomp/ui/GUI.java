@@ -45,7 +45,7 @@ public class GUI extends JApplet {
 		cmanager = new ComponentManager(this);
 
 
-		ActivateblePanel[] panes = {
+		final ActivateblePanel[] panels = {
 			new BasicView(this),
 		};
 
@@ -67,7 +67,7 @@ public class GUI extends JApplet {
 			@Override
 			public void focusGained(FocusEvent e) {
 				super.focusGained(e);
-				for (ActivateblePanel panel : panes) {
+				for (ActivateblePanel panel : panels) {
 					panel.redrawArrows();
 				}
 			}
@@ -77,14 +77,14 @@ public class GUI extends JApplet {
 			@Override
 			public void componentResized(ComponentEvent componentEvent) {
 				super.componentResized(componentEvent);
-				for (ActivateblePanel panel : panes) {
+				for (ActivateblePanel panel : panels) {
 					panel.revalidate();
 					panel.repaint();
 					panel.redrawArrows();
 				}
 			}
 		});
-		for (ActivateblePanel pane : panes) {
+		for (ActivateblePanel pane : panels) {
 			pane.setPreferredSize(PANE_SIZE);
 
 			tabs.addTab(pane.getPanelName(), pane);
