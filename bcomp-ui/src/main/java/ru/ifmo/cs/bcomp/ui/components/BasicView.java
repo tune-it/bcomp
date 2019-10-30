@@ -35,13 +35,14 @@ public class BasicView extends BCompPanel {
 				new RegisterProperties(Reg.AR, REG_ACCUM_X_BV, REG_ADDR_Y_BV, false,false,
 						new GridBagConstraints() {{
 							fill = GridBagConstraints.NONE;
-							gridy = 5;
+							gridy = 4;
 							gridx = 5;
-							weightx = 0.5;
-							weighty = 0.5;
+							weightx = 0;
+							weighty = 0;
 							gridwidth = 1;
-							anchor = GridBagConstraints.NORTH;
-							insets = new Insets(0, 0, 0, 0);
+							gridheight = 1;
+							anchor = GridBagConstraints.NORTHWEST;
+							insets = new Insets(156, 20, 0, 0);
 						}}),
 				new RegisterProperties(Reg.DR, REG_ACCUM_X_BV, REG_DATA_Y_BV, false, false,
 
@@ -188,8 +189,8 @@ public class BasicView extends BCompPanel {
 			gridy = 0;
 			gridheight = 5;
 			weighty = 0;
-			anchor = GridBagConstraints.CENTER;
-			insets = new Insets(0, 0, 0, 0);
+			anchor = GridBagConstraints.WEST;
+			insets = new Insets(0, 40, 60, 0);
 		}};
 		regPanel.add(cmanager.getMem(),constraintMem);
 
@@ -204,6 +205,7 @@ public class BasicView extends BCompPanel {
 			anchor = NORTH;
 			insets = new Insets(101+CELL_HEIGHT, 0, 0, 20);
 		}};
+
 		regPanel.add(cmanager.getFlagView(1),constraintsF);
 		constraintsF.insets.right+= 60;
 		regPanel.add(cmanager.getFlagView(0),constraintsF);
