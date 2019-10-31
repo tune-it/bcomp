@@ -14,7 +14,7 @@ public class loc_ru extends ListResourceBundle {
             {"start","F7 Пуск"},
             {"continue","F8 Продолжение"},
             {"tick","Shift+F9 Такт"},
-            {"run","F9  Работа"},
+            {"run","F9   Работа"},
             {"stop","F9 Останов"},
             {"basename","Базовая ЭВМ"}
     };
