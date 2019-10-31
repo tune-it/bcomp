@@ -5,6 +5,8 @@
 package ru.ifmo.cs.bcomp.ui.components;
 
 import java.awt.event.*;
+
+import ru.ifmo.cs.bcomp.Reg;
 import ru.ifmo.cs.bcomp.Utils;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 import ru.ifmo.cs.components.Register;
@@ -139,12 +141,11 @@ public class InputRegisterView extends RegisterView {
 
 			int pos = 6 + formattedWidth - Utils.getBinaryWidth(bitno + 1);
 			str.insert(pos + 1, COLOR_END);
-			cmanager.getInput2().setValue(str.toString());
 			str.insert(pos, COLOR_ACTIVE_BIT);
 			setValue(str.toString());
-
+			cmanager.getRegisterView(Reg.IR).setValue(Utils.toBinary((int)reg.getValue(),regWidth));
 		} else
-			super.setValue();
+			super.setValue(HTML + Utils.toBinary((int)reg.getValue(), regWidth) + HTML_END);
 	}
 
 	public void reqFocus() {

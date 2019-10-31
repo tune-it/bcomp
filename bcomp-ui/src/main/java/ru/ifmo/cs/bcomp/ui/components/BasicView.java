@@ -106,6 +106,12 @@ public class BasicView extends BCompPanel {
 						gridy = 2;
 						gridx = 3;
 						insets = new Insets(0,3,0,40);
+					}}),
+					new RegisterProperties(Reg.IR,0,0,false, true,
+						 new GridBagConstraints(){{
+						gridy = 3;
+						gridx = 3;
+						insets = new Insets(0,3,80,40);
 					}})
 			},
 				new EnumMap<BusNames, BusView>(BusNames.class){{
@@ -215,12 +221,6 @@ public class BasicView extends BCompPanel {
 		constraintsF.insets = new Insets(101+CELL_HEIGHT, 80, 0, 0);
 		regPanel.add(cmanager.getFlagView(2),constraintsF);
 
-		GridBagConstraints constraintsIN2 = new GridBagConstraints(){{
-			gridy = 3;
-			gridx = 3;
-			insets = new Insets(0,3,80,40);
-		}};
-		regPanel.add(cmanager.getInput2(),constraintsIN2);
 
 		addComponentListener(new ComponentAdapter() {
 			@Override
@@ -257,6 +257,7 @@ public class BasicView extends BCompPanel {
 			RegisterView addr = cmanager.getRegisterView(Reg.AR);
 			RegisterView instr = cmanager.getRegisterView(Reg.CR);
 			RegisterView accum = cmanager.getRegisterView(Reg.AC);
+			RegisterView irReg=cmanager.getRegisterView(Reg.IR);
 			RegisterView ipReg = cmanager.getRegisterView(Reg.IP);
 			RegisterView spReg = cmanager.getRegisterView(Reg.SP);
 			RegisterView buf = cmanager.getRegisterView(Reg.BR);
@@ -316,8 +317,8 @@ public class BasicView extends BCompPanel {
 
 				case IR_ALU:
 					bus.calcBounds(new int[][]{
-							{regPanelX+accum.getX()+REG_16_WIDTH+4, cmanager.getInput2().getY() +REG_HEIGHT/2},
-							{regPanelX+alu.getX()+ALU_WIDTH*3/8, cmanager.getInput2().getY() +REG_HEIGHT/2},
+							{regPanelX+accum.getX()+REG_16_WIDTH+4, irReg.getY() +REG_HEIGHT/2},
+							{regPanelX+alu.getX()+ALU_WIDTH*3/8, irReg.getY() +REG_HEIGHT/2},
 							{regPanelX+alu.getX()+ ALU_WIDTH*3/8, alu.getY()-13},
 
 					});

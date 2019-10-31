@@ -20,7 +20,6 @@ import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 
 
 import ru.ifmo.cs.components.DataDestination;
-import ru.ifmo.cs.components.Register;
 
 /**
  *
@@ -218,7 +217,7 @@ public class ComponentManager {
 	private final MemoryView mem;
 	private FlagView[] flagViews = new FlagView[4];
 	private EnumMap<Reg, RegisterView> regs = new EnumMap<Reg, RegisterView>(Reg.class);
-	private RegisterView input2 = new RegisterView(new Register(16));
+	private InputRegisterView input;
 	private ActiveBitView activeBit = new ActiveBitView(ACTIVE_BIT_X, REG_KEY_Y);
 	private volatile BCompPanel activePanel;
 	private final long[] delayPeriods = { 0, 1, 5, 10, 25, 50, 100, 1000 };
@@ -237,6 +236,7 @@ public class ComponentManager {
 		this.gui = gui;
 		bcomp = gui.getBasicComp();
 		cpu = gui.getCPU();
+		input =new InputRegisterView(this,cpu.getRegister(Reg.IR));
 		ioctrls = gui.getIOCtrls();
 
 		cpu.setTickStartListener(new Runnable() {
@@ -277,15 +277,9 @@ public class ComponentManager {
 		flagViews[0].setTitle("N");flagViews[1].setTitle("Z");flagViews[2].setTitle("V");flagViews[3].setTitle("C");
 
 		for (Reg reg : Reg.values()) {
-			switch (reg) {
-				case IR:
-					InputRegisterView regKey = new InputRegisterView(this, cpu.getRegister(reg));
-					regs.put(reg, regKey);
-					regKey.setProperties(REG_KEY_X, REG_KEY_Y, false, false);
-					break;
-				default:
+
 					regs.put(reg, new RegisterView(cpu.getRegister(reg)));
-			}
+
 		}
 
 
@@ -363,13 +357,11 @@ public class ComponentManager {
 		constraints.gridheight = 2;
 		constraints.insets =new Insets(0,0,0,30);
 
-		input2.setProperties(0,0,false,true);
-		input2.setTitle("IR");
-		input2.setPreferredSize(input2.getSize());
-
-		regs.get(Reg.IR).setPreferredSize(regs.get(Reg.IR).getSize());
-		regs.get(Reg.IR).setMinimumSize(regs.get(Reg.IR).getSize());
-		buttonsPanel.add(regs.get(Reg.IR), constraints);
+		input.setProperties(0,0,false,true);
+		input.setTitle("IR");
+		input.setPreferredSize(input.getSize());
+		input.setMinimumSize(input.getSize());
+		buttonsPanel.add(input, constraints);
 
 
 		constraints.anchor = GridBagConstraints.CENTER;
@@ -396,7 +388,7 @@ public class ComponentManager {
 	}
 
 	public void switchFocus() {
-		((InputRegisterView)regs.get(Reg.IR)).setActive();
+		input.setActive();
 	}
 
 	public RegisterView getRegisterView(Reg reg) {
@@ -486,8 +478,8 @@ public class ComponentManager {
 	public MemoryView getMem(){
 		return mem;
 	}
-	public RegisterView getInput2(){
-		return input2;
+	public RegisterView getInput(){
+		return input;
 	}
 
 	public ResourceBundle getRes() {
