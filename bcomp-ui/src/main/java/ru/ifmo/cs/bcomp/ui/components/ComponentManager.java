@@ -229,7 +229,7 @@ public class ComponentManager {
 	private final SignalListener[] listeners;
 	private ArrayList<ControlSignal> openBuses = new ArrayList<ControlSignal>();
 	private static final ControlSignal[] busSignals = {
-		RDDR, RDCR, RDIP, RDAC, RDPS, RDIR, WRAR, WRDR, WRCR, WRIP, WRAC, LOAD, STOR, WRPS, IO,
+		RDDR, RDCR, RDIP, RDAC, RDPS, RDIR, WRAR, WRDR, WRCR, WRIP, WRAC, LOAD, STOR, WRPS, IO,WRSP,WRBR,RDBR,RDSP
 	};
 
 	public ComponentManager(GUI gui) {
@@ -291,6 +291,8 @@ public class ComponentManager {
 			new SignalListener(regs.get(Reg.IP), WRIP),
 			new SignalListener(regs.get(Reg.AC), WRAC),
 			new SignalListener(regs.get(Reg.PS), RDPS,WRPS,SETC, SETV, STNZ, DINT, EINT, HALT,SET_PROGRAM),
+           new SignalListener(regs.get(Reg.SP), WRSP),
+           new SignalListener(regs.get(Reg.BR),WRBR)
 
 		};
 
