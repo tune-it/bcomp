@@ -120,7 +120,7 @@ public class BasicView extends BCompPanel {
 					put(PS_ALU, new BusView(RDPS));
 					put(COMM_PS, new BusView( WRPS));
 					put(COMM_ALL, new BusView( WRBR,WRAC,WRIP,WRCR,WRDR,WRAR,WRPS,WRSP));
-					put(ALU_COMM, new BusView(WRBR,WRAC,WRIP,WRCR,WRDR,WRAR,WRPS,WRSP ));
+					put(ALU_COMM, new BusView(WRBR,WRAC,WRIP,WRCR,WRDR,WRAR,WRPS,WRSP,TYPE));
 					put(DR_ALU, new BusView(RDDR));
 					put(CR_ALU, new BusView(RDCR));
 					put(IP_ALU, new BusView(RDIP));
