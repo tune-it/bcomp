@@ -230,7 +230,7 @@ public class ComponentManager {
 	private ArrayList<ControlSignal> openBuses = new ArrayList<ControlSignal>();
 	private static final ControlSignal[] busSignals = {
 		RDDR, RDCR, RDIP, RDAC, RDPS, RDIR, RDBR, RDSP,
-		WRDR, WRCR, WRIP, WRAC, WRPS, WRAR, WRBR, WRSP, LOAD, STOR, IO
+		WRDR, WRCR, WRIP, WRAC, WRPS, WRAR, WRBR, WRSP, LOAD, STOR, IO, TYPE
 	};
 
 	public ComponentManager(GUI gui) {

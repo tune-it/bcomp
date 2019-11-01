@@ -136,7 +136,7 @@ public class BasicView extends BCompPanel {
 					put(MEM_IO, new BusView(LOAD,STOR));
 					put(MEM_R, new BusView(LOAD));
 					put(MEM_W, new BusView(STOR));
-					put(CU, new BusView());
+					put(CU, new BusView(TYPE));
 				}}
 		);
 		add(regPanel,BorderLayout.CENTER);
