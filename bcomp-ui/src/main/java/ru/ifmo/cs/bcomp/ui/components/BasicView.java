@@ -182,7 +182,6 @@ public class BasicView extends BCompPanel {
 			gridx = 4;
 			gridy = 3;
 			gridheight = 2;
-
 			anchor = GridBagConstraints.CENTER;
 			insets = new Insets(20, 90, 0, 0);
 		}};
@@ -454,8 +453,8 @@ public class BasicView extends BCompPanel {
 					break;
 				case CU:
 					bus.calcBounds(new int[][]{
-							{cycleview.getX() + MEM_WIDTH*3/2 , instr.getY() + REG_HEIGHT + 1},
-							{cycleview.getX() + MEM_WIDTH *3/2, cycleview.getY() - 14}
+							{commutView.getX() + 154 , commutView.getY()+15},
+							{cycleview.getX()-13, commutView.getY()+15}
 					});
 					break;
 			}

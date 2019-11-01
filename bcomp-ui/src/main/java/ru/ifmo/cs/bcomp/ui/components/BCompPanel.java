@@ -97,7 +97,7 @@ public abstract class BCompPanel extends ActivateblePanel {
 //		}
 
 		cmanager.panelActivate(this);
-		cmanager.getRegisterView(Reg.IR).setTitle("IR");
+
 		for (RegisterProperties prop : regProps) {
 			RegisterView reg = cmanager.getRegisterView(prop.reg);
 			reg.setProperties(prop.x, prop.y, prop.hex,prop.isLeft);
