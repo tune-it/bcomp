@@ -44,45 +44,40 @@ public class CLI {
 		cpu.setCPUStartListener(new Runnable() {
 			@Override
 			public void run() {
-				if (printOnStop) {
-					writelist.clear();
-					// Saving IP/MP to print registers later
-					savedPointer = cpu.getRegValue(cpu.getClockState() ? Reg.IP : Reg.MP);
-					printRegsTitle();
-				}
+				if (!printOnStop)
+					return;
+
+				writelist.clear();
+				// Saving IP/MP to print registers later
+				savedPointer = cpu.getRegValue(cpu.getClockState() ? Reg.IP : Reg.MP);
+				printRegsTitle();
 			}
 		});
 
 		cpu.setCPUStopListener(new Runnable() { // Print changed mem
 			@Override
 			public void run() {
-				String add;
-
 				sleep = 0;
 
-				if (printOnStop) {
-					if (writelist.isEmpty())
-						add = "";
-					else {
-						add = " " + getMemory(writelist.get(0));
-						writelist.remove(0);
-					}
+				if (!printOnStop)
+					return;
 
-					printRegs(add);
+				printRegs(writelist.isEmpty() ? "" : " " + getMemory(writelist.remove(0)));
 
-					for (Long wraddr : writelist)
-						println(String.format("%1$34s", " ") + getMemory(wraddr));
-				}
+				for (Long wraddr : writelist)
+					println(String.format("%1$34s", " ") + getMemory(wraddr));
 			}
 		});
 
 		cpu.setTickFinishListener(new Runnable() {
 			@Override
 			public void run() {
-				if (sleep > 0)
-					try {
-						Thread.sleep(sleep);
-					} catch (InterruptedException e) { /*totally not empty*/ }
+				if (sleep <= 0)
+					return;
+
+				try {
+					Thread.sleep(sleep);
+				} catch (InterruptedException e) { /*totally not empty*/ }
 			}
 		});
 
@@ -106,29 +101,27 @@ public class CLI {
 		println(MCDecoder.getFormattedMC(cpu, addr));
 	}
 
-	// XXX: Получать имена регистров из их свойств
 	private void printRegsTitle() {
-		if (printRegsTitle) {
-			//Адр Знчн  IP  AR  SP  CR   DR   BR   AC  NZVC Адр Знчн
-			//Адр    МК      IP  AR  SP  CR   DR   BR   AC  NZVC СчМК
+		if (!printRegsTitle)
+			return;
+		//Адр Знчн  IP  AR  SP  CR   DR   BR   AC  NZVC Адр Знчн
+		//Адр    МК      IP  AR  SP  CR   DR   BR   AC  NZVC СчМК
 
-			String space;
-			println(
-					"Адр "
-							+ (cpu.getClockState() ? "Знчн" : "   МК    ") + (space = "  ")
-							+ Reg.IP.name() + space
-							+ Reg.AR.name() + space
-							+ Reg.SP.name() + space
-							+ Reg.CR.name() + (space = "   ")
-							+ Reg.DR.name() + space
-							+ Reg.BR.name() + space
-							+ Reg.AC.name() + "  "
-							+ "NZVC "
-							+ (cpu.getClockState() ? "Адр Знчн" : "СчМК")
-			);
-
-			printRegsTitle = false;
-		}
+		String space;
+		println(
+			"Адр "
+			+ (cpu.getClockState() ? "Знчн" : "   МК    ") + (space = "  ")
+			+ Reg.IP.name() + space
+			+ Reg.AR.name() + space
+			+ Reg.SP.name() + space
+			+ Reg.CR.name() + (space = "   ")
+			+ Reg.DR.name() + space
+			+ Reg.BR.name() + space
+			+ Reg.AC.name() + "  "
+			+ "NZVC "
+			+ (cpu.getClockState() ? "Адр Знчн" : "СчМК")
+		);
+		printRegsTitle = false;
 	}
 
 	private void printRegs(String add) {
@@ -191,14 +184,13 @@ public class CLI {
 
 	private Scanner input = new Scanner(System.in);
 	public void cli() {
-		String line;
-
 //		bcomp.startTimer(); //TODO ? IODevTimer
 
 		println("Эмулятор Базовой ЭВМ. Версия r" + CLI.class.getPackage().getImplementationVersion() + "\n" +
 			"БЭВМ готова к работе.\n" +
 			"Используйте ? или help для получения справки");
 
+		String line;
 		for (;;) {
 			try {
 				line = fetchLine();
@@ -381,7 +373,7 @@ public class CLI {
 			}
 
 			try {
-				if (Utils.isHexNumeric(cmd)) {
+				if (Utils.isHexNumeric(cmd) && cmd.length() <= (cpu.getRegWidth(Reg.IR)/4) + (cmd.charAt(0) == '-' ? 1 : 0)) {
 					value = Integer.parseInt(cmd, 16);
 					cpu.getRegister(Reg.IR).setValue(value);
 				} else

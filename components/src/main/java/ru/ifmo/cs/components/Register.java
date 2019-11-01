@@ -23,9 +23,7 @@ public class Register extends DataPart {
 	}
 
 	public synchronized void invertBit(long startbit) {
-		long bit = 1L << startbit;
-
-		value = (value & ~bit) | (~(value & bit) & bit);
+		value ^= (1L << startbit) & mask;
 	}
 
 	public synchronized long getValue(long startbit) {
