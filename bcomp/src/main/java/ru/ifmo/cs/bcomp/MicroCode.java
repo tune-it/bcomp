@@ -86,7 +86,7 @@ public class MicroCode {
         new CMC("CHKABS",   cs(RDCR, HTOL), 3, 0,                           "OPFETCH"), // if CR(11) = 0 then GOTO OPFETCH
 
         // Выборка адреса
-        new omc("ADFETCH",  cs(RDCR, SEXT, WRBR)),                                      // LTOL(CR) -> BR
+        new omc("ADFETCH",  cs(RDCR, SEXT, LTOL, WRBR)),                                // SEXT(CR) -> BR
         new CMC(            cs(RDCR, HTOL), 2, 1,                           "T11XX"),   // if CR(10) = 1 then GOTO T11XX
         new omc("T10XX",    cs(RDBR, RDIP, HTOH, LTOL, WRAR)),                          // CR -> AR
         new omc(            cs(LOAD)),                                                  // MEM(AR) -> DR
@@ -175,8 +175,7 @@ public class MicroCode {
         new CMC("BR00XX",   cs(RDCR, HTOL), 1, 1,                           "BR001X"),  // if CR(9) = 1 then GOTO BR001X
         new CMC("BR000X",   cs(RDCR, HTOL), 0, 1,                           "BNE"),     // if CR(8) = 1 then GOTO BNE
         new CMC("BEQ",      cs(RDPS, LTOL), Z.ordinal(), 0,                 "INT"),     // if Z = 0 then GOTO INT
-        // !!! Значение какого регистра используем? DR или CR?
-        new omc("BR",       cs(RDCR, SEXT, WRBR)),                                      // SEXT(CR) -> BR
+        new omc("BR",       cs(RDCR, SEXT, LTOL, WRBR)),                                // SEXT(CR) -> BR
         new omc(            cs(RDBR, RDIP, HTOH, LTOL, WRIP)),                          // BR + IP -> IP
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("BNE",      cs(RDPS, LTOL), Z.ordinal(), 0,                 "BR"),      // if Z = 0 then GOTO BR
@@ -215,7 +214,7 @@ public class MicroCode {
         new CMC("AL0010",   cs(RDCR, LTOL), 7, 1,                           "CMA"),     // if CR(7) = 1 then GOTO CMA
         new omc("CLA",      cs(STNZ, SETV, WRAC)),                                      // 0 -> AC, N, V, Z
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new omc("CMA",      cs(RDAC, COML, HTOH, LTOL, STNZ, SETV, WRAC)),        // ~AC + 0 -> BR, N, Z, V
+        new omc("CMA",      cs(RDAC, COML, HTOH, LTOL, STNZ, SETV, WRAC)),              // ~AC + 0 -> BR, N, Z, V
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("AL0011",   cs(RDCR, LTOL), 7, 1,                           "CMC"),     // if (CR7) = 1 then GOTO CMC
         new omc("CLC",      cs(SETC)),                                                  // 0 -> C
@@ -226,20 +225,20 @@ public class MicroCode {
         new CMC("AL01XX",   cs(RDCR, HTOL), 1, 1,                           "AL011X"),  // if CR(9) = 1 then GOTO AL011X
         new CMC("AL010X",   cs(RDCR, HTOL), 0, 1,                           "AL0101"),  // if CR(8) = 1 then GOTO AL0101
         new CMC("AL0100",   cs(RDCR, LTOL), 7, 1,                           "ROR"),     // if CR(7) = 1 then GOTO ROR
-        new omc("ROL",      cs(RDAC, SHLT, SHL0, STNZ, SETC, WRAC)),                    // ROL(AC) -> AC, C, N, Z
+        new omc("ROL",      cs(RDAC, SHLT, SHL0, STNZ, SETV, SETC, WRAC)),              // ROL(AC) -> AC, N, Z, V, C
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new omc("ROR",      cs(RDAC, SHRT, STNZ, SETC, WRAC)),                    // ROR(AC) -> AC, C, N, Z
+        new omc("ROR",      cs(RDAC, SHRT, SHRF, STNZ, SETV, SETC, WRAC)),              // ROR(AC) -> AC, N, Z, V, C
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("AL0101",   cs(RDCR, LTOL), 7, 1,                           "ASR"),     // if CR(7) = 1 then GOTO ASR
         new omc("ASL",      cs(RDAC, HTOH, LTOL, WRDR)),                                // AC -> DR
         new omc(            cs(RDAC, RDDR, HTOH, LTOL, STNZ, SETV, SETC, WRAC)),        // AC + DR -> AC, N, Z, V, C
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new omc("ASR",      cs(RDAC, SHRT, SHRF, STNZ, SETV, SETC, WRAC)),                    // ASR(AC) -> AC, N, Z, V, C
+        new omc("ASR",      cs(RDAC, SHRT, STNZ, SETV, WRAC)),                          // ASR(AC) -> AC, N, Z, V
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("AL011X",   cs(RDCR, HTOL), 0, 1,                           "AL0111"),  // if CR(8) = 1 then GOTO AL0111
         new CMC("AL0110",   cs(RDCR, LTOL), 7, 1,                           "SWAB"),    // if CR(7) = 1 then GOTO SWAB
         new CMC("AL01100",  cs(RDCR, LTOL), 6, 1,                           "TST"),     // if CR(6) = 1 then GOTO TST
-        new omc("SXTB",     cs(RDAC, SEXT, STNZ, SETV, WRAC)),                          // SEXT(AC) -> AC, N, Z, V
+        new omc("SXTB",     cs(RDAC, SEXT, LTOL, STNZ, SETV, WRAC)),                    // SEXT(AC) -> AC, N, Z, V
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new omc("TST",      cs(RDAC, HTOH, LTOL, STNZ, SETV)),                          // AC -> N, Z, V
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT

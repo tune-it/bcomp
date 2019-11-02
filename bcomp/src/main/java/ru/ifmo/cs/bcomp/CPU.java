@@ -223,19 +223,21 @@ public class CPU {
 		Control shrf;
 		Control setv;
 		PartWriter writeto15 = new PartWriter(swout, 1, DATA_WIDTH - 1);
+		PartWriter writeto17 = new PartWriter(swout, 1, DATA_WIDTH + 1);
 		PartWriter ei = new PartWriter(ps, 1, EI.ordinal());
 		PartWriter stateProgram = new PartWriter(ps, 1, PROG.ordinal());
-		valves.put(SEXT, c = new SignExtender(aluout, 8, SEXT.ordinal() - 16, swout));
+		valves.put(SEXT, c = new Extender(aluout, 8, 7, SEXT.ordinal() - 16, swout));
 		clock1.addDestination(new Not(TYPE.ordinal(),
 			new Valve(mr, VR_WIDTH, 16, 0,
 				c,
+				new Valve(aluout, 1, 14, SHLT.ordinal() - 16, writeto17),
 				newValveH(aluout, DATA_WIDTH, 0, SHLT, new PartWriter(swout, DATA_WIDTH, 1)),
 				newValveH(aluout, 1, DATA_WIDTH + 2, SHL0, swout),
 				newValveH(aluout, DATA_WIDTH - 1, 1, SHRT, swout),
 				new Valve(aluout, 1, 0, SHRT.ordinal() - 16, new PartWriter(swout, 1, DATA_WIDTH)),
 				new ValveTwo(SHRT.ordinal() - 16, SHRF.ordinal() - 16,
-					shrf = new Valve(aluout, 1, DATA_WIDTH - 1, 0, writeto15),
-					new Not(0, new Valve(aluout, 1, DATA_WIDTH + 2, 0, writeto15))
+					shrf = new Valve(aluout, 1, DATA_WIDTH + 2, 0, writeto15, writeto17),
+					new Not(0, new Valve(aluout, 1, DATA_WIDTH - 1, 0, writeto15, writeto17))
 				),
 				newValveH(swout, 1, DATA_WIDTH, SETC, new PartWriter(ps, 1, C.ordinal())),
 				setv = new Xor(swout, 2, DATA_WIDTH, SETV.ordinal() - 16, new PartWriter(ps, 1, V.ordinal())),
