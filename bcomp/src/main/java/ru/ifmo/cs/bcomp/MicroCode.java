@@ -215,7 +215,7 @@ public class MicroCode {
         new CMC("AL0010",   cs(RDCR, LTOL), 7, 1,                           "CMA"),     // if CR(7) = 1 then GOTO CMA
         new omc("CLA",      cs(STNZ, SETV, WRAC)),                                      // 0 -> AC, N, V, Z
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new omc("CMA",      cs(RDAC, COML, HTOH, LTOL, STNZ, SETV, SETC, WRAC)),        // ~AC + 0 -> BR, N, Z, V, C
+        new omc("CMA",      cs(RDAC, COML, HTOH, LTOL, STNZ, SETV, WRAC)),        // ~AC + 0 -> BR, N, Z, V
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("AL0011",   cs(RDCR, LTOL), 7, 1,                           "CMC"),     // if (CR7) = 1 then GOTO CMC
         new omc("CLC",      cs(SETC)),                                                  // 0 -> C
