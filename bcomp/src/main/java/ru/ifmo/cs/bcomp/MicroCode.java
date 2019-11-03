@@ -256,7 +256,7 @@ public class MicroCode {
         new omc("AL10XX",   cs(RDSP, HTOH, LTOL, WRAR)),                                // SP -> AR
         new omc(            cs(LOAD)),                                                  // MEM(AR) -> DR
         new CMC(            cs(RDCR, HTOL), 1, 1,                           "AL101X"),  // if CR(9) = 1 then AL101X
-        new CMC(            cs(RDCR, HTOL), 0, 1,                           "POPF"),    // if CR(8) = 1 then POPF
+        new CMC("AL100X",   cs(RDCR, HTOL), 0, 1,                           "POPF"),    // if CR(8) = 1 then POPF
         new omc("POP",      cs(RDDR, HTOH, LTOL, WRAC)),                                // DR -> AC
         new omc("INCSP",    cs(RDSP, PLS1, HTOH, LTOL, WRSP)),                          // SP + 1 -> SP
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
