@@ -195,13 +195,14 @@ public class CPU {
 		valves.put(SORA, c);
 
 		// SUM
+		PartWriter writetoH = new PartWriter(swout, 8, 8);
 		clock1.addDestination(new Not(SORA.ordinal(),
 			new DataAdd(lcom, rcom, carry, DATA_WIDTH, 0, aluout),
 			new Valve(ps, 1, 0, 0, new PartWriter(aluout, 1, DATA_WIDTH + 2))));
 
 		clock1.addDestination(newValve(aluout, 8, 0, LTOL, swout));
 		clock1.addDestination(newValve(aluout, 8, 0, LTOH,
-			new PartWriter(swout, 8, 8)));
+			writetoH));
 		clock1.addDestination(newValve(aluout, 8, 8, HTOL, swout));
 		clock1.addDestination(newValve(aluout, 10, 8, HTOH,
 			new PartWriter(swout, 10, 8)));
@@ -226,7 +227,7 @@ public class CPU {
 		PartWriter writeto17 = new PartWriter(swout, 1, DATA_WIDTH + 1);
 		PartWriter ei = new PartWriter(ps, 1, EI.ordinal());
 		PartWriter stateProgram = new PartWriter(ps, 1, PROG.ordinal());
-		valves.put(SEXT, c = new Extender(aluout, 8, 7, SEXT.ordinal() - 16, swout));
+		valves.put(SEXT, c = new Extender(aluout, 8, 7, SEXT.ordinal() - 16, writetoH));
 		clock1.addDestination(new Not(TYPE.ordinal(),
 			new Valve(mr, VR_WIDTH, 16, 0,
 				c,
