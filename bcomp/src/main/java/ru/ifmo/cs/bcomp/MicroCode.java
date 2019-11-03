@@ -88,7 +88,7 @@ public class MicroCode {
         // Выборка адреса
         new omc("ADFETCH",  cs(RDCR, SEXT, LTOL, WRBR)),                                // SEXT(CR) -> BR
         new CMC(            cs(RDCR, HTOL), 2, 1,                           "T11XX"),   // if CR(10) = 1 then GOTO T11XX
-        new omc("T10XX",    cs(RDBR, RDIP, HTOH, LTOL, WRAR)),                          // CR -> AR
+        new omc("T10XX",    cs(RDBR, RDIP, HTOH, LTOL, WRAR)),                          // BR + CR  -> AR
         new omc(            cs(LOAD)),                                                  // MEM(AR) -> DR
         new CMC(            cs(RDCR, HTOL), 1, 1,                           "T101X"),   // if CR(9) = 1 then GOTO T101X
         new CMC("T100X",    cs(RDCR, HTOL), 0, 1,                           "RESERVED"),// if CR(8) = 1 then GOTO RESERVED
