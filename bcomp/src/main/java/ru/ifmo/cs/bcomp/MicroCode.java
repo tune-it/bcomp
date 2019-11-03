@@ -244,13 +244,14 @@ public class MicroCode {
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new omc("SWAB",     cs(RDAC, HTOL, LTOH, STNZ, SETV, WRAC)),                    // SWAB(AC) -> AC, N, Z, V
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new CMC("AL0111",   cs(RDCR, LTOL), 7, 1,                           "DEC"),     // if CR(7) = 1 then GOTO DEC
-        new CMC("AL01110",  cs(RDCR, LTOL), 6, 1,                           "NEG"),     // if CR(6) = 1 then GOTO NEG
+        new CMC("AL0111",   cs(RDCR, LTOL), 7, 1,                           "NEG"),     // if CR(7) = 1 then GOTO NEG
+        new CMC("AL01110",  cs(RDCR, LTOL), 6, 1,                           "DEC"),     // if CR(6) = 1 then GOTO DEC
         new omc("INC",      cs(RDAC, PLS1, HTOH, LTOL, STNZ, SETV, SETC, WRAC)),        // AC + 1 -> AC, N, Z, V, C
+        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
+        new omc("DEC",      cs(RDAC, COMR, HTOH, LTOL, STNZ, SETV, SETC, WRAC)),        // AC + ~0 -> AC, N, Z, V, C
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new omc("NEG",      cs(RDAC, COML, PLS1, HTOH, LTOL, STNZ, SETV, SETC, WRAC)),  // ~AC + 1 -> AC, N, Z, V, C
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new omc("DEC",      cs(RDAC, COMR, HTOH, LTOL, STNZ, SETV, SETC, WRAC)),        // AC + ~0 -> AC, N, Z, V, C
         new CMC("AL1XXX",   cs(RDCR, HTOL), 2, 1,                           "AL11XX"),  // if CR(10) = 1 then AL11XX
         new omc("AL10XX",   cs(RDSP, HTOH, LTOL, WRAR)),                                // SP -> AR
         new omc(            cs(LOAD)),                                                  // MEM(AR) -> DR
