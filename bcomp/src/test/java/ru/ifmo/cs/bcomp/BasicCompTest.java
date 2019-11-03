@@ -29,8 +29,8 @@ public class BasicCompTest {
 	private final State[] TEST_STATES = { C, V, Z, N, F, EI };
 	private final long[] TEST_REG_VALUES = { 0xDEAD, 0x0ADB	};
 	private final long[] TEST_FLAG_VALUES = { 0, 1 };
-	private Hexadecimal x100 = new Hexadecimal(0x100);
-	private Hexadecimal x101 = new Hexadecimal(0x101);
+	private final Hexadecimal x100 = new Hexadecimal(0x100);
+	private final Hexadecimal x101 = new Hexadecimal(0x101);
 
 	private static final String[] TESTS = {
 		"START; ; DR=0,CR=0,SP=0,AC=0,BR=0,AR=0,C=0,V=0,Z=1,N=0,EI=0",
@@ -81,9 +81,9 @@ public class BasicCompTest {
 		"0600; AC=4444; AC=0044,N=0,Z=0,V=0", // SXTB
 		"0600; AC=0000; AC=0000,N=0,Z=1,V=0", // SXTB
 
-		"0640; AC=BEEF; AC=BEEF,N=1,Z=0,V=0", // TST
-		"0640; AC=1313; AC=1313,N=0,Z=0,V=0", // TST
-		"0640; AC=0000; AC=0000,N=0,Z=1,V=0", // TST
+		"0640; AC=BEEF; N=1,Z=0,V=0", // TST
+		"0640; AC=1313; N=0,Z=0,V=0", // TST
+		"0640; AC=0000; N=0,Z=1,V=0", // TST
 
 		"0680; AC=BEEF; AC=EFBE,N=1,Z=0,V=0", // SWAB
 		"0680; AC=7654; AC=5476,N=0,Z=0,V=0", // SWAB
@@ -103,11 +103,28 @@ public class BasicCompTest {
 		"0780; AC=1313; AC=ECED,N=1,Z=0,V=0,C=0", // NEG
 		"0780; AC=0000; AC=0000,N=0,Z=1,V=0,C=1", // NEG
 
-		"0800; SP=600,600=BEEF; DR=BEEF,AR=600,SP=601,AC=BEEF", // POP
-		"0800; SP=7FF,7FF=1313; DR=1313,AR=7FF,SP=000,AC=1313", // POP
+		"0800; SP=7FF,7FF=1313; DR=1313,AR=7FF,SP=000,AC=1313,N=0,Z=0,V=0", // POP
+		"0800; SP=600,600=BEEF; DR=BEEF,AR=600,SP=601,AC=BEEF,N=1,Z=0,V=0", // POP
+		"0800; SP=400,400=0000; DR=0000,AR=400,SP=401,AC=0000,N=0,Z=1,V=0", // POP
 
 		"0900; SP=600,600=0400; DR=0400,AR=600,SP=601,EI=0,F=0,N=0,Z=0,V=0,C=0", // POPF
 		"0900; SP=7FF,7FF=045F; DR=045F,AR=7FF,SP=000,EI=1,F=1,N=1,Z=1,V=1,C=1", // POPF
+
+		"0A00; SP=600,600=FF00; DR=FF00,IP=700,AR=600,SP=601", // RET
+		"0A00; SP=7FF,7FF=0013; DR=0013,IP=013,AR=7FF,SP=000", // RET
+
+		"0B00; SP=600,600=0400,601=FF00; DR=FF00,IP=700,AR=601,SP=602,EI=0,F=0,N=0,Z=0,V=0,C=0", // IRET
+		"0B00; SP=7FE,7FE=045F,7FF=0013; DR=0013,IP=013,AR=7FF,SP=000,EI=1,F=1,N=1,Z=1,V=1,C=1", // IRET
+
+		"0C00; AC=BEEF,SP=000; DR=BEEF,AR=7FF,SP=7FF,7FF=BEEF", // PUSH
+		"0C00; AC=1313,SP=601; DR=1313,AR=600,SP=600,600=1313", // PUSH
+
+		"0D00; SP=000,EI=0,F=0,N=0,Z=0,V=0,C=0; DR=0400,AR=7FF,SP=7FF,7FF=0400", // PUSHF
+		"0D00; SP=601,EI=1,F=1,N=1,Z=1,V=1,C=1; DR=045F,AR=600,SP=600,600=045F", // PUSHF
+
+		"0E00; SP=7FF,AC=BEEF,7FF=1313; DR=BEEF,AC=1313,BR=1313,AR=7FF,N=0,Z=0,V=0,7FF=BEEF", // SWAP
+		"0E00; SP=600,AC=0603,600=C0BA; DR=0603,AC=C0BA,BR=C0BA,AR=600,N=1,Z=0,V=0,600=0603", // SWAP
+		"0E00; SP=400,AC=FEED,400=0000; DR=FEED,AC=0000,BR=0000,AR=400,N=0,Z=1,V=0,400=FEED", // SWAP
 	};
 
 	private final BasicComp bcomp;
@@ -174,12 +191,14 @@ public class BasicCompTest {
 					Reg r = findRegister(pair[0]);
 					if (r != null) {
 						initialRegs.put(r, value);
+						expectedRegs.put(r, value);
 						continue;
 					}
 
 					State s = findState(pair[0]);
 					if (s != null) {
 						initialFlags.put(s, value);
+						expectedFlags.put(s, value);
 						continue;
 					}
 
