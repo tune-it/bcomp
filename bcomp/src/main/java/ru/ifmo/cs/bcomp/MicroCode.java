@@ -150,7 +150,7 @@ public class MicroCode {
         // !!! CHECK FLAGS !!!
         new omc("LD",       cs(RDDR, HTOH, LTOL, WRAC, STNZ, SETV)),                    // DR -> AC, N, Z, V
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new omc("SWAM",     cs(RDDR, HTOL, LTOL, WRBR)),                                // DR -> BR
+        new omc("SWAM",     cs(RDDR, HTOH, LTOL, WRBR)),                                // DR -> BR
         new omc(            cs(RDAC, HTOH, LTOL, WRDR)),                                // AC -> DR
         // !!! CHECK FLAGS !!!
         new omc(            cs(RDBR, HTOH, LTOL, WRAC, STOR)),                          // DR -> MEM(AR), BR -> AC
