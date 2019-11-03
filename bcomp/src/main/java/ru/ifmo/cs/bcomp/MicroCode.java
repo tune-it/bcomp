@@ -108,7 +108,7 @@ public class MicroCode {
         new CMC("T111X",    cs(RDCR, HTOL), 0, 0,                           "T1110"),   // if CR(8) = 0 then GOTO RESERVED
         new omc("T1111",    cs(RDBR, HTOH, LTOL, WRDR)),                                // BR -> DR
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "EXEC"),    // GOTO EXEC
-        new omc("T1110",    cs(RDBR, RDSP, HTOH, LTOL, WRDR)),                          // BR + SP -> DR
+        new omc("T1110",    cs(RDBR, RDIP, HTOH, LTOL, WRDR)),                          // BR + IP -> DR
 
         // Выборка операнда
         new CMC("OPFETCH",  cs(RDCR, HTOL), 7, 0,                           "RDVALUE"), // if CR(15) = 0 then GOTO RDVALUE
