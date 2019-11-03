@@ -277,7 +277,9 @@ public class BasicCompTest {
 					memory.setValue(mem.addr.value, mem.value.value);
 				nextWrite = expectedWrites.listIterator();
 
+				System.out.println("=== BEFORE " + Long.toHexString(regs.get(PS).getValue()));
 				run.run();
+				System.out.println("=== AFTER " + Long.toHexString(regs.get(PS).getValue()));
 
 				for (Reg r : TEST_REGISTERS)
 					assertEquals("Register " + r.name(),
