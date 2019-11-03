@@ -40,32 +40,74 @@ public class BasicCompTest {
 		"WRITE; IR=1313,IP=7FF; IP=000,AR=7FF,DR=1313,7FF=1313",
 		"READ; IP=100,100=BEEF; IP=101,AR=100,DR=BEEF",
 		"READ; IP=7FF,7FF=1313; IP=000,AR=7FF,DR=1313",
+
 		"0000", // NOP
+
 		"0100", // HLT
+
 		"0200; ; AC=0000,N=0,Z=1,V=0", // CLA
+
 		"0280; AC=BEEF; AC=4110,V=0,Z=0,N=0", // NOT
 		"0280; AC=FFFF; AC=0000,V=0,Z=1,N=0", // NOT
 		"0280; AC=0000; AC=FFFF,V=0,Z=0,N=1", // NOT
+
 		"0300; ; C=0", // CLC
+
 		"0380; C=1; C=0", // CMC
 		"0380; C=0; C=1", // CMC
+
 		"0400; AC=BEEF,C=1; AC=7DDF,Z=0,N=0,V=1,C=1", // ROL
 		"0400; AC=5555,C=0; AC=AAAA,Z=0,N=1,V=1,C=0", // ROL
 		"0400; AC=8000,C=0; AC=0000,Z=1,N=0,V=1,C=1", // ROL
 		"0400; AC=0000,C=1; AC=0001,Z=0,N=0,V=0,C=0", // ROL
+
 		"0480; AC=BEEF,C=1; AC=DF77,Z=0,N=1,V=0,C=1", // ROR
 		"0480; AC=8000,C=0; AC=4000,Z=0,N=0,V=0,C=0", // ROR
 		"0480; AC=0001,C=0; AC=0000,Z=1,N=0,V=1,C=1", // ROR
+
 		"0500; AC=BEEF; DR=BEEF,AC=7DDE,N=0,Z=0,V=1,C=1", // ASL
 		"0500; AC=4444; DR=4444,AC=8888,N=1,Z=0,V=1,C=0", // ASL
 		"0500; AC=2222; DR=2222,AC=4444,N=0,Z=0,V=0,C=0", // ASL
 		"0500; AC=FFFF; DR=FFFF,AC=FFFE,N=1,Z=0,V=0,C=1", // ASL
 		"0500; AC=0000; DR=0000,AC=0000,N=0,Z=1,V=0,C=0", // ASL
+
 		"0580; AC=BEEF; AC=DF77,N=1,Z=0,V=0", // ASR
 		"0580; AC=8000; AC=C000,N=1,Z=0,V=1", // ASR
 		"0580; AC=0001; AC=0000,N=0,Z=1,V=1", // ASR
 		"0580; AC=4444; AC=2222,N=0,Z=0,V=0", // ASR
 		"0580; AC=5555; AC=2AAA,N=0,Z=0,V=1", // ASR
+
+		"0600; AC=8888; AC=FF88,N=1,Z=0,V=0", // SXTB
+		"0600; AC=4444; AC=0044,N=0,Z=0,V=0", // SXTB
+		"0600; AC=0000; AC=0000,N=0,Z=1,V=0", // SXTB
+
+		"0640; AC=BEEF; AC=BEEF,N=1,Z=0,V=0", // TST
+		"0640; AC=1313; AC=1313,N=0,Z=0,V=0", // TST
+		"0640; AC=0000; AC=0000,N=0,Z=1,V=0", // TST
+
+		"0680; AC=BEEF; AC=EFBE,N=1,Z=0,V=0", // SWAB
+		"0680; AC=7654; AC=5476,N=0,Z=0,V=0", // SWAB
+		"0680; AC=0000; AC=0000,N=0,Z=1,V=0", // SWAB
+
+		"0700; AC=BEEF; AC=BEF0,N=1,Z=0,V=0,C=0", // INC
+		"0700; AC=7FFF; AC=8000,N=1,Z=0,V=1,C=0", // INC
+		"0700; AC=1313; AC=1314,N=0,Z=0,V=0,C=0", // INC
+		"0700; AC=FFFF; AC=0000,N=0,Z=1,V=0,C=1", // INC
+
+		"0740; AC=BEEF; AC=BEEE,N=1,Z=0,V=0,C=1", // DEC
+		"0740; AC=8000; AC=7FFF,N=0,Z=0,V=1,C=1", // DEC
+		"0740; AC=0000; AC=FFFF,N=1,Z=0,V=0,C=0", // DEC
+		"0740; AC=0001; AC=0000,N=0,Z=1,V=0,C=1", // DEC
+
+		"0780; AC=BEEF; AC=4111,N=0,Z=0,V=0,C=0", // NEG
+		"0780; AC=1313; AC=ECED,N=1,Z=0,V=0,C=0", // NEG
+		"0780; AC=0000; AC=0000,N=0,Z=1,V=0,C=1", // NEG
+
+		"0800; SP=600,600=BEEF; DR=BEEF,AR=600,SP=601,AC=BEEF", // POP
+		"0800; SP=7FF,7FF=1313; DR=1313,AR=7FF,SP=000,AC=1313", // POP
+
+		"0900; SP=600,600=0400; DR=0400,AR=600,SP=601,EI=0,F=0,N=0,Z=0,V=0,C=0", // POPF
+		"0900; SP=7FF,7FF=045F; DR=045F,AR=7FF,SP=000,EI=1,F=1,N=1,Z=1,V=1,C=1", // POPF
 	};
 
 	private final BasicComp bcomp;
@@ -233,7 +275,6 @@ public class BasicCompTest {
 
 				for (MemoryValue mem : initialMemory)
 					memory.setValue(mem.addr.value, mem.value.value);
-
 				nextWrite = expectedWrites.listIterator();
 
 				run.run();
