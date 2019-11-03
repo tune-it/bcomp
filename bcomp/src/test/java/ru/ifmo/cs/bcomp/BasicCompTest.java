@@ -71,11 +71,11 @@ public class BasicCompTest {
 		"0500; AC=FFFF; DR=FFFF,AC=FFFE,N=1,Z=0,V=0,C=1", // ASL
 		"0500; AC=0000; DR=0000,AC=0000,N=0,Z=1,V=0,C=0", // ASL
 
-		"0580; AC=BEEF; AC=DF77,N=1,Z=0,V=0", // ASR
-		"0580; AC=8000; AC=C000,N=1,Z=0,V=1", // ASR
-		"0580; AC=0001; AC=0000,N=0,Z=1,V=1", // ASR
-		"0580; AC=4444; AC=2222,N=0,Z=0,V=0", // ASR
-		"0580; AC=5555; AC=2AAA,N=0,Z=0,V=1", // ASR
+		"0580; AC=BEEF; AC=DF77,N=1,Z=0,V=0,C=1", // ASR
+		"0580; AC=8000; AC=C000,N=1,Z=0,V=1,C=0", // ASR
+		"0580; AC=0001; AC=0000,N=0,Z=1,V=1,C=1", // ASR
+		"0580; AC=4444; AC=2222,N=0,Z=0,V=0,C=0", // ASR
+		"0580; AC=5555; AC=2AAA,N=0,Z=0,V=1,C=1", // ASR
 
 		"0600; AC=8888; AC=FF88,N=1,Z=0,V=0", // SXTB
 		"0600; AC=4444; AC=0044,N=0,Z=0,V=0", // SXTB
@@ -277,9 +277,7 @@ public class BasicCompTest {
 					memory.setValue(mem.addr.value, mem.value.value);
 				nextWrite = expectedWrites.listIterator();
 
-				System.out.println("=== BEFORE " + Long.toHexString(regs.get(PS).getValue()));
 				run.run();
-				System.out.println("=== AFTER " + Long.toHexString(regs.get(PS).getValue()));
 
 				for (Reg r : TEST_REGISTERS)
 					assertEquals("Register " + r.name(),
