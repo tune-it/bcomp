@@ -148,7 +148,7 @@ public class MicroCode {
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("CMD101X",  cs(RDCR, HTOL), 4, 1,                           "SWAM"),    // if CR(12) = 1 then GOTO SWAM
         // !!! CHECK FLAGS !!!
-        new omc("LD",       cs(RDDR, HTOH, LTOL, WRAC)),                                // DR -> AC
+        new omc("LD",       cs(RDDR, HTOH, LTOL, WRAC, STNZ, SETV)),                    // DR -> AC, N, Z, V
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new omc("SWAM",     cs(RDDR, HTOL, LTOL, WRBR)),                                // DR -> BR
         new omc(            cs(RDAC, HTOH, LTOL, WRDR)),                                // AC -> DR
@@ -257,7 +257,7 @@ public class MicroCode {
         new omc(            cs(LOAD)),                                                  // MEM(AR) -> DR
         new CMC(            cs(RDCR, HTOL), 1, 1,                           "AL101X"),  // if CR(9) = 1 then AL101X
         new CMC("AL100X",   cs(RDCR, HTOL), 0, 1,                           "POPF"),    // if CR(8) = 1 then POPF
-        new omc("POP",      cs(RDDR, HTOH, LTOL, WRAC)),                                // DR -> AC
+        new omc("POP",      cs(RDDR, HTOH, LTOL, WRAC, STNZ, SETV)),                    // DR -> AC, N, Z, V
         new omc("INCSP",    cs(RDSP, PLS1, HTOH, LTOL, WRSP)),                          // SP + 1 -> SP
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new omc("POPF",     cs(RDDR, HTOH, LTOL, WRPS)),                                // DR -> PS
@@ -280,7 +280,7 @@ public class MicroCode {
         new omc(            cs(LOAD)),                                                  // MEM(AR) -> DR
         new omc(            cs(RDDR, HTOH, LTOL, WRBR)),                                // DR -> BR
         new omc(            cs(RDAC, HTOH, LTOL, WRDR)),                                // AC -> DR
-        new omc(            cs(RDBR, HTOH, LTOL, WRBR, STOR)),                          // BR -> AC; DR -> MEM(AR)
+        new omc(            cs(RDBR, HTOH, LTOL, WRAC, STNZ, SETV, STOR)),              // BR -> AC, N, Z, V; DR -> MEM(AR)
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         // IO
         new omc("IO",       cs(IO)),                                                    // IO
