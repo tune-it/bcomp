@@ -121,10 +121,10 @@ public class MicroCode {
         new CMC("CMD0XXX",  cs(RDCR, HTOL), 6, 1,                           "CMD01XX"), // if CR(14) = 1 then GOTO CMD01XX
         // 13th bit already checked !!! CHECK LABEL NAME !!!
         new CMC("CMD000X",  cs(RDCR, HTOL), 4, 1,                           "OR"),      // if CR(12) = 1 then GOTO OR
-        new omc("AND",      cs(RDAC, RDDR, SORA, HTOH, LTOL, STNZ, WRAC)),              // AC & DR -> AC, N, Z
+        new omc("AND",      cs(RDAC, RDDR, SORA, HTOH, LTOL, STNZ, SETV, WRAC)),        // AC & DR -> AC, N, Z, V
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new omc("OR",       cs(RDAC, RDDR, COML, COMR, SORA, HTOH, LTOL, WRBR)),        // ~AC & ~DR -> BR
-        new omc(            cs(RDBR, COML, HTOH, LTOL, STNZ, WRAC)),                    // ~BR -> AC, N, Z
+        new omc(            cs(RDBR, COML, HTOH, LTOL, STNZ, SETV, WRAC)),              // ~BR -> AC, N, Z, V
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("CMD01XX",  cs(RDCR, HTOL), 5, 1,                           "CMD011X"), // if CR(13) = 1 then GOTO CMD011X
         new CMC("CMD010X",  cs(RDCR, HTOL), 4, 1,                           "ADC"),     // if CR(12) = 1 then GOTO ADC
