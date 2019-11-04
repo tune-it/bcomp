@@ -197,11 +197,16 @@ public class MicroCode {
         new CMC("BVC",      cs(RDPS, LTOL), V.ordinal(), 0,                 "BR"),      // if V = 0 then GOTO BR
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("BR1XXX",   cs(RDCR, HTOL), 2, 1,                           "RESERVED"),// if CR(10) = 1 then GOTO RESERVED
-        new CMC("BR10XX",   cs(RDCR, HTOL), 1, 1,                           "RESERVED"),// if CR(9) = 1 then GOTO RESERVED
-        new CMC("BR100X",   cs(RDCR, HTOL), 0, 1,                           "BFC"),     // if CR(8) = 1 then GOTO BFC
-        new CMC("BFS",      cs(RDPS, LTOL), F.ordinal(), 0,                 "BR"),      // if F = 0 then GOTO BR
+        new CMC("BR10XX",   cs(RDCR, HTOL), 1, 1,                           "BR101X"),  // if CR(9) = 1 then GOTO RESERVED
+        new CMC("BR100X",   cs(RDCR, HTOL), 0, 1,                           "BGE"),     // if CR(8) = 1 then GOTO BGE
+        new CMC("BLT",      cs(RDPS, LTOL), N.ordinal(), 0,                 "BVS"),     // if N = 0 then GOTO BVS
+        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "BVC"),     // GOTO BVC
+        new CMC("BGE",      cs(RDPS, LTOL), N.ordinal(), 0,                 "BVC"),     // if N = 0 then GOTO BVC
+        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "BVS"),     // GOTO BVS
+        new CMC("BR101X",   cs(RDCR, HTOL), 0, 1,                           "BFC"),     // if CR(8) = 1 then GOTO BFC
+        new CMC("BFS",      cs(RDPS, LTOL), F.ordinal(), 1,                 "BR"),      // if F = 1 then GOTO BR
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new CMC("BFC",      cs(RDPS, LTOL), F.ordinal(), 1,                 "BR"),      // if F = 1 then GOTO BR
+        new CMC("BFC",      cs(RDPS, LTOL), F.ordinal(), 0,                 "BR"),      // if F = 0 then GOTO BR
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
 
         // Безадресные команды
@@ -337,7 +342,7 @@ public class MicroCode {
         throw new Exception("Label '" + label + "' not found");
     }
 
-	public String getLabel(int addr) {
-		return addr < MP.length ? MP[addr].label : null;
-	}
+    public String getLabel(int addr) {
+        return addr < MP.length ? MP[addr].label : null;
+    }
 }
