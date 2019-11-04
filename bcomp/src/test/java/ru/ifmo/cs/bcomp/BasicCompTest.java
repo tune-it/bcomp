@@ -205,6 +205,22 @@ public class BasicCompTest {
 
 		"F7EF; V=0; IP=0F0,BR=FFEF", // BVC
 		"F7EF; V=1;", // BVC
+
+		"F83F; N=0,V=0;", // BLT
+		"F83F; N=0,V=1; IP=140,BR=003F", // BLT
+		"F8EF; N=1,V=0; IP=0F0,BR=FFEF", // BLT
+		"F8EF; N=1,V=1;", // BLT
+
+		"F93F; N=0,V=1;", // BGE
+		"F93F; N=0,V=0; IP=140,BR=003F", // BGE
+		"F9EF; N=1,V=1; IP=0F0,BR=FFEF", // BGE
+		"F9EF; N=1,V=0;", // BGE
+
+		"FA3F; F=0;", // BFS
+		"FA3F; F=1; IP=140,BR=003F", // BFS
+
+		"FBEF; F=0; IP=0F0,BR=FFEF", // BFC
+		"FBEF; F=1;", // BFC
 	};
 
 	private final BasicComp bcomp;
