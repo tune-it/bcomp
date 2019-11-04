@@ -183,8 +183,12 @@ public class MCDecoder {
 				return "HTOH(" + alu + ")";
 		}
 
-		if (cs.contains(LTOL))
-			return "LTOL(" + alu + ")";
+		if (cs.contains(LTOL)) {
+			if (cs.contains(SEXT))
+				return "extend sign " + alu + "(0..7)";
+			else
+				return "LTOL(" + alu + ")";
+		}
 
 		if (cs.contains(LTOH)) {
 			if (cs.contains(HTOL))
@@ -199,19 +203,18 @@ public class MCDecoder {
 		if (cs.contains(SEXT))
 			return "SEXT(" + alu + ")";
 
-
 		if (cs.contains(SHLT)) {
 			if (cs.contains(SHL0))
-				return "SHLT+SHL0(" + alu + ")";
+				return "ROL(" + alu + ")";
 			else
-				return "SHLT(" + alu + ")";
+				return "SHL(" + alu + ")";
 		}
 
 		if (cs.contains(SHRT)) {
 			if (cs.contains(SHRF))
-				return "SHRT+SHRF(" + alu + ")";
+				return "ROR(" + alu + ")";
 			else
-				return "SHRT(" + alu + ")";
+				return "ASR(" + alu + ")";
 		}
 
 		return null;
