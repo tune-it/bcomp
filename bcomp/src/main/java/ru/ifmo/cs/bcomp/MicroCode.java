@@ -181,20 +181,20 @@ public class MicroCode {
         new CMC("BNE",      cs(RDPS, LTOL), Z.ordinal(), 0,                 "BR"),      // if Z = 0 then GOTO BR
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("BR001X",   cs(RDCR, HTOL), 0, 1,                           "BPL"),     // if CR(8) then GOTO BPL
-        new CMC("BMI",      cs(RDPS, LTOL), N.ordinal(), 0,                 "BR"),      // if N = 0 then GOTO BR
+        new CMC("BMI",      cs(RDPS, LTOL), N.ordinal(), 1,                 "BR"),      // if N = 1 then GOTO BR
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new CMC("BPL",      cs(RDPS, LTOL), N.ordinal(), 1,                 "BR"),      // if N = 1 then GOTO BR
+        new CMC("BPL",      cs(RDPS, LTOL), N.ordinal(), 0,                 "BR"),      // if N = 0 then GOTO BR
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("BR01XX",   cs(RDCR, HTOL), 1, 1,                           "BR011X"),  // if CR(9) = 1 then GOTO BR011X
         new CMC("BR010X",   cs(RDCR, HTOL), 0, 1,                           "BCC"),     // if CR(8) = 1 then GOTO BCC
-        new CMC("BCS",      cs(RDPS, LTOL), C.ordinal(), 0,                 "BR"),      // if C = 0 then GOTO BR
+        new CMC("BCS",      cs(RDPS, LTOL), C.ordinal(), 1,                 "BR"),      // if C = 1 then GOTO BR
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new CMC("BCC",      cs(RDPS, LTOL), C.ordinal(), 1,                 "BR"),      // if C = 1 then GOTO BR
+        new CMC("BCC",      cs(RDPS, LTOL), C.ordinal(), 0,                 "BR"),      // if C = 0 then GOTO BR
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("BR011X",   cs(RDCR, HTOL), 0, 1,                           "BVC"),     // if CR(8) = 1 then GOTO BCC
-        new CMC("BVS",      cs(RDPS, LTOL), V.ordinal(), 0,                 "BR"),      // if V = 0 then GOTO BR
+        new CMC("BVS",      cs(RDPS, LTOL), V.ordinal(), 1,                 "BR"),      // if V = 1 then GOTO BR
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new CMC("BVC",      cs(RDPS, LTOL), V.ordinal(), 1,                 "BR"),      // if V = 1 then GOTO BR
+        new CMC("BVC",      cs(RDPS, LTOL), V.ordinal(), 0,                 "BR"),      // if V = 0 then GOTO BR
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("BR1XXX",   cs(RDCR, HTOL), 2, 1,                           "RESERVED"),// if CR(10) = 1 then GOTO RESERVED
         new CMC("BR10XX",   cs(RDCR, HTOL), 1, 1,                           "RESERVED"),// if CR(9) = 1 then GOTO RESERVED
