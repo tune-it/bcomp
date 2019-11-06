@@ -81,10 +81,6 @@ public class BasicCompTest {
 		"0600; AC=4444; AC=0044,N=0,Z=0,V=0", // SXTB
 		"0600; AC=0000; AC=0000,N=0,Z=1,V=0", // SXTB
 
-		"0640; AC=BEEF; N=1,Z=0,V=0", // TST
-		"0640; AC=1313; N=0,Z=0,V=0", // TST
-		"0640; AC=0000; N=0,Z=1,V=0", // TST
-
 		"0680; AC=BEEF; AC=EFBE,N=1,Z=0,V=0", // SWAB
 		"0680; AC=7654; AC=5476,N=0,Z=0,V=0", // SWAB
 		"0680; AC=0000; AC=0000,N=0,Z=1,V=0", // SWAB

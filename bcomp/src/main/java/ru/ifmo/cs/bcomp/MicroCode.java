@@ -242,10 +242,7 @@ public class MicroCode {
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("AL011X",   cs(RDCR, HTOL), 0, 1,                           "AL0111"),  // if CR(8) = 1 then GOTO AL0111
         new CMC("AL0110",   cs(RDCR, LTOL), 7, 1,                           "SWAB"),    // if CR(7) = 1 then GOTO SWAB
-        new CMC("AL01100",  cs(RDCR, LTOL), 6, 1,                           "TST"),     // if CR(6) = 1 then GOTO TST
         new omc("SXTB",     cs(RDAC, SEXT, LTOL, STNZ, SETV, WRAC)),                    // SEXT(AC) -> AC, N, Z, V
-        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new omc("TST",      cs(RDAC, HTOH, LTOL, STNZ, SETV)),                          // AC -> N, Z, V
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new omc("SWAB",     cs(RDAC, HTOL, LTOH, STNZ, SETV, WRAC)),                    // SWAB(AC) -> AC, N, Z, V
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
