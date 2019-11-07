@@ -67,8 +67,8 @@ public class MicroCode {
     }
 
     private final omc[] MP = {
-        // Пустая ячейка
-        new omc(            cs()),
+        // Halt basic computer when unnecessary call to reserved command or addressing type
+        new omc(            cs(HALT)),
 
         // Выборка команды
         new omc("INFETCH",  cs(RDIP, HTOH, LTOL, WRAR, WRBR)),                          // IP -> AR, BR
