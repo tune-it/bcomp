@@ -104,8 +104,8 @@ public class CLI {
 	private void printRegsTitle() {
 		if (!printRegsTitle)
 			return;
-		//Адр Знчн  IP  AR  SP  CR   DR   BR   AC  NZVC Адр Знчн
-		//Адр    МК      IP  AR  SP  CR   DR   BR   AC  NZVC СчМК
+		//Адр Знчн  IP  AR  CR   DR  SP   BR   AC  NZVC Адр Знчн
+		//Адр    МК      IP  SP  CR   DR  SP   BR   AC  NZVC СчМК
 
 		String space;
 		println(
@@ -113,9 +113,9 @@ public class CLI {
 			+ (cpu.getClockState() ? "Знчн" : "   МК    ") + (space = "  ")
 			+ Reg.IP.name() + space
 			+ Reg.AR.name() + space
-			+ Reg.SP.name() + space
 			+ Reg.CR.name() + (space = "   ")
 			+ Reg.DR.name() + space
+			+ Reg.SP.name() + "  "
 			+ Reg.BR.name() + space
 			+ Reg.AC.name() + "  "
 			+ "NZVC "
@@ -129,9 +129,9 @@ public class CLI {
 			(cpu.getClockState() ? getMemory(savedPointer) : Utils.toHex(savedPointer, 8) + " " + Utils.toHex(cpu.getMicroCode().getValue(savedPointer), 40)) + " "
 			+ getReg(Reg.IP) + " "
 			+ getReg(Reg.AR) + " "
-			+ getReg(Reg.SP) + " "
 			+ getReg(Reg.CR) + " "
 			+ getReg(Reg.DR) + " "
+			+ getReg(Reg.SP) + " "
 			+ getReg(Reg.BR) + " "
 			+ getReg(Reg.AC) + " "
 			+ Utils.toBinary(cpu.getRegValue(Reg.PS) & 0xF,4)
