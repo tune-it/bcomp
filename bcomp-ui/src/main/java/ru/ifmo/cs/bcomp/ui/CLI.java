@@ -101,43 +101,28 @@ public class CLI {
 		println(MCDecoder.getFormattedMC(cpu, addr));
 	}
 
+	private Reg[] printRegs = new Reg[]{ Reg.IP, Reg.CR, Reg.AR, Reg.DR, Reg.SP, Reg.BR, Reg.AC };
 	private void printRegsTitle() {
 		if (!printRegsTitle)
 			return;
-		//Адр Знчн  IP  CR   AR  DR   SP  BR   AC  NZVC Адр Знчн
-		//Адр    МК      IP  CR   AR  DR   SP  BR   AC  NZVC СчМК
 
-		String smSp = "  ";
-		String bigSp = "   ";
-		println(
-			"Адр "
-			+ (cpu.getClockState() ? "Знчн" : "   МК    ") + smSp
-			+ Reg.IP.name() + smSp
-			+ Reg.CR.name() + bigSp
-			+ Reg.AR.name() + smSp
-			+ Reg.DR.name() + bigSp
-			+ Reg.SP.name() + smSp
-			+ Reg.BR.name() + bigSp
-			+ Reg.AC.name() + smSp
-			+ "NZVC "
-			+ (cpu.getClockState() ? "Адр Знчн" : "СчМК")
-		);
+		print("Адр " + (cpu.getClockState() ? "Знчн" : "   МК    "));
+		for (Reg reg : printRegs) {
+			int width = (int) Math.ceil(cpu.getRegWidth(reg) / 4.0);
+			int l = (int) Math.ceil((width - reg.name().length()) / 2.0);
+			print(String.format(" %" + (l>0 ? l : "") + "s%-" + (width - l) + "s", "", reg.name()));
+		}
+		println(" NZVC " + (cpu.getClockState() ? "Адр Знчн" : "СчМК"));
+
 		printRegsTitle = false;
 	}
-
 	private void printRegs(String add) {
-		println(
-			(cpu.getClockState() ? getMemory(savedPointer) : Utils.toHex(savedPointer, 8) + " " + Utils.toHex(cpu.getMicroCode().getValue(savedPointer), 40)) + " "
-			+ getReg(Reg.IP) + " "
-			+ getReg(Reg.CR) + " "
-			+ getReg(Reg.AR) + " "
-			+ getReg(Reg.DR) + " "
-			+ getReg(Reg.SP) + " "
-			+ getReg(Reg.BR) + " "
-			+ getReg(Reg.AC) + " "
-			+ Utils.toBinary(cpu.getRegValue(Reg.PS) & 0xF,4)
-			+ (cpu.getClockState() ? add : "  " + getReg(Reg.MP))
-		);
+		print((cpu.getClockState() ? getMemory(savedPointer) : Utils.toHex(savedPointer, 8) +
+				' ' + Utils.toHex(cpu.getMicroCode().getValue(savedPointer), 40)));
+		for (Reg reg : printRegs)
+			print(' ' + getReg(reg));
+		println(' ' + Utils.toBinary(cpu.getRegValue(Reg.PS) & 0xF,4)
+				+ (cpu.getClockState() ? add : "  " + getReg(Reg.MP)));
 	}
 
 	private void printIO(int ioaddr) {
@@ -210,7 +195,7 @@ public class CLI {
 		int i, value;
 		String[] cmds = line.split("[ \t]+");
 
-		if(cmds.length == 0)
+		if (cmds.length == 0)
 			return;
 
 		for (i = 0, printRegsTitle = printMicroTitle = true; i < cmds.length; i++) {
@@ -230,7 +215,7 @@ public class CLI {
 				continue;
 			}
 
-			try{
+			try {
 				if (checkCmd(cmd, "address")) {
 					checkResult(cpu.executeSetAddr());
 					continue;
@@ -340,7 +325,6 @@ public class CLI {
 					for (;;) {
 						line = fetchLine();
 
-
 						if (line.equalsIgnoreCase("END"))
 							break;
 
@@ -392,6 +376,10 @@ public class CLI {
 		return input.nextLine();
 	}
 
+	@SuppressWarnings("WeakerAccess")
+	protected void print(String str){
+		System.out.print(str);
+	}
 	@SuppressWarnings("WeakerAccess")
 	protected void println(String str){
 		System.out.println(str);
