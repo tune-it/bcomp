@@ -5,12 +5,12 @@
   <parent>
     <groupId>ru.ifmo.cs</groupId>
     <artifactId>BasicComputer</artifactId>
-    <version>1</version>
+    <version>2</version>
   </parent>
   <groupId>ru.ifmo.cs</groupId>
-  <artifactId>bcomp</artifactId>
+  <artifactId>bcomp-ng</artifactId>
   <version>1</version>
-  <name>bcomp</name>
+  <name>bcomp-ng</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
