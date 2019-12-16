@@ -60,9 +60,9 @@ public class RunningCycleView extends BCompComponent {
 		RunningCycle newcycle = cpu.getRunningCycle();
 
 		if (newcycle != lastcycle) {
-			if (lastcycle != RunningCycle.STOP)
+			if (lastcycle != RunningCycle.STOP && lastcycle != RunningCycle.RESERVED)
 				labels[cycles.get(lastcycle)].setForeground(COLOR_TEXT);
-			if (newcycle != RunningCycle.STOP)
+			if (newcycle != RunningCycle.STOP && newcycle != RunningCycle.RESERVED)
 			labels[cycles.get(newcycle)].setForeground(COLOR_ACTIVE);
 			lastcycle = newcycle;
 		}
