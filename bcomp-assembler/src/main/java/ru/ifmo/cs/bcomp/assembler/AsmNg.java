@@ -19,7 +19,7 @@ import ru.ifmo.cs.bcomp.grammar.BCompNGParser.*;
  *
  * @author serge
  */
-public class AsmNg extends Asm {
+public class AsmNg {
     /**
      * If you don't have ORG directive assembler starts code generation
      * from base_address
@@ -30,7 +30,7 @@ public class AsmNg extends Asm {
         AsmNg asmng = new AsmNg(
                 "ORG 020h\n" +
                 "ad: and ad\n" +
-                "ORG 023h\n" +
+                "ORG 020h\n" +
                 "    OR $ad\n" +
                 "bc:\n" +
                 "    ADC $бяка\n" +
@@ -42,7 +42,17 @@ public class AsmNg extends Asm {
                 "    BR бяка\n" +
                 "    ПРЫГ (bc)\n" +
                         "");
-        asmng.compile();
+        Program prog = asmng.compile();
+        LinkedList<Integer> addresses = new LinkedList<Integer>(prog.memory.keySet());
+        Collections.sort(addresses);
+        for (Integer addr : addresses ) {
+            MemoryWord w = prog.memory.get(addr);
+            System.out.println(w);
+        }        
+        
+        for (Integer w : prog.getBinaryFormat()) {
+            System.out.println(Integer.toHexString(w+0x100000).substring(2));
+        }
     }
     
     private CodePointCharStream program;
@@ -67,24 +77,14 @@ public class AsmNg extends Asm {
         return parser;
     }
     
-    public LinkedList<Integer> compile () {
-
+    public Program compile () {
         //decode commands and collect all labels
         //System.out.println("first pass");        
         firstPass();
         //debug output
-        LinkedList<Integer> addresses = new LinkedList<Integer>(memory.keySet());
-        Collections.sort(addresses);
-        //for (Integer addr : addresses ) {
-        //    MemoryWord w = memory.get(addr);
-        //    System.out.println(w);
-        //}
         //System.out.println(labels);     
         //System.out.println("second pass");
-        LinkedList<Integer> prog = secondPass();
-        //for (Integer w : prog) {
-        //    System.out.println(Integer.toHexString(w+0x100000).substring(2));
-        //}
+        Program prog = secondPass();
         return prog;
     }
     
@@ -190,16 +190,17 @@ public class AsmNg extends Asm {
         walker.walk(fp, tree);
     }
 
-    protected LinkedList<Integer> secondPass () {
+    protected Program secondPass () {
         LinkedList<Integer> addresses = new LinkedList<Integer>(memory.keySet());
-        LinkedList<Integer> prog = new LinkedList<Integer>();
+        LinkedList<Integer> binary = new LinkedList<Integer>();
+        Program prog = new Program();
+        //
         Collections.sort(addresses);
-        Integer start = addresses.getFirst();
-        prog.add(start); //write first memory address
+        prog.load_address = addresses.getFirst();
+        prog.start_address = prog.load_address;
         if (labels.containsKey("START")) {
-            start = labels.get("START").address;
+            prog.start_address = labels.get("START").address;
         }
-        prog.add(start); //write start address
         int prev = addresses.getFirst();
         for (Integer addr : addresses ) {
             MemoryWord w = memory.get(addr);
@@ -221,17 +222,20 @@ public class AsmNg extends Asm {
             }
             while (w.address - prev > 1) {
                 //generate zeroes when hole found
-                prog.add(0);
+                binary.add(0);
                 prev++;
             }
-            prog.add(w.value);
+            binary.add(w.value);
             prev = w.address; //to be sure
             //System.out.println(w);
         }
+        prog.binary = binary;
+        prog.labels = labels;
+        prog.memory = memory;
         return prog;
     }
     
-    protected static Integer parseIntFromNumberContext(NumberContext nc) {
+    private static Integer parseIntFromNumberContext(NumberContext nc) {
         Integer number = null;
         String text = null;
         if (nc.DECIMAL() != null) {
