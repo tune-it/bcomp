@@ -33,12 +33,12 @@ public abstract class BCompPanel extends ActivateblePanel {
 	FlagView[] flags;
 
 
-	public BCompPanel(ComponentManager cmanager, RegisterProperties[] regProps, Map baseMap) {
+	public BCompPanel(ComponentManager cmanager, RegisterProperties[] regProps, Map<BusNames, BusView> baseMap) {
 		setLayout(new BorderLayout());
 		this.cmanager = cmanager;
 		this.regProps = regProps;
-		this.busesMap=baseMap;
-		regPanel=new RegPanel();
+		this.busesMap = baseMap;
+		regPanel = new RegPanel();
 	}
 	protected class RegPanel extends JComponent {
 		RegPanel() {
