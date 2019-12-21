@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import ru.ifmo.cs.bcomp.*;
 import ru.ifmo.cs.components.DataDestination;
+import ru.ifmo.cs.bcomp.assembler.AsmNg;
 
 /**
  *
@@ -17,7 +18,6 @@ public class CLI {
 	private final BasicComp bcomp;
 	private final CPU cpu;
 //	private final IOCtrl[] ioctrls; //TODO IOCtrl
-//	protected final Assembler asm; //TODO Assembler
 	private final ArrayList<Long> writelist = new ArrayList<Long>();
 
 	private int sleeptime = 1;
@@ -332,9 +332,11 @@ public class CLI {
 					}
 
 					printOnStop = false;
-//						asm.compileProgram(code);
-//						asm.loadProgram(cpu);
-//						println("Программа начинается с адреса " + Utils.toHex(asm.getBeginAddr(), 11));
+                                                AsmNg asm = new AsmNg(code);
+                                                ProgramBinary prog = new ProgramBinary();
+                                                prog.loadBinaryFormat(asm.compile().getBinaryFormat());
+                                                bcomp.loadProgram(prog);
+						println("Программа начинается с адреса " + Utils.toHex(prog.start_address, 11));
 					printOnStop = true;
 
 //					try {

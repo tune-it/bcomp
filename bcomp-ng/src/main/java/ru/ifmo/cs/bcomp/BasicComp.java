@@ -4,11 +4,6 @@
 
 package ru.ifmo.cs.bcomp;
 
-import java.util.EnumMap;
-import ru.ifmo.cs.components.Memory;
-import ru.ifmo.cs.components.Register;
-import static ru.ifmo.cs.bcomp.Utils.toHex;
-
 /**
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
@@ -63,6 +58,19 @@ public class BasicComp {
 			cpu.tickUnlock();
 		}
 	}
+        
+        public void loadProgram(ProgramBinary prog) throws RuntimeException {
+            if (cpu.isLocked())
+                    throw new RuntimeException("Операция невозможна: выполняется программа");
+            if (!cpu.executeSetAddr(prog.load_address))
+                    throw new RuntimeException("Операция прервана: выполняется программа");
+            for (Integer cmd : prog.binary) {
+                if (!cpu.executeWrite(cmd))
+                        throw new RuntimeException("Операция прервана: выполняется программа");
+            }
+            if (!cpu.executeSetAddr(prog.start_address))
+                    throw new RuntimeException("Операция прервана: выполняется программа");
+        }
 /*
 	public IOCtrl[] getIOCtrls() {
 		return ioctrls;
