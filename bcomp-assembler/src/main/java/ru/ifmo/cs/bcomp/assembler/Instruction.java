@@ -3,98 +3,52 @@
  */
 
 package ru.ifmo.cs.bcomp.assembler;
+import static ru.ifmo.cs.bcomp.assembler.Instruction.Type.*;
 
 /**
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public enum Instruction {
-    
-        //address
-        AND(0x2000,"AND",Type.ADDR),
-        OR(0x3000,"OR" ,Type.ADDR),
-        ADD(0x4000,"ADD",Type.ADDR),
-        ADC(0x5000,"ADC",Type.ADDR),
-        SUB(0x6000,"SUB",Type.ADDR),
-        CMP(0x7000,"CMP",Type.ADDR),
-        LOOP(0x8000,"LOOP",Type.ADDR),
-        LD(0xA000,"LD",Type.ADDR),
-        SWAM(0xB000,"SWAM",Type.ADDR),
-        JUMP(0xC000,"JUMP",Type.ADDR),
-        CALL(0xD000,"CALL",Type.ADDR),
-        ST(0xE000,"ST",Type.ADDR),
-        //addressless
-        NOP(0x0000,"NOP",Type.NONADDR),
-        HLT(0x0100,"HLT",Type.NONADDR),
-        CLA(0x0200,"CLA",Type.NONADDR),
-        NOT(0x0280,"NOT",Type.NONADDR),
-        CLC(0x0300,"CLC",Type.NONADDR),
-        CMC(0x0380,"CMC",Type.NONADDR),
-        ROL(0x0400,"ROL",Type.NONADDR),
-        ROR(0x0480,"ROR",Type.NONADDR),
-        ASL(0x0500,"ASL",Type.NONADDR),
-        ASR(0x0580,"ASR",Type.NONADDR),
-        SXTB(0x0600,"SXTB",Type.NONADDR),
-        SWAB(0x0680,"SWAB",Type.NONADDR),
-        INC(0x0700,"INC",Type.NONADDR),
-        DEC(0x0740,"DEC",Type.NONADDR),
-        NEG(0x0780,"DEC",Type.NONADDR),
-        POP(0x0800,"POP",Type.NONADDR),
-        POPF(0x0900,"POPF",Type.NONADDR),
-        RET(0x0A00,"RET",Type.NONADDR),
-        IRET(0x0B00,"IRET",Type.NONADDR),
-        PUSH(0x0C00,"PUSH",Type.NONADDR),
-        PUSHF(0x0D00,"PUSHF",Type.NONADDR),
-        SWAP(0x0E00,"SWAP",Type.NONADDR),
-        //branch
-        BEQ(0xF000,"BEQ",Type.BRANCH),
-        BNE(0xF100,"BNE",Type.BRANCH),
-        BMI(0xF200,"BMI",Type.BRANCH),
-        BPL(0xF300,"BPL",Type.BRANCH),
-        BCS(0xF400,"BCS",Type.BRANCH),
-        BCC(0xF500,"BCC",Type.BRANCH),
-        BVS(0xF600,"BVS",Type.BRANCH),
-        BVC(0xF700,"BVC",Type.BRANCH),
-        BLT(0xF800,"BLT",Type.BRANCH),
-        BGE(0xF900,"BGE",Type.BRANCH),
-        BR(0xCE00,"BR", Type.BRANCH),
-
-        END(1,"",Type.NONADDR);
-
-        Instruction(int opcode, String mnemonic, Type type) {
-            this.opcode = opcode;
-            this.mnemonic = mnemonic;
-            this.type = type;
-        }
         
-        public enum Type {
-		ADDR, NONADDR, BRANCH, IO
-	};
+    //address
+    AND(0x2000,ADDR), OR(0x3000 ,ADDR), ADD(0x4000,ADDR), ADC(0x5000,ADDR),
+    SUB(0x6000,ADDR), CMP(0x7000,ADDR), LOOP(0x8000,ADDR), LD(0xA000,ADDR),
+    SWAM(0xB000,ADDR), JUMP(0xC000,ADDR), CALL(0xD000,ADDR), ST(0xE000,ADDR),
+    //addressless
+    NOP(0x0000,NONADDR), HLT(0x0100,NONADDR), CLA(0x0200,NONADDR),
+    NOT(0x0280,NONADDR), CLC(0x0300,NONADDR), CMC(0x0380,NONADDR),
+    ROL(0x0400,NONADDR), ROR(0x0480,NONADDR), ASL(0x0500,NONADDR),
+    ASR(0x0580,NONADDR), SXTB(0x0600,NONADDR), SWAB(0x0680,NONADDR),
+    INC(0x0700,NONADDR), DEC(0x0740,NONADDR), NEG(0x0780,NONADDR),
+    POP(0x0800,NONADDR), POPF(0x0900,NONADDR), RET(0x0A00,NONADDR),
+    IRET(0x0B00,NONADDR), PUSH(0x0C00,NONADDR), PUSHF(0x0D00,NONADDR),
+    SWAP(0x0E00,NONADDR),
+    //branch
+    BEQ(0xF000,BRANCH), BNE(0xF100,BRANCH), BMI(0xF200,BRANCH), BPL(0xF300,BRANCH),
+    BCS(0xF400,BRANCH), BCC(0xF500,BRANCH), BVS(0xF600,BRANCH), BVC(0xF700,BRANCH),
+    BLT(0xF800,BRANCH), BGE(0xF900,BRANCH), BR(0xCE00, BRANCH),
 
-	public final int opcode;
-	public final String mnemonic;
-	public Type type;
+    END(1,Type.NONADDR);
 
-	public int getOpcode() {
-		return opcode;
-	}
+    public static final Instruction [] values = Instruction.values();
 
-	public String getMnemonic() {
-            return mnemonic;
-	}
+    Instruction(int opcode, Type type) {
+        this.opcode = opcode;
+        this.mnemonic = this.name();
+        this.type = type;
+    }
 
-	public Type getType() {
-            return type;
-	}
-        
-        public String getTypeString() {
-            switch (type) {
-                case ADDR: return "ADDR";
-                case NONADDR: return "NONADDR";
-                case BRANCH: return "BRANCH";
-                case IO: return "IO";
-                default: return "";
-            }
-        }
+    public enum Type {
+            ADDR, NONADDR, BRANCH, IO
+    };
+
+    public final int opcode;
+    public final String mnemonic;
+    public Type type;
+
+    public String getTypeString() {
+       return type.name();
+    }
         
 }

@@ -13,26 +13,15 @@ public class InstructionWord extends MemoryWord {
     public volatile Instruction instruction;
     public volatile AddressingMode operand = null;
     
-    public int getOpcode() {
-            return instruction.getOpcode();
-    }
-
-    public String getMnemonic() {
-        return instruction.getMnemonic();
-    }
-
-    public Instruction.Type getType() {
-        return instruction.getType();
-    }
-
     @Override
     public String toString() {
-        return "Instruction{ address=" + address + 
-                (label != null ? ", label=" + label.name : "" ) + 
-                ", mnemonic=" + getMnemonic() + ", type=" + getType() + '}' +
-                (instruction.type == Instruction.Type.ADDR? " operand="+operand.toString(): "") +
+        return  Integer.toHexString(address+0x100000).substring(3) + "| " +
+                (label != null ? label.name + ": " : "" ) +
+                instruction.mnemonic + " " +
+                (instruction.type == Instruction.Type.ADDR? operand.toString(): "") +
                 (instruction.type == Instruction.Type.BRANCH? " label="+operand.reference: "") +
-                (value != UNDEFINED? " value="+Integer.toHexString(value): "");
+                " \t; type=" + instruction.type + 
+                (value != UNDEFINED? " value=0x"+Integer.toHexString(value): "");
     }   
     
 }

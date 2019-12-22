@@ -24,12 +24,16 @@ instruction
 
 directive
    : org orgAddress comment?
-   | lbl? word wordArguments comment?
+   | wordDirective
    | end comment?
    ;
 
 orgAddress
    : address
+   ;
+
+wordDirective
+   : lbl? word wordArguments comment?
    ;
 
 wordArguments
@@ -217,7 +221,7 @@ ST: ( S T ) | ( RT RSSIGN RF RU );
 NOP: ( N O P );
 HLT: ( H L T );
 CLA: ( C L A );
-NOT: ( N O T ) | ( C M A ) | ( RN RE ) | ( RS RB RA );
+NOT: ( N O T ) | ( C M A ) | ( C O M ) | ( RN RE ) | ( RS RB RA );
 CLC: ( C L C ) ;
 CMC: ( C M C ) ;
 ROL: ( R O L ) ;

@@ -15,12 +15,20 @@ import java.util.List;
  */
 public class ProgramBinary {
     public final static int UNDEFINED = -1;
-    public int start_address = UNDEFINED;
     public int load_address = UNDEFINED;
+    public int start_address = UNDEFINED;
     
     public List<Integer> binary = null;
     
-    private List<Integer> getBinaryFormat() {
+    public ProgramBinary() {
+        //default
+    }
+    
+    public ProgramBinary(List<Integer> prog) {
+        loadBinaryFormat(prog);
+    }
+    
+    public final List<Integer> getBinaryFormat() {
         if (start_address == UNDEFINED || load_address == UNDEFINED ||
                 binary == null || binary.isEmpty()) 
             throw new RuntimeException("BcompNG: Program data is corrupted");
@@ -30,7 +38,7 @@ public class ProgramBinary {
         return prog;
     }
     
-    public void loadBinaryFormat(List<Integer> prog) {
+    public final void loadBinaryFormat(List<Integer> prog) {
         Iterator<Integer> i = prog.iterator();
         if (!i.hasNext()) throw new IndexOutOfBoundsException("BcompNG: Программа пуста: load_address");
         load_address = i.next();
@@ -40,5 +48,29 @@ public class ProgramBinary {
         binary = new LinkedList<Integer>();
         while (i.hasNext()) binary.add(i.next());
     }
+
+    public String toBinaryRepresentation(int columns) {
+        StringBuilder sb = new StringBuilder();
+        int col = 8;
+        if (columns >= 1) col = columns;
+        int i = 1;
+        for (Integer w : getBinaryFormat()) {
+            sb.append(Integer.toHexString(w+0x100000).substring(2)).append(' ');
+            if (i++ % col == 0) sb.append('\n');
+        }
+        return sb.toString();
+    }
+    
+    public String toBinaryRepresentation() {
+        return toBinaryRepresentation(8);
+    }
+
+
+    @Override
+    public String toString() {
+        return toBinaryRepresentation();
+    }
+    
+    
 
 }

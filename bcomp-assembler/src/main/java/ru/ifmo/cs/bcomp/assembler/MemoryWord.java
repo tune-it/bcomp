@@ -19,9 +19,10 @@ public class MemoryWord {
 
     @Override
     public String toString() {
-        return "MemoryWord{ " + "address=" + address +
-                (label != null ? ", label=" + label.name : "" ) + 
-                ", value=" + value + '}';
+        return Integer.toHexString(address+0x100000).substring(3) + "| " +
+                (label != null ? label.name + ": " : "" ) +
+                "WORD " +
+                (value != UNDEFINED? " 0x"+Integer.toHexString(value): "");
     }
     
     

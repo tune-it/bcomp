@@ -30,29 +30,21 @@ public class AsmNg {
         AsmNg asmng = new AsmNg(
                 "ORG 020h\n" +
                 "ad: and ad\n" +
-                "ORG 020h\n" +
+                "ORG 030h\n" +
                 "    OR $ad\n" +
                 "bc:\n" +
                 "    ADC $бяка\n" +
                 "    LD #0F\n" +
                 "    ST &0\n" +
                 "    ВЖУХ бяка\n" +
-                "    WORD 44H,33\n" +
+                "eb:    WORD 44H,33,49,50\n" +
               "бяка: WORD 22H\n" +
                 "    BR бяка\n" +
                 "    ПРЫГ (bc)\n" +
                         "");
         Program prog = asmng.compile();
-        LinkedList<Integer> addresses = new LinkedList<Integer>(prog.memory.keySet());
-        Collections.sort(addresses);
-        for (Integer addr : addresses ) {
-            MemoryWord w = prog.memory.get(addr);
-            System.out.println(w);
-        }        
-        
-        for (Integer w : prog.getBinaryFormat()) {
-            System.out.println(Integer.toHexString(w+0x100000).substring(2));
-        }
+        System.out.println(prog.toCompiledWords());
+        System.out.println(prog.toBinaryRepresentation());
     }
     
     private CodePointCharStream program;
@@ -147,6 +139,23 @@ public class AsmNg {
                 MemoryWord m = new MemoryWord();
                 m.address = address;
                 m.value = i;
+                //find out label if one and set it up to the first WORD
+                if (ctx.getParent().getParent() instanceof WordDirectiveContext) {
+                    WordDirectiveContext wdctx = (WordDirectiveContext)ctx.getParent().getParent();
+                    //if label exsist in line
+                    if (wdctx.lbl() != null ) {
+                        //look for this label address
+                        Label l = labels.get(wdctx.lbl().label().getText());
+                        if (l != null) {
+                            // if label points to this first word instruction
+                            if (l.address == address) {
+                                m.label = l;
+                            }
+                        }
+                    }
+                }
+                
+                
                 memory.put(m.address, m);
                 //System.out.println("WORD value = "+i);
                 address++;
@@ -231,7 +240,7 @@ public class AsmNg {
         }
         prog.binary = binary;
         prog.labels = labels;
-        prog.memory = memory;
+        prog.content = memory;
         return prog;
     }
     
@@ -298,9 +307,14 @@ public class AsmNg {
             case BCompNGParser.SWAB: i = Instruction.SWAB; break;
             case BCompNGParser.INC:  i = Instruction.INC; break;
             case BCompNGParser.DEC:  i = Instruction.DEC; break;
-            case BCompNGParser.NEG:  i = Instruction.DEC; break;
-            case BCompNGParser.POP:  i = Instruction.SXTB; break;
-            case BCompNGParser.POPF: i = Instruction.SWAB; break;
+            case BCompNGParser.NEG:  i = Instruction.NEG; break;
+            case BCompNGParser.POP:  i = Instruction.POP; break;
+            case BCompNGParser.POPF: i = Instruction.POPF; break;
+            case BCompNGParser.RET: i = Instruction.RET; break;
+            case BCompNGParser.IRET: i = Instruction.IRET; break;
+            case BCompNGParser.PUSH: i = Instruction.PUSH; break;
+            case BCompNGParser.PUSHF: i = Instruction.PUSHF; break;
+            case BCompNGParser.SWAP: i = Instruction.SWAP; break;
             //branch
             case BCompNGParser.BEQ: i = Instruction.BEQ; break;
             case BCompNGParser.BNE: i = Instruction.BNE; break;
