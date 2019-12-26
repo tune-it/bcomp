@@ -144,7 +144,7 @@ public class MicroCode {
         new omc("LOOP",     cs(RDDR, COML, HTOH, LTOL, WRDR)),                          // DR + ~0 -> DR
         new omc(            cs(STOR)),                                                  // DR -> MEM(AR)
         new CMC(            cs(RDDR, HTOL), 7, 1,                           "INT"),     // if DR(15) = 1 then GOTO INT
-        new omc(            cs(RDIP, HTOH, LTOL, PLS1, WRIP)),                          // IP + 1 -> IP
+        new omc(            cs(RDIP, PLS1, HTOH, LTOL, WRIP)),                          // IP + 1 -> IP
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("CMD101X",  cs(RDCR, HTOL), 4, 1,                           "SWAM"),    // if CR(12) = 1 then GOTO SWAM
         // !!! CHECK FLAGS !!!
