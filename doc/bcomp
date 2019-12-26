@@ -3,7 +3,7 @@
 
 MODE=gui
 MP=base
-JAR=bcomp.jar
+JAR=bcomp-ng.jar
 
 while getopts gcdnboep: arg
 do
