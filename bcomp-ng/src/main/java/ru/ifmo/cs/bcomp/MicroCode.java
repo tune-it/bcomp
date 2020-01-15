@@ -306,7 +306,6 @@ public class MicroCode {
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         // Чтение
         new omc("READ",     cs(RDIP, HTOH, LTOL, WRAR)),                                // IP -> AR
-        new omc(            cs(RDIR, HTOH, LTOL, WRDR)),                                // IR -> DR
         new omc(            cs(RDIP, PLS1, HTOH, LTOL, WRIP, LOAD)),                    // MEM(AR) -> DR; IP + 1 -> IP
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "STOP"),    // GOTO STOP
         // Запись
