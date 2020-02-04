@@ -134,11 +134,18 @@ public class AsmNg {
 
             @Override
             public void exitWordArgument(WordArgumentContext ctx) {
-                NumberContext n = ctx.number();
-                Integer i = parseIntFromNumberContext(n);
                 MemoryWord m = new MemoryWord();
                 m.address = address;
-                m.value = i;
+                //parse direct numbers
+                NumberContext nc = ctx.number();
+                if (nc != null) {
+                    Integer i = parseIntFromNumberContext(nc);
+                    m.value = i;
+                }
+                LabelContext lc = ctx.label();
+                if (lc != null) {
+                    m.value_addr_reference = new String(lc.getText());
+                }
                 //find out label if one and set it up to the first WORD
                 if (ctx.getParent().getParent() instanceof WordDirectiveContext) {
                     WordDirectiveContext wdctx = (WordDirectiveContext)ctx.getParent().getParent();
@@ -228,6 +235,14 @@ public class AsmNg {
                     case IO:
                         break;
                 }
+            }
+            if (w.value_addr_reference != null) {
+                if ( !labels.containsKey(w.value_addr_reference)) {
+                    //TODO error
+                    throw new RuntimeException("Internal error: ");
+                }
+                Label l = labels.get(w.value_addr_reference);
+                w.value = l.address;
             }
             while (w.address - prev > 1) {
                 //generate zeroes when hole found

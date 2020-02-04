@@ -42,6 +42,7 @@ wordArguments
 
 wordArgument
    : number
+   | '$' label
    ;
 
 lbl

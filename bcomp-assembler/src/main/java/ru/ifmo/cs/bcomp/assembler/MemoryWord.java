@@ -16,6 +16,7 @@ public class MemoryWord {
     public volatile int address = UNDEFINED;
     public volatile Label label = null;
     public volatile int value = UNDEFINED;
+    public volatile String value_addr_reference = null;
 
     @Override
     public String toString() {
