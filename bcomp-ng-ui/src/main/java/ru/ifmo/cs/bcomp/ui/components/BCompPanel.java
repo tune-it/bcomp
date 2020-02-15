@@ -6,12 +6,10 @@ package ru.ifmo.cs.bcomp.ui.components;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.Map;
 
 import ru.ifmo.cs.bcomp.ControlSignal;
 
-import ru.ifmo.cs.bcomp.Reg;
 import ru.ifmo.cs.bcomp.SignalListener;
 
 import javax.swing.*;

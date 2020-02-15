@@ -458,7 +458,7 @@ public class AsmNg {
                     //TODO eroor number should be in command
                     throw new RuntimeException("Internal error: ");
                 }
-                if (num > 127 || num < -128) {
+                if (num > 255 || num < 0) {
                     //TODO error number exceed limit values
                     throw new RuntimeException("Internal error: ");
                 }
