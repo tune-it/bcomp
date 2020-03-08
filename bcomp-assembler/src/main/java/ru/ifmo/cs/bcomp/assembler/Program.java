@@ -61,7 +61,9 @@ public class Program {
         if (columns >= 1) col = columns;
         int i = 1;
         for (Integer w : getBinaryFormat()) {
-            sb.append(Integer.toHexString(w+0x100000).substring(2)).append(' ');
+            String s = "0000"+Integer.toHexString(w);
+            s = s.substring(s.length()-4, s.length());
+            sb.append(s).append(' ');
             if (i++ % col == 0) sb.append('\n');
         }
         return sb.toString();

@@ -43,6 +43,16 @@ wordArguments
 wordArgument
    : number
    | '$' label
+   | dupArgument
+   | '?'
+   ;
+
+dupArgument
+   : count dup '(' wordArgument ')'
+   ;
+
+count
+   : number
    ;
 
 lbl
@@ -129,6 +139,7 @@ ip: IP;
 
 org: ORG;
 word: WORD;
+dup: DUP;
 end: END;
 
 fragment A : ('a' | 'A'); 
@@ -201,6 +212,7 @@ fragment P0D : '0' D ;
 ORG: O R G;
 WORD: W O R D;
 END: E N D;
+DUP: ( D U P ) | ( D U P L I C A T E );
 
 /*
 * opcodes
@@ -268,11 +280,14 @@ NAME
    ;
 
 DECIMAL
-   : P0D? DECDIGIT+
+   : ( P0D? DECDIGIT+ )
+   | ( '-' P0D? DECDIGIT+ )
+   | ( P0D? '-' DECDIGIT+ )
    ;
 
 HEX
-   : HEXDIGIT+ | (P0X HEXDIGIT+ ) | ( HEXDIGIT+ H )
+   : HEXDIGIT+ | (P0X HEXDIGIT+ ) | ( HEXDIGIT+ H ) 
+   | ( '-' HEXDIGIT+ ) | ( '-' P0X HEXDIGIT+ ) | (P0X '-' HEXDIGIT+ ) | ( '-' HEXDIGIT+ H ) 
    ;
 
 COMMENT
