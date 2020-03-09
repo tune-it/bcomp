@@ -104,7 +104,7 @@ public class AsmNg {
             //System.out.println("second pass");
             prog = secondPass();
         } catch (AssemblerException e) {
-            reportError(e);
+            reportAndRecoverFromError(e);
         }
         return prog;
     }
@@ -135,7 +135,7 @@ public class AsmNg {
                     InstructionWord i = new InstructionWord();
                     Instruction instr = instructionByParserType(t.getSymbol().getType());
                     if (instr == null) {
-                        reportError(new AssemblerException("Internal error: after parser instruction cant be null", parser, ICtx));
+                        reportAndRecoverFromError(new AssemblerException("Internal error: after parser instruction cant be null", parser, ICtx));
                     }
                     i.instruction = instr;
                     i.address = address;
@@ -199,7 +199,7 @@ public class AsmNg {
                     int count = parseIntFromNumberContext(dactx.count().number());
                     if (count <= 1) {
                         //throw new RuntimeException("Internal error: count should be greater than 1");
-                        reportError(new AssemblerException("DUP count should be greater than 1", parser, dactx));
+                        reportAndRecoverFromError(new AssemblerException("DUP count should be greater than 1", parser, dactx));
                     }
                     WordArgumentContext what = dactx.wordArgument();
                     int whatnum = 0;
@@ -230,7 +230,7 @@ public class AsmNg {
                 lab.address = address;
                 if (labels.containsKey(lab.name)) {
                     //TODO FIX IT with common error message
-                    reportError(new AssemblerException("Error: already defined label " + lab.name, parser, ctx));
+                    reportAndRecoverFromError(new AssemblerException("Error: already defined label " + lab.name, parser, ctx));
                 }
                 //TODO fix this special case for start label
                 if ("START".equalsIgnoreCase(lab.name)) {
@@ -293,9 +293,10 @@ public class AsmNg {
                 if (!labels.containsKey(w.value_addr_reference)) {
                     //TODO error
                     reportError(new AssemblerException("Second pass: Label " + w.value_addr_reference + " not found", parser));
+                } else {
+                    Label l = labels.get(w.value_addr_reference);
+                    w.value = l.address;
                 }
-                Label l = labels.get(w.value_addr_reference);
-                w.value = l.address;
             }
             while (w.address - prev > 1) {
                 //generate zeroes when hole found
@@ -624,19 +625,27 @@ public class AsmNg {
         }
         if (!labels.containsKey(reference)) {
             //TODO error
-            reportError(new AssemblerException("Second pass: label refference "+reference+" not found",parser));
+            AssemblerException ae = new AssemblerException("Second pass: label refference "+reference+" not found",parser);
+            reportError(ae);
+            return 0;
         }
         Label l = labels.get(reference);
         l.referenced = true;
         num = l.address - iw.address - 1; //-1 to fix impact of fetch cycle
         //TODO FIX
         if (num > 127 || num < -128) {
-            reportError(new AssemblerException("Second pass: number exceed limits [-127..128]",parser));
+            AssemblerException ae = new AssemblerException("Second pass: label "+reference+" displacement exceed limits [-127..128]",parser);
+            reportError(ae);
+            num = 0;
         }
         return num & 0xFF;
     }
 
     private void reportError(AssemblerException ae) {
+        errHandler.reportError(parser, ae);
+    }
+    
+    private void reportAndRecoverFromError(AssemblerException ae) {
         errHandler.reportError(parser, ae);
         errHandler.recover(parser, ae);
     }
