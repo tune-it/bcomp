@@ -4,8 +4,6 @@
 
 package ru.ifmo.cs.components;
 
-import static ru.ifmo.cs.components.BasicComponent.calculateMask;
-
 /**
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
