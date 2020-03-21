@@ -25,7 +25,7 @@ public class DataAdd extends Control {
 
 	@Override
 	public synchronized void setValue(long value) {
-		if (isOpen(value)) { 
+		if (isOpen(value)) {
 			long l = left.getValue();
 			long r = right.getValue();
 			long c = carry.getValue();
