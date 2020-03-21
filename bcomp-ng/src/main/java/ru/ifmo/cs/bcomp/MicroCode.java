@@ -141,10 +141,9 @@ public class MicroCode {
         // Warning - 11XX was already checked
         new CMC("CMD1XXX",  cs(RDCR, HTOL), 5, 1,                           "CMD101X"), // if CR(13) = 1 then GOTO CMD101X
         new CMC("CMD100X",  cs(RDCR, HTOL), 4, 1,                           "RESERVED"),// if CR(12) = 1 then GOTO RESERVED
-        new omc("LOOP",     cs(RDDR, COML, HTOH, LTOL, WRDR)),                       // DR + ~0 -> DR
-        new omc(            cs(STOR)),                                                  // DR -> MEM(AR)
-        new omc(            cs(RDDR, COML, HTOH, LTOL, WRDR)),                       // DR + ~0 -> DR
-        new CMC(            cs(RDDR, HTOL), 7, 0,                           "INT"),     // if DR(15) = 0 then GOTO INT
+        new omc("LOOP",     cs(RDDR, COML, HTOH, LTOL, WRDR)),                          // DR + ~0 -> DR
+        new omc(            cs(STOR, RDDR, COML, HTOH, LTOL, WRBR)),                    // DR -> MEM(AR), DR + ~0 -> BR
+        new CMC(            cs(RDBR, HTOL), 7, 0,                           "INT"),     // if BR(15) = 0 then GOTO INT
         new omc(            cs(RDIP, PLS1, HTOH, LTOL, WRIP)),                          // IP + 1 -> IP
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("CMD101X",  cs(RDCR, HTOL), 4, 1,                           "SWAM"),    // if CR(12) = 1 then GOTO SWAM
