@@ -451,7 +451,7 @@ public class Nightmare {
 
 				case KeyEvent.VK_F9:
 					cpu.invertRunState();
-					regs.get(PS).bits[RUN.ordinal()].repaint();
+					regs.get(PS).bits[W.ordinal()].repaint();
 					break;
 
 				case KeyEvent.VK_F11:

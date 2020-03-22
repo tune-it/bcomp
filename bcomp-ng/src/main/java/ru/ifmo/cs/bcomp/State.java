@@ -31,37 +31,27 @@ public enum State {
 	N,
 	/**
 	 * Flag 4:
-	 * IO flag???
-	 */
-	F,
-	/**
-	 * Flag 5:
 	 * Always zero
 	 */
 	PS0,
 	/**
-	 * Flag 6:
+	 * Flag 5:
 	 * Enable Interrupts
 	 */
 	EI,
 	/**
-	 * Flag 7:
+	 * Flag 6:
 	 * Interrupt
 	 */
-	INTR,
+	IRQ,
 	/**
-	 * Flag 8:
-	 * IOREADY
-	 */
-	IOREADY,
-	/**
-	 * Flag 9:
+	 * Flag 7:
 	 * Run state
 	 */
-	RUN,
+	W,
 	/**
-	 * Flag 10:
+	 * Flag 8:
 	 * Program is running
 	 */
-	PROG,
+	P,
 }

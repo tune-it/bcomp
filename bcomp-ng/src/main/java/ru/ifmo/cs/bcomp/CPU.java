@@ -34,7 +34,7 @@ public class CPU {
 	private static final long MP_WIDTH = 8;
 	private static final long AR_WIDTH = 11;
 	private static final long DATA_WIDTH = 16;
-	private static final long PS_WIDTH = 16; // !!! FIX WIDTH !!! //
+	private static final long PS_WIDTH = P.ordinal() + 1;
 
 	private final EnumMap<Reg, Register> regs = new EnumMap<Reg, Register>(Reg.class);
 	private final EnumMap<ControlSignal, Control> valves = new EnumMap<ControlSignal, Control>(ControlSignal.class);
@@ -90,7 +90,7 @@ public class CPU {
 
 						if (tickFinishListener != null)
 							tickFinishListener.run();
-					} while (ps.getValue(PROG.ordinal()) == 1);
+					} while (ps.getValue(P.ordinal()) == 1);
 
 					if (cpuStopListener != null)
 						cpuStopListener.run();
@@ -102,7 +102,6 @@ public class CPU {
 			}
 		}
 	}, "BComp");
-
 
 	protected CPU() throws Exception {
 		Control c;
@@ -226,7 +225,7 @@ public class CPU {
 		PartWriter writeto15 = new PartWriter(swout, 1, DATA_WIDTH - 1);
 		PartWriter writeto17 = new PartWriter(swout, 1, DATA_WIDTH + 1);
 		PartWriter ei = new PartWriter(ps, 1, EI.ordinal());
-		PartWriter stateProgram = new PartWriter(ps, 1, PROG.ordinal());
+		PartWriter stateProgram = new PartWriter(ps, 1, P.ordinal());
 		valves.put(SEXT, c = new Extender(aluout, 8, 7, SEXT.ordinal() - 16, writetoH));
 		clock1.addDestination(new Not(TYPE.ordinal(),
 			new Valve(mr, VR_WIDTH, 16, 0,
@@ -390,7 +389,7 @@ public class CPU {
 	public void setRunState(boolean state) {
 		tick.lock();
 		try {
-			ps.setValue(state ? 1 : 0, 1, State.RUN.ordinal());
+			ps.setValue(state ? 1 : 0, 1, State.W.ordinal());
 		} finally {
 			tick.unlock();
 		}
@@ -399,7 +398,7 @@ public class CPU {
 	public void invertRunState() {
 		tick.lock();
 		try {
-			ps.invertBit(State.RUN.ordinal());
+			ps.invertBit(State.W.ordinal());
 		} finally {
 			tick.unlock();
 		}

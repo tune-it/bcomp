@@ -146,7 +146,7 @@ public class BasicView extends BCompPanel {
 				new SignalListener(new DataDestination() {
 					@Override
 					public void setValue(long value) {
-						cycleview.updateProg(cpu.getProgramState(State.PROG) == 1);
+						cycleview.updateProg(cpu.getProgramState(State.P) == 1);
 					}
 				}, HALT, SET_PROGRAM)
 		});

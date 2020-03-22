@@ -276,7 +276,7 @@ public class CLI {
 
                 if (checkCmd(cmd, "run")) {
                     cpu.invertRunState();
-                    println("Режим работы: " + (cpu.getProgramState(State.RUN) == 1 ? "Работа" : "Останов"));
+                    println("Режим работы: " + (cpu.getProgramState(State.W) == 1 ? "Работа" : "Останов"));
                     continue;
                 }
 

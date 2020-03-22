@@ -26,7 +26,7 @@ import ru.ifmo.cs.components.Memory;
  */
 public class BasicCompTest {
 	private final Reg[] TEST_REGISTERS = { DR, CR, IP, SP, AC, BR, AR };
-	private final State[] TEST_STATES = { C, V, Z, N, F, EI };
+	private final State[] TEST_STATES = { C, V, Z, N, EI };
 	private final long[] TEST_REG_VALUES = { 0xDEAD, 0x0ADB	};
 	private final long[] TEST_FLAG_VALUES = { 0, 1 };
 	private final Hexadecimal x100 = new Hexadecimal(0x100);
@@ -103,20 +103,23 @@ public class BasicCompTest {
 		"0800; SP=600,600=BEEF; DR=BEEF,AR=600,SP=601,AC=BEEF,N=1,Z=0,V=0", // POP
 		"0800; SP=400,400=0000; DR=0000,AR=400,SP=401,AC=0000,N=0,Z=1,V=0", // POP
 
-		"0900; SP=600,600=0400; DR=0400,AR=600,SP=601,EI=0,F=0,N=0,Z=0,V=0,C=0", // POPF
-		"0900; SP=7FF,7FF=045F; DR=045F,AR=7FF,SP=000,EI=1,F=1,N=1,Z=1,V=1,C=1", // POPF
+		"0900; SP=600,600=" + states(P) + "; DR=" + states(P) + ",AR=600,SP=601,EI=0,N=0,Z=0,V=0,C=0", // POPF
+		"0900; SP=7FF,7FF=" + states(P, EI, N, Z, V, C) + "; DR=" + states(P, EI, N, Z, V, C) +
+			",AR=7FF,SP=000,EI=1,N=1,Z=1,V=1,C=1", // POPF
 
 		"0A00; SP=600,600=FF00; DR=FF00,IP=700,AR=600,SP=601", // RET
 		"0A00; SP=7FF,7FF=0013; DR=0013,IP=013,AR=7FF,SP=000", // RET
 
-		"0B00; SP=600,600=0400,601=FF00; DR=FF00,IP=700,AR=601,SP=602,EI=0,F=0,N=0,Z=0,V=0,C=0", // IRET
-		"0B00; SP=7FE,7FE=045F,7FF=0013; DR=0013,IP=013,AR=7FF,SP=000,EI=1,F=1,N=1,Z=1,V=1,C=1", // IRET
+		"0B00; SP=600,600=" + states(P) + ",601=FF00; DR=FF00,IP=700,AR=601,SP=602,EI=0,N=0,Z=0,V=0,C=0", // IRET
+		"0B00; SP=7FE,7FE=" + states(P, EI, N, Z, V, C) +
+			",7FF=0013; DR=0013,IP=013,AR=7FF,SP=000,EI=1,N=1,Z=1,V=1,C=1", // IRET
 
 		"0C00; AC=BEEF,SP=000; DR=BEEF,AR=7FF,SP=7FF,7FF=BEEF", // PUSH
 		"0C00; AC=1313,SP=601; DR=1313,AR=600,SP=600,600=1313", // PUSH
 
-		"0D00; SP=000,EI=0,F=0,N=0,Z=0,V=0,C=0; DR=0400,AR=7FF,SP=7FF,7FF=0400", // PUSHF
-		"0D00; SP=601,EI=1,F=1,N=1,Z=1,V=1,C=1; DR=045F,AR=600,SP=600,600=045F", // PUSHF
+		"0D00; SP=000,EI=0,F=0,N=0,Z=0,V=0,C=0; DR=" + states(P) + ",AR=7FF,SP=7FF,7FF=" + states(P), // PUSHF
+		"0D00; SP=601,EI=1,F=1,N=1,Z=1,V=1,C=1; DR=" + states(P, EI, N, Z, V, C) +
+			",AR=600,SP=600,600=" + states(P, EI, N, Z, V, C), // PUSHF
 
 		"0E00; SP=7FF,AC=BEEF,7FF=1313; DR=BEEF,AC=1313,BR=1313,AR=7FF,N=0,Z=0,V=0,7FF=BEEF", // SWAP
 		"0E00; SP=600,AC=0603,600=C0BA; DR=0603,AC=C0BA,BR=C0BA,AR=600,N=1,Z=0,V=0,600=0603", // SWAP
@@ -215,12 +218,6 @@ public class BasicCompTest {
 		"F93F; N=0,V=0; IP=140,BR=003F", // BGE
 		"F9EF; N=1,V=1; IP=0F0,BR=FFEF", // BGE
 		"F9EF; N=1,V=0;", // BGE
-
-		"FA3F; F=0;", // BFS
-		"FA3F; F=1; IP=140,BR=003F", // BFS
-
-		"FBEF; F=0; IP=0F0,BR=FFEF", // BFC
-		"FBEF; F=1;", // BFC
 	};
 
 	private final BasicComp bcomp;
@@ -235,6 +232,15 @@ public class BasicCompTest {
 	private EnumMap<State, Hexadecimal> expectedFlags;
 	private ArrayList<MemoryValue> expectedWrites;
 	private Iterator<MemoryValue> nextWrite;
+
+	private static String states(State ... states) {
+		long value = 0L;
+
+		for (State state : states)
+			value |= 1L << state.ordinal();
+
+		return toHex(value, P.ordinal() + 1);
+	}
 
 	public BasicCompTest() throws Exception {
 		this.bcomp = new BasicComp();

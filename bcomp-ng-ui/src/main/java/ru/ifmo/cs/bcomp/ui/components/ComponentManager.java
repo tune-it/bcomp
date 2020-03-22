@@ -429,7 +429,7 @@ public class ComponentManager {
 
 	public void cmdInvertRunState() {
 		cpu.invertRunState();
-		long state =	cpu.getProgramState(State.RUN);
+		long state = cpu.getProgramState(State.W);
 		rbRanStop.setSelected(state == 1);
 		rbRanStop.setText(buttonProperties[BUTTON_RUN].texts[(int)state]);
 		regs.get(Reg.PS).setValue();

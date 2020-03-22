@@ -197,17 +197,12 @@ public class MicroCode {
         new CMC("BVC",      cs(RDPS, LTOL), V.ordinal(), 0,                 "BR"),      // if V = 0 then GOTO BR
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("BR1XXX",   cs(RDCR, HTOL), 2, 1,                           "RESERVED"),// if CR(10) = 1 then GOTO RESERVED
-        new CMC("BR10XX",   cs(RDCR, HTOL), 1, 1,                           "BR101X"),  // if CR(9) = 1 then GOTO RESERVED
+        new CMC("BR10XX",   cs(RDCR, HTOL), 1, 1,                           "RESERVED"),// if CR(9) = 1 then GOTO RESERVED
         new CMC("BR100X",   cs(RDCR, HTOL), 0, 1,                           "BGE"),     // if CR(8) = 1 then GOTO BGE
         new CMC("BLT",      cs(RDPS, LTOL), N.ordinal(), 0,                 "BVS"),     // if N = 0 then GOTO BVS
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "BVC"),     // GOTO BVC
         new CMC("BGE",      cs(RDPS, LTOL), N.ordinal(), 0,                 "BVC"),     // if N = 0 then GOTO BVC
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "BVS"),     // GOTO BVS
-        new CMC("BR101X",   cs(RDCR, HTOL), 0, 1,                           "BFC"),     // if CR(8) = 1 then GOTO BFC
-        new CMC("BFS",      cs(RDPS, LTOL), F.ordinal(), 1,                 "BR"),      // if F = 1 then GOTO BR
-        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new CMC("BFC",      cs(RDPS, LTOL), F.ordinal(), 0,                 "BR"),      // if F = 0 then GOTO BR
-        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
 
         // Безадресные команды
         new CMC("ADDRLESS", cs(RDCR, HTOL), 3, 1,                           "AL1XXX"),  // if CR(11) = 1 then GOTO AL1XXX
@@ -288,8 +283,8 @@ public class MicroCode {
         new omc("IO",       cs(IO)),                                                    // IO
 
         // Цикл прерывания
-        new CMC("INT",      cs(RDPS, HTOL), RUN.ordinal() - 8, 0,           "STOP"),    // if RUN = 0 then GOTO STOP
-        new CMC(            cs(RDPS, LTOL), INTR.ordinal(), 0    ,          "INFETCH"), // if INTR = 0 then GOTO INFETCH
+        new CMC("INT",      cs(RDPS, HTOL), W.ordinal() - 8, 0,           "STOP"),    // if RUN = 0 then GOTO STOP
+        new CMC(            cs(RDPS, LTOL), IRQ.ordinal(), 0    ,          "INFETCH"), // if INTR = 0 then GOTO INFETCH
         new omc(            cs(RDSP, COML, HTOH, LTOL, WRSP, WRAR)),                    // SP + ~0 -> SP, AR
         new omc(            cs(RDIP, HTOH, LTOL, WRDR)),                                // IP -> DR
         new omc(            cs(STOR)),                                                  // DR -> MEM(AR)
