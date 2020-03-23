@@ -26,7 +26,17 @@ public class CPU {
 		SWITCH_OUT,
 		VV,
 		EXPECTED,
-		NEWMP
+		NEWMP,
+	}
+
+	public enum IOBuses {
+		IOData,
+		IOAddr,
+		IOCtrl,
+	}
+
+	public enum IOValves {
+		io,
 	}
 
 	private static final long MR_WIDTH = TYPE.ordinal() + 1;
@@ -34,11 +44,15 @@ public class CPU {
 	private static final long MP_WIDTH = 8;
 	private static final long AR_WIDTH = 11;
 	private static final long DATA_WIDTH = 16;
+	private static final long IO_WIDTH = 8;
+	private static final long IOCMD_WIDTH = 4;
 	private static final long PS_WIDTH = P.ordinal() + 1;
 
 	private final EnumMap<Reg, Register> regs = new EnumMap<Reg, Register>(Reg.class);
 	private final EnumMap<ControlSignal, Control> valves = new EnumMap<ControlSignal, Control>(ControlSignal.class);
 	private final EnumMap<Buses, Bus> buses = new EnumMap<Buses, Bus>(Buses.class);
+	private final EnumMap<IOBuses, Bus> iobuses = new EnumMap<IOBuses, Bus>(IOBuses.class);
+	private final EnumMap<IOValves, DataDestination> iovalves = new EnumMap<IOValves, DataDestination>(IOValves.class);
 	private final EnumMap<RunningCycle, Integer> labels = new EnumMap<RunningCycle, Integer>(RunningCycle.class);
 	private final MicroCode mc = new MicroCode();
 	private final Memory mem;
@@ -143,6 +157,7 @@ public class CPU {
 		// Read microcommand
 		valves.put(CLOCK0, new Valve(microcode, MR_WIDTH, 0, 0, mr));
 
+		// Internal buses
 		Bus right = new Bus(DATA_WIDTH);
 		buses.put(Buses.RIGHT_INPUT, right);
 		Bus left = new Bus(DATA_WIDTH);
@@ -158,6 +173,13 @@ public class CPU {
 		buses.put(Buses.VV, vv = new Bus(1));
 		buses.put(Buses.EXPECTED, expected = new Bus(1));
 		buses.put(Buses.NEWMP, newmp = new Bus(MP_WIDTH));
+		// IO buses
+		Bus iodata = new Bus(IO_WIDTH);
+		iobuses.put(IOBuses.IOData, iodata);
+		Bus ioaddr = new Bus(IO_WIDTH);
+		iobuses.put(IOBuses.IOAddr, ioaddr);
+		CtrlBus ioctrl = new CtrlBus(IO_WIDTH);
+		iobuses.put(IOBuses.IOCtrl, ioctrl);
 
 		// Execute microcommand
 		Control clock1 = new Valve(mr, MR_WIDTH, 0, 0,
@@ -222,6 +244,7 @@ public class CPU {
 		// Operating Micro Command
 		Control shrf;
 		Control setv;
+		Control io;
 		PartWriter writeto15 = new PartWriter(swout, 1, DATA_WIDTH - 1);
 		PartWriter writeto17 = new PartWriter(swout, 1, DATA_WIDTH + 1);
 		PartWriter ei = new PartWriter(ps, 1, EI.ordinal());
@@ -253,8 +276,8 @@ public class CPU {
 				newValveH(swout, AR_WIDTH, 0, WRAR, ar),
 				newValveH(mem, DATA_WIDTH, 0, LOAD, dr),
 				newValveH(dr, DATA_WIDTH, 0, STOR, mem),
-				newValveH(dr, DATA_WIDTH, 0, IO),
-				newValveH(Consts.consts[1], 1, 0, CLRF),
+				io = newValveH(Consts.consts[1], 1, 0, IO),
+				newValveH(Consts.consts[1], 1, 0, IRQS), // !!! Should be fixed later
 				newValveH(Consts.consts[0], 1, 0, DINT, ei),
 				newValveH(Consts.consts[1], 1, 0, EINT, ei),
 				newValveH(Consts.consts[0], 1, 0, HALT, stateProgram)
@@ -265,6 +288,7 @@ public class CPU {
 		valves.put(SET_PROGRAM, new Valve(Consts.consts[1], 1, 0, 0, stateProgram));
 
 		clock1.addDestination(new DataDestination() {
+			@Override
 			public void setValue(long value) {
 				mp.setValue(vv.getValue() == expected.getValue() ? newmp.getValue() : 0);
 			}
@@ -277,6 +301,18 @@ public class CPU {
 			labels.put(cycle, findLabel(cycle.name()));
 
 		mp.setValue(labels.get(STOP) + 1);
+
+		// IO specific staff
+		iovalves.put(IOValves.io, io);
+		io.addDestination(
+			new Valve(cr, IO_WIDTH, 0, 0, ioaddr),
+			new Decoder(cr, IO_WIDTH, IOCMD_WIDTH, 0, ioctrl));
+		// Output: open AC to IO data
+		ioctrl.addDestination(new ValveTwo(IOControlSignal.OUT.ordinal(), IOControlSignal.RDY.ordinal(),
+			new Not(1, new Valve(ac, IO_WIDTH, 0, IOControlSignal.OUT.ordinal(), iodata))));
+		// Input: IO data to AC
+		ioctrl.addDestination(new ValveTwo(IOControlSignal.IN.ordinal(), IOControlSignal.RDY.ordinal(),
+			new Valve(iodata, IO_WIDTH, 0, 0, ac)));
 	}
 
 	private Control newValve(DataSource input, long width, long startbit, ControlSignal cs, DataDestination ... dsts) {
@@ -313,9 +349,19 @@ public class CPU {
 		return mc;
 	}
 
+	public EnumMap<IOBuses, Bus> getIOBuses() {
+		return iobuses;
+	}
+
+	public EnumMap<IOValves, DataDestination> getIOValves() {
+		return iovalves;
+	}
+
 	public synchronized void step() {
 		for (Buses bus: Buses.values())
 			buses.get(bus).resetValue();
+		for (IOBuses bus: IOBuses.values())
+			iobuses.get(bus).resetValue();
 
 		valves.get(CLOCK0).setValue(1);
 		valves.get(CLOCK1).setValue(1);

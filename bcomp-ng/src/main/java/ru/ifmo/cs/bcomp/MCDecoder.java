@@ -100,8 +100,9 @@ public class MCDecoder {
 		if (cs.contains(IO))
 			operations.add("IO");
 
-		if (cs.contains(CLRF))
-			operations.add("Clear flags");
+// !!! Should be fixed later
+//		if (cs.contains(CLRF))
+//			operations.add("Clear flags");
 
 		if (cs.contains(DINT))
 			operations.add("Disable interrupts");

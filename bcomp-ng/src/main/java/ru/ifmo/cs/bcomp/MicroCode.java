@@ -297,7 +297,7 @@ public class MicroCode {
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INFETCH"), // GOTO INFETCH
 
         // Пуск
-        new omc("START",    cs(STNZ, SETV, SETC, WRDR, WRCR, WRSP, WRAC, WRBR, WRAR, DINT, CLRF)),// 0 -> all registers; DI; CLRF
+        new omc("START",    cs(STNZ, SETV, SETC, WRDR, WRCR, WRSP, WRAC, WRBR, WRAR, DINT)),// 0 -> all registers; DI
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         // Чтение
         new omc("READ",     cs(RDIP, HTOH, LTOL, WRAR)),                                // IP -> AR

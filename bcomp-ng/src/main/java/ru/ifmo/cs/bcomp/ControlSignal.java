@@ -186,9 +186,9 @@ public enum ControlSignal {
 	IO,
 	/**
 	 * Control signal 35:
-	 * Clear flags for all IO Controllers
+	 * 
 	 */
-	CLRF,
+	IRQS,
 	/**
 	 * Control signal 36:
 	 * Disable interrupts
