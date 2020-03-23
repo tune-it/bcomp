@@ -11,7 +11,64 @@ import ru.ifmo.cs.components.*;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class IOCtrl {
+public class IOCtrl implements DataDestination {
+	private final long addr;
+	private final long regwidth;
+	private final long regmask;
+	private final Bus iodata;
+	private final Bus ioaddr;
+	private final CtrlBus ioctrl;
+	private final DataDestination chaintctrl;
+
+	public IOCtrl(long _addr, long width, EnumMap<CPU.IOBuses, Bus> buses, DataDestination chainctrl) {
+		this.addr = _addr;
+		this.regmask = ~BasicComponent.calculateMask(this.regwidth = width);
+		this.chaintctrl = chainctrl;
+		this.iodata = buses.get(CPU.IOBuses.IOData);
+		this.ioaddr = buses.get(CPU.IOBuses.IOAddr);
+		this.ioctrl = (CtrlBus)buses.get(CPU.IOBuses.IOCtrl);
+
+		ioctrl.addDestination(new DataDestination() {
+			@Override
+			public void setValue(long value) {
+				long reg = ioaddr.getValue();
+
+				if ((reg & regmask) != addr)
+					return;
+
+				reg &= ~regmask;
+
+				try {
+					if (value == 1) {
+						doInput(reg);
+						ioctrl.setValue(1, 1, IOControlSignal.RDY.ordinal());
+					} else if (value == 2) {
+						doOutput(reg);
+						ioctrl.setValue(1, 1, IOControlSignal.RDY.ordinal());
+					}
+				} catch (Exception e) {
+					System.err.println("IOCtrl " + Utils.toHex(addr, 8) +
+						" register " + Utils.toHex(reg, regwidth) +
+						" can't be used for " + e.getMessage());
+				}
+
+			}
+		});
+	}
+
+	@Override
+	public synchronized void setValue(long value) {
+		System.out.println("ADDR: " + addr + "IRQ: " + Long.toHexString(value));
+	}
+
+	void doInput(long reg) throws Exception {
+		throw new Exception("input");
+	}
+
+	void doOutput(long reg) throws Exception {
+		throw new Exception("output");
+	}
+
 	/*
 	public enum Direction {
 		IN, OUT, INOUT
@@ -22,7 +79,6 @@ public class IOCtrl {
 
 	private final Register flag;
 	private final Register data;
-	private final int addr;
 	private final Direction dir;
 	private final Valve valveSetFlag = new Valve(Consts.consts[1]);
 	private final EnumMap<ControlSignal, DataHandler[]> signals =

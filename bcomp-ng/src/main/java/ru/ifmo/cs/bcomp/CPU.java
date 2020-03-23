@@ -36,7 +36,7 @@ public class CPU {
 	}
 
 	public enum IOValves {
-		io,
+		IRQSC
 	}
 
 	private static final long MR_WIDTH = TYPE.ordinal() + 1;
@@ -52,7 +52,7 @@ public class CPU {
 	private final EnumMap<ControlSignal, Control> valves = new EnumMap<ControlSignal, Control>(ControlSignal.class);
 	private final EnumMap<Buses, Bus> buses = new EnumMap<Buses, Bus>(Buses.class);
 	private final EnumMap<IOBuses, Bus> iobuses = new EnumMap<IOBuses, Bus>(IOBuses.class);
-	private final EnumMap<IOValves, DataDestination> iovalves = new EnumMap<IOValves, DataDestination>(IOValves.class);
+	private final EnumMap<IOValves, Control> iovalves = new EnumMap<IOValves, Control>(IOValves.class);
 	private final EnumMap<RunningCycle, Integer> labels = new EnumMap<RunningCycle, Integer>(RunningCycle.class);
 	private final MicroCode mc = new MicroCode();
 	private final Memory mem;
@@ -231,6 +231,7 @@ public class CPU {
 		// Control Micro Command
 		Control vr0 = newValve(mr, VR_WIDTH, 16, TYPE,
 			new DataDestination() {
+				@Override
 				public synchronized void setValue(long value) {
 					newmp.setValue((value >> 8) & BasicComponent.calculateMask(8));
 					expected.setValue((value >> 16) & 1L);
@@ -245,6 +246,7 @@ public class CPU {
 		Control shrf;
 		Control setv;
 		Control io;
+		Control irqsc;
 		PartWriter writeto15 = new PartWriter(swout, 1, DATA_WIDTH - 1);
 		PartWriter writeto17 = new PartWriter(swout, 1, DATA_WIDTH + 1);
 		PartWriter ei = new PartWriter(ps, 1, EI.ordinal());
@@ -277,7 +279,7 @@ public class CPU {
 				newValveH(mem, DATA_WIDTH, 0, LOAD, dr),
 				newValveH(dr, DATA_WIDTH, 0, STOR, mem),
 				io = newValveH(Consts.consts[1], 1, 0, IO),
-				newValveH(Consts.consts[1], 1, 0, IRQS), // !!! Should be fixed later
+				irqsc = newValveH(Consts.consts[1], 1, 0, IRQS), // !!! Should be fixed later
 				newValveH(Consts.consts[0], 1, 0, DINT, ei),
 				newValveH(Consts.consts[1], 1, 0, EINT, ei),
 				newValveH(Consts.consts[0], 1, 0, HALT, stateProgram)
@@ -303,7 +305,8 @@ public class CPU {
 		mp.setValue(labels.get(STOP) + 1);
 
 		// IO specific staff
-		iovalves.put(IOValves.io, io);
+		//iovalves.put(IOValves.io, io);
+		iovalves.put(IOValves.IRQSC, irqsc);
 		io.addDestination(
 			new Valve(cr, IO_WIDTH, 0, 0, ioaddr),
 			new Decoder(cr, IO_WIDTH, IOCMD_WIDTH, 0, ioctrl));
@@ -353,7 +356,7 @@ public class CPU {
 		return iobuses;
 	}
 
-	public EnumMap<IOValves, DataDestination> getIOValves() {
+	public EnumMap<IOValves, Control> getIOValves() {
 		return iovalves;
 	}
 

@@ -22,11 +22,20 @@ public class CtrlBus extends Bus implements DataDestination {
 		this.dsts.addAll(Arrays.asList(dsts));
 	}
 
+	private void callDestinations() {
+		for (DataDestination dst : dsts)
+			dst.setValue(this.value);
+	}
+
 	@Override
 	public synchronized void setValue(long value) {
 		super.setValue(value);
+		callDestinations();
+	}
 
-		for (DataDestination dst : dsts)
-			dst.setValue(this.value);
+	@Override
+	public synchronized void setValue(long value, long mask, long startbit) {
+		super.setValue(value, mask, startbit);
+		callDestinations();
 	}
 }
