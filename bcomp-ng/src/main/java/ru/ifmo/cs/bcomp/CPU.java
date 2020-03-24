@@ -45,7 +45,7 @@ public class CPU {
 	private static final long AR_WIDTH = 11;
 	private static final long DATA_WIDTH = 16;
 	private static final long IO_WIDTH = 8;
-	private static final long IOCMD_WIDTH = 4;
+	private static final long IOCMD_WIDTH = 3;
 	private static final long PS_WIDTH = P.ordinal() + 1;
 
 	private final EnumMap<Reg, Register> regs = new EnumMap<Reg, Register>(Reg.class);
@@ -312,10 +312,12 @@ public class CPU {
 			new Decoder(cr, IO_WIDTH, IOCMD_WIDTH, 0, ioctrl));
 		// Output: open AC to IO data
 		ioctrl.addDestination(new ValveTwo(IOControlSignal.OUT.ordinal(), IOControlSignal.RDY.ordinal(),
-			new Not(1, new Valve(ac, IO_WIDTH, 0, IOControlSignal.OUT.ordinal(), iodata))));
+			new Not(0, new Valve(ac, IO_WIDTH, 0, 0, iodata))
+		));
 		// Input: IO data to AC
 		ioctrl.addDestination(new ValveTwo(IOControlSignal.IN.ordinal(), IOControlSignal.RDY.ordinal(),
-			new Valve(iodata, IO_WIDTH, 0, 0, ac)));
+			new Valve(iodata, IO_WIDTH, 0, 0, new PartWriter(ac, IO_WIDTH, 0))
+		));
 	}
 
 	private Control newValve(DataSource input, long width, long startbit, ControlSignal cs, DataDestination ... dsts) {

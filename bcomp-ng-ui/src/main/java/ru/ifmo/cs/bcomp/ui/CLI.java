@@ -185,7 +185,7 @@ public class CLI {
     private Scanner input = new Scanner(System.in);
 
     public void cli() {
-//		bcomp.startTimer(); //TODO ? IODevTimer
+		bcomp.startTimer();
 
         println("Эмулятор Базовой ЭВМ. Версия r" + CLI.class.getPackage().getImplementationVersion() + "\n"
                 + "БЭВМ готова к работе.\n"

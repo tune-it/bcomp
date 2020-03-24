@@ -15,18 +15,20 @@ public class IOCtrl implements DataDestination {
 	private final long addr;
 	private final long regwidth;
 	private final long regmask;
-	private final Bus iodata;
-	private final Bus ioaddr;
+	private long irq;
+	final Bus iodata;
+	final Bus ioaddr;
 	private final CtrlBus ioctrl;
 	private final DataDestination chaintctrl;
 
-	public IOCtrl(long _addr, long width, EnumMap<CPU.IOBuses, Bus> buses, DataDestination chainctrl) {
+	public IOCtrl(long _addr, long width, long irq, EnumMap<CPU.IOBuses, Bus> buses, DataDestination chainctrl) {
 		this.addr = _addr;
 		this.regmask = ~BasicComponent.calculateMask(this.regwidth = width);
-		this.chaintctrl = chainctrl;
+		this.irq = irq;
 		this.iodata = buses.get(CPU.IOBuses.IOData);
 		this.ioaddr = buses.get(CPU.IOBuses.IOAddr);
 		this.ioctrl = (CtrlBus)buses.get(CPU.IOBuses.IOCtrl);
+		this.chaintctrl = chainctrl;
 
 		ioctrl.addDestination(new DataDestination() {
 			@Override
@@ -51,13 +53,13 @@ public class IOCtrl implements DataDestination {
 						" register " + Utils.toHex(reg, regwidth) +
 						" can't be used for " + e.getMessage());
 				}
-
 			}
 		});
 	}
 
 	@Override
 	public synchronized void setValue(long value) {
+		// isReady() { ... } else chainctrl.setValue(1) 
 		System.out.println("ADDR: " + addr + "IRQ: " + Long.toHexString(value));
 	}
 
@@ -67,6 +69,14 @@ public class IOCtrl implements DataDestination {
 
 	void doOutput(long reg) throws Exception {
 		throw new Exception("output");
+	}
+
+	boolean isReady() {
+		return false;
+	}
+
+	void setIRQ(long irq) {
+		this.irq = irq;
 	}
 
 	/*
