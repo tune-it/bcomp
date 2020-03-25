@@ -20,7 +20,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
-//import ru.ifmo.cs.bcomp.Assembler;
 import ru.ifmo.cs.bcomp.BasicComp;
 import ru.ifmo.cs.bcomp.CPU;
 import static ru.ifmo.cs.bcomp.ControlSignal.*;
@@ -28,7 +27,8 @@ import ru.ifmo.cs.bcomp.ProgramBinary;
 import ru.ifmo.cs.bcomp.Reg;
 import static ru.ifmo.cs.bcomp.Reg.*;
 import static ru.ifmo.cs.bcomp.State.*;
-//import ru.ifmo.cs.bcomp.IOCtrl;
+import ru.ifmo.cs.bcomp.IOCtrl;
+import ru.ifmo.cs.bcomp.IOCtrlBasic;
 import ru.ifmo.cs.bcomp.SignalListener;
 import ru.ifmo.cs.bcomp.assembler.AsmNg;
 import ru.ifmo.cs.bcomp.assembler.Program;
@@ -55,21 +55,19 @@ public class Nightmare {
 
 	private final BasicComp bcomp;
 	private final CPU cpu;
-	//private final IOCtrl[] ioctrls;
+	private final IOCtrl[] ioctrls;
 	private EnumMap<Reg, RegisterView> regs = new EnumMap<Reg, RegisterView>(Reg.class);
 	private final SignalListener[] listeners;
 
-	/*
 	private BasicIOView io1 = null;
 	private BasicIOView io2 = null;
 	private BasicIOView io3 = null;
-	private TextPrinter textPrinter = null;
-	private Ticker ticker = null;
-	private SevenSegmentDisplay ssd = null;
-	private Keyboard kbd = null;
-	private Numpad numpad = null;
-	private GUI pairgui = null;
-	*/
+//	private TextPrinter textPrinter = null;
+//	private Ticker ticker = null;
+//	private SevenSegmentDisplay ssd = null;
+//	private Keyboard kbd = null;
+//	private Numpad numpad = null;
+//	private GUI pairgui = null;
 
 	private class BitView extends JComponent {
 		private final Register reg;
@@ -97,11 +95,11 @@ public class Nightmare {
 		private final Register reg;
 		private final BitView[] bits;
 
-		private RegisterView(Reg r, Register reg) {
+		private RegisterView(String name, Register reg) {
 			super(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 
 			this.reg = reg;
-			JLabel label = new JLabel(r.toString());
+			JLabel label = new JLabel(name);
 			label.setFont(LABEL_FONT);
 			add(label);
 
@@ -120,21 +118,22 @@ public class Nightmare {
 			bits[startbit].repaint();
 		}
 	}
-/*
+
 	private class BasicIOView {
-		private final IOCtrl ioctrl;
+		private final IOCtrlBasic ioctrl;
 		private final JFrame frame;
 		private final RegisterView data;
 		private final RegisterView flag;
 
 		private BasicIOView(IOCtrl ioctrls[], int number) {
-			this.ioctrl = ioctrls[number];
-			data = new RegisterView(ioctrl.getRegData());
-			flag = new RegisterView(ioctrl.getRegFlag());
+			this.ioctrl = (IOCtrlBasic)ioctrls[number];
+			data = new RegisterView("DR", ioctrl.getDataRegister());
+			flag = new RegisterView("SR", ioctrl.getStateRegister());
 
-			ioctrl.addDestination(IOCtrl.ControlSignal.SETFLAG, flag);
-			if (ioctrl.getDirection() != IOCtrl.Direction.IN)
-				ioctrl.addDestination(IOCtrl.ControlSignal.OUT, data);
+// XXX: TODO: FIX ME
+//			ioctrl.addDestination(IOCtrl.ControlSignal.SETFLAG, flag);
+//			if (ioctrl.getDirection() != IOCtrl.Direction.IN)
+//				ioctrl.addDestination(IOCtrl.ControlSignal.OUT, data);
 
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 			panel.add(flag);
@@ -153,7 +152,7 @@ public class Nightmare {
 					case KeyEvent.VK_F1:
 					case KeyEvent.VK_F2:
 					case KeyEvent.VK_F3:
-						ioctrl.setFlag();
+						ioctrl.setReady();
 						break;
 
 					case KeyEvent.VK_0:
@@ -194,8 +193,8 @@ public class Nightmare {
 
 		// XXX: Говнокод
 		private void invertBit(int startbit) {
-			if (ioctrl.getDirection() != IOCtrl.Direction.OUT)
-				data.invertBit(startbit);
+			// XXX: Fix me if (ioctrl.getDirection() != IOCtrl.Direction.OUT)
+			data.invertBit(startbit);
 		}
 
 		private void activate() {
@@ -203,12 +202,11 @@ public class Nightmare {
 			frame.requestFocus();
 		}
 	}
-*/
 
 	public Nightmare() throws Exception {
 		this.bcomp = new BasicComp();
 		this.cpu = bcomp.getCPU();
-		//this.ioctrls = bcomp.getIOCtrls();
+		this.ioctrls = bcomp.getIOCtrls();
 
 		try {
 			String code = System.getProperty("code", null);
@@ -232,7 +230,7 @@ public class Nightmare {
 
 		for (Reg reg : Reg.values())
 			if ((reg != MP) && (reg != MR))
-				regs.put(reg, new RegisterView(reg, cpu.getRegister(reg)));
+				regs.put(reg, new RegisterView(reg.toString(), cpu.getRegister(reg)));
 
 		listeners = new SignalListener[] {
 			new SignalListener(regs.get(DR), WRDR, LOAD),
@@ -283,7 +281,7 @@ public class Nightmare {
 					case KeyEvent.VK_Q:
 						System.exit(0);
 						break;
-/*
+
 					case KeyEvent.VK_1:
 					case KeyEvent.VK_F1:
 						if (io1 == null)
@@ -304,7 +302,7 @@ public class Nightmare {
 							io3 = new BasicIOView(ioctrls, 3);
 						io3.activate();
 						break;
-
+/*
 					case KeyEvent.VK_4:
 					case KeyEvent.VK_F4:
 						if (textPrinter == null)

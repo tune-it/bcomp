@@ -11,18 +11,18 @@ import ru.ifmo.cs.components.*;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class IOCtrlBasic extends IOCtrl {
-	private final Register flag = new Register(1);
+	private final Register state = new Register(1);
 	final Register dr = new Register(8);
 
 	public IOCtrlBasic(long addr, long irq, CPU cpu, DataDestination chainctrl) {
 		super(addr, 1, irq, cpu, chainctrl);
-		cpu.addIRQReqInput(flag);
+		cpu.addIRQReqInput(state);
 	}
 
 	@Override
 	void doInput(long reg) throws Exception {
 		if (reg == 1)
-			iodata.setValue(flag.getValue() == 0 ? 0 : 0x40);
+			iodata.setValue(state.getValue() == 0 ? 0 : 0x40);
 		else
 			super.doInput(reg);
 	}
@@ -31,7 +31,7 @@ public class IOCtrlBasic extends IOCtrl {
 	void doOutput(long reg) throws Exception {
 		System.out.println("reg: " + reg);
 		if (reg == 1) {
-			flag.setValue(0);
+			state.setValue(0);
 			callbackIRQRq();
 		} else
 			super.doInput(reg);
@@ -39,16 +39,20 @@ public class IOCtrlBasic extends IOCtrl {
 
 	@Override
 	public boolean isReady() {
-		return flag.getValue() == 1;
+		return state.getValue() == 1;
 	}
 
 	@Override
 	public void setReady() {
-		flag.setValue(1);
+		state.setValue(1);
 		callbackIRQRq();
 	}
 
-	public Register getDR() {
+	public Register getStateRegister() {
+		return state;
+	}
+
+	public Register getDataRegister() {
 		return dr;
 	}
 

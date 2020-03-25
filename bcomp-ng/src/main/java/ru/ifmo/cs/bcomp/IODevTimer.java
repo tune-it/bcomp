@@ -18,7 +18,7 @@ public class IODevTimer {
 
 	public IODevTimer(IOCtrl ctrl) {
 		this.ctrl = (IOCtrlBasicOutput)ctrl;
-		this.dr = this.ctrl.getDR();
+		this.dr = this.ctrl.getDataRegister();
 	}
 
 	public void start(String name) {
