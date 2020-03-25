@@ -4,7 +4,6 @@
 
 package ru.ifmo.cs.bcomp;
 
-import java.util.EnumMap;
 import ru.ifmo.cs.components.*;
 
 /**
@@ -21,13 +20,13 @@ public class IOCtrl implements DataDestination {
 	private final CtrlBus ioctrl;
 	private final DataDestination chaintctrl;
 
-	public IOCtrl(long _addr, long width, long irq, EnumMap<CPU.IOBuses, Bus> buses, DataDestination chainctrl) {
+	public IOCtrl(long _addr, long width, long irq, CPU cpu, DataDestination chainctrl) {
 		this.addr = _addr;
 		this.regmask = ~BasicComponent.calculateMask(this.regwidth = width);
 		this.irq = irq;
-		this.iodata = buses.get(CPU.IOBuses.IOData);
-		this.ioaddr = buses.get(CPU.IOBuses.IOAddr);
-		this.ioctrl = (CtrlBus)buses.get(CPU.IOBuses.IOCtrl);
+		this.iodata = cpu.getIOBuses().get(CPU.IOBuses.IOData);
+		this.ioaddr = cpu.getIOBuses().get(CPU.IOBuses.IOAddr);
+		this.ioctrl = (CtrlBus)cpu.getIOBuses().get(CPU.IOBuses.IOCtrl);
 		this.chaintctrl = chainctrl;
 
 		ioctrl.addDestination(new DataDestination() {

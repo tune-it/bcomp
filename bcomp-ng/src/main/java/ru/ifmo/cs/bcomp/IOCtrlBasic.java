@@ -4,7 +4,6 @@
 
 package ru.ifmo.cs.bcomp;
 
-import java.util.EnumMap;
 import ru.ifmo.cs.components.*;
 
 /**
@@ -15,8 +14,8 @@ public class IOCtrlBasic extends IOCtrl {
 	private final Register flag = new Register(1);
 	final Register dr = new Register(8);
 
-	public IOCtrlBasic(long addr, long irq, EnumMap<CPU.IOBuses, Bus> buses, DataDestination chainctrl) {
-		super(addr, 1, irq, buses, chainctrl);
+	public IOCtrlBasic(long addr, long irq, CPU cpu, DataDestination chainctrl) {
+		super(addr, 1, irq, cpu, chainctrl);
 	}
 
 	@Override

@@ -4,9 +4,6 @@
 
 package ru.ifmo.cs.bcomp;
 
-import java.util.EnumMap;
-import ru.ifmo.cs.components.Bus;
-
 /**
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
@@ -20,12 +17,11 @@ public class BasicComp {
 		cpu = new CPU();
 		cpu.startCPU();
 
-		EnumMap<CPU.IOBuses, Bus> iobuses = cpu.getIOBuses();
 		cpu.getIOValves().get(CPU.IOValves.IRQSC).addDestination(
-			ioctrls[0] = new IOCtrlBasicOutput(0, 0, iobuses,
-			ioctrls[1] = new IOCtrlBasicOutput(2, 1, iobuses,
-			ioctrls[2] = new IOCtrlBasicInput(4, 2, iobuses,
-			ioctrls[3] = new IOCtrlBasicInputOutput(6, 3, iobuses, null))))
+			ioctrls[0] = new IOCtrlBasicOutput(0, 0, cpu,
+			ioctrls[1] = new IOCtrlBasicOutput(2, 1, cpu,
+			ioctrls[2] = new IOCtrlBasicInput(4, 2, cpu,
+			ioctrls[3] = new IOCtrlBasicInputOutput(6, 3, cpu, null))))
 		);
 		timer = new IODevTimer(ioctrls[0]);
 	}
