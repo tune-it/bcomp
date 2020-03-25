@@ -10,11 +10,12 @@ import ru.ifmo.cs.components.*;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public class IOCtrl implements DataDestination {
+public abstract class IOCtrl implements DataDestination {
 	private final long addr;
 	private final long regwidth;
 	private final long regmask;
 	private long irq;
+	private final Control irqrqvalve;
 	final Bus iodata;
 	final Bus ioaddr;
 	private final CtrlBus ioctrl;
@@ -24,6 +25,7 @@ public class IOCtrl implements DataDestination {
 		this.addr = _addr;
 		this.regmask = ~BasicComponent.calculateMask(this.regwidth = width);
 		this.irq = irq;
+		this.irqrqvalve = cpu.getIRQReqValve();
 		this.iodata = cpu.getIOBuses().get(CPU.IOBuses.IOData);
 		this.ioaddr = cpu.getIOBuses().get(CPU.IOBuses.IOAddr);
 		this.ioctrl = (CtrlBus)cpu.getIOBuses().get(CPU.IOBuses.IOCtrl);
@@ -70,8 +72,11 @@ public class IOCtrl implements DataDestination {
 		throw new Exception("output");
 	}
 
-	public boolean isReady() {
-		return false;
+	public abstract boolean isReady();
+	public abstract void setReady();
+
+	public void callbackIRQRq() {
+		irqrqvalve.setValue(1);
 	}
 
 	void setIRQ(long irq) {

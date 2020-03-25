@@ -16,6 +16,7 @@ public class IOCtrlBasic extends IOCtrl {
 
 	public IOCtrlBasic(long addr, long irq, CPU cpu, DataDestination chainctrl) {
 		super(addr, 1, irq, cpu, chainctrl);
+		cpu.addIRQReqInput(flag);
 	}
 
 	@Override
@@ -29,9 +30,10 @@ public class IOCtrlBasic extends IOCtrl {
 	@Override
 	void doOutput(long reg) throws Exception {
 		System.out.println("reg: " + reg);
-		if (reg == 1)
+		if (reg == 1) {
 			flag.setValue(0);
-		else
+			callbackIRQRq();
+		} else
 			super.doInput(reg);
 	}
 
@@ -40,8 +42,10 @@ public class IOCtrlBasic extends IOCtrl {
 		return flag.getValue() == 1;
 	}
 
+	@Override
 	public void setReady() {
 		flag.setValue(1);
+		callbackIRQRq();
 	}
 
 	public Register getDR() {

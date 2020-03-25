@@ -63,6 +63,7 @@ public class CPU {
 	private final Bus vv;
 	private final Bus expected;
 	private final Bus newmp;
+	private final InputBus irqreq = new InputBus(1);
 	private volatile boolean clock = true;
 
 	private final ReentrantLock tick = new ReentrantLock();
@@ -245,14 +246,19 @@ public class CPU {
 		// Operating Micro Command
 		Control shrf;
 		Control setv;
-		Control io;
-		Control irqsc;
 		PartWriter writeto15 = new PartWriter(swout, 1, DATA_WIDTH - 1);
 		PartWriter writeto17 = new PartWriter(swout, 1, DATA_WIDTH + 1);
-		PassValue ei = new PassValue(1, 0, new PartWriter(ps, 1, EI.ordinal()));
-		valves.put(DINT, ei);
 		PartWriter stateProgram = new PartWriter(ps, 1, P.ordinal());
 		valves.put(SEXT, c = new Extender(aluout, 8, 7, SEXT.ordinal() - 16, writetoH));
+
+		// IO specific staff
+		Control io;
+		Control irqsc;
+		ValveAnd irqrq = new ValveAnd(ps, EI.ordinal(), irqreq, new PartWriter(ps, 1, IRQ.ordinal()));
+		valves.put(SET_REQUEST_INTERRUPT, irqrq);
+		PassValue ei = new PassValue(1, 0, new PartWriter(ps, 1, EI.ordinal()), irqrq);
+		valves.put(DINT, ei);
+
 		clock1.addDestination(new Not(TYPE.ordinal(),
 			new Valve(mr, VR_WIDTH, 16, 0,
 				c,
@@ -366,6 +372,14 @@ public class CPU {
 
 	public EnumMap<IOValves, Control> getIOValves() {
 		return iovalves;
+	}
+
+	public void addIRQReqInput(DataSource ... inputs) {
+		irqreq.addInput(inputs);
+	}
+
+	public Control getIRQReqValve() {
+		return valves.get(SET_REQUEST_INTERRUPT);
 	}
 
 	public synchronized void step() {
