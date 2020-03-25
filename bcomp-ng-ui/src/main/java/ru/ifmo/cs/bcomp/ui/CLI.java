@@ -170,6 +170,7 @@ public class CLI {
                 + "mw[rite] value\t- Запись микрокоманды\n"
                 + "mr[ead]\t\t- Чтение микрокоманды\n"
                 + "md[ecode]\t- Декодировать текущую микрокоманду\n"
+				+ "stat[e]\t\t- Вывести регистр состояния БЭВМ\n"
                 + "io\t\t- Вывод состояния всех ВУ\n"
                 + "io addr\t\t- Вывод состояния указанного ВУ\n"
                 + "io addr value\t- Запись value в указанное ВУ\n"
@@ -309,7 +310,15 @@ public class CLI {
                     continue;
                 }
 
-                if (checkCmd(cmd, "io")) {
+				if (checkCmd(cmd, "state")) {
+					for (State state : State.values())
+						print(state.name() + ": " + cpu.getProgramState(state) + " ");
+
+					println("");
+					continue;
+				}
+
+				if (checkCmd(cmd, "io")) {
                     if (i == cmds.length - 1) {
                         for (int ioaddr = 0; ioaddr < 4; ioaddr++) {
                             printIO(ioaddr);
