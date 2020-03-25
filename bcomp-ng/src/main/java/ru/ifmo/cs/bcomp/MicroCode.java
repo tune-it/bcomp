@@ -280,20 +280,25 @@ public class MicroCode {
         new omc(            cs(RDBR, HTOH, LTOL, STNZ, SETV, WRAC, STOR)),              // BR -> AC, N, Z, V; DR -> MEM(AR)
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         // IO
-        new omc("IO",       cs(IO)),                                                    // IO
+        new CMC("IO",       cs(RDCR, HTOL), 3, 1,                           "IRQ"),     // if CR(11) = 1 then GOTO IRQ
+        new omc(            cs(IO)),                                                    // IO
 
         // Цикл прерывания
-        new CMC("INT",      cs(RDPS, HTOL), W.ordinal() - 8, 0,             "STOP"),    // if RUN = 0 then GOTO STOP
+        new CMC("INT",      cs(RDPS, LTOL), W.ordinal(), 0,                 "STOP"),    // if RUN = 0 then GOTO STOP
         new CMC(            cs(RDPS, LTOL), IRQ.ordinal(), 0,               "INFETCH"), // if INTR = 0 then GOTO INFETCH
-        new omc(            cs(RDSP, COML, HTOH, LTOL, WRSP, WRAR)),                    // SP + ~0 -> SP, AR
+        new omc(            cs(IRQS)),                                                  // IRQ Sc
+        new omc("IRQ",      cs(RDSP, COML, HTOH, LTOL, WRSP, WRAR)),                    // SP + ~0 -> SP, AR
         new omc(            cs(RDIP, HTOH, LTOL, WRDR)),                                // IP -> DR
         new omc(            cs(STOR)),                                                  // DR -> MEM(AR)
         new omc(            cs(RDSP, COML, HTOH, LTOL, WRSP, WRAR)),                    // SP + ~0 -> SP, AR
         new omc(            cs(RDPS, HTOH, LTOL, WRDR)),                                // PS -> DR
         new omc(            cs(STOR)),                                                  // DR -> MEM(AR)
-        new omc(            cs(WRAR)),                                                  // 0 -> AR
+        new omc(            cs(RDCR, SHLT, WRBR, WRAR)),                                // 2 * CR -> BR, AR
         new omc(            cs(LOAD)),                                                  // MEM(AR) -> DR
-        new omc(            cs(RDDR, HTOH, LTOL, WRIP, DINT)),                          // DR -> IP; DI
+        new omc(            cs(RDDR, HTOH, LTOL, WRIP)),                                // DR -> IP;
+        new omc(            cs(RDBR, PLS1, LTOL, WRAR)),                                // BR + 1 -> AR
+        new omc(            cs(LOAD)),                                                  // MEM(AR) -> DR
+        new omc(            cs(RDDR, HTOH, LTOL, WRPS)),                                // DR -> PS
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INFETCH"), // GOTO INFETCH
 
         // Пуск

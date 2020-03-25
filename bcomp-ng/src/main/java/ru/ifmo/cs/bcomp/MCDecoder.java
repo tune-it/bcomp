@@ -89,24 +89,24 @@ public class MCDecoder {
 			operations.add((swOutput == null ? "0" : swOutput) + " → " + writelist);
 		}
 
-		if (cs.contains(STOR))
-			operations.add("DR → MEM(AR)");
-
 		if (cs.contains(LOAD))
 			operations.add("MEM(AR) → DR");
+
+		if (cs.contains(STOR))
+			operations.add("DR → MEM(AR)");
 
 		if (cs.contains(IO))
 			operations.add("IO");
 
-// !!! Should be fixed later
-//		if (cs.contains(CLRF))
-//			operations.add("Clear flags");
+		if (cs.contains(IRQS))
+			operations.add("IRQSC");
 
 		if (cs.contains(DINT))
 			operations.add("Disable interrupts");
 
-		if (cs.contains(EINT))
-			operations.add("Enable interrupts");
+// DEPRECATED
+//		if (cs.contains(EINT))
+//			operations.add("Enable interrupts");
 
 		if (cs.contains(HALT))
 			operations.add("Halt");

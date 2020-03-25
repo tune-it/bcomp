@@ -17,7 +17,7 @@ public class BasicComp {
 		cpu = new CPU();
 		cpu.startCPU();
 
-		cpu.getIOValves().get(CPU.IOValves.IRQSC).addDestination(
+		cpu.addDestination(ControlSignal.IRQS,
 			ioctrls[0] = new IOCtrlBasicOutput(0, 0, cpu,
 			ioctrls[1] = new IOCtrlBasicOutput(2, 1, cpu,
 			ioctrls[2] = new IOCtrlBasicInput(4, 2, cpu,

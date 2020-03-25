@@ -43,10 +43,9 @@ public enum IOControlSignal {
 	RESERVED5,
 	/**
 	 * Control signal 6:
-	 * Reserved
-	 * @hidden
+	 * IRQ response
 	 */
-	RESERVED6,
+	IRQ,
 	/**
 	 * Control signal 7:
 	 * Ready

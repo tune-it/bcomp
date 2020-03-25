@@ -35,10 +35,6 @@ public class CPU {
 		IOCtrl,
 	}
 
-	public enum IOValves {
-		IRQSC
-	}
-
 	private static final long MR_WIDTH = TYPE.ordinal() + 1;
 	private static final long VR_WIDTH = MR_WIDTH - 17;
 	private static final long MP_WIDTH = 8;
@@ -52,7 +48,6 @@ public class CPU {
 	private final EnumMap<ControlSignal, Control> valves = new EnumMap<ControlSignal, Control>(ControlSignal.class);
 	private final EnumMap<Buses, Bus> buses = new EnumMap<Buses, Bus>(Buses.class);
 	private final EnumMap<IOBuses, Bus> iobuses = new EnumMap<IOBuses, Bus>(IOBuses.class);
-	private final EnumMap<IOValves, Control> iovalves = new EnumMap<IOValves, Control>(IOValves.class);
 	private final EnumMap<RunningCycle, Integer> labels = new EnumMap<RunningCycle, Integer>(RunningCycle.class);
 	private final MicroCode mc = new MicroCode();
 	private final Memory mem;
@@ -286,7 +281,7 @@ public class CPU {
 				newValveH(mem, DATA_WIDTH, 0, LOAD, dr),
 				newValveH(dr, DATA_WIDTH, 0, STOR, mem),
 				io = newValveH(Consts.consts[1], 1, 0, IO),
-				irqsc = newValveH(Consts.consts[1], 1, 0, IRQS), // !!! Should be fixed later
+				irqsc = newValveH(Consts.consts[1], 1, 0, IRQS),
 				new Valve(Consts.consts[0], 1, 0, DINT.ordinal() - 16, ei),
 				newValveH(Consts.consts[0], 1, 0, HALT, stateProgram)
 			)
@@ -311,8 +306,6 @@ public class CPU {
 		mp.setValue(labels.get(STOP) + 1);
 
 		// IO specific staff
-		//iovalves.put(IOValves.io, io);
-		iovalves.put(IOValves.IRQSC, irqsc);
 		io.addDestination(
 			new Valve(cr, IO_WIDTH, 0, 0, ioaddr),
 			new Decoder(cr, IO_WIDTH, IOCMD_WIDTH, 0, ioctrl));
@@ -328,7 +321,9 @@ public class CPU {
 			// Disable interrupts
 			new Valve(Consts.consts[0], 1, 0, IOControlSignal.DI.ordinal(), ei),
 			// Enable interrupts
-			new Valve(Consts.consts[1], 1, 0, IOControlSignal.EI.ordinal(), ei)
+			new Valve(Consts.consts[1], 1, 0, IOControlSignal.EI.ordinal(), ei),
+			// IRQ SC
+			new Valve(ioaddr, 3, 0, IOControlSignal.IRQ.ordinal(), new PartWriter(cr, 8, 0))
 		);
 	}
 
@@ -368,10 +363,6 @@ public class CPU {
 
 	public EnumMap<IOBuses, Bus> getIOBuses() {
 		return iobuses;
-	}
-
-	public EnumMap<IOValves, Control> getIOValves() {
-		return iovalves;
 	}
 
 	public void addIRQReqInput(DataSource ... inputs) {

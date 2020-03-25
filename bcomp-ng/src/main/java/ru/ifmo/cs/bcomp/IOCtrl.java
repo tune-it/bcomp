@@ -14,22 +14,22 @@ public abstract class IOCtrl implements DataDestination {
 	private final long addr;
 	private final long regwidth;
 	private final long regmask;
-	private long irq;
+	private final Register irq = new Register(3);
 	private final Control irqrqvalve;
 	final Bus iodata;
 	final Bus ioaddr;
 	private final CtrlBus ioctrl;
-	private final DataDestination chaintctrl;
+	private final DataDestination chainctrl;
 
 	public IOCtrl(long _addr, long width, long irq, CPU cpu, DataDestination chainctrl) {
 		this.addr = _addr;
 		this.regmask = ~BasicComponent.calculateMask(this.regwidth = width);
-		this.irq = irq;
+		this.irq.setValue(irq);
 		this.irqrqvalve = cpu.getIRQReqValve();
 		this.iodata = cpu.getIOBuses().get(CPU.IOBuses.IOData);
 		this.ioaddr = cpu.getIOBuses().get(CPU.IOBuses.IOAddr);
 		this.ioctrl = (CtrlBus)cpu.getIOBuses().get(CPU.IOBuses.IOCtrl);
-		this.chaintctrl = chainctrl;
+		this.chainctrl = chainctrl;
 
 		ioctrl.addDestination(new DataDestination() {
 			@Override
@@ -60,8 +60,11 @@ public abstract class IOCtrl implements DataDestination {
 
 	@Override
 	public synchronized void setValue(long value) {
-		// isReady() { ... } else chainctrl.setValue(1) 
-		System.out.println("ADDR: " + addr + "IRQ: " + Long.toHexString(value));
+		if (isReady()) {
+			ioaddr.setValue(irq.getValue());
+			ioctrl.setValue(1, 1, IOControlSignal.IRQ.ordinal());
+		} else if (chainctrl != null)
+			chainctrl.setValue(value);
 	}
 
 	void doInput(long reg) throws Exception {
@@ -80,7 +83,7 @@ public abstract class IOCtrl implements DataDestination {
 	}
 
 	void setIRQ(long irq) {
-		this.irq = irq;
+		this.irq.setValue(irq);
 	}
 
 	/*
