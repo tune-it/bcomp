@@ -7,8 +7,6 @@ package ru.ifmo.cs.bcomp;
 import java.util.ArrayList;
 import static ru.ifmo.cs.bcomp.Utils.toHex;
 import static ru.ifmo.cs.bcomp.ControlSignal.*;
-import static ru.ifmo.cs.bcomp.State.*;
-import static ru.ifmo.cs.bcomp.Utils.cs;
 
 /**
  *
