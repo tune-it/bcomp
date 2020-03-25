@@ -71,7 +71,7 @@ public class IOCtrl implements DataDestination {
 		throw new Exception("output");
 	}
 
-	boolean isReady() {
+	public boolean isReady() {
 		return false;
 	}
 

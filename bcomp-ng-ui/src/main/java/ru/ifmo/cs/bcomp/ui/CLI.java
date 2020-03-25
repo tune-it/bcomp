@@ -18,7 +18,7 @@ public class CLI {
 
     private final BasicComp bcomp;
     private final CPU cpu;
-//	private final IOCtrl[] ioctrls; //TODO IOCtrl
+	private final IOCtrl[] ioctrls;
     private final ArrayList<Long> writelist = new ArrayList<Long>();
 
     private int sleeptime = 1;
@@ -90,7 +90,7 @@ public class CLI {
         });
 
 //		asm = new Assembler(cpu.getInstructionSet());
-//		ioctrls = bcomp.getIOCtrls();
+		ioctrls = bcomp.getIOCtrls();
     }
 
     private String getReg(Reg reg) {
@@ -141,8 +141,8 @@ public class CLI {
         println(
                 "ВУ" + ioaddr
                 + ": Флаг = "
-                + // Utils.toBinaryFlag(ioctrls[ioaddr].getFlag()) +
-                " РДВУ = " // + Utils.toHex(ioctrls[ioaddr].getData(), 8)
+                + (ioctrls[ioaddr].isReady() ? "1" : "0") +
+                " РДВУ = " + Utils.toHex(((IOCtrlBasic)ioctrls[ioaddr]).getData(), 8)
         );
     }
 
@@ -321,7 +321,7 @@ public class CLI {
 
                     if (i < cmds.length - 1) {
                         value = Integer.parseInt(cmds[++i], 16);
-//							ioctrls[ioaddr].setData(value);
+							((IOCtrlBasic)ioctrls[ioaddr]).setData(value);
                     }
 
                     printIO(ioaddr);
@@ -334,7 +334,7 @@ public class CLI {
                     }
 
                     int ioaddr = Integer.parseInt(cmds[++i], 16);
-//						ioctrls[ioaddr].setFlag();
+						((IOCtrlBasic)ioctrls[ioaddr]).setReady();
                     printIO(ioaddr);
                     continue;
                 }

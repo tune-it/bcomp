@@ -21,6 +21,6 @@ public class IOCtrlBasicOutput extends IOCtrlBasic {
 		if (reg == 0)
 			dr.setValue(iodata.getValue());
 		else
-			super.doInput(reg);
+			super.doOutput(reg);
 	}
 }

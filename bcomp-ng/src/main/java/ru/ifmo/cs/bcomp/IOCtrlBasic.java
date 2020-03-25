@@ -29,6 +29,7 @@ public class IOCtrlBasic extends IOCtrl {
 
 	@Override
 	void doOutput(long reg) throws Exception {
+		System.out.println("reg: " + reg);
 		if (reg == 1)
 			flag.setValue(0);
 		else
@@ -46,5 +47,13 @@ public class IOCtrlBasic extends IOCtrl {
 
 	public Register getDR() {
 		return dr;
+	}
+
+	public long getData() {
+		return dr.getValue();
+	}
+
+	public void setData(long value) {
+		dr.setValue(value);
 	}
 }
