@@ -24,11 +24,14 @@ import javax.swing.WindowConstants;
 import ru.ifmo.cs.bcomp.BasicComp;
 import ru.ifmo.cs.bcomp.CPU;
 import static ru.ifmo.cs.bcomp.ControlSignal.*;
+import ru.ifmo.cs.bcomp.ProgramBinary;
 import ru.ifmo.cs.bcomp.Reg;
 import static ru.ifmo.cs.bcomp.Reg.*;
 import static ru.ifmo.cs.bcomp.State.*;
 //import ru.ifmo.cs.bcomp.IOCtrl;
 import ru.ifmo.cs.bcomp.SignalListener;
+import ru.ifmo.cs.bcomp.assembler.AsmNg;
+import ru.ifmo.cs.bcomp.assembler.Program;
 //import ru.ifmo.cs.bcomp.ui.io.Keyboard;
 //import ru.ifmo.cs.bcomp.ui.io.Numpad;
 //import ru.ifmo.cs.bcomp.ui.io.SevenSegmentDisplay;
@@ -207,7 +210,6 @@ public class Nightmare {
 		this.cpu = bcomp.getCPU();
 		//this.ioctrls = bcomp.getIOCtrls();
 
-		/*
 		try {
 			String code = System.getProperty("code", null);
 			File file = new File(code);
@@ -218,16 +220,15 @@ public class Nightmare {
 				byte content[] = new byte[(int)file.length()];
 				fin.read(content);
 				code = new String(content, Charset.forName("UTF-8"));
-				// XXX: Handle exceptions from assembler
-				Assembler asm = new Assembler(cpu.getInstructionSet());
-				asm.compileProgram(code);
-				asm.loadProgram(cpu);
+				AsmNg asm = new AsmNg(code);
+				Program pobj = asm.compile();
+				ProgramBinary prog = new ProgramBinary(pobj.getBinaryFormat());
+				bcomp.loadProgram(prog);
 			} finally {
 				if (fin != null)
 					fin.close();
 			}
 		} catch (Exception e) { }
-		*/
 
 		for (Reg reg : Reg.values())
 			if ((reg != MP) && (reg != MR))
@@ -240,7 +241,7 @@ public class Nightmare {
 			new SignalListener(regs.get(SP), WRSP),
 			new SignalListener(regs.get(AC), WRAC),
 			new SignalListener(regs.get(BR), WRBR),
-			new SignalListener(regs.get(PS), WRPS, SETC, SETV, STNZ, DINT, EINT, HALT, SET_PROGRAM),
+			new SignalListener(regs.get(PS), WRPS, SETC, SETV, STNZ, DINT, HALT, SET_PROGRAM, SET_REQUEST_INTERRUPT),
 			new SignalListener(regs.get(AR), WRAR),
 		};
 
