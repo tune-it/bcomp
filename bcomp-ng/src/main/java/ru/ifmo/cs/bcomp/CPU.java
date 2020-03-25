@@ -249,7 +249,8 @@ public class CPU {
 		Control irqsc;
 		PartWriter writeto15 = new PartWriter(swout, 1, DATA_WIDTH - 1);
 		PartWriter writeto17 = new PartWriter(swout, 1, DATA_WIDTH + 1);
-		PartWriter ei = new PartWriter(ps, 1, EI.ordinal());
+		PassValue ei = new PassValue(1, 0, new PartWriter(ps, 1, EI.ordinal()));
+		valves.put(DINT, ei);
 		PartWriter stateProgram = new PartWriter(ps, 1, P.ordinal());
 		valves.put(SEXT, c = new Extender(aluout, 8, 7, SEXT.ordinal() - 16, writetoH));
 		clock1.addDestination(new Not(TYPE.ordinal(),
@@ -280,8 +281,7 @@ public class CPU {
 				newValveH(dr, DATA_WIDTH, 0, STOR, mem),
 				io = newValveH(Consts.consts[1], 1, 0, IO),
 				irqsc = newValveH(Consts.consts[1], 1, 0, IRQS), // !!! Should be fixed later
-				newValveH(Consts.consts[0], 1, 0, DINT, ei),
-				newValveH(Consts.consts[1], 1, 0, EINT, ei),
+				new Valve(Consts.consts[0], 1, 0, DINT.ordinal() - 16, ei),
 				newValveH(Consts.consts[0], 1, 0, HALT, stateProgram)
 			)
 		));
@@ -310,14 +310,20 @@ public class CPU {
 		io.addDestination(
 			new Valve(cr, IO_WIDTH, 0, 0, ioaddr),
 			new Decoder(cr, IO_WIDTH, IOCMD_WIDTH, 0, ioctrl));
-		// Output: open AC to IO data
-		ioctrl.addDestination(new ValveTwo(IOControlSignal.OUT.ordinal(), IOControlSignal.RDY.ordinal(),
-			new Not(0, new Valve(ac, IO_WIDTH, 0, 0, iodata))
-		));
-		// Input: IO data to AC
-		ioctrl.addDestination(new ValveTwo(IOControlSignal.IN.ordinal(), IOControlSignal.RDY.ordinal(),
-			new Valve(iodata, IO_WIDTH, 0, 0, new PartWriter(ac, IO_WIDTH, 0))
-		));
+		ioctrl.addDestination(
+			// Output: open AC to IO data
+			new ValveTwo(IOControlSignal.OUT.ordinal(), IOControlSignal.RDY.ordinal(),
+				new Not(0, new Valve(ac, IO_WIDTH, 0, 0, iodata))
+			),
+			// Input: IO data to AC
+			new ValveTwo(IOControlSignal.IN.ordinal(), IOControlSignal.RDY.ordinal(),
+				new Valve(iodata, IO_WIDTH, 0, 0, new PartWriter(ac, IO_WIDTH, 0))
+			),
+			// Disable interrupts
+			new Valve(Consts.consts[0], 1, 0, IOControlSignal.DI.ordinal(), ei),
+			// Enable interrupts
+			new Valve(Consts.consts[1], 1, 0, IOControlSignal.EI.ordinal(), ei)
+		);
 	}
 
 	private Control newValve(DataSource input, long width, long startbit, ControlSignal cs, DataDestination ... dsts) {

@@ -197,6 +197,7 @@ public enum ControlSignal {
 	/**
 	 * Control signal 37:
 	 * Enable interrupts
+	 * @deprecated 
 	 */
 	EINT,
 	/**
