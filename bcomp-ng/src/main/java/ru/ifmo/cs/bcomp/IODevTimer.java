@@ -23,6 +23,7 @@ public class IODevTimer {
 
 	public void start(String name) {
 		timer = new Thread(new Runnable() {
+			@Override
 			public void run() {
 				long countdown = 0;
 				long value;
