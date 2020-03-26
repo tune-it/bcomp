@@ -70,7 +70,7 @@ public class CLI {
                 printRegs(writelist.isEmpty() ? "" : " " + getMemory(writelist.remove(0)));
 
                 for (Long wraddr : writelist) {
-                    println(String.format("%1$34s", " ") + getMemory(wraddr));
+                    println(String.format("%1$46s", " ") + getMemory(wraddr));
                 }
             }
         });
@@ -89,7 +89,6 @@ public class CLI {
             }
         });
 
-//		asm = new Assembler(cpu.getInstructionSet());
 		ioctrls = bcomp.getIOCtrls();
     }
 
@@ -103,7 +102,7 @@ public class CLI {
 
     private void printMicroMemory(long addr) {
         if (printMicroTitle) {
-            println("Адр    МК    \tМетка\t\tРасшифровка");
+            println("Адр    МК       Метка           Расшифровка");
             printMicroTitle = false;
         }
         println(MCDecoder.getFormattedMC(cpu, addr));
@@ -371,11 +370,9 @@ public class CLI {
                         bcomp.loadProgram(prog);
                         println("Программа начинается с адреса " + Utils.toHex(prog.start_address, 11));
                     } else {
-                        String errors = new String();
                         for (String err : asm.getErrors()) {
-                            errors = errors + err + '\n';
+                            println(err);
                         }
-                        System.err.println(errors);
                         println("Программа содержит ошибки");
                     }
                     printOnStop = true;
