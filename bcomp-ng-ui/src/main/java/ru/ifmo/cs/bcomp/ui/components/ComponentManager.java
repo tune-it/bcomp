@@ -291,7 +291,7 @@ public class ComponentManager {
 			new SignalListener(regs.get(Reg.CR), WRCR),
 			new SignalListener(regs.get(Reg.IP), WRIP),
 			new SignalListener(regs.get(Reg.AC), WRAC),
-			new SignalListener(regs.get(Reg.PS), RDPS,WRPS,SETC, SETV, STNZ, DINT, EINT, HALT,SET_PROGRAM),
+			new SignalListener(regs.get(Reg.PS), RDPS,WRPS,SETC, SETV, STNZ, DINT, HALT,SET_PROGRAM),
            new SignalListener(regs.get(Reg.SP), WRSP),
            new SignalListener(regs.get(Reg.BR),WRBR)
 
