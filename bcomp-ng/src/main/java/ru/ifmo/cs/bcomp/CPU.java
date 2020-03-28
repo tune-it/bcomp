@@ -251,7 +251,7 @@ public class CPU {
 		Control irqsc;
 		ValveAnd irqrq = new ValveAnd(ps, EI.ordinal(), irqreq, new PartWriter(ps, 1, IRQ.ordinal()));
 		valves.put(SET_REQUEST_INTERRUPT, irqrq);
-		PassValue ei = new PassValue(1, 0, new PartWriter(ps, 1, EI.ordinal()), irqrq);
+		Control ei = new Control(1, 0, 0, new PartWriter(ps, 1, EI.ordinal()), irqrq);
 		valves.put(DINT, ei);
 
 		clock1.addDestination(new Not(TYPE.ordinal(),
