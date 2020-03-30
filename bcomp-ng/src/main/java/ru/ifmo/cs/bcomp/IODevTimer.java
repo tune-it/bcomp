@@ -11,14 +11,14 @@ import ru.ifmo.cs.components.Register;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class IODevTimer {
-	private final IOCtrlBasicOutput ctrl;
+	private final IOCtrlBasic ctrl;
 	private final Register dr;
 	private Thread timer;
 	private volatile boolean running = true;
 
 	public IODevTimer(IOCtrl ctrl) {
-		this.ctrl = (IOCtrlBasicOutput)ctrl;
-		this.dr = this.ctrl.getDataRegister();
+		this.ctrl = (IOCtrlBasic)ctrl;
+		this.dr = ctrl.getRegisters()[0];
 	}
 
 	public void start(String name) {

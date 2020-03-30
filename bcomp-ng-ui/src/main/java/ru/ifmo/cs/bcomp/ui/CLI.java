@@ -141,7 +141,8 @@ public class CLI {
                 "ВУ" + ioaddr
                 + ": Флаг = "
                 + (ioctrls[ioaddr].isReady() ? "1" : "0") +
-                " РДВУ = " + Utils.toHex(((IOCtrlBasic)ioctrls[ioaddr]).getData(), 8)
+                " РДВУ = " + Utils.toHex(((IOCtrlBasic)ioctrls[ioaddr]).getData(), 8) +
+				" IRQ = " + ioctrls[ioaddr].getIRQ()
         );
     }
 

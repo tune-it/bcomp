@@ -11,11 +11,11 @@ import ru.ifmo.cs.components.*;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public abstract class IOCtrl {
-	final Decoder chkregister;
 	final Bus iodata;
 	final Bus ioaddr;
 	final CtrlBus ioctrl;
 	final Register irqreg = new Register(3);
+	private final Decoder chkregister;
 	private final Control irqrqvalve;
 
 	public IOCtrl(long addr, long width, long irq, CPU cpu) {
@@ -54,11 +54,19 @@ public abstract class IOCtrl {
 		irqrqvalve.setValue(1);
 	}
 
+	public final void checkRegister(DataDestination ... dsts) {
+		chkregister.addDestination(dsts);
+	}
+
 	public abstract boolean isReady();
 	public abstract Register[] getRegisters();
 	public abstract DataDestination getIRQSC();
 
 	void setIRQ(long irq) {
 		irqreg.setValue(irq);
+	}
+
+	public long getIRQ() {
+		return irqreg.getValue();
 	}
 }
