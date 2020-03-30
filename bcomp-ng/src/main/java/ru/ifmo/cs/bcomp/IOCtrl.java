@@ -10,174 +10,55 @@ import ru.ifmo.cs.components.*;
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
-public abstract class IOCtrl implements DataDestination {
-	private final long addr;
-	private final long regwidth;
-	private final long regmask;
-	private final Register irq = new Register(3);
-	private final Control irqrqvalve;
+public abstract class IOCtrl {
+	final Decoder chkregister;
 	final Bus iodata;
 	final Bus ioaddr;
-	private final CtrlBus ioctrl;
-	private final DataDestination chainctrl;
+	final CtrlBus ioctrl;
+	final Register irqreg = new Register(3);
+	private final Control irqrqvalve;
 
-	public IOCtrl(long _addr, long width, long irq, CPU cpu, DataDestination chainctrl) {
-		this.addr = _addr;
-		this.regmask = ~BasicComponent.calculateMask(this.regwidth = width);
-		this.irq.setValue(irq);
-		this.irqrqvalve = cpu.getIRQReqValve();
-		this.iodata = cpu.getIOBuses().get(CPU.IOBuses.IOData);
-		this.ioaddr = cpu.getIOBuses().get(CPU.IOBuses.IOAddr);
-		this.ioctrl = (CtrlBus)cpu.getIOBuses().get(CPU.IOBuses.IOCtrl);
-		this.chainctrl = chainctrl;
+	public IOCtrl(long addr, long width, long irq, CPU cpu) {
+		Register devaddr = new Register(8 - width);
+		devaddr.setValue(addr >> width);
 
-		ioctrl.addDestination(new DataDestination() {
-			@Override
-			public void setValue(long value) {
-				long reg = ioaddr.getValue();
+		irqreg.setValue(irq);
 
-				if ((reg & regmask) != addr)
-					return;
+		irqrqvalve = cpu.getIRQReqValve();
 
-				reg &= ~regmask;
-
-				try {
-					if (value == 1) {
-						doInput(reg);
-						ioctrl.setValue(1, 1, IOControlSignal.RDY.ordinal());
-					} else if (value == 2) {
-						doOutput(reg);
-						ioctrl.setValue(1, 1, IOControlSignal.RDY.ordinal());
-					}
-				} catch (Exception e) {
-					System.err.println("IOCtrl " + Utils.toHex(addr, 8) +
-						" register " + Utils.toHex(reg, regwidth) +
-						" can't be used for " + e.getMessage());
-				}
-			}
-		});
+		iodata = cpu.getIOBuses().get(CPU.IOBuses.IOData);
+		ioaddr = cpu.getIOBuses().get(CPU.IOBuses.IOAddr);
+		ioctrl = (CtrlBus)cpu.getIOBuses().get(CPU.IOBuses.IOCtrl);
+		ioctrl.addDestination(
+			// Is set DI?
+			new Not(IOControlSignal.DI.ordinal(), new Valve(ioctrl, 1, IOControlSignal.EI.ordinal(), 0,
+				// Is set EI?
+				new Not(0, new Valve(ioctrl, 1, IOControlSignal.IRQ.ordinal(), 0,
+					// Is set IRQ?
+					new Not(0, new Valve(ioctrl, 1, IOControlSignal.RDY.ordinal(), 0,
+						// Is set RDY?
+						new Not(0, new Valve(new InputBus(8 - width, width, ioaddr), 8 - width, 0, 0,
+							// Requested my address?
+							new Comparer(devaddr,
+								// Ok, decode register
+								chkregister = new Decoder(ioaddr, 0, width, 0)
+							)
+						))
+					))
+				))
+			))
+		);
 	}
 
-	@Override
-	public synchronized void setValue(long value) {
-		if (isReady()) {
-			ioaddr.setValue(irq.getValue());
-			ioctrl.setValue(1, 1, IOControlSignal.IRQ.ordinal());
-		} else if (chainctrl != null)
-			chainctrl.setValue(value);
-	}
-
-	void doInput(long reg) throws Exception {
-		throw new Exception("input");
-	}
-
-	void doOutput(long reg) throws Exception {
-		throw new Exception("output");
-	}
-
-	public abstract boolean isReady();
-	public abstract void setReady();
-
-	public void callbackIRQRq() {
+	public void setReady() {
 		irqrqvalve.setValue(1);
 	}
 
+	public abstract boolean isReady();
+	public abstract Register[] getRegisters();
+	public abstract DataDestination getIRQSC();
+
 	void setIRQ(long irq) {
-		this.irq.setValue(irq);
+		irqreg.setValue(irq);
 	}
-
-	/*
-	public enum Direction {
-		IN, OUT, INOUT
-	};
-	public enum ControlSignal {
-		SETFLAG, CHKFLAG, IN, OUT
-	};
-
-	private final Register flag;
-	private final Register data;
-	private final Direction dir;
-	private final Valve valveSetFlag = new Valve(Consts.consts[1]);
-	private final EnumMap<ControlSignal, DataHandler[]> signals =
-		new EnumMap<ControlSignal, DataHandler[]>(ControlSignal.class);
-
-	public IOCtrl(int addr, Direction dir, CPU2IO cpu2io) {
-		this.addr = addr;
-		this.dir = dir;
-
-		String name = "РД ВУ" + Integer.toString(addr);
-		data = new Register(name, name, 8);
-
-		DataComparer dc = new DataComparer(cpu2io.getAddr(), addr, cpu2io.getValveIO());
-		ValveDecoder order = new ValveDecoder(cpu2io.getOrder(), dc);
-
-		Valve valveClearFlag = new Valve(Consts.consts[0], 0, order);
-		signals.put(ControlSignal.SETFLAG, new DataHandler[] { valveSetFlag, valveClearFlag });
-
-		flag = new Register("Ф ВУ" + Integer.toString(addr), "Флаг ВУ" + Integer.toString(addr), 1, valveSetFlag, valveClearFlag);
-		cpu2io.addIntrBusInput(flag);
-
-		cpu2io.addIntrCtrlInput(valveClearFlag);
-		cpu2io.addIntrCtrlInput(valveSetFlag);
-
-		cpu2io.addValveClearFlag(valveClearFlag);
-
-		ValveOnce checkFlag = new ValveOnce(flag, 1, order);
-		cpu2io.addFlagInput(checkFlag);
-		signals.put(ControlSignal.CHKFLAG, new DataHandler[] { checkFlag });
-
-		if (dir != Direction.IN) {
-			Valve valveOut = new Valve(cpu2io.getOut(), 3, order);
-			valveOut.addDestination(data);
-			signals.put(ControlSignal.OUT, new DataHandler[] { valveOut });
-		}
-
-		if (dir != Direction.OUT) {
-			ValveOnce valveIn = new ValveOnce(data, 2, order);
-			cpu2io.addInInput(valveIn);
-			signals.put(ControlSignal.IN, new DataHandler[] { valveIn });
-		}
-	}
-
-	public Direction getDirection() {
-		return dir;
-	}
-
-	public int getFlag() {
-		return flag.getValue();
-	}
-
-	public Register getRegFlag() {
-		return flag;
-	}
-
-	public void setFlag() {
-		valveSetFlag.setValue(1);
-	}
-
-	public int getData() {
-		return data.getValue();
-	}
-
-	public Register getRegData() {
-		return data;
-	}
-
-	public void setData(int value) throws Exception {
-		if (dir != Direction.OUT)
-			data.setValue(value);
-		else
-			throw new Exception("Attempt to write to the output device " + addr);
-	}
-
-	public void addDestination(ControlSignal cs, DataDestination dest) {
-		for (DataHandler valve : signals.get(cs))
-			valve.addDestination(dest);
-	}
-
-	public void removeDestination(ControlSignal cs, DataDestination dest) {
-		for (DataHandler valve : signals.get(cs))
-			valve.removeDestination(dest);
-	}
-*/
 }

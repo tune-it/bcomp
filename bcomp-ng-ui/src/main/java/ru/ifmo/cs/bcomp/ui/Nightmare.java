@@ -239,7 +239,7 @@ public class Nightmare {
 			new SignalListener(regs.get(SP), WRSP),
 			new SignalListener(regs.get(AC), WRAC),
 			new SignalListener(regs.get(BR), WRBR),
-			new SignalListener(regs.get(PS), WRPS, SETC, SETV, STNZ, DINT, HALT, SET_PROGRAM, SET_REQUEST_INTERRUPT),
+			new SignalListener(regs.get(PS), WRPS, SETC, SETV, STNZ, SET_EI, HALT, SET_PROGRAM, SET_REQUEST_INTERRUPT),
 			new SignalListener(regs.get(AR), WRAR),
 		};
 

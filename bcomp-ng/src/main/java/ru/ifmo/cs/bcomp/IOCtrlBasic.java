@@ -11,30 +11,20 @@ import ru.ifmo.cs.components.*;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class IOCtrlBasic extends IOCtrl {
-	private final Register state = new Register(1);
+	final Register state = new Register(1);
 	final Register dr = new Register(8);
+	private final Register[] registers = {dr, state};
+	private final DataDestination irqsc;
 
-	public IOCtrlBasic(long addr, long irq, CPU cpu, DataDestination chainctrl) {
-		super(addr, 1, irq, cpu, chainctrl);
+	public IOCtrlBasic(long addr, long irq, CPU cpu, DataDestination ... chainctrl) {
+		super(addr, 1, irq, cpu);
 		cpu.addIRQReqInput(state);
-	}
 
-	@Override
-	void doInput(long reg) throws Exception {
-		if (reg == 1)
-			iodata.setValue(state.getValue() == 0 ? 0 : 0x40);
-		else
-			super.doInput(reg);
-	}
-
-	@Override
-	void doOutput(long reg) throws Exception {
-		System.out.println("reg: " + reg);
-		if (reg == 1) {
-			state.setValue(0);
-			callbackIRQRq();
-		} else
-			super.doInput(reg);
+		irqsc = new Valve(state, 1, 0, 0,
+			new Valve(irqreg, 3, 0, 0, ioaddr),
+			new Valve(Consts.consts[1], 1, 0, 0, new PartWriter(ioctrl, 1, IOControlSignal.IRQ.ordinal())),
+			new Not(0, chainctrl)
+		);
 	}
 
 	@Override
@@ -45,13 +35,30 @@ public class IOCtrlBasic extends IOCtrl {
 	@Override
 	public void setReady() {
 		state.setValue(1);
-		callbackIRQRq();
+		super.setReady();
 	}
 
+	@Override
+	public DataDestination getIRQSC() {
+		return irqsc;
+	}
+
+	@Override
+	public Register[] getRegisters() {
+		return registers;
+	}
+	/**
+	 * 
+	 * @deprecated 
+	 */
 	public Register getStateRegister() {
 		return state;
 	}
 
+	/**
+	 * 
+	 * @deprecated 
+	 */
 	public Register getDataRegister() {
 		return dr;
 	}

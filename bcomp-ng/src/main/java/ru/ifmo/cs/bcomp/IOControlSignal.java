@@ -11,34 +11,32 @@ package ru.ifmo.cs.bcomp;
 public enum IOControlSignal {
 	/**
 	 * IO Control signal 0:
-	 * Input
-	 */
-	IN,
-	/**
-	 * IO Control signal 1:
-	 * Output
-	 */
-	OUT,
-	/**
-	 * Control signal 2:
 	 * Disable interrupts
 	 */
 	DI,
 	/**
-	 * Control signal 3:
+	 * IO Control signal 1:
 	 * Enable interrupts
 	 */
 	EI,
 	/**
+	 * IO Control signal 2:
+	 * Input
+	 */
+	IN,
+	/**
+	 * IO Control signal 3:
+	 * Output
+	 */
+	OUT,
+	/**
 	 * Control signal 4:
 	 * Reserved
-	 * @hidden
 	 */
 	RESERVED4,
 	/**
 	 * Control signal 5:
 	 * Reserved
-	 * @hidden
 	 */
 	RESERVED5,
 	/**
@@ -48,7 +46,7 @@ public enum IOControlSignal {
 	IRQ,
 	/**
 	 * Control signal 7:
-	 * Ready
+	 * Ready response
 	 */
 	RDY,
 }

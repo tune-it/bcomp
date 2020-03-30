@@ -281,7 +281,7 @@ public class MicroCode {
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         // IO
         new CMC("IO",       cs(RDCR, HTOL), 3, 1,                           "IRQ"),     // if CR(11) = 1 then GOTO IRQ
-        new omc(            cs(IO)),                                                    // IO
+        new omc("DOIO",     cs(IO)),                                                    // IO
 
         // Цикл прерывания
         new CMC("INT",      cs(RDPS, LTOL), W.ordinal(), 0,                 "STOP"),    // if RUN = 0 then GOTO STOP
@@ -302,8 +302,8 @@ public class MicroCode {
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INFETCH"), // GOTO INFETCH
 
         // Пуск
-        new omc("START",    cs(STNZ, SETV, SETC, WRDR, WRCR, WRSP, WRAC, WRBR, WRAR, DINT)),// 0 -> all registers; DI
-        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
+        new omc("START",    cs(STNZ, SETV, SETC, WRDR, WRCR, WRSP, WRAC, WRBR, WRAR)),  // 0 -> all registers
+        new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "DOIO"),    // GOTO DOIO
         // Чтение
         new omc("READ",     cs(RDIP, HTOH, LTOL, WRAR)),                                // IP -> AR
         new omc(            cs(RDIP, PLS1, HTOH, LTOL, WRIP, LOAD)),                    // MEM(AR) -> DR; IP + 1 -> IP

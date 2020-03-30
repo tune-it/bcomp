@@ -252,7 +252,7 @@ public class CPU {
 		ValveAnd irqrq = new ValveAnd(ps, EI.ordinal(), irqreq, new PartWriter(ps, 1, IRQ.ordinal()));
 		valves.put(SET_REQUEST_INTERRUPT, irqrq);
 		Control ei = new Control(1, 0, 0, new PartWriter(ps, 1, EI.ordinal()), irqrq);
-		valves.put(DINT, ei);
+		valves.put(SET_EI, ei);
 
 		clock1.addDestination(new Not(TYPE.ordinal(),
 			new Valve(mr, VR_WIDTH, 16, 0,
@@ -282,7 +282,6 @@ public class CPU {
 				newValveH(dr, DATA_WIDTH, 0, STOR, mem),
 				io = newValveH(Consts.consts[1], 1, 0, IO),
 				irqsc = newValveH(Consts.consts[1], 1, 0, IRQS),
-				new Valve(Consts.consts[0], 1, 0, DINT.ordinal() - 16, ei),
 				newValveH(Consts.consts[0], 1, 0, HALT, stateProgram)
 			)
 		));

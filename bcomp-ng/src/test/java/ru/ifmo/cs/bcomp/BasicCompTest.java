@@ -219,8 +219,8 @@ public class BasicCompTest {
 		"F9EF; N=1,V=1; IP=0F0,BR=FFEF", // BGE
 		"F9EF; N=1,V=0;", // BGE
 
-		"1200; EI=0", // DI
-		"1300; EI=1", // EI
+		"1000; EI=0", // DI
+		"1100; EI=1", // EI
 	};
 
 	private final BasicComp bcomp;

@@ -101,13 +101,6 @@ public class MCDecoder {
 		if (cs.contains(IRQS))
 			operations.add("IRQSC");
 
-		if (cs.contains(DINT))
-			operations.add("Disable interrupts");
-
-// DEPRECATED
-//		if (cs.contains(EINT))
-//			operations.add("Enable interrupts");
-
 		if (cs.contains(HALT))
 			operations.add("Halt");
 
