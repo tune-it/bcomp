@@ -58,9 +58,11 @@ public abstract class IOCtrl {
 		chkregister.addDestination(dsts);
 	}
 
-	public abstract boolean isReady();
 	public abstract Register[] getRegisters();
 	public abstract DataDestination getIRQSC();
+	public abstract boolean isReady();
+	public abstract long getData();
+	public abstract void setData(long value);
 
 	void setIRQ(long irq) {
 		irqreg.setValue(irq);

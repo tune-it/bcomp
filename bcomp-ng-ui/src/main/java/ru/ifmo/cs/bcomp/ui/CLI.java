@@ -141,7 +141,7 @@ public class CLI {
                 "ВУ" + ioaddr
                 + ": Флаг = "
                 + (ioctrls[ioaddr].isReady() ? "1" : "0") +
-                " РДВУ = " + Utils.toHex(((IOCtrlBasic)ioctrls[ioaddr]).getData(), 8) +
+                " РДВУ = " + Utils.toHex(ioctrls[ioaddr].getData(), 8) +
 				" IRQ = " + ioctrls[ioaddr].getIRQ()
         );
     }
@@ -330,7 +330,7 @@ public class CLI {
 
                     if (i < cmds.length - 1) {
                         value = Integer.parseInt(cmds[++i], 16);
-							((IOCtrlBasic)ioctrls[ioaddr]).setData(value);
+							ioctrls[ioaddr].setData(value);
                     }
 
                     printIO(ioaddr);
@@ -343,7 +343,7 @@ public class CLI {
                     }
 
                     int ioaddr = Integer.parseInt(cmds[++i], 16);
-						((IOCtrlBasic)ioctrls[ioaddr]).setReady();
+						ioctrls[ioaddr].setReady();
                     printIO(ioaddr);
                     continue;
                 }
