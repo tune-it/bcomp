@@ -246,14 +246,6 @@ public class CPU {
 		PartWriter stateProgram = new PartWriter(ps, 1, P.ordinal());
 		valves.put(SEXT, c = new Extender(aluout, 8, 7, SEXT.ordinal() - 16, writetoH));
 
-		// IO specific staff
-		Control io;
-		Control irqsc;
-		ValveAnd irqrq = new ValveAnd(ps, EI.ordinal(), irqreq, new PartWriter(ps, 1, IRQ.ordinal()));
-		valves.put(SET_REQUEST_INTERRUPT, irqrq);
-		Control ei = new Control(1, 0, 0, new PartWriter(ps, 1, EI.ordinal()), irqrq);
-		valves.put(SET_EI, ei);
-
 		clock1.addDestination(new Not(TYPE.ordinal(),
 			new Valve(mr, VR_WIDTH, 16, 0,
 				c,
@@ -280,8 +272,11 @@ public class CPU {
 				newValveH(swout, AR_WIDTH, 0, WRAR, ar),
 				newValveH(mem, DATA_WIDTH, 0, LOAD, dr),
 				newValveH(dr, DATA_WIDTH, 0, STOR, mem),
-				io = newValveH(Consts.consts[1], 1, 0, IO),
-				irqsc = newValveH(Consts.consts[1], 1, 0, IRQS),
+				newValveH(Consts.consts[1], 1, 0, IO,
+					new Valve(cr, IO_WIDTH, 0, 0, ioaddr),
+					new Decoder(cr, IO_WIDTH, IOCMD_WIDTH, 0, ioctrl)
+				),
+				newValveH(Consts.consts[1], 1, 0, IRQS),
 				newValveH(Consts.consts[0], 1, 0, HALT, stateProgram)
 			)
 		));
@@ -305,9 +300,11 @@ public class CPU {
 		mp.setValue(labels.get(STOP) + 1);
 
 		// IO specific staff
-		io.addDestination(
-			new Valve(cr, IO_WIDTH, 0, 0, ioaddr),
-			new Decoder(cr, IO_WIDTH, IOCMD_WIDTH, 0, ioctrl));
+		ValveAnd irqrq = new ValveAnd(ps, EI.ordinal(), irqreq, new PartWriter(ps, 1, IRQ.ordinal()));
+		valves.put(SET_REQUEST_INTERRUPT, irqrq);
+		Control ei = new Control(1, 0, 0, new PartWriter(ps, 1, EI.ordinal()), irqrq);
+		valves.put(SET_EI, ei);
+
 		ioctrl.addDestination(
 			// Output: open AC to IO data
 			new ValveTwo(IOControlSignal.OUT.ordinal(), IOControlSignal.RDY.ordinal(),
