@@ -32,11 +32,11 @@ import ru.ifmo.cs.bcomp.IOCtrlBasic;
 import ru.ifmo.cs.bcomp.SignalListener;
 import ru.ifmo.cs.bcomp.assembler.AsmNg;
 import ru.ifmo.cs.bcomp.assembler.Program;
-//import ru.ifmo.cs.bcomp.ui.io.Keyboard;
-//import ru.ifmo.cs.bcomp.ui.io.Numpad;
-//import ru.ifmo.cs.bcomp.ui.io.SevenSegmentDisplay;
-//import ru.ifmo.cs.bcomp.ui.io.TextPrinter;
-//import ru.ifmo.cs.bcomp.ui.io.Ticker;
+import ru.ifmo.cs.bcomp.ui.io.Keyboard;
+import ru.ifmo.cs.bcomp.ui.io.Numpad;
+import ru.ifmo.cs.bcomp.ui.io.SevenSegmentDisplay;
+import ru.ifmo.cs.bcomp.ui.io.TextPrinter;
+import ru.ifmo.cs.bcomp.ui.io.Ticker;
 import ru.ifmo.cs.components.DataDestination;
 import ru.ifmo.cs.components.Register;
 
@@ -62,11 +62,11 @@ public class Nightmare {
 	private BasicIOView io1 = null;
 	private BasicIOView io2 = null;
 	private BasicIOView io3 = null;
-//	private TextPrinter textPrinter = null;
-//	private Ticker ticker = null;
-//	private SevenSegmentDisplay ssd = null;
-//	private Keyboard kbd = null;
-//	private Numpad numpad = null;
+	private TextPrinter textPrinter = null;
+	private Ticker ticker = null;
+	private SevenSegmentDisplay ssd = null;
+	private Keyboard kbd = null;
+	private Numpad numpad = null;
 //	private GUI pairgui = null;
 
 	private class BitView extends JComponent {
@@ -109,6 +109,7 @@ public class Nightmare {
 				add(bits[(int)i] = new BitView(reg, (int)i));
 		}
 
+		@Override
 		public void setValue(long value) {
 			for (int i = 0; i < reg.width; bits[i++].repaint());
 		}
@@ -126,14 +127,12 @@ public class Nightmare {
 		private final RegisterView flag;
 
 		private BasicIOView(IOCtrl ioctrls[], int number) {
-			this.ioctrl = (IOCtrlBasic)ioctrls[number];
-			data = new RegisterView("DR", ioctrl.getDataRegister());
-			flag = new RegisterView("SR", ioctrl.getStateRegister());
+			ioctrl = (IOCtrlBasic)ioctrls[number];
+			data = new RegisterView("DR", ioctrl.getRegisters()[0]);
+			flag = new RegisterView("SR", ioctrl.getRegisters()[1]);
 
-// XXX: TODO: FIX ME
-//			ioctrl.addDestination(IOCtrl.ControlSignal.SETFLAG, flag);
-//			if (ioctrl.getDirection() != IOCtrl.Direction.IN)
-//				ioctrl.addDestination(IOCtrl.ControlSignal.OUT, data);
+			ioctrl.addDestination(ioctrl.getRegisters()[0], data);
+			ioctrl.addDestination(ioctrl.getRegisters()[1], flag);
 
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 			panel.add(flag);
@@ -191,9 +190,7 @@ public class Nightmare {
 			});
 		}
 
-		// XXX: Говнокод
 		private void invertBit(int startbit) {
-			// XXX: Fix me if (ioctrl.getDirection() != IOCtrl.Direction.OUT)
 			data.invertBit(startbit);
 		}
 
@@ -234,10 +231,10 @@ public class Nightmare {
 
 		listeners = new SignalListener[] {
 			new SignalListener(regs.get(DR), WRDR, LOAD),
-			new SignalListener(regs.get(CR), WRCR),
+			new SignalListener(regs.get(CR), WRCR, IO),
 			new SignalListener(regs.get(IP), WRIP),
 			new SignalListener(regs.get(SP), WRSP),
-			new SignalListener(regs.get(AC), WRAC),
+			new SignalListener(regs.get(AC), WRAC, IO),
 			new SignalListener(regs.get(BR), WRBR),
 			new SignalListener(regs.get(PS), WRPS, SETC, SETV, STNZ, SET_EI, HALT, SET_PROGRAM, SET_REQUEST_INTERRUPT),
 			new SignalListener(regs.get(AR), WRAR),
@@ -302,42 +299,41 @@ public class Nightmare {
 							io3 = new BasicIOView(ioctrls, 3);
 						io3.activate();
 						break;
-/*
-					case KeyEvent.VK_4:
-					case KeyEvent.VK_F4:
-						if (textPrinter == null)
-							textPrinter = new TextPrinter(ioctrls[4]);
-						textPrinter.activate();
-						break;
 
 					case KeyEvent.VK_5:
 					case KeyEvent.VK_F5:
-						if (ticker == null)
-							ticker = new Ticker(ioctrls[5]);
-						ticker.activate();
+						if (textPrinter == null)
+							textPrinter = new TextPrinter(ioctrls[5]);
+						textPrinter.activate();
 						break;
 
 					case KeyEvent.VK_6:
 					case KeyEvent.VK_F6:
-						if (ssd == null)
-							ssd = new SevenSegmentDisplay(ioctrls[6]);
-						ssd.activate();
+						if (ticker == null)
+							ticker = new Ticker(ioctrls[6]);
+						ticker.activate();
 						break;
 
 					case KeyEvent.VK_7:
 					case KeyEvent.VK_F7:
-						if (kbd == null)
-							kbd = new Keyboard(ioctrls[7]);
-						kbd.activate();
+						if (ssd == null)
+							ssd = new SevenSegmentDisplay(ioctrls[7]);
+						ssd.activate();
 						break;
 
 					case KeyEvent.VK_8:
 					case KeyEvent.VK_F8:
+						if (kbd == null)
+							kbd = new Keyboard(ioctrls[8]);
+						kbd.activate();
+						break;
+
+					case KeyEvent.VK_9:
+					case KeyEvent.VK_F9:
 						if (numpad == null)
-							numpad = new Numpad(ioctrls[8]);
+							numpad = new Numpad(ioctrls[9]);
 						numpad.activate();
 						break;
-*/
 					}
 					return;
 				}

@@ -21,6 +21,8 @@ public class IOCtrlBasic extends IOCtrl {
 	private final Register dr = new Register(8);
 	private final Register[] registers = {dr, state};
 	private final DataDestination irqsc;
+	private final Control changeFlag;
+	private final Control writeToDR;
 
 	public IOCtrlBasic(long addr, long irq, CPU cpu, TYPE type, DataDestination ... chainctrl) {
 		super(addr, 1, irq, cpu);
@@ -33,7 +35,8 @@ public class IOCtrlBasic extends IOCtrl {
 		);
 
 		Valve rdy = new Valve(Consts.consts[1], 1, 0, 0, new PartWriter(ioctrl, 1, IOControlSignal.RDY.ordinal()));
-		Valve clearFlag = new Valve(Consts.consts[0], 1, 0, 0, state);
+		changeFlag = new Control(1, 0, 0, state);
+		Valve clearFlag = new Valve(Consts.consts[0], 1, 0, 0, changeFlag);
 		Valve r0;
 		checkRegister(
 			// Register 0
@@ -62,10 +65,13 @@ public class IOCtrlBasic extends IOCtrl {
 				)
 			);
 
+		// Preventing NPE in dumb UI
+		writeToDR = new Valve(iodata, 8, 0, 0, dr);
+		// Output to DR
 		if (type == TYPE.OUTPUT || type == TYPE.INPUTOUTPUT)
 			r0.addDestination(
 				new Valve(Consts.consts[1], 1, 0, IOControlSignal.OUT.ordinal(),
-					new Valve(iodata, 8, 0, 0, dr),
+					writeToDR,
 					clearFlag,
 					rdy
 				)
@@ -79,7 +85,7 @@ public class IOCtrlBasic extends IOCtrl {
 
 	@Override
 	public void setReady() {
-		state.setValue(1);
+		changeFlag.setValue(1);
 		super.setReady();
 	}
 
@@ -92,26 +98,21 @@ public class IOCtrlBasic extends IOCtrl {
 	public Register[] getRegisters() {
 		return registers;
 	}
-	/**
-	 * 
-	 * @deprecated 
-	 */
-	public Register getStateRegister() {
-		return state;
+
+	@Override
+	public void addDestination(Register reg, DataDestination ... dsts) {
+		if (reg == state)
+			changeFlag.addDestination(dsts);
+		else if (reg == dr)
+			writeToDR.addDestination(dsts);
 	}
 
-	/**
-	 * 
-	 * @deprecated 
-	 */
-	public Register getDataRegister() {
-		return dr;
-	}
-
+	@Override
 	public long getData() {
 		return dr.getValue();
 	}
 
+	@Override
 	public void setData(long value) {
 		dr.setValue(value);
 	}

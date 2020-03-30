@@ -60,6 +60,7 @@ public abstract class IOCtrl {
 
 	public abstract Register[] getRegisters();
 	public abstract DataDestination getIRQSC();
+	public abstract void addDestination(Register reg, DataDestination ... dsts);
 	public abstract boolean isReady();
 	public abstract long getData();
 	public abstract void setData(long value);
