@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.text.BadLocationException;
 import ru.ifmo.cs.bcomp.IOCtrl;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.FONT_COURIER_BOLD_21;
 
@@ -69,6 +70,10 @@ public class TextPrinter extends OutputDevice {
 	protected void actionPerformed(long value) {
 		if (value == 0) {
 			text.setText("");
+		} else if (value == 8) {
+			try {
+				text.setText(text.getText(0, text.getText().length() - 1));
+			} catch (BadLocationException e) { }
 		} else {
 			byte[] array = new byte[] { (byte)value };
 			try {
