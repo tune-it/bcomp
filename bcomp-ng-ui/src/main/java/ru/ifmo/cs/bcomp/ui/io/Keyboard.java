@@ -26,6 +26,7 @@ public class Keyboard extends IODevice {
 	static final Dimension DIMS = new Dimension(45, 30);
 	private static final String KEYS[][][] = new String[][][] {
 		{ // First row
+			{"`", "~", "ё", "Ё"},
 			{"1", "!", "1", "!"},
 			{"2", "@", "2", "\""},
 			{"3", "#", "3", "#"},
@@ -38,7 +39,6 @@ public class Keyboard extends IODevice {
 			{"0", ")", "0", ")"},
 			{"-", "_", "-", "_"},
 			{"=", "+", "=", "+"},
-			{"\\", "|", "\\", "|"},
 		}, { // Second row
 			{"q", "Q", "й", "Й"},
 			{"w", "W", "ц", "Ц"},
@@ -52,6 +52,7 @@ public class Keyboard extends IODevice {
 			{"p", "P", "з", "З"},
 			{"[", "{", "х", "Х"},
 			{"]", "}", "ъ", "Ъ"},
+			{"\\", "|", "\\", "|"},
 		}, { // Third row
 			{"a", "A", "ф", "Ф"},
 			{"s", "S", "ы", "Ы"},
@@ -74,7 +75,7 @@ public class Keyboard extends IODevice {
 			{"m", "M", "ь", "Ь"},
 			{",", "<", "б", "Б"},
 			{".", ">", "ю", "Ю"},
-			{"/", "?", "ё", "Ё"},
+			{"/", "?", "/", "?"},
 		}
 	};
 
@@ -140,13 +141,76 @@ public class Keyboard extends IODevice {
 	protected Component getContent() {
 		JPanel content = new JPanel(new GridLayout(5, 1, 0, 0));
 
-		for (String[][] row : KEYS) {
+		for (int line = 0; line < KEYS.length; line++) {
 			JPanel jrow = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-			for (String[] key : row) {
-				Key k = new Key(key);
+			for (int row = 0; row < KEYS[line].length; row++) {
+				if (row == 0) {
+					SizedButton b;
+
+					switch (line) {
+					case 1:
+						// Tab
+						b = new SizedButton("<html>&rarr;</html>");
+						b.buttonSetSize(new Dimension(60, 30));
+						b.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								buttonPressed("\t");
+							}
+						});
+						jrow.add(b);
+						break;
+
+					case 2:
+						b = new SizedButton("Caps");
+						b.buttonSetSize(new Dimension(75, 30));
+						b.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								for (Key key : keys) {
+									key.caps = !key.caps;
+									key.setActiveLayout();
+								}
+							}
+						});
+						jrow.add(b);
+						break;
+					}
+				}
+
+				Key k = new Key(KEYS[line][row]);
 
 				jrow.add(k);
 				keys.add(k);
+
+				if (row == (KEYS[line].length - 1)) {
+					SizedButton b;
+					// Backspace
+					switch (line) {
+					case 0:
+						b = new SizedButton("<html>&larr;</html>");
+						b.buttonSetSize(new Dimension(60, 30));
+						b.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								buttonPressed("\b");
+							}
+						});
+						jrow.add(b);
+						break;
+
+					case 2:
+						b = new SizedButton("Enter");
+						b.buttonSetSize(new Dimension(75, 30));
+						b.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								buttonPressed("\n");
+							}
+						});
+						jrow.add(b);
+					}
+				}
 			}
 			content.add(jrow);
 		}
@@ -154,27 +218,6 @@ public class Keyboard extends IODevice {
 		JPanel jrow = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		jrow.add(new FlagIndicator(ioctrl, 30));
 
-		SizedButton caps = new SizedButton("Caps Lock");
-		caps.buttonSetSize(new Dimension(120, 30));
-		caps.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				for (Key key : keys) {
-					key.caps = !key.caps;
-					key.setActiveLayout();
-				}
-			}
-		});
-		jrow.add(caps);
-		SizedButton space = new SizedButton(" ");
-		space.buttonSetSize(new Dimension(180, 30));
-		space.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					buttonPressed(" ");
-				}
-			});
-		jrow.add(space);
 		SizedButton latrus = new SizedButton("Lat/Рус");
 		latrus.buttonSetSize(new Dimension(120, 30));
 		latrus.addActionListener(new ActionListener() {
@@ -187,6 +230,17 @@ public class Keyboard extends IODevice {
 			}
 		});
 		jrow.add(latrus);
+
+		SizedButton space = new SizedButton(" ");
+		space.buttonSetSize(new Dimension(300, 30));
+		space.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					buttonPressed(" ");
+				}
+			});
+		jrow.add(space);
+
 		JComboBox charsetbox = new JComboBox(new String[] {charset = "KOI8-R", "ISO8859-5", "CP866", "CP1251"});
 		charsetbox.addActionListener(new ActionListener() {
 			@Override
