@@ -125,16 +125,20 @@ public class Nightmare {
 		private final JFrame frame;
 		private final RegisterView data;
 		private final RegisterView flag;
+		private final RegisterView irq;
 
 		private BasicIOView(IOCtrl ioctrls[], int number) {
 			ioctrl = (IOCtrlBasic)ioctrls[number];
 			data = new RegisterView("DR", ioctrl.getRegisters()[0]);
 			flag = new RegisterView("SR", ioctrl.getRegisters()[1]);
+			irq = new RegisterView("IRQ", ioctrl.getRegisters()[2]);
 
 			ioctrl.addDestination(ioctrl.getRegisters()[0], data);
 			ioctrl.addDestination(ioctrl.getRegisters()[1], flag);
+			ioctrl.addDestination(ioctrl.getRegisters()[2], irq);
 
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+			panel.add(irq);
 			panel.add(flag);
 			panel.add(data);
 
