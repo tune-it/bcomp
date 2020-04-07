@@ -19,10 +19,11 @@ public class IOCtrlBasic extends IOCtrl {
 
 	private final Register state = new Register(1);
 	private final Register dr = new Register(8);
-	private final Register[] registers = {dr, state};
+	private final Register[] registers = {dr, state, irqreg};
 	private final DataDestination irqsc;
 	private final Control changeFlag;
 	private final Control writeToDR;
+	private final Control setIRQ;
 
 	public IOCtrlBasic(long addr, long irq, CPU cpu, TYPE type, DataDestination ... chainctrl) {
 		super(addr, 1, irq, cpu);
@@ -50,7 +51,7 @@ public class IOCtrlBasic extends IOCtrl {
 				),
 				// Output - set IRQ
 				new Valve(Consts.consts[1], 1, 0, IOControlSignal.OUT.ordinal(),
-					new Valve(iodata, irqreg.width, 0, 0, irqreg),
+					setIRQ = new Valve(iodata, irqreg.width, 0, 0, irqreg),
 					rdy
 				)
 			)
@@ -105,6 +106,8 @@ public class IOCtrlBasic extends IOCtrl {
 			changeFlag.addDestination(dsts);
 		else if (reg == dr)
 			writeToDR.addDestination(dsts);
+		else if (reg == irqreg)
+			setIRQ.addDestination(dsts);
 	}
 
 	@Override
@@ -115,5 +118,13 @@ public class IOCtrlBasic extends IOCtrl {
 	@Override
 	public void setData(long value) {
 		dr.setValue(value);
+	}
+
+	@Override
+	public String toString() {
+		return
+			"IRQ = " + irqreg +
+			" State = " + state +
+			" Data = " + dr;
 	}
 }
