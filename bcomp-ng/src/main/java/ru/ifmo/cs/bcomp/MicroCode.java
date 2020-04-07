@@ -6,7 +6,6 @@ package ru.ifmo.cs.bcomp;
 
 import static ru.ifmo.cs.bcomp.ControlSignal.*;
 import static ru.ifmo.cs.bcomp.State.*;
-import static ru.ifmo.cs.bcomp.Utils.cs;
 
 /**
  *
@@ -341,4 +340,8 @@ public class MicroCode {
     public String getLabel(int addr) {
         return addr < MP.length ? MP[addr].label : null;
     }
+
+	private static ControlSignal[] cs(ControlSignal ... signals) {
+		return signals;
+	}
 }
