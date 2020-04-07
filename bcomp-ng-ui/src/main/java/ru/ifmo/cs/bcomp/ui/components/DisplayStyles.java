@@ -8,7 +8,7 @@
 
 package ru.ifmo.cs.bcomp.ui.components;
 
-import ru.ifmo.cs.bcomp.Utils;
+import ru.ifmo.cs.components.Utils;
 
 import java.awt.*;
 import java.awt.font.FontRenderContext;

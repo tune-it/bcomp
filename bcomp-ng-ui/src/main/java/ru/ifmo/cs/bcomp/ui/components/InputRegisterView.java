@@ -7,7 +7,7 @@ package ru.ifmo.cs.bcomp.ui.components;
 import java.awt.event.*;
 
 import ru.ifmo.cs.bcomp.Reg;
-import ru.ifmo.cs.bcomp.Utils;
+import ru.ifmo.cs.components.Utils;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 import ru.ifmo.cs.components.Register;
 

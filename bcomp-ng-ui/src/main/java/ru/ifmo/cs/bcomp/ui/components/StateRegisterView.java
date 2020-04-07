@@ -7,7 +7,7 @@ package ru.ifmo.cs.bcomp.ui.components;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 //import ru.ifmo.cs.bcomp.StateReg;
-import ru.ifmo.cs.bcomp.Utils;
+import ru.ifmo.cs.components.Utils;
 
 import ru.ifmo.cs.components.Register;
 

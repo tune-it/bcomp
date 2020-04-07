@@ -7,7 +7,7 @@ package ru.ifmo.cs.bcomp.ui.components;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JLabel;
-import ru.ifmo.cs.bcomp.Utils;
+import ru.ifmo.cs.components.Utils;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 
 /**

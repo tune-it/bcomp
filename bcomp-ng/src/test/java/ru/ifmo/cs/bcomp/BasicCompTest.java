@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Iterator;
-import static ru.ifmo.cs.bcomp.Utils.toHex;
+import static ru.ifmo.cs.components.Utils.toHex;
 import ru.ifmo.cs.components.DataDestination;
 import ru.ifmo.cs.components.Register;
 import static ru.ifmo.cs.bcomp.ControlSignal.*;
