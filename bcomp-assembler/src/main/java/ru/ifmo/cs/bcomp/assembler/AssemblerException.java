@@ -24,6 +24,7 @@ public class AssemblerException extends RecognitionException {
 
     public AssemblerException(String msg, Parser recognizer, ParserRuleContext ctx) {
         super(msg, recognizer, recognizer.getInputStream(), ctx);
+        //System.out.println(msg+recognizer.getCurrentToken());
         this.setOffendingToken(recognizer.getCurrentToken());
     }
     

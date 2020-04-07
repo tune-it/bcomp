@@ -130,9 +130,10 @@ comment
 
 addr: AND | OR | ADD | ADC | SUB | CMP | LOOP | LD | SWAM | JUMP | CALL | ST;
 nonaddr: NOP | HLT | CLA | NOT | CLC | CMC | ROL | ROR | ASL | ASR | SXTB | SWAB |
-         INC | DEC | NEG | POP | POPF | RET | IRET | PUSH | PUSHF | SWAP;
+         INC | DEC | NEG | POP | POPF | RET | IRET | PUSH | PUSHF | SWAP |
+         EI  | DI;
 branch: BEQ | BNE | BMI | BPL | BCS | BCC | BVS | BVC | BLT | BGE | BR;
-io: CLF | TSF | IN | OUT;
+io:  IN | OUT | INT;
 
 sp: SP;
 ip: IP;
@@ -267,16 +268,17 @@ BGE: ( B G E ) ;
 BR: ( B R ) ;    //syntetic insturction, jump with direct relative addressing mode
 
 
-CLF: ( C L F ) ;
-TSF: ( T S F ) ;
+DI: ( D I ) ;
+EI: ( E I ) ;
 IN: ( I N ) ;
 OUT: ( O U T ) ;
+INT: ( I N T ) ;
 
 SP: ( S P ) ;
 IP: ( I P ) ;
 
 NAME
-   : [a-zA-Zа-яА-Я] [a-zA-Zа-яА-Я0-9."]*
+   : [a-zA-Zа-яА-Я_] [a-zA-Zа-яА-Я_0-9."]*
    ;
 
 DECIMAL

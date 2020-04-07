@@ -10,8 +10,9 @@ package ru.ifmo.cs.bcomp.assembler;
  * @author serge
  */
 public class InstructionWord extends MemoryWord {
-    public volatile Instruction instruction;
-    public volatile AddressingMode operand = null;
+    public volatile Instruction instruction = null;
+    public volatile AddressingMode operand = null; //only for address command
+    public volatile Integer device = UNDEFINED; //only for io command IN OUT INTR
     
     @Override
     public String toString() {

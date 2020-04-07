@@ -32,6 +32,7 @@ public class AsmNg {
     public static void main(String[] args) throws Exception {
         AsmNg asmng = new AsmNg(
                 "ORG 020h\n"
+                + "IN 0x1\n"
                 + "ad: and ad\n"
                 + "ORG 030h\n"
                 + "    OR $ad\n"
@@ -50,7 +51,11 @@ public class AsmNg {
                 + "    WORD 0x12,?,0x13 ; komment\n"
                 + "");
         Program prog = asmng.compile();
+        System.out.println("-------errors--------");
+        System.out.println(asmng.getErrors());
+        System.out.println("-------words--------");
         System.out.println(prog.toCompiledWords());
+        System.out.println("-------binary--------");
         System.out.println(prog.toBinaryRepresentation());
     }
 
@@ -70,7 +75,7 @@ public class AsmNg {
         //
         lexer = new BCompNGLexer(program);
         tokens = new CommonTokenStream(lexer);
-        parser = new BCompNGParser(tokens);
+        this.parser = new BCompNGParser(tokens);
         errHandler = new AssemblerAntlrErrorStrategy();
         parser.setErrorHandler(errHandler);
         errors = new ArrayList<String>();
@@ -135,7 +140,10 @@ public class AsmNg {
                     InstructionWord i = new InstructionWord();
                     Instruction instr = instructionByParserType(t.getSymbol().getType());
                     if (instr == null) {
-                        reportAndRecoverFromError(new AssemblerException("Internal error: after parser instruction cant be null", parser, ICtx));
+                        //parser has instruction description but ASM NG has not
+                        //add new instruction to method instructionByParserType and Instruction
+                        reportAndRecoverFromError(new AssemblerException("Internal error: Parser has instruction but assebler hasn't", parser, ICtx));
+                        return;
                     }
                     i.instruction = instr;
                     i.address = address;
@@ -155,6 +163,21 @@ public class AsmNg {
                         i.operand = am;
                         //make String copy. Do not remove new String(..)
                         i.operand.reference = new String(ICtx.label().getText());
+                    }
+                    if (instr.type == Instruction.Type.IO) {
+                        AssemblerException ae = new AssemblerException("Device or vector shall be valid number", parser, ICtx);
+                        if (ICtx.dev() == null) {
+                                reportAndRecoverFromError(ae);return;
+                        }
+                        NumberContext nc = ICtx.dev().number();
+                        if (nc == null) {
+                            reportAndRecoverFromError(ae);return;
+                        }
+                        Integer devnum = parseIntFromNumberContext(nc);
+                        if (devnum == null) {
+                            reportAndRecoverFromError(ae);return;
+                        }
+                        i.device = devnum;
                     }
                     memory.put(i.address, i);
                     address++;
@@ -196,10 +219,11 @@ public class AsmNg {
                 }
                 DupArgumentContext dactx = ctx.dupArgument();
                 if (dactx != null) {
-                    int count = parseIntFromNumberContext(dactx.count().number());
+                    Integer count = parseIntFromNumberContext(dactx.count().number());
                     if (count <= 1) {
                         //throw new RuntimeException("Internal error: count should be greater than 1");
-                        reportAndRecoverFromError(new AssemblerException("DUP count should be greater than 1", parser, dactx));
+                        reportError(new AssemblerException("DUP count should be greater than 1", parser, dactx));
+                        return;
                     }
                     WordArgumentContext what = dactx.wordArgument();
                     int whatnum = 0;
@@ -231,6 +255,7 @@ public class AsmNg {
                 if (labels.containsKey(lab.name)) {
                     //TODO FIX IT with common error message
                     reportAndRecoverFromError(new AssemblerException("Error: already defined label " + lab.name, parser, ctx));
+                    return;
                 }
                 //TODO fix this special case for start label
                 if ("START".equalsIgnoreCase(lab.name)) {
@@ -286,6 +311,17 @@ public class AsmNg {
                         iw.value = iw.instruction.opcode | convertReferenceToDisplacement(iw);
                         break;
                     case IO:
+                        if (iw.instruction.opcode == Instruction.INT.opcode) {
+                            if (iw.device < 0 || iw.device > 7) {
+                                reportError(new AssemblerException("Second pass: vector exceed limits [0..7]",parser));
+                            }
+                            iw.value = iw.instruction.opcode | iw.device;
+                            break;
+                        }
+                        if (iw.device < 0 || iw.device > 255) {
+                            reportError(new AssemblerException("Second pass: device number exceed limits [0..0xff]",parser));
+                        }
+                        iw.value = iw.instruction.opcode | iw.device;
                         break;
                 }
             }
@@ -490,6 +526,22 @@ public class AsmNg {
             case BCompNGParser.BR:
                 i = Instruction.BR;
                 break;
+            case BCompNGParser.EI:
+                i = Instruction.EI;
+                break;
+            case BCompNGParser.DI:
+                i = Instruction.DI;
+                break;
+            case BCompNGParser.IN:
+                i = Instruction.IN;
+                break;
+            case BCompNGParser.OUT:
+                i = Instruction.OUT;
+                break;
+            case BCompNGParser.INT:
+                i = Instruction.INT;
+                break;
+                
             default:
         }
         return i;
