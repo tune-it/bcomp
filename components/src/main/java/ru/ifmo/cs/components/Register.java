@@ -30,4 +30,9 @@ public class Register extends DataPart {
 	public synchronized long getValue(long startbit) {
 		return (value >> startbit) & 1L;
 	}
+
+	@Override
+	public synchronized String toString() {
+		return Utils.toHex(value, width);
+	}
 }
