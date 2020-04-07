@@ -86,7 +86,8 @@ public class CLI {
                 try {
                     Thread.sleep(sleep);
                 } catch (InterruptedException e) {
-                    /*totally not empty*/ }
+                    /*totally not empty*/
+				}
             }
         });
 
@@ -138,13 +139,7 @@ public class CLI {
     }
 
     private void printIO(int ioaddr) {
-        println(
-                "ВУ" + ioaddr
-                + ": Флаг = "
-                + (ioctrls[ioaddr].isReady() ? "1" : "0") +
-                " РДВУ = " + Utils.toHex(ioctrls[ioaddr].getData(), 8) +
-				" IRQ = " + ioctrls[ioaddr].getIRQ()
-        );
+        println("ВУ" + ioaddr + " " + ioctrls[ioaddr]);
     }
 
     private boolean checkCmd(String cmd, String check) {
