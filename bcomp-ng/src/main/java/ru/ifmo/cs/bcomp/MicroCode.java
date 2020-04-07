@@ -291,8 +291,8 @@ public class MicroCode {
         new omc(            cs(STOR)),                                                  // DR -> MEM(AR)
         new omc(            cs(RDSP, COML, HTOH, LTOL, WRSP, WRAR)),                    // SP + ~0 -> SP, AR
         new omc(            cs(RDPS, HTOH, LTOL, WRDR)),                                // PS -> DR
-        new omc(            cs(STOR)),                                                  // DR -> MEM(AR)
-        new omc(            cs(RDCR, SHLT, WRBR, WRAR)),                                // 2 * CR -> BR, AR
+        new omc(            cs(RDCR, LTOL, WRBR, STOR)),                                // LTOL(CR) -> BR; DR -> MEM(AR)
+        new omc(            cs(RDBR, SHLT, WRBR, WRAR)),                                // 2 * BR -> BR, AR
         new omc(            cs(LOAD)),                                                  // MEM(AR) -> DR
         new omc(            cs(RDDR, HTOH, LTOL, WRIP)),                                // DR -> IP;
         new omc(            cs(RDBR, PLS1, LTOL, WRAR)),                                // BR + 1 -> AR
