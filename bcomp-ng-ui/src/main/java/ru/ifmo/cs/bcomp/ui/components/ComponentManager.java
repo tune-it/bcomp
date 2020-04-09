@@ -39,7 +39,7 @@ public class ComponentManager {
 	}
 
 	private class ButtonProperties {
-		 final String[] texts;
+		final String[] texts;
 		public final ActionListener listener;
 
 		public ButtonProperties(String[] texts, ActionListener listener) {
@@ -50,6 +50,7 @@ public class ComponentManager {
 
 	private JRadioButton rbRanStop;
 	private JRadioButton rbTact;
+
 	private class ButtonsPanel extends JComponent {
 
 		public ButtonsPanel() {
@@ -106,52 +107,53 @@ public class ComponentManager {
 			add(rbTact, constraints);
 		}
 	}
+
 	private ResourceBundle res = ResourceBundle.getBundle("ru.ifmo.cs.bcomp.ui.components.loc", Locale.getDefault());
-	private Color[] buttonColors = new Color[] { COLOR_TEXT, COLOR_ACTIVE };
+	private Color[] buttonColors = new Color[]{COLOR_TEXT, COLOR_ACTIVE};
 	private ButtonProperties[] buttonProperties = {
-		new ButtonProperties(new String[] { res.getString("setip") }, new ActionListener() {
+			new ButtonProperties(new String[]{res.getString("setip")}, new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
-				cmdEnterAddr();
-			}
-		}),
-			new ButtonProperties( new String[] { res.getString("read") }, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cmdEnterAddr();
+				}
+			}),
+			new ButtonProperties(new String[]{res.getString("read")}, new ActionListener() {
 
-		public void actionPerformed(ActionEvent e) {
-			cmdRead();
-		}
-	}),
-		new ButtonProperties( new String[] { res.getString("write") }, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cmdRead();
+				}
+			}),
+			new ButtonProperties(new String[]{res.getString("write")}, new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
-				cmdWrite();
-			}
-		}),
+				public void actionPerformed(ActionEvent e) {
+					cmdWrite();
+				}
+			}),
 
-		new ButtonProperties( new String[] { res.getString("start") }, new ActionListener() {
+			new ButtonProperties(new String[]{res.getString("start")}, new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
-				cmdStart();
-			}
-		}),
-		new ButtonProperties( new String[] { res.getString("continue") }, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cmdStart();
+				}
+			}),
+			new ButtonProperties(new String[]{res.getString("continue")}, new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
-				cmdContinue();
-			}
-		}),
-		new ButtonProperties( new String[] { res.getString("stop"), res.getString("run") }, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cmdContinue();
+				}
+			}),
+			new ButtonProperties(new String[]{res.getString("stop"), res.getString("run")}, new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
-				cmdInvertRunState();
-			}
-		}),
-		new ButtonProperties(new String[] { res.getString("tick") }, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cmdInvertRunState();
+				}
+			}),
+			new ButtonProperties(new String[]{res.getString("tick")}, new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
-				cmdInvertClockState();
-			}
-		})
+				public void actionPerformed(ActionEvent e) {
+					cmdInvertClockState();
+				}
+			})
 	};
 
 	private final KeyAdapter keyListener = new KeyAdapter() {
@@ -220,7 +222,7 @@ public class ComponentManager {
 	private InputRegisterView input;
 	private ActiveBitView activeBit = new ActiveBitView(ACTIVE_BIT_X, REG_KEY_Y);
 	private volatile BCompPanel activePanel;
-	private final long[] delayPeriods = { 0, 1, 5, 10, 25, 50, 100, 1000 };
+	private final long[] delayPeriods = {0, 1, 5, 10, 25, 50, 100, 1000};
 	private volatile int currentDelay = 3;
 	private volatile int savedDelay;
 	private final Object lockActivePanel = new Object();
@@ -229,15 +231,15 @@ public class ComponentManager {
 	private final SignalListener[] listeners;
 	private ArrayList<ControlSignal> openBuses = new ArrayList<ControlSignal>();
 	private static final ControlSignal[] busSignals = {
-		RDDR, RDCR, RDIP, RDAC, RDPS, RDIR, RDBR, RDSP,
-		WRDR, WRCR, WRIP, WRAC, WRPS, WRAR, WRBR, WRSP, LOAD, STOR, IO, TYPE
+			RDDR, RDCR, RDIP, RDAC, RDPS, RDIR, RDBR, RDSP,
+			WRDR, WRCR, WRIP, WRAC, WRPS, WRAR, WRBR, WRSP, LOAD, STOR, IO, TYPE
 	};
 
 	public ComponentManager(GUI gui) {
 		this.gui = gui;
 		bcomp = gui.getBasicComp();
 		cpu = gui.getCPU();
-		input =new InputRegisterView(this,cpu.getRegister(Reg.IR));
+		input = new InputRegisterView(this, cpu.getRegister(Reg.IR));
 		ioctrls = gui.getIOCtrls();
 
 		cpu.setTickStartListener(new Runnable() {
@@ -271,32 +273,33 @@ public class ComponentManager {
 		for (ControlSignal cs : busSignals)
 			cpu.addDestination(cs, new SignalHandler(cs));
 
-		for(int i = 0; i < 4; i++) {
-			flagViews[i] = new FlagView(0,0,25,25);
+		for (int i = 0; i < 4; i++) {
+			flagViews[i] = new FlagView(0, 0, 25, 25);
 			flagViews[i].setPreferredSize(flagViews[i].getSize());
 		}
-		flagViews[0].setTitle("N");flagViews[1].setTitle("Z");flagViews[2].setTitle("V");flagViews[3].setTitle("C");
+		flagViews[0].setTitle("N");
+		flagViews[1].setTitle("Z");
+		flagViews[2].setTitle("V");
+		flagViews[3].setTitle("C");
 
 		for (Reg reg : Reg.values()) {
 
-					regs.put(reg, new RegisterView(cpu.getRegister(reg)));
+			regs.put(reg, new RegisterView(cpu.getRegister(reg)));
 
 		}
 
 
-
-		listeners = new SignalListener[] {
-			new SignalListener(regs.get(Reg.AR), WRAR),
-			new SignalListener(regs.get(Reg.DR), WRDR, LOAD),
-			new SignalListener(regs.get(Reg.CR), WRCR),
-			new SignalListener(regs.get(Reg.IP), WRIP),
-			new SignalListener(regs.get(Reg.AC), WRAC),
-			new SignalListener(regs.get(Reg.PS), RDPS,WRPS,SETC, SETV, STNZ, SET_EI, HALT,SET_PROGRAM),
-           new SignalListener(regs.get(Reg.SP), WRSP),
-           new SignalListener(regs.get(Reg.BR),WRBR)
+		listeners = new SignalListener[]{
+				new SignalListener(regs.get(Reg.AR), WRAR),
+				new SignalListener(regs.get(Reg.DR), WRDR, LOAD),
+				new SignalListener(regs.get(Reg.CR), WRCR),
+				new SignalListener(regs.get(Reg.IP), WRIP),
+				new SignalListener(regs.get(Reg.AC), WRAC),
+				new SignalListener(regs.get(Reg.PS), RDPS, WRPS, SETC, SETV, STNZ, SET_EI, HALT, SET_PROGRAM),
+				new SignalListener(regs.get(Reg.SP), WRSP),
+				new SignalListener(regs.get(Reg.BR), WRBR)
 
 		};
-
 
 
 		mem = new MemoryView(cpu.getMemory(), MEM_X, MEM_Y);
@@ -328,8 +331,8 @@ public class ComponentManager {
 		cpu.addDestination(STNZ, new DataDestination() {
 			@Override
 			public void setValue(long value) {
-			flagViews[1].setActive(cpu.getProgramState(State.Z) != 0);//z
-			flagViews[0].setActive(cpu.getProgramState(State.N)!= 0);//n
+				flagViews[1].setActive(cpu.getProgramState(State.Z) != 0);//z
+				flagViews[0].setActive(cpu.getProgramState(State.N) != 0);//n
 			}
 		});
 
@@ -358,9 +361,9 @@ public class ComponentManager {
 		constraints.gridx = 2;
 		constraints.gridy = 0;
 		constraints.gridheight = 2;
-		constraints.insets =new Insets(0,0,0,30);
+		constraints.insets = new Insets(0, 0, 0, 30);
 
-		input.setProperties(0,0,false,true);
+		input.setProperties(0, 0, false, true);
 		input.setTitle("IR");
 		input.setPreferredSize(input.getSize());
 		input.setMinimumSize(input.getSize());
@@ -368,7 +371,7 @@ public class ComponentManager {
 
 
 		constraints.anchor = GridBagConstraints.CENTER;
-		constraints.insets = new Insets(0, REG_16_WIDTH+26, 0, 20);//помещаем бит рядом с кл регистром
+		constraints.insets = new Insets(0, REG_16_WIDTH + 26, 0, 20);//помещаем бит рядом с кл регистром
 		activeBit.setPreferredSize(activeBit.getSize());
 		activeBit.setMinimumSize(activeBit.getSize());
 		buttonsPanel.add(activeBit, constraints);
@@ -383,7 +386,11 @@ public class ComponentManager {
 	}
 
 	public void panelDeactivate() {
-
+		synchronized (lockActivePanel) {
+			bcomp.removeDestination(listeners);
+			bcomp.removeDestination(activePanel.getSignalListeners());
+			activePanel = null;
+		}
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -408,17 +415,17 @@ public class ComponentManager {
 
 	public void cmdEnterAddr() {
 
-			cpu.startSetAddr();
+		cpu.startSetAddr();
 	}
 
 	public void cmdWrite() {
 
-			cpu.startWrite();
+		cpu.startWrite();
 	}
 
 	public void cmdRead() {
 
-			cpu.startRead();
+		cpu.startRead();
 	}
 
 	public void cmdStart() {
@@ -431,7 +438,7 @@ public class ComponentManager {
 		cpu.invertRunState();
 		long state = cpu.getProgramState(State.W);
 		rbRanStop.setSelected(state == 1);
-		rbRanStop.setText(buttonProperties[BUTTON_RUN].texts[(int)state]);
+		rbRanStop.setText(buttonProperties[BUTTON_RUN].texts[(int) state]);
 		regs.get(Reg.PS).setValue();
 	}
 
@@ -439,6 +446,7 @@ public class ComponentManager {
 		boolean state = cpu.invertClockState();
 		rbTact.setSelected(!state);
 	}
+
 	public void cmdNextDelay() {
 		currentDelay = currentDelay < delayPeriods.length - 1 ? currentDelay + 1 : 0;
 	}
@@ -478,10 +486,12 @@ public class ComponentManager {
 	public void clearActiveSignals() {
 		openBuses.clear();
 	}
-	public MemoryView getMem(){
+
+	public MemoryView getMem() {
 		return mem;
 	}
-	public RegisterView getInput(){
+
+	public RegisterView getInput() {
 		return input;
 	}
 

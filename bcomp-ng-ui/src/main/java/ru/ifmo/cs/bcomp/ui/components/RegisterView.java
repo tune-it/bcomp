@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import ru.ifmo.cs.components.Utils;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.CELL_HEIGHT;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.COLOR_TITLE;
+import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.REG_TITLE_WIDTH;
+
 import ru.ifmo.cs.components.DataDestination;
 //import ru.ifmo.cs.components.DataWidth;
 import ru.ifmo.cs.components.Register;
@@ -45,14 +47,15 @@ public class RegisterView extends BCompComponent implements DataDestination {
 		this.hex = hex;
 		this.formatWidth = regWidth;
 		this.valuemask = (1 << regWidth) - 1;
-		this.isLeft=isLeft;
-		setBounds(x, y, getValueWidth(regWidth, hex)+15);
+		this.isLeft = isLeft;
+		setBounds(x, y, getValueWidth(regWidth, hex) + 15);
 		setValue();
-		if (!isLeft){
-		title.setBounds(1,1,25,CELL_HEIGHT+1);
-		value.setBounds(27, 1, width-28, CELL_HEIGHT+1);}
-		else {title.setBounds(width-26,1,25,CELL_HEIGHT+1);
-		value.setBounds(1,1,width-28,CELL_HEIGHT+1);
+		if (!isLeft) {
+			title.setBounds(1, 1, REG_TITLE_WIDTH, CELL_HEIGHT + 1);
+			value.setBounds(REG_TITLE_WIDTH + 2, 1, width - REG_TITLE_WIDTH - 3, CELL_HEIGHT + 1);
+		} else {
+			title.setBounds(width - 1 - REG_TITLE_WIDTH, 1, REG_TITLE_WIDTH, CELL_HEIGHT + 1);
+			value.setBounds(1, 1, width - REG_TITLE_WIDTH - 3, CELL_HEIGHT + 1);
 		}
 	}
 

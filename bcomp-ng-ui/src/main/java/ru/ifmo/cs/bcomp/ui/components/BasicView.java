@@ -28,98 +28,99 @@ public class BasicView extends BCompPanel {
 
 	private final ALUView alu;
 	private final CommutView commutView;
+
 	public BasicView(GUI gui) {
 
-		super(gui.getComponentManager(), 
-			new RegisterProperties[] {
-				new RegisterProperties(Reg.AR, REG_ACCUM_X_BV, REG_ADDR_Y_BV, false, false, 
-						new GridBagConstraints() {{
-							fill = GridBagConstraints.NONE;
-							gridy = 4;
-							gridx = 5;
-							weightx = 0;
-							weighty = 0;
-							gridwidth = 1;
-							gridheight = 1;
-							anchor = GridBagConstraints.NORTHWEST;
-							insets = new Insets(156, 20, 0, 0);
-						}}), 
-				new RegisterProperties(Reg.DR, REG_ACCUM_X_BV, REG_DATA_Y_BV, false, false, 
+		super(gui.getComponentManager(),
+				new RegisterProperties[]{
+						new RegisterProperties(Reg.AR, REG_ACCUM_X_BV, REG_ADDR_Y_BV, false, false,
+								new GridBagConstraints() {{
+									fill = GridBagConstraints.NONE;
+									gridy = 4;
+									gridx = 5;
+									weightx = 0;
+									weighty = 0;
+									gridwidth = 1;
+									gridheight = 1;
+									anchor = GridBagConstraints.NORTHWEST;
+									insets = new Insets(156, 20, 0, 0);
+								}}),
+						new RegisterProperties(Reg.DR, REG_ACCUM_X_BV, REG_DATA_Y_BV, false, false,
 
-						new GridBagConstraints() {{
-							fill = GridBagConstraints.NONE;
-							gridy = 0;
-							gridx = 4;
-							weightx = 0.5;
-							weighty = 0.5;
-							insets = new Insets(60, 40, 0, 0);
+								new GridBagConstraints() {{
+									fill = GridBagConstraints.NONE;
+									gridy = 0;
+									gridx = 4;
+									weightx = 0.5;
+									weighty = 0.5;
+									insets = new Insets(60, 40, 0, 0);
 
-						}}
+								}}
 
-						), 
-				new RegisterProperties(Reg.IP, REG_IP_X_BV, REG_IP_Y_BV, false, false, 
-						new GridBagConstraints() {{
-							fill = GridBagConstraints.NONE;
-							gridy = 2;
-							gridx = 4;
-							weightx = 0.5;
-							weighty = 0.5;
-							insets = new Insets(0, 0, 0, 33);
+						),
+						new RegisterProperties(Reg.IP, REG_IP_X_BV, REG_IP_Y_BV, false, false,
+								new GridBagConstraints() {{
+									fill = GridBagConstraints.NONE;
+									gridy = 2;
+									gridx = 4;
+									weightx = 0.5;
+									weighty = 0.5;
+									insets = new Insets(0, 0, 0, 33);
 
-						}}
-						), 
-				new RegisterProperties(Reg.CR, REG_INSTR_X_BV, REG_ADDR_Y_BV, false, false, 
-						new GridBagConstraints() {{
-							fill = GridBagConstraints.NONE;
-							gridy = 1;
-							gridx = 4;
-							weightx = 0.5;
-							weighty = 0.5;
-							insets = new Insets(0, 40, 0, 0);
-						}}
-						), 
-				new RegisterProperties(Reg.AC, REG_ACCUM_X_BV, REG_ACCUM_Y_BV, false, true, 
-						new GridBagConstraints() {{
-							fill = GridBagConstraints.NONE;
-							gridy = 0;
-							gridx = 3;
-							weighty = 0.5;
-							weightx = 0.5;
-							insets = new Insets(60, 23, 0, 60);
-						}}), 
-					new RegisterProperties(Reg.SP, REG_ACCUM_X_BV, 0, false, false, 
-							new GridBagConstraints() {{
-								fill = GridBagConstraints.NONE;
-								gridy = 3;
-								gridx = 4;
-								weighty = 0.5;
-								insets = new Insets(0, 0, 80, 33);
-							}}), 
-					new RegisterProperties(Reg.BR, 0, 0, false, true, 
-							new GridBagConstraints(){{
-						gridy = 1;
-						gridx = 3;
-						insets = new Insets(0, 3, 0, 40);
-					}}), 
-					new RegisterProperties(Reg.PS, 0, 0, false, true, 
-							new GridBagConstraints(){{
-						gridy = 2;
-						gridx = 3;
-						insets = new Insets(0, 3, 0, 40);
-					}}), 
-					new RegisterProperties(Reg.IR, 0, 0, false, true, 
-						 new GridBagConstraints(){{
-						gridy = 3;
-						gridx = 3;
-						insets = new Insets(0, 3, 80, 40);
-					}})
-			}, 
-				new EnumMap<BusNames, BusView>(BusNames.class){{
-					put(BR_ALU, new BusView( RDBR));
+								}}
+						),
+						new RegisterProperties(Reg.CR, REG_INSTR_X_BV, REG_ADDR_Y_BV, false, false,
+								new GridBagConstraints() {{
+									fill = GridBagConstraints.NONE;
+									gridy = 1;
+									gridx = 4;
+									weightx = 0.5;
+									weighty = 0.5;
+									insets = new Insets(0, 40, 0, 0);
+								}}
+						),
+						new RegisterProperties(Reg.AC, REG_ACCUM_X_BV, REG_ACCUM_Y_BV, false, true,
+								new GridBagConstraints() {{
+									fill = GridBagConstraints.NONE;
+									gridy = 0;
+									gridx = 3;
+									weighty = 0.5;
+									weightx = 0.5;
+									insets = new Insets(60, 23, 0, 60);
+								}}),
+						new RegisterProperties(Reg.SP, REG_ACCUM_X_BV, 0, false, false,
+								new GridBagConstraints() {{
+									fill = GridBagConstraints.NONE;
+									gridy = 3;
+									gridx = 4;
+									weighty = 0.5;
+									insets = new Insets(0, 0, 80, 33);
+								}}),
+						new RegisterProperties(Reg.BR, 0, 0, false, true,
+								new GridBagConstraints() {{
+									gridy = 1;
+									gridx = 3;
+									insets = new Insets(0, 3, 0, 40);
+								}}),
+						new RegisterProperties(Reg.PS, 0, 0, false, true,
+								new GridBagConstraints() {{
+									gridy = 2;
+									gridx = 3;
+									insets = new Insets(0, 3, 0, 40);
+								}}),
+						new RegisterProperties(Reg.IR, 0, 0, false, true,
+								new GridBagConstraints() {{
+									gridy = 3;
+									gridx = 3;
+									insets = new Insets(0, 3, 80, 40);
+								}})
+				},
+				new EnumMap<BusNames, BusView>(BusNames.class) {{
+					put(BR_ALU, new BusView(RDBR));
 					put(COMM_BR, new BusView(WRBR));
 					put(PS_ALU, new BusView(RDPS));
-					put(COMM_PS, new BusView( WRPS));
-					put(COMM_ALL, new BusView( WRBR, WRAC, WRIP, WRCR, WRDR, WRAR, WRPS, WRSP));
+					put(COMM_PS, new BusView(WRPS));
+					put(COMM_ALL, new BusView(WRBR, WRAC, WRIP, WRCR, WRDR, WRAR, WRPS, WRSP));
 					put(ALU_COMM, new BusView(WRBR, WRAC, WRIP, WRCR, WRDR, WRAR, WRPS, WRSP, TYPE));
 					put(DR_ALU, new BusView(RDDR));
 					put(CR_ALU, new BusView(RDCR));
@@ -142,7 +143,7 @@ public class BasicView extends BCompPanel {
 		add(regPanel, BorderLayout.CENTER);
 		cpu = gui.getCPU();
 
-		setSignalListeners(new SignalListener[] {
+		setSignalListeners(new SignalListener[]{
 				new SignalListener(new DataDestination() {
 					@Override
 					public void setValue(long value) {
@@ -152,7 +153,7 @@ public class BasicView extends BCompPanel {
 		});
 
 		GridBagConstraints constraintsALU = new GridBagConstraints() {{
-			gridx  = 3;
+			gridx = 3;
 			gridy = 4;
 			gridwidth = 2;
 			weightx = 0.5;
@@ -165,7 +166,7 @@ public class BasicView extends BCompPanel {
 		regPanel.add(alu, constraintsALU);
 
 		GridBagConstraints constraintsComm = new GridBagConstraints() {{
-			gridx  = 3;
+			gridx = 3;
 			gridy = 4;
 			gridwidth = 2;
 			weightx = 0.5;
@@ -200,7 +201,7 @@ public class BasicView extends BCompPanel {
 		regPanel.add(cmanager.getMem(), constraintMem);
 
 
-		GridBagConstraints constraintsF  = new GridBagConstraints() {{
+		GridBagConstraints constraintsF = new GridBagConstraints() {{
 			fill = GridBagConstraints.NONE;
 			gridy = 4;
 			gridx = 3;
@@ -228,9 +229,8 @@ public class BasicView extends BCompPanel {
 				redrawArrows();
 			}
 		});
-	redrawArrows();
+		redrawArrows();
 	}
-
 
 
 	@Override
@@ -250,213 +250,207 @@ public class BasicView extends BCompPanel {
 	}
 
 	public void redrawArrows() {
-		for(BusNames key :busesMap.keySet()) {
+		for (BusNames key : busesMap.keySet()) {
 			BusView bus = busesMap.get(key);
 			RegisterView data = cmanager.getRegisterView(Reg.DR);
 			RegisterView addr = cmanager.getRegisterView(Reg.AR);
 			RegisterView instr = cmanager.getRegisterView(Reg.CR);
 			RegisterView accum = cmanager.getRegisterView(Reg.AC);
-			RegisterView irReg=cmanager.getRegisterView(Reg.IR);
+			RegisterView irReg = cmanager.getRegisterView(Reg.IR);
 			RegisterView ipReg = cmanager.getRegisterView(Reg.IP);
 			RegisterView spReg = cmanager.getRegisterView(Reg.SP);
 			RegisterView buf = cmanager.getRegisterView(Reg.BR);
 			RegisterView rs = cmanager.getRegisterView(Reg.PS);
-			int regPanelX  = regPanel.getX();
+			int regPanelX = regPanel.getX();
+			int aluX = alu.getX();
+			int aluY = alu.getY();
+			int commY = commutView.getY();
+			int accumX = accum.getX();
 			switch (key) {
 				case DR_ALU:
 					bus.calcBounds(new int[][]{
-							{regPanelX + data.getX() - 5 , data.getY() + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() + ALU_WIDTH*6/8, data.getY()  + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() + ALU_WIDTH*6/8, alu.getY() - 13}, 
+							{regPanelX + data.getX() - 5, data.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 6 / 8, data.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 6 / 8, aluY - 13},
 					});
 					break;
 				case CR_ALU:
 					bus.calcBounds(new int[][]{
-							{regPanelX + instr.getX()  - 5, instr.getY() + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() + ALU_WIDTH*6/8, instr.getY()  + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() + ALU_WIDTH*6/8, alu.getY() - 13}, 
+							{regPanelX + instr.getX() - 5, instr.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 6 / 8, instr.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 6 / 8, aluY - 13},
 					});
 					break;
 				case IP_ALU:
 					bus.calcBounds(new int[][]{
-							{regPanelX + ipReg.getX() - 5 , ipReg.getY() + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() + ALU_WIDTH*6/8, ipReg.getY()  + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() + ALU_WIDTH*6/8, alu.getY() - 13}, 
+							{regPanelX + ipReg.getX() - 5, ipReg.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 6 / 8, ipReg.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 6 / 8, aluY - 13},
 					});
 					break;
 				case SP_ALU:
 					bus.calcBounds(new int[][]{
-							{regPanelX + spReg.getX() - 5 , spReg.getY() + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() + ALU_WIDTH*6/8, spReg.getY()  + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() + ALU_WIDTH*6/8, alu.getY() - 13}, 
+							{regPanelX + spReg.getX() - 5, spReg.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 6 / 8, spReg.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 6 / 8, aluY - 13},
 					});
 					break;
 				case AC_ALU:
 					bus.calcBounds(new int[][]{
-							{regPanelX + accum.getX() + REG_16_WIDTH + 4 , accum.getY()  + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() + ALU_WIDTH*2/8, accum.getY()  + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() +  ALU_WIDTH*2/8, alu.getY() - 13}, 
+							{regPanelX + accumX + REG_16_WIDTH - 6, accum.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 2 / 8, accum.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 2 / 8, aluY - 13},
 					});
 					break;
 				case BR_ALU:
 					bus.calcBounds(new int[][]{
-							{regPanelX + buf.getX() + REG_16_WIDTH + 4 , buf.getY()  + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() + ALU_WIDTH*2/8, buf.getY()  + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() +  ALU_WIDTH*2/8, alu.getY() - 13}, 
+							{regPanelX + buf.getX() + REG_16_WIDTH - 6, buf.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 2 / 8, buf.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 2 / 8, aluY - 13},
 					});
 					break;
 				case PS_ALU:
 					bus.calcBounds(new int[][]{
-							{regPanelX + rs.getX() + REG_16_WIDTH + 4 , rs.getY()  + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() + ALU_WIDTH*2/8, rs.getY()  + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() +  ALU_WIDTH*2/8, alu.getY() - 13}, 
+							{regPanelX + rs.getX() + REG_9_WIDTH - 6, rs.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 2 / 8, rs.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 2 / 8, aluY - 13},
 					});
 					break;
-
-
 				case IR_ALU:
 					bus.calcBounds(new int[][]{
-							{regPanelX + accum.getX() + REG_16_WIDTH + 4, irReg.getY()  + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() + ALU_WIDTH*2/8, irReg.getY()  + REG_HEIGHT/2}, 
-							{regPanelX + alu.getX() +  ALU_WIDTH*2/8, alu.getY() - 13}, 
+							{regPanelX + irReg.getX() + REG_16_WIDTH - 6, irReg.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 2 / 8, irReg.getY() + REG_HEIGHT / 2},
+							{regPanelX + aluX + ALU_WIDTH * 2 / 8, aluY - 13},
 
 					});
 					break;
 				case COMM_AR:
 					bus.calcBounds(new int[][]{
-
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, commutView.getY() + commutView.getHeight() + 4}, 
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, addr.getY() + REG_HEIGHT/2}, 
-							{addr.getX() - 13, addr.getY() + REG_HEIGHT/2}, 
-
+							{regPanelX + aluX + ALU_WIDTH / 2, commY + commutView.getHeight() + 4},
+							{regPanelX + aluX + ALU_WIDTH / 2, addr.getY() + REG_HEIGHT / 2},
+							{addr.getX() - 13, addr.getY() + REG_HEIGHT / 2},
 					});
 					break;
 				case COMM_DR:
 					bus.calcBounds(new int[][]{
-
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, commutView.getY() + commutView.getHeight() + 4}, 
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, alu.getY() + ALU_HEIGHT + 90}, 
-							{ regPanelX + data.getX()  + REG_16_WIDTH + 20, alu.getY() + ALU_HEIGHT + 90}, 
-							{regPanelX + data.getX()  + REG_16_WIDTH + 20, data.getY() + REG_HEIGHT / 2}, 
-							{regPanelX + data.getX()  + REG_16_WIDTH + 13, data.getY() + REG_HEIGHT / 2}
+							{regPanelX + aluX + ALU_WIDTH / 2, commY + commutView.getHeight() + 4},
+							{regPanelX + aluX + ALU_WIDTH / 2, aluY + ALU_HEIGHT + 90},
+							{regPanelX + data.getX() + REG_16_WIDTH + 10, aluY + ALU_HEIGHT + 90},
+							{regPanelX + data.getX() + REG_16_WIDTH + 10, data.getY() + REG_HEIGHT / 2},
+							{regPanelX + data.getX() + REG_16_WIDTH + 3, data.getY() + REG_HEIGHT / 2}
 					});
 					break;
 				case COMM_CR:
 					bus.calcBounds(new int[][]{
 
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, commutView.getY() + commutView.getHeight() + 4}, 
-
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, alu.getY() + ALU_HEIGHT + 90}, 
-
-							{regPanelX + instr.getX()  + REG_16_WIDTH + 20 , alu.getY() + ALU_HEIGHT + 90}, 
-
-							{regPanelX + instr.getX()  + REG_16_WIDTH + 20, instr.getY() + REG_HEIGHT / 2}, 
-							{regPanelX + instr.getX()  + REG_16_WIDTH + 13, instr.getY() + REG_HEIGHT / 2}
+							{regPanelX + aluX + ALU_WIDTH / 2, commY + commutView.getHeight() + 4},
+							{regPanelX + aluX + ALU_WIDTH / 2, aluY + ALU_HEIGHT + 90},
+							{regPanelX + instr.getX() + REG_16_WIDTH + 10, aluY + ALU_HEIGHT + 90},
+							{regPanelX + instr.getX() + REG_16_WIDTH + 10, instr.getY() + REG_HEIGHT / 2},
+							{regPanelX + instr.getX() + REG_16_WIDTH + 3, instr.getY() + REG_HEIGHT / 2}
 					});
 					break;
 				case COMM_IP:
 					bus.calcBounds(new int[][]{
 
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, commutView.getY() + commutView.getHeight() + 4}, 
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, alu.getY() + ALU_HEIGHT + 90}, 
-							{regPanelX + instr.getX() + REG_16_WIDTH + 20, alu.getY() + ALU_HEIGHT + 90}, 
-							{regPanelX + instr.getX()  + REG_16_WIDTH + 20, ipReg.getY() + REG_HEIGHT / 2}, 
-							{regPanelX + ipReg.getX()  + REG_11_WIDTH + 13, ipReg.getY() + REG_HEIGHT / 2}
+							{regPanelX + aluX + ALU_WIDTH / 2, commY + commutView.getHeight() + 4},
+							{regPanelX + aluX + ALU_WIDTH / 2, aluY + ALU_HEIGHT + 90},
+							{regPanelX + instr.getX() + REG_16_WIDTH + 10, aluY + ALU_HEIGHT + 90},
+							{regPanelX + instr.getX() + REG_16_WIDTH + 10, ipReg.getY() + REG_HEIGHT / 2},
+							{regPanelX + ipReg.getX() + REG_11_WIDTH + 3, ipReg.getY() + REG_HEIGHT / 2}
 					});
 					break;
 				case COMM_SP:
 					bus.calcBounds(new int[][]{
-							//   {regPanelX + alu.getX() + ALU_WIDTH / 2, alu.getY() + ALU_HEIGHT + 4}, 
-							// {regPanelX + alu.getX() +  ALU_WIDTH / 2, commutView.getY()}, 
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, commutView.getY() + commutView.getHeight() + 4}, 
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, alu.getY() + ALU_HEIGHT + 90}, 
-							{regPanelX + instr.getX() + REG_16_WIDTH + 20, alu.getY() + ALU_HEIGHT + 90}, 
-							{regPanelX + instr.getX()  + REG_16_WIDTH + 20, spReg.getY() + REG_HEIGHT / 2}, 
-							{regPanelX + spReg.getX()  + REG_11_WIDTH + 13, spReg.getY() + REG_HEIGHT / 2}
+							//   {regPanelX + aluX + ALU_WIDTH / 2, aluY + ALU_HEIGHT + 4},
+							// {regPanelX + aluX +  ALU_WIDTH / 2, commY},
+							{regPanelX + aluX + ALU_WIDTH / 2, commY + commutView.getHeight() + 4},
+							{regPanelX + aluX + ALU_WIDTH / 2, aluY + ALU_HEIGHT + 90},
+							{regPanelX + instr.getX() + REG_16_WIDTH + 10, aluY + ALU_HEIGHT + 90},
+							{regPanelX + instr.getX() + REG_16_WIDTH + 10, spReg.getY() + REG_HEIGHT / 2},
+							{regPanelX + spReg.getX() + REG_11_WIDTH + 3, spReg.getY() + REG_HEIGHT / 2}
 					});
 					break;
 				case COMM_ALL:
 					bus.calcBounds(new int[][]{
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, commutView.getY() + commutView.getHeight() + 4}, 
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, alu.getY() + ALU_HEIGHT + 74}, 
+							{regPanelX + aluX + ALU_WIDTH / 2, commY + commutView.getHeight() + 4},
+							{regPanelX + aluX + ALU_WIDTH / 2, aluY + ALU_HEIGHT + 74},
 					});
 					break;
 				case COMM_AC:
 					bus.calcBounds(new int[][]{
-
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, commutView.getY() + commutView.getHeight() + 4}, 
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, alu.getY() + ALU_HEIGHT + 90}, 
-							{regPanelX + accum.getX() - 20, alu.getY() + ALU_HEIGHT + 90}, 
-
-							{regPanelX + accum.getX() - 20, accum.getY() + REG_HEIGHT / 2}, 
-							{regPanelX + accum.getX() - 13, accum.getY() + REG_HEIGHT / 2}
+							{regPanelX + aluX + ALU_WIDTH / 2, commY + commutView.getHeight() + 4},
+							{regPanelX + aluX + ALU_WIDTH / 2, aluY + ALU_HEIGHT + 90},
+							{regPanelX + accumX - 20, aluY + ALU_HEIGHT + 90},
+							{regPanelX + accumX - 20, accum.getY() + REG_HEIGHT / 2},
+							{regPanelX + accumX - 13, accum.getY() + REG_HEIGHT / 2}
 					});
 					break;
-				case ALU_COMM :
+				case ALU_COMM:
 					bus.calcBounds(new int[][]{
-							{regPanelX + alu.getX() + ALU_WIDTH/2, alu.getY() + ALU_HEIGHT + 4}, 
-							{regPanelX + alu.getX() + ALU_WIDTH/2, commutView.getY() - 13}
-					}); break;
+							{regPanelX + aluX + ALU_WIDTH / 2, aluY + ALU_HEIGHT + 4},
+							{regPanelX + aluX + ALU_WIDTH / 2, commY - 13}
+					});
+					break;
 				case COMM_BR:
 					bus.calcBounds(new int[][]{
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, commutView.getY() + commutView.getHeight() + 4}, 
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, alu.getY() + ALU_HEIGHT + 90}, 
-							{regPanelX + accum.getX() - 20, alu.getY() + ALU_HEIGHT + 90}, 
-
-							{regPanelX + accum.getX() - 20, buf.getY() + REG_HEIGHT / 2}, 
-							{regPanelX + accum.getX() - 13, buf.getY() + REG_HEIGHT / 2}
-					}); break;
+							{regPanelX + aluX + ALU_WIDTH / 2, commY + commutView.getHeight() + 4},
+							{regPanelX + aluX + ALU_WIDTH / 2, aluY + ALU_HEIGHT + 90},
+							{regPanelX + accumX - 20, aluY + ALU_HEIGHT + 90},
+							{regPanelX + accumX - 20, buf.getY() + REG_HEIGHT / 2},
+							{regPanelX + accumX - 13, buf.getY() + REG_HEIGHT / 2}
+					});
+					break;
 				case COMM_PS:
 					bus.calcBounds(new int[][]{
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, commutView.getY() + commutView.getHeight() + 4}, 
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, alu.getY() + ALU_HEIGHT + 90}, 
-							{regPanelX + accum.getX() - 20, alu.getY() + ALU_HEIGHT + 90}, 
-
-							{regPanelX + accum.getX() - 20, rs.getY() + REG_HEIGHT / 2}, 
-							{regPanelX + accum.getX() - 13, rs.getY() + REG_HEIGHT / 2}
+							{regPanelX + aluX + ALU_WIDTH / 2, commY + commutView.getHeight() + 4},
+							{regPanelX + aluX + ALU_WIDTH / 2, aluY + ALU_HEIGHT + 90},
+							{regPanelX + accumX - 20, aluY + ALU_HEIGHT + 90},
+							{regPanelX + accumX - 20, rs.getY() + REG_HEIGHT / 2},
+							{regPanelX + rs.getX() - 13, rs.getY() + REG_HEIGHT / 2}
 					});
 					break;
 				case MEM_IO:
 					bus.calcBounds(new int[][]{
-							{regPanelX + cmanager.getMem().getX() + MEM_WIDTH/4, addr.getY() - 5 }, 
-							{regPanelX + cmanager.getMem().getX() + MEM_WIDTH/4, cmanager.getMem().getY() + CELL_HEIGHT*17 + 15}, 
+							{regPanelX + cmanager.getMem().getX() + MEM_WIDTH / 4, addr.getY() - 5},
+							{regPanelX + cmanager.getMem().getX() + MEM_WIDTH / 4, cmanager.getMem().getY() + CELL_HEIGHT * 17 + 15},
 					});
 					break;
 				case MEM_R:
-					bus.calcBounds(cmanager.getMem().getY()<35?
+					bus.calcBounds(cmanager.getMem().getY() < 35 ?
 							new int[][]{
-									{regPanelX + cmanager.getMem().getX() - 5, cmanager.getMem().getY() + 10}, 
-									{regPanelX + data.getX()  + REG_16_WIDTH/2 - 10, cmanager.getMem().getY() + 10}, 
-									{regPanelX + data.getX() + REG_16_WIDTH/2 - 10, data.getY() - 13 }, 
+									{regPanelX + cmanager.getMem().getX() - 5, cmanager.getMem().getY() + 10},
+									{regPanelX + data.getX() + REG_16_WIDTH / 2 - 10, cmanager.getMem().getY() + 10},
+									{regPanelX + data.getX() + REG_16_WIDTH / 2 - 10, data.getY() - 13},
 							}
-							:new int[][]{
-							{regPanelX + cmanager.getMem().getX() + MEM_WIDTH/2 + 10, cmanager.getMem().getY() - 5}, 
-							{regPanelX + cmanager.getMem().getX() + MEM_WIDTH/2 + 10, data.getY() - 65}, 
-							{regPanelX + data.getX() + REG_16_WIDTH/2  - 10, data.getY() - 65}, 
-							{regPanelX + data.getX() + REG_16_WIDTH/2 - 10, data.getY() - 13 }
+							: new int[][]{
+							{regPanelX + cmanager.getMem().getX() + MEM_WIDTH / 2 + 10, cmanager.getMem().getY() - 5},
+							{regPanelX + cmanager.getMem().getX() + MEM_WIDTH / 2 + 10, data.getY() - 65},
+							{regPanelX + data.getX() + REG_16_WIDTH / 2 - 10, data.getY() - 65},
+							{regPanelX + data.getX() + REG_16_WIDTH / 2 - 10, data.getY() - 13}
 					});
 					break;
 				case MEM_W:
 					bus.calcBounds(
-							cmanager.getMem().getY()<35?
-									new int[][]{{regPanelX + data.getX() + REG_16_WIDTH/2 + 10, data.getY() - 5 }, 
-											{regPanelX + data.getX() + REG_16_WIDTH/2 + 10, cmanager.getMem().getY() + 25}, 
-											{regPanelX + cmanager.getMem().getX() - 13, cmanager.getMem().getY() + 25}, 
+							cmanager.getMem().getY() < 35 ?
+									new int[][]{{regPanelX + data.getX() + REG_16_WIDTH / 2 + 10, data.getY() - 5},
+											{regPanelX + data.getX() + REG_16_WIDTH / 2 + 10, cmanager.getMem().getY() + 25},
+											{regPanelX + cmanager.getMem().getX() - 13, cmanager.getMem().getY() + 25},
 									}
 									:
 									new int[][]{
-											{regPanelX + data.getX() + REG_16_WIDTH/2 + 10, data.getY() - 5 }, 
-											{regPanelX + data.getX() + REG_16_WIDTH/2 + 10, data.getY() - 50}, 
-											{regPanelX + cmanager.getMem().getX() + MEM_WIDTH/2 - 10, data.getY() - 50}, 
-											{regPanelX + cmanager.getMem().getX() + MEM_WIDTH/2 - 10, cmanager.getMem().getY() - 13}, 
+											{regPanelX + data.getX() + REG_16_WIDTH / 2 + 10, data.getY() - 5},
+											{regPanelX + data.getX() + REG_16_WIDTH / 2 + 10, data.getY() - 50},
+											{regPanelX + cmanager.getMem().getX() + MEM_WIDTH / 2 - 10, data.getY() - 50},
+											{regPanelX + cmanager.getMem().getX() + MEM_WIDTH / 2 - 10, cmanager.getMem().getY() - 13},
 									});
 					break;
 				case CU:
 					bus.calcBounds(new int[][]{
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, commutView.getY() + commutView.getHeight() + 4}, 
-							{regPanelX + alu.getX() +  ALU_WIDTH / 2, alu.getY() + ALU_HEIGHT + 90}, 
-							{regPanelX + cycleview.getX()  + cycleview.getWidth() / 2, alu.getY() + ALU_HEIGHT + 90},
-							{regPanelX + cycleview.getX()  + cycleview.getWidth() / 2, cycleview.getY()  + CELL_HEIGHT * 8 + 15},
+							{regPanelX + aluX + ALU_WIDTH / 2, commY + commutView.getHeight() + 4},
+							{regPanelX + aluX + ALU_WIDTH / 2, aluY + ALU_HEIGHT + 90},
+							{regPanelX + cycleview.getX() + cycleview.getWidth() / 2, aluY + ALU_HEIGHT + 90},
+							{regPanelX + cycleview.getX() + cycleview.getWidth() / 2, cycleview.getY() + CELL_HEIGHT * 8 + 15},
 
 					});
 					break;

@@ -79,14 +79,15 @@ public class DisplayStyles {
     public static final int CELL_HEIGHT = 25;
     public static final int REG_HEIGHT =  CELL_HEIGHT + 3;
     // Basic view
+    public static final int REG_TITLE_WIDTH = 25;
     private static final int REG_1_WIDTH = 2 * FONT_COURIER_BOLD_21_WIDTH + 2;
     private static final int REG_3_WIDTH = 4 * FONT_COURIER_BOLD_21_WIDTH + 2;
     private static final int REG_4_WIDTH = 5 * FONT_COURIER_BOLD_21_WIDTH + 2;
     private static final int REG_5_WIDTH = 6 * FONT_COURIER_BOLD_21_WIDTH + 2;
     public static final int REG_8_WIDTH = (Utils.getBinaryWidth(8) + 1) * FONT_COURIER_BOLD_21_WIDTH + 2;
-    public static final int REG_9_WIDTH = (Utils.getBinaryWidth(9) + 1) * FONT_COURIER_BOLD_21_WIDTH + 2;
-    public static final int REG_11_WIDTH = (Utils.getBinaryWidth(11) + 1) * FONT_COURIER_BOLD_21_WIDTH + 17;
-    public static final int REG_16_WIDTH = (Utils.getBinaryWidth(16) + 1) * FONT_COURIER_BOLD_21_WIDTH + 17;
+    public static final int REG_9_WIDTH = (Utils.getBinaryWidth(9) + 1) * FONT_COURIER_BOLD_21_WIDTH + REG_TITLE_WIDTH + 2;
+    public static final int REG_11_WIDTH = (Utils.getBinaryWidth(11) + 1) * FONT_COURIER_BOLD_21_WIDTH + REG_TITLE_WIDTH + 2;
+    public static final int REG_16_WIDTH = (Utils.getBinaryWidth(16) + 1) * FONT_COURIER_BOLD_21_WIDTH + REG_TITLE_WIDTH + 2;
     private static final int REG_16_HALF = REG_16_WIDTH / 2;
     private static final int REG_HEIGHT_HALF = CELL_HEIGHT + 1;
     // Bus width
