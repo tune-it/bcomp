@@ -71,7 +71,7 @@ public class BCompComponent extends BorderedComponent {
 		return hex ? getValueWidth(width) : getPixelWidth(Utils.getBinaryWidth(width));
 	}
 
-	protected void setTitle(String title) {
+	public void setTitle(String title) {
 		this.title.setText(title);
 	}
 

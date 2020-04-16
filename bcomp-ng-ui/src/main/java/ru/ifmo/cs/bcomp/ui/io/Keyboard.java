@@ -134,7 +134,7 @@ public class Keyboard extends IODevice {
 	}
 
 	public Keyboard(final IOCtrl ioctrl) {
-		super(ioctrl, "Клавиатура");
+		super(ioctrl, "kbd");
 	}
 
 	@Override

@@ -143,9 +143,8 @@ public class InputRegisterView extends RegisterView {
 			str.insert(pos + 1, COLOR_END);
 			str.insert(pos, COLOR_ACTIVE_BIT);
 			setValue(str.toString());
-			cmanager.getRegisterView(Reg.IR).setValue(Utils.toBinary((int)reg.getValue(),regWidth));
 		} else
-			super.setValue(HTML + Utils.toBinary((int)reg.getValue(), regWidth) + HTML_END);
+			super.setValue(HTML + Utils.toBinary(reg.getValue(), regWidth) + HTML_END);
 	}
 
 	public void reqFocus() {

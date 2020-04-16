@@ -59,7 +59,7 @@ public class Ticker extends OutputDevice {
 	}
 
 	public Ticker(IOCtrl ioctrl) {
-		super(ioctrl, "Бегущая строка");
+		super(ioctrl, "ticker");
 
 		Arrays.fill(elements, 0);
 	}

@@ -121,7 +121,7 @@ public class GUI extends JApplet {
 	}
 
 	public IOCtrl[] getIOCtrls() {
-		return null;
+		return bcomp.getIOCtrls();
 	}
 
 	public ComponentManager getComponentManager() {

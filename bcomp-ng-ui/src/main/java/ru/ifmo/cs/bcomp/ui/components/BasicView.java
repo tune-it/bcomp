@@ -7,11 +7,12 @@ package ru.ifmo.cs.bcomp.ui.components;
 import ru.ifmo.cs.bcomp.*;
 
 import ru.ifmo.cs.bcomp.ui.GUI;
+import ru.ifmo.cs.bcomp.ui.io.*;
 import ru.ifmo.cs.components.DataDestination;
 
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
 import java.util.EnumMap;
 
 
@@ -25,9 +26,140 @@ import static ru.ifmo.cs.bcomp.ui.components.BusNames.*;
 public class BasicView extends BCompPanel {
 	private final CPU cpu;
 	private final RunningCycleView cycleview;
-
 	private final ALUView alu;
 	private final CommutView commutView;
+	private IOCtrl[] ioctrls;
+	private FirstIO firstIO;
+	private SecondIO secondIO;
+	private TextPrinter textPrinter = null;
+	private Ticker ticker = null;
+	private SevenSegmentDisplay ssd = null;
+	private Keyboard kbd = null;
+	private Numpad numpad = null;
+	private ThirdIO thirdIO;
+	private JToggleButton[] ioButtons = new JToggleButton[9];
+	private ItemListener[] actionListeners = new ItemListener[]{new ItemListener() {
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			switch (e.getStateChange()){
+				case ItemEvent.SELECTED:
+					if (firstIO == null) {
+						firstIO = new FirstIO(ioctrls[1]);
+						activateAndAddListener(firstIO,0);
+					}else
+					 firstIO.activate();
+					break;
+				case ItemEvent.DESELECTED:
+					firstIO.getFrame().setVisible(false);
+			}
+		}
+	}, new ItemListener() {
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			switch (e.getStateChange()){
+				case ItemEvent.SELECTED:
+					if (secondIO == null) {
+						secondIO = new SecondIO(ioctrls[2], cmanager);
+						activateAndAddListener(secondIO,1);
+					} else
+					 secondIO.activate();
+					break;
+				case ItemEvent.DESELECTED:
+					secondIO.getFrame().setVisible(false);
+			}
+		}
+	}, new ItemListener() {
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			switch (e.getStateChange()){
+				case ItemEvent.SELECTED:
+					if (thirdIO == null) {
+						thirdIO = new ThirdIO(ioctrls[3]);
+						activateAndAddListener(thirdIO,2);
+					} else
+					thirdIO.activate();break;
+				case ItemEvent.DESELECTED:
+					thirdIO.getFrame().setVisible(false);
+			}
+		}
+	}, null,
+			new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					switch (e.getStateChange()){
+						case ItemEvent.SELECTED:
+							if (textPrinter == null) {
+								textPrinter = new TextPrinter(ioctrls[5]);
+								activateAndAddListener(textPrinter,4);
+							} else
+							textPrinter.activate();break;
+						case ItemEvent.DESELECTED:
+							textPrinter.getFrame().setVisible(false);
+					}
+				}
+			},
+			new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					switch (e.getStateChange()){
+						case ItemEvent.SELECTED:
+							if (ticker == null) {
+								ticker = new Ticker(ioctrls[6]);
+								activateAndAddListener(ticker,5);
+							} else
+							ticker.activate();break;
+						case ItemEvent.DESELECTED:
+							ticker.getFrame().setVisible(false);
+					}
+				}
+			},
+			new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					switch (e.getStateChange()){
+						case ItemEvent.SELECTED:
+							if (ssd == null) {
+								ssd = new SevenSegmentDisplay(ioctrls[7]);
+								activateAndAddListener(ssd,6);
+							}else
+							ssd.activate();break;
+						case ItemEvent.DESELECTED:
+							ssd.getFrame().setVisible(false);
+					}
+				}
+			},
+			new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					switch (e.getStateChange()){
+						case ItemEvent.SELECTED:
+							if (kbd == null) {
+								kbd = new Keyboard(ioctrls[8]);
+								activateAndAddListener(kbd,7);
+							}else
+							kbd.activate();break;
+						case ItemEvent.DESELECTED:
+							kbd.getFrame().setVisible(false);
+					}
+				}
+			},
+			new ItemListener() {
+
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					switch (e.getStateChange()){
+						case ItemEvent.SELECTED:
+							if (numpad == null) {
+								numpad = new Numpad(ioctrls[9]);
+								activateAndAddListener(numpad,8);
+							}else
+							numpad.activate();break;
+						case ItemEvent.DESELECTED:
+							numpad.getFrame().setVisible(false);
+					}
+				}
+			}
+	};
 
 	public BasicView(GUI gui) {
 
@@ -36,7 +168,7 @@ public class BasicView extends BCompPanel {
 						new RegisterProperties(Reg.AR, REG_ACCUM_X_BV, REG_ADDR_Y_BV, false, false,
 								new GridBagConstraints() {{
 									fill = GridBagConstraints.NONE;
-									gridy = 4;
+									gridy = 5;
 									gridx = 5;
 									weightx = 0;
 									weighty = 0;
@@ -49,7 +181,7 @@ public class BasicView extends BCompPanel {
 
 								new GridBagConstraints() {{
 									fill = GridBagConstraints.NONE;
-									gridy = 0;
+									gridy = 1;
 									gridx = 4;
 									weightx = 0.5;
 									weighty = 0.5;
@@ -61,7 +193,7 @@ public class BasicView extends BCompPanel {
 						new RegisterProperties(Reg.IP, REG_IP_X_BV, REG_IP_Y_BV, false, false,
 								new GridBagConstraints() {{
 									fill = GridBagConstraints.NONE;
-									gridy = 2;
+									gridy = 3;
 									gridx = 4;
 									weightx = 0.5;
 									weighty = 0.5;
@@ -72,7 +204,7 @@ public class BasicView extends BCompPanel {
 						new RegisterProperties(Reg.CR, REG_INSTR_X_BV, REG_ADDR_Y_BV, false, false,
 								new GridBagConstraints() {{
 									fill = GridBagConstraints.NONE;
-									gridy = 1;
+									gridy = 2;
 									gridx = 4;
 									weightx = 0.5;
 									weighty = 0.5;
@@ -82,7 +214,7 @@ public class BasicView extends BCompPanel {
 						new RegisterProperties(Reg.AC, REG_ACCUM_X_BV, REG_ACCUM_Y_BV, false, true,
 								new GridBagConstraints() {{
 									fill = GridBagConstraints.NONE;
-									gridy = 0;
+									gridy = 1;
 									gridx = 3;
 									weighty = 0.5;
 									weightx = 0.5;
@@ -91,26 +223,26 @@ public class BasicView extends BCompPanel {
 						new RegisterProperties(Reg.SP, REG_ACCUM_X_BV, 0, false, false,
 								new GridBagConstraints() {{
 									fill = GridBagConstraints.NONE;
-									gridy = 3;
+									gridy = 4;
 									gridx = 4;
 									weighty = 0.5;
 									insets = new Insets(0, 0, 80, 33);
 								}}),
 						new RegisterProperties(Reg.BR, 0, 0, false, true,
 								new GridBagConstraints() {{
-									gridy = 1;
+									gridy = 2;
 									gridx = 3;
 									insets = new Insets(0, 3, 0, 40);
 								}}),
 						new RegisterProperties(Reg.PS, 0, 0, false, true,
 								new GridBagConstraints() {{
-									gridy = 2;
+									gridy = 3;
 									gridx = 3;
 									insets = new Insets(0, 3, 0, 40);
 								}}),
 						new RegisterProperties(Reg.IR, 0, 0, false, true,
 								new GridBagConstraints() {{
-									gridy = 3;
+									gridy = 4;
 									gridx = 3;
 									insets = new Insets(0, 3, 80, 40);
 								}})
@@ -140,8 +272,9 @@ public class BasicView extends BCompPanel {
 					put(CU, new BusView(TYPE));
 				}}
 		);
-		add(regPanel, BorderLayout.CENTER);
 		cpu = gui.getCPU();
+		ioctrls = gui.getIOCtrls();
+		add(regPanel, BorderLayout.CENTER);
 
 		setSignalListeners(new SignalListener[]{
 				new SignalListener(new DataDestination() {
@@ -154,7 +287,7 @@ public class BasicView extends BCompPanel {
 
 		GridBagConstraints constraintsALU = new GridBagConstraints() {{
 			gridx = 3;
-			gridy = 4;
+			gridy = 5;
 			gridwidth = 2;
 			weightx = 0.5;
 			weighty = 0.5;
@@ -167,7 +300,7 @@ public class BasicView extends BCompPanel {
 
 		GridBagConstraints constraintsComm = new GridBagConstraints() {{
 			gridx = 3;
-			gridy = 4;
+			gridy = 5;
 			gridwidth = 2;
 			weightx = 0.5;
 			weighty = 0.5;
@@ -181,7 +314,7 @@ public class BasicView extends BCompPanel {
 
 		GridBagConstraints constraintsCycle = new GridBagConstraints() {{
 			gridx = 4;
-			gridy = 3;
+			gridy = 4;
 			gridheight = 2;
 			anchor = GridBagConstraints.CENTER;
 			insets = new Insets(0, 90, 0, 0);
@@ -192,7 +325,7 @@ public class BasicView extends BCompPanel {
 
 		GridBagConstraints constraintMem = new GridBagConstraints() {{
 			gridx = 5;
-			gridy = 0;
+			gridy = 1;
 			gridheight = 5;
 			weighty = 0;
 			anchor = GridBagConstraints.WEST;
@@ -203,7 +336,7 @@ public class BasicView extends BCompPanel {
 
 		GridBagConstraints constraintsF = new GridBagConstraints() {{
 			fill = GridBagConstraints.NONE;
-			gridy = 4;
+			gridy = 5;
 			gridx = 3;
 			gridwidth = 2;
 			weightx = 0.5;
@@ -221,6 +354,30 @@ public class BasicView extends BCompPanel {
 		constraintsF.insets = new Insets(101 + CELL_HEIGHT, 80, 0, 0);
 		regPanel.add(cmanager.getFlagView(2), constraintsF);
 
+		GridBagConstraints constraintsButton = new GridBagConstraints() {{
+			fill = GridBagConstraints.NONE;
+			gridy = 0;
+			gridx = 0;
+			insets = new Insets(0, 0, 50, 0);
+		}};
+		GridBagConstraints constraintsButtonPanel = new GridBagConstraints() {{
+			fill = GridBagConstraints.NONE;
+			gridy = 0;
+			gridx = 0;
+			gridheight = 2;
+			gridwidth = 5;
+			insets = new Insets(0, 0, 0, 160);
+		}};
+		RegPanel buttonsPanel = new RegPanel();
+		for (int i = 1; i < 10; i++) {
+			ioButtons[i-1] = new JToggleButton(cmanager.getRes().getString("DEV-" + i));
+			ioButtons[i-1].setFont(FONT_COURIER_PLAIN_12);
+			ioButtons[i-1].setFocusable(false);
+			ioButtons[i-1].addItemListener(actionListeners[i-1]);
+			buttonsPanel.add(ioButtons[i-1], constraintsButton);
+			constraintsButton.gridx++;
+		}
+		regPanel.add(buttonsPanel, constraintsButtonPanel);
 
 		addComponentListener(new ComponentAdapter() {
 			@Override
@@ -456,5 +613,16 @@ public class BasicView extends BCompPanel {
 					break;
 			}
 		}
+	}
+
+	private  void activateAndAddListener(IODevice ioDevice, int i){
+		ioDevice.activate();
+		ioDevice.getFrame().addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				super.windowClosing(e);
+				ioButtons[i].setSelected(false);
+			}
+		});
 	}
 }

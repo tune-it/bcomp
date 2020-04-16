@@ -38,7 +38,7 @@ public class Numpad extends IODevice {
 	private final NumButton[] buttons = new NumButton[16];
 
 	public Numpad(final IOCtrl ioctrl) {
-		super(ioctrl, "Цифровая клавиатура");
+		super(ioctrl, "numpad");
 	}
 
 	@Override

@@ -16,10 +16,12 @@ import ru.ifmo.cs.bcomp.*;
 import ru.ifmo.cs.bcomp.ui.GUI;
 
 import static ru.ifmo.cs.bcomp.ControlSignal.*;
+import static ru.ifmo.cs.bcomp.Reg.*;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 
 
 import ru.ifmo.cs.components.DataDestination;
+import ru.ifmo.cs.components.Utils;
 
 /**
  *
@@ -239,7 +241,13 @@ public class ComponentManager {
 		this.gui = gui;
 		bcomp = gui.getBasicComp();
 		cpu = gui.getCPU();
-		input = new InputRegisterView(this, cpu.getRegister(Reg.IR));
+		input = new InputRegisterView(this, cpu.getRegister(IR)){
+			@Override
+			protected void setValue(String val) {
+				super.setValue(val);
+				getRegisterView(IR).setValue(Utils.toBinary(cpu.getRegister(IR).getValue(),(int)input.getRegWidth()));
+			}
+		};
 		ioctrls = gui.getIOCtrls();
 
 		cpu.setTickStartListener(new Runnable() {
@@ -292,9 +300,9 @@ public class ComponentManager {
 		listeners = new SignalListener[]{
 				new SignalListener(regs.get(Reg.AR), WRAR),
 				new SignalListener(regs.get(Reg.DR), WRDR, LOAD),
-				new SignalListener(regs.get(Reg.CR), WRCR),
+				new SignalListener(regs.get(Reg.CR), WRCR, IO),
 				new SignalListener(regs.get(Reg.IP), WRIP),
-				new SignalListener(regs.get(Reg.AC), WRAC),
+				new SignalListener(regs.get(Reg.AC), WRAC, IO),
 				new SignalListener(regs.get(Reg.PS), RDPS, WRPS, SETC, SETV, STNZ, SET_EI, HALT, SET_PROGRAM),
 				new SignalListener(regs.get(Reg.SP), WRSP),
 				new SignalListener(regs.get(Reg.BR), WRBR)
@@ -489,10 +497,6 @@ public class ComponentManager {
 
 	public MemoryView getMem() {
 		return mem;
-	}
-
-	public RegisterView getInput() {
-		return input;
 	}
 
 	public ResourceBundle getRes() {

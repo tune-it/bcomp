@@ -28,7 +28,6 @@ public abstract class BCompPanel extends ActivateblePanel {
 
 	private SignalListener[] listeners;
 	protected RegPanel regPanel;
-	FlagView[] flags;
 
 
 	public BCompPanel(ComponentManager cmanager, RegisterProperties[] regProps, Map<BusNames, BusView> baseMap) {
@@ -88,11 +87,6 @@ public abstract class BCompPanel extends ActivateblePanel {
 
 	@Override
 	public void panelActivate() {
-//		for (RegisterProperties prop : regProps) {
-//			RegisterView reg = cmanager.getRegisterView(prop.reg);
-//			reg.setProperties(prop.x, prop.y, prop.hex);
-//			add(reg);
-//		}
 
 		cmanager.panelActivate(this);
 

@@ -47,7 +47,7 @@ public class AssemblerView extends BCompPanel implements ActionListener {
 		JScrollPane scroll = new JScrollPane(text);
 		pane.add(scroll,BorderLayout.CENTER);
 
-		JButton button = new JButton("Компилировать");
+		JButton button = new JButton(cmanager.getRes().getString("compile"));
 		button.setForeground(COLOR_TEXT);
 		button.setFont(FONT_COURIER_PLAIN_12);
 		button.setFocusable(false);
@@ -80,11 +80,11 @@ public class AssemblerView extends BCompPanel implements ActionListener {
 
 	@Override
 	public String getPanelName() {
-		return "Ассемблер";
+		return cmanager.getRes().getString("assembler");
 	}
 
 	private void showError(String msg) {
-		JOptionPane.showMessageDialog(gui, msg, "Ошибка", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(gui, msg, cmanager.getRes().getString("error"), JOptionPane.ERROR_MESSAGE);
 	}
 
     @Override
@@ -95,7 +95,7 @@ public class AssemblerView extends BCompPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (cpu.isLocked()) {
-            showError("Для компиляции остановите выполняющуюся программу");
+            showError(cmanager.getRes().getString("stopRunning"));
             return;
         }
 

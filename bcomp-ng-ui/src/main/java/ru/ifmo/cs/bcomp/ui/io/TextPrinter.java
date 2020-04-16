@@ -28,7 +28,7 @@ public class TextPrinter extends OutputDevice {
 	private String charset = null;
 
 	public TextPrinter(IOCtrl ioctrl) {
-		super(ioctrl, "Тектовый принтер");
+		super(ioctrl, "printer");
 	}
 
 	@Override
