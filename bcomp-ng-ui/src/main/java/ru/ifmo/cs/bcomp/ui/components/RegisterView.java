@@ -52,7 +52,7 @@ public class RegisterView extends BCompComponent implements DataDestination {
 		setValue();
 		if (!isLeft) {
 			title.setBounds(1, 1, REG_TITLE_WIDTH, CELL_HEIGHT + 1);
-			value.setBounds(REG_TITLE_WIDTH + 2, 1, width - REG_TITLE_WIDTH - 3, CELL_HEIGHT + 1);
+			value.setBounds(REG_TITLE_WIDTH, 1, width - REG_TITLE_WIDTH - 1, CELL_HEIGHT + 1);
 		} else {
 			title.setBounds(width - 1 - REG_TITLE_WIDTH, 1, REG_TITLE_WIDTH, CELL_HEIGHT + 1);
 			value.setBounds(1, 1, width - REG_TITLE_WIDTH - 3, CELL_HEIGHT + 1);

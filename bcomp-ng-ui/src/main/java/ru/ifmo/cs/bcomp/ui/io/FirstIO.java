@@ -23,8 +23,9 @@ public class FirstIO extends IODevice {
         panel.setPreferredSize(new Dimension(500, 150));
         panel.setBackground(COLOR_BACKGROUND);
         output = new RegisterView(ioctrl.getRegisters()[0]);
-        output.setProperties(200, 30, false, false);
+        output.setProperties(0, 0, false, false);
         output.setPreferredSize(output.getSize());
+        output.setMinimumSize(output.getSize());
         output.setTitle("ВУ");
         GridBagConstraints constraints = new GridBagConstraints() {{
             gridy = 0;

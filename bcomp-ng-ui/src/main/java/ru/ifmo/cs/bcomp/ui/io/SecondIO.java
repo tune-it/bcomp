@@ -25,8 +25,9 @@ public class SecondIO extends IODevice {
         panel.setPreferredSize(new Dimension(500, 150));
         panel.setBackground(COLOR_BACKGROUND);
         input = new InputRegisterView(componentManager, ioctrl.getRegisters()[0]);
-        input.setProperties(200, 30, false, false);
+        input.setProperties(0, 0, false, false);
         input.setPreferredSize(input.getSize());
+        input.setMinimumSize(input.getSize());
         input.setTitle("ВУ");
         JButton button = new JButton(getRes().getString("ready"));
         button.setFont(FONT_COURIER_PLAIN_12);

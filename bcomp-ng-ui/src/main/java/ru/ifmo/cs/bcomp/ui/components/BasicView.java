@@ -238,7 +238,7 @@ public class BasicView extends BCompPanel {
 								new GridBagConstraints() {{
 									gridy = 3;
 									gridx = 3;
-									insets = new Insets(0, 3, 0, 40);
+									insets = new Insets(0, 3, 0, 40 - REG_16_WIDTH + REG_9_WIDTH);
 								}}),
 						new RegisterProperties(Reg.IR, 0, 0, false, true,
 								new GridBagConstraints() {{
