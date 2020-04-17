@@ -176,6 +176,8 @@ public class CPU {
 		iobuses.put(IOBuses.IOAddr, ioaddr);
 		CtrlBus ioctrl = new CtrlBus(IO_WIDTH);
 		iobuses.put(IOBuses.IOCtrl, ioctrl);
+		// Update IRQ flag
+		ValveAnd irqrq = new ValveAnd(ps, EI.ordinal(), irqreq, new PartWriter(ps, 1, IRQ.ordinal()));
 
 		// Execute microcommand
 		Control clock1 = new Valve(mr, MR_WIDTH, 0, 0,
@@ -268,7 +270,7 @@ public class CPU {
 				newValveH(swout, AR_WIDTH, 0, WRSP, sp),
 				newValveH(swout, DATA_WIDTH, 0, WRAC, ac),
 				newValveH(swout, DATA_WIDTH, 0, WRBR, br),
-				newValveH(swout, PS_WIDTH, 0, WRPS, ps),
+				newValveH(swout, PS_WIDTH, 0, WRPS, new PartWriter(ps, 6, 0), irqrq),
 				newValveH(swout, AR_WIDTH, 0, WRAR, ar),
 				newValveH(mem, DATA_WIDTH, 0, LOAD, dr),
 				newValveH(dr, DATA_WIDTH, 0, STOR, mem),
@@ -300,7 +302,6 @@ public class CPU {
 		mp.setValue(labels.get(STOP) + 1);
 
 		// IO specific staff
-		ValveAnd irqrq = new ValveAnd(ps, EI.ordinal(), irqreq, new PartWriter(ps, 1, IRQ.ordinal()));
 		valves.put(SET_REQUEST_INTERRUPT, irqrq);
 		Control ei = new Control(1, 0, 0, new PartWriter(ps, 1, EI.ordinal()), irqrq);
 		valves.put(SET_EI, ei);
