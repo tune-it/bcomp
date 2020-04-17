@@ -11,9 +11,6 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.nio.charset.Charset;
 import java.util.EnumMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -23,15 +20,12 @@ import javax.swing.WindowConstants;
 import ru.ifmo.cs.bcomp.BasicComp;
 import ru.ifmo.cs.bcomp.CPU;
 import static ru.ifmo.cs.bcomp.ControlSignal.*;
-import ru.ifmo.cs.bcomp.ProgramBinary;
 import ru.ifmo.cs.bcomp.Reg;
 import static ru.ifmo.cs.bcomp.Reg.*;
 import static ru.ifmo.cs.bcomp.State.*;
 import ru.ifmo.cs.bcomp.IOCtrl;
 import ru.ifmo.cs.bcomp.IOCtrlBasic;
 import ru.ifmo.cs.bcomp.SignalListener;
-import ru.ifmo.cs.bcomp.assembler.AsmNg;
-import ru.ifmo.cs.bcomp.assembler.Program;
 import ru.ifmo.cs.bcomp.ui.io.Keyboard;
 import ru.ifmo.cs.bcomp.ui.io.Numpad;
 import ru.ifmo.cs.bcomp.ui.io.SevenSegmentDisplay;
@@ -204,30 +198,10 @@ public class Nightmare {
 		}
 	}
 
-	public Nightmare() throws Exception {
-		this.bcomp = new BasicComp();
+	public Nightmare(BasicComp bcomp) {
+		this.bcomp = bcomp;
 		this.cpu = bcomp.getCPU();
 		this.ioctrls = bcomp.getIOCtrls();
-
-		try {
-			String code = System.getProperty("code", null);
-			File file = new File(code);
-			FileInputStream fin = null;
-
-			try {
-				fin = new FileInputStream(file);
-				byte content[] = new byte[(int)file.length()];
-				fin.read(content);
-				code = new String(content, Charset.forName("UTF-8"));
-				AsmNg asm = new AsmNg(code);
-				Program pobj = asm.compile();
-				ProgramBinary prog = new ProgramBinary(pobj.getBinaryFormat());
-				bcomp.loadProgram(prog);
-			} finally {
-				if (fin != null)
-					fin.close();
-			}
-		} catch (Exception e) { }
 
 		for (Reg reg : Reg.values())
 			if ((reg != MP) && (reg != MR))

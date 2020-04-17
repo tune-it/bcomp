@@ -34,8 +34,8 @@ public class GUI extends JApplet {
 	private final CPU cpu;
 
 
-	public GUI() throws Exception {
-		this.bcomp = new BasicComp();
+	public GUI(BasicComp bcomp) {
+		this.bcomp = bcomp;
 		this.cpu = bcomp.getCPU();
 	}
 

@@ -29,8 +29,8 @@ public class CLI {
     private volatile boolean printMicroTitle = false;
     private volatile int sleep = 0;
 
-    public CLI() throws Exception {
-        bcomp = new BasicComp();
+    public CLI(BasicComp bcomp) {
+        this.bcomp = bcomp;
 
         cpu = bcomp.getCPU();
         cpu.addDestination(ControlSignal.STOR, new DataDestination() {
