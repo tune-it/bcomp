@@ -2,7 +2,7 @@ grammar BCompNG;
 
 prog
    : (line? EOL)*
-   ;
+   ; 
 
 line
    : comment
