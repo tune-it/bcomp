@@ -53,6 +53,11 @@ public class BCompApp {
 			}
 		} catch (Exception e) { }
 
+		try {
+			String debuglevel = System.getProperty("debuglevel", "0");
+			bcomp.getCPU().setDebugLevel(Long.parseLong(debuglevel));
+		} catch (Exception e) { }
+
 		if (app.equals("gui")) {
 			GUI gui = new GUI(bcomp);
 			gui.gui();

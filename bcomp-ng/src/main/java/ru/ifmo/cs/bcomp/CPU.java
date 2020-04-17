@@ -29,7 +29,6 @@ public class CPU {
 		NEWMP,
 	}
 
-
 	private static final long MR_WIDTH = TYPE.ordinal() + 1;
 	private static final long VR_WIDTH = MR_WIDTH - 17;
 	private static final long MP_WIDTH = 8;
@@ -55,6 +54,7 @@ public class CPU {
 	private final Bus newmp;
 	private final InputBus irqreq = new InputBus(1);
 	private volatile boolean clock = true;
+	private volatile long debuglevel = 0;
 
 	private final ReentrantLock tick = new ReentrantLock();
 	private final ReentrantLock lock = new ReentrantLock();
@@ -366,6 +366,9 @@ public class CPU {
 	}
 
 	public synchronized void step() {
+		if ((debuglevel & 1) == 1)
+			System.out.println(MCDecoder.getFormattedMC(this, getRegister(Reg.MP).getValue()));
+
 		for (Buses bus: Buses.values())
 			buses.get(bus).resetValue();
 		for (IOBuses bus: IOBuses.values())
@@ -488,6 +491,10 @@ public class CPU {
 	public boolean invertClockState() {
 		setClockState(!clock);
 		return clock;
+	}
+
+	public void setDebugLevel(long debuglevel) {
+		this.debuglevel = debuglevel;
 	}
 
 	public final int findLabel(String label) throws Exception {

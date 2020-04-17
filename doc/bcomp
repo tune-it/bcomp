@@ -5,7 +5,7 @@ MODE=gui
 JAR=bcomp-ng.jar
 ADD=""
 
-while getopts gcdnC:p: arg
+while getopts gcdnC:D:p: arg
 do
 	case "$arg" in
 	g)	MODE=gui;;
@@ -13,6 +13,7 @@ do
 	d)	MODE=decoder;;
 	n)	MODE=nightmare;;
 	C)	ADD="$ADD -Dcode=$OPTARG";;
+	D)	ADD="$ADD -Ddebuglevel=$OPTARG";;
 	p)	JAR="$OPTARG";;
 	*)
 		echo "Usage: bcomp [-g | -c | -d] [-b | -o | -e] [-p path]
