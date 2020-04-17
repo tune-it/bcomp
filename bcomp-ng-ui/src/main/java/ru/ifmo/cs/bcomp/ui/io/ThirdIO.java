@@ -56,12 +56,7 @@ public class ThirdIO extends IODevice {
                 buttonReady.setForeground(value == 1 ? COLOR_ACTIVE : COLOR_TEXT);
             }
         });
-        ioctrl.addDestination(ioctrl.getRegisters()[0], new DataDestination() {
-            @Override
-            public void setValue(long value) {
-                output.setValue(value);
-            }
-        });
+        ioctrl.addDestination(ioctrl.getRegisters()[0], output);
         constraints = new GridBagConstraints() {{
             gridy = 0;
             gridx = 3;

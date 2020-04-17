@@ -48,12 +48,7 @@ public class FirstIO extends IODevice {
             }
 
         });
-        ioctrl.addDestination(ioctrl.getRegisters()[0], new DataDestination() {
-            @Override
-            public void setValue(long value) {
-                output.setValue(value);
-            }
-        });
+        ioctrl.addDestination(ioctrl.getRegisters()[0], output);
         panel.add(output, constraints);
         constraints.gridy++;
         constraints.insets.top += 30;

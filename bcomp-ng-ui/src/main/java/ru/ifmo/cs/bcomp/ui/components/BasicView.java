@@ -366,7 +366,7 @@ public class BasicView extends BCompPanel {
 			gridx = 0;
 			gridheight = 2;
 			gridwidth = 5;
-			insets = new Insets(0, 0, 0, 160);
+			insets = new Insets(0, 0, 0, 50);
 		}};
 		RegPanel buttonsPanel = new RegPanel();
 		for (int i = 1; i < 10; i++) {
@@ -577,27 +577,27 @@ public class BasicView extends BCompPanel {
 					bus.calcBounds(cmanager.getMem().getY() < 35 ?
 							new int[][]{
 									{regPanelX + cmanager.getMem().getX() - 5, cmanager.getMem().getY() + 10},
-									{regPanelX + data.getX() + REG_16_WIDTH / 2 - 10, cmanager.getMem().getY() + 10},
-									{regPanelX + data.getX() + REG_16_WIDTH / 2 - 10, data.getY() - 13},
+									{regPanelX + data.getX() + 3 * REG_16_WIDTH / 4 - 10, cmanager.getMem().getY() + 10},
+									{regPanelX + data.getX() + 3 * REG_16_WIDTH / 4 - 10, data.getY() - 13},
 							}
 							: new int[][]{
 							{regPanelX + cmanager.getMem().getX() + MEM_WIDTH / 2 + 10, cmanager.getMem().getY() - 5},
 							{regPanelX + cmanager.getMem().getX() + MEM_WIDTH / 2 + 10, data.getY() - 65},
-							{regPanelX + data.getX() + REG_16_WIDTH / 2 - 10, data.getY() - 65},
-							{regPanelX + data.getX() + REG_16_WIDTH / 2 - 10, data.getY() - 13}
+							{regPanelX + data.getX() + 3 * REG_16_WIDTH / 4 - 10, data.getY() - 65},
+							{regPanelX + data.getX() + 3 * REG_16_WIDTH / 4 - 10, data.getY() - 13}
 					});
 					break;
 				case MEM_W:
 					bus.calcBounds(
 							cmanager.getMem().getY() < 35 ?
-									new int[][]{{regPanelX + data.getX() + REG_16_WIDTH / 2 + 10, data.getY() - 5},
-											{regPanelX + data.getX() + REG_16_WIDTH / 2 + 10, cmanager.getMem().getY() + 25},
+									new int[][]{{regPanelX + data.getX() + 3 * REG_16_WIDTH / 4 + 10, data.getY() - 5},
+											{regPanelX + data.getX() + 3 * REG_16_WIDTH / 4 + 10, cmanager.getMem().getY() + 25},
 											{regPanelX + cmanager.getMem().getX() - 13, cmanager.getMem().getY() + 25},
 									}
 									:
 									new int[][]{
-											{regPanelX + data.getX() + REG_16_WIDTH / 2 + 10, data.getY() - 5},
-											{regPanelX + data.getX() + REG_16_WIDTH / 2 + 10, data.getY() - 50},
+											{regPanelX + data.getX() + 3 * REG_16_WIDTH / 4 + 10, data.getY() - 5},
+											{regPanelX + data.getX() + 3 * REG_16_WIDTH / 4 + 10, data.getY() - 50},
 											{regPanelX + cmanager.getMem().getX() + MEM_WIDTH / 2 - 10, data.getY() - 50},
 											{regPanelX + cmanager.getMem().getX() + MEM_WIDTH / 2 - 10, cmanager.getMem().getY() - 13},
 									});
