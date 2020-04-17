@@ -26,9 +26,9 @@ public abstract class IOCtrl {
 
 		irqrqvalve = cpu.getIRQReqValve();
 
-		iodata = cpu.getIOBuses().get(CPU.IOBuses.IOData);
-		ioaddr = cpu.getIOBuses().get(CPU.IOBuses.IOAddr);
-		ioctrl = (CtrlBus)cpu.getIOBuses().get(CPU.IOBuses.IOCtrl);
+		iodata = cpu.getIOBuses().get(IOBuses.IOData);
+		ioaddr = cpu.getIOBuses().get(IOBuses.IOAddr);
+		ioctrl = (CtrlBus)cpu.getIOBuses().get(IOBuses.IOCtrl);
 		ioctrl.addDestination(
 			// Is set DI?
 			new Not(IOControlSignal.DI.ordinal(), new Valve(ioctrl, 1, IOControlSignal.EI.ordinal(), 0,

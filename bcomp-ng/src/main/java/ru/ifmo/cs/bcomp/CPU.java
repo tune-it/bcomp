@@ -29,12 +29,6 @@ public class CPU {
 		NEWMP,
 	}
 
-	public enum IOBuses {
-		IOData,
-		IOAddr,
-		IOCtrl,
-	}
-
 	private static final long MR_WIDTH = TYPE.ordinal() + 1;
 	private static final long VR_WIDTH = MR_WIDTH - 17;
 	private static final long MP_WIDTH = 8;
@@ -60,6 +54,7 @@ public class CPU {
 	private final Bus newmp;
 	private final InputBus irqreq = new InputBus(1);
 	private volatile boolean clock = true;
+	private volatile long debuglevel = 0;
 
 	private final ReentrantLock tick = new ReentrantLock();
 	private final ReentrantLock lock = new ReentrantLock();
@@ -176,6 +171,8 @@ public class CPU {
 		iobuses.put(IOBuses.IOAddr, ioaddr);
 		CtrlBus ioctrl = new CtrlBus(IO_WIDTH);
 		iobuses.put(IOBuses.IOCtrl, ioctrl);
+		// Update IRQ flag
+		ValveAnd irqrq = new ValveAnd(ps, EI.ordinal(), irqreq, new PartWriter(ps, 1, IRQ.ordinal()));
 
 		// Execute microcommand
 		Control clock1 = new Valve(mr, MR_WIDTH, 0, 0,
@@ -268,7 +265,7 @@ public class CPU {
 				newValveH(swout, AR_WIDTH, 0, WRSP, sp),
 				newValveH(swout, DATA_WIDTH, 0, WRAC, ac),
 				newValveH(swout, DATA_WIDTH, 0, WRBR, br),
-				newValveH(swout, PS_WIDTH, 0, WRPS, ps),
+				newValveH(swout, PS_WIDTH, 0, WRPS, new PartWriter(ps, 6, 0), irqrq),
 				newValveH(swout, AR_WIDTH, 0, WRAR, ar),
 				newValveH(mem, DATA_WIDTH, 0, LOAD, dr),
 				newValveH(dr, DATA_WIDTH, 0, STOR, mem),
@@ -300,7 +297,6 @@ public class CPU {
 		mp.setValue(labels.get(STOP) + 1);
 
 		// IO specific staff
-		ValveAnd irqrq = new ValveAnd(ps, EI.ordinal(), irqreq, new PartWriter(ps, 1, IRQ.ordinal()));
 		valves.put(SET_REQUEST_INTERRUPT, irqrq);
 		Control ei = new Control(1, 0, 0, new PartWriter(ps, 1, EI.ordinal()), irqrq);
 		valves.put(SET_EI, ei);
@@ -370,6 +366,9 @@ public class CPU {
 	}
 
 	public synchronized void step() {
+		if ((debuglevel & 1) == 1)
+			System.out.println(MCDecoder.getFormattedMC(this, getRegister(Reg.MP).getValue()));
+
 		for (Buses bus: Buses.values())
 			buses.get(bus).resetValue();
 		for (IOBuses bus: IOBuses.values())
@@ -492,6 +491,10 @@ public class CPU {
 	public boolean invertClockState() {
 		setClockState(!clock);
 		return clock;
+	}
+
+	public void setDebugLevel(long debuglevel) {
+		this.debuglevel = debuglevel;
 	}
 
 	public final int findLabel(String label) throws Exception {

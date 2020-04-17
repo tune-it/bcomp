@@ -9,6 +9,7 @@ import java.awt.ComponentOrientation;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -102,21 +103,23 @@ public class AssemblerView extends BCompPanel implements ActionListener {
         cmanager.saveDelay();
         boolean clock = cpu.getClockState();
         cpu.setClockState(true);
+        long starttime = System.currentTimeMillis();
+        AsmNg asm = new AsmNg(text.getText());
+        Program pobj = asm.compile();
+        long finishtime = System.currentTimeMillis();
+        String errors = new String();
+        String st = "Start compilation at "+new Date(starttime)+"\n";
+        String ft = "Finish compilation at "+new Date(finishtime)+"\n";
+        errors = st;
+        for (String err: asm.getErrors()) {
+            errors = errors + err + '\n';
+        }
+        errors = errors + ft;
+        errorarea.setText(errors);
+        if (pobj != null) {
+            gui.getBasicComp().loadProgram(new ProgramBinary(pobj.getBinaryFormat()));
+        }
 
-        //try {
-            AsmNg asm = new AsmNg(text.getText());
-            Program pobj = asm.compile();
-            String errors = new String();
-            for (String err: asm.getErrors()) {
-                errors = errors + err + '\n';
-            }
-            errorarea.setText(errors);
-            if (pobj != null) {
-                gui.getBasicComp().loadProgram(new ProgramBinary(pobj.getBinaryFormat()));
-            }
-        //} catch (Exception ex) {
-        //    showError(ex.getMessage());
-        //}
         cpu.setClockState(clock);
         cmanager.clearActiveSignals();
         cmanager.restoreDelay();

@@ -18,8 +18,8 @@ public class MicroCodeDecoder {
 	private final CPU cpu;
 	private final MicroCode mc;
 
-	public MicroCodeDecoder() throws Exception {
-		cpu = (new BasicComp().getCPU());
+	public MicroCodeDecoder(BasicComp bcomp) {
+		cpu = bcomp.getCPU();
 		mc = cpu.getMicroCodeSource();
 		cpu.stopCPU();
 	}

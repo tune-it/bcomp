@@ -32,7 +32,7 @@ public class AsmNg {
     public static void main(String[] args) throws Exception {
         AsmNg asmng = new AsmNg(
                 "ORG 020h\n"
-                + "IN 0x1\n"
+                + "IN \n"
                 + "ad: and ad\n"
                 + "ORG 030h\n"
                 + "    OR $ad\n"
@@ -87,7 +87,8 @@ public class AsmNg {
     }
 
     public AsmNg(String program) {
-        this(CharStreams.fromString(program));
+        //TODO fix grammar prog statement
+        this(CharStreams.fromString(program+"\n"));
     }
 
     public BCompNGParser getParser() {
