@@ -29,11 +29,6 @@ public class CPU {
 		NEWMP,
 	}
 
-	public enum IOBuses {
-		IOData,
-		IOAddr,
-		IOCtrl,
-	}
 
 	private static final long MR_WIDTH = TYPE.ordinal() + 1;
 	private static final long VR_WIDTH = MR_WIDTH - 17;
