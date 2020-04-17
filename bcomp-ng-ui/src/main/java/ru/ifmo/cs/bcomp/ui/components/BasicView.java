@@ -366,7 +366,7 @@ public class BasicView extends BCompPanel {
 			gridx = 0;
 			gridheight = 2;
 			gridwidth = 5;
-			insets = new Insets(0, 0, 0, 50);
+			insets = new Insets(30, 0, 0, 50);
 		}};
 		RegPanel buttonsPanel = new RegPanel();
 		for (int i = 1; i < 10; i++) {

@@ -73,7 +73,7 @@ public class DisplayStyles {
     // XXX: Need to rename and reorder all consts
     // Coordinates and dimentions
 
-    public static final int PANE_HEIGHT =560;
+    public static final int PANE_HEIGHT =580;
 
     // Memory cell height
     public static final int CELL_HEIGHT = 25;
