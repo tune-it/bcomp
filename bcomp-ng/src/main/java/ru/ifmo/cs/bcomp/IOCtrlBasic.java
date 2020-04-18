@@ -17,8 +17,9 @@ public class IOCtrlBasic extends IOCtrl {
 		INPUTOUTPUT
 	}
 
-	private final Register state = new Register(1);
 	private final Register dr = new Register(8);
+	private final Register state = new Register(1);
+	private final Register irqreg = new Register(3);
 	private final Register[] registers = {dr, state, irqreg};
 	private final DataDestination irqsc;
 	private final Control changeFlag;
@@ -26,8 +27,10 @@ public class IOCtrlBasic extends IOCtrl {
 	private final Control setIRQ;
 
 	public IOCtrlBasic(long addr, long irq, CPU cpu, TYPE type, DataDestination ... chainctrl) {
-		super(addr, 1, irq, cpu);
+		super(addr, 1, cpu);
 		cpu.addIRQReqInput(state);
+
+		irqreg.setValue(irq);
 
 		irqsc = new Valve(state, 1, 0, 0,
 			new Valve(irqreg, 3, 0, 0, ioaddr),
@@ -36,7 +39,7 @@ public class IOCtrlBasic extends IOCtrl {
 		);
 
 		Valve rdy = new Valve(Consts.consts[1], 1, 0, 0, new PartWriter(ioctrl, 1, IOControlSignal.RDY.ordinal()));
-		changeFlag = new Control(1, 0, 0, state);
+		changeFlag = new Control(1, 0, 0, state, cpu.getIRQReqValve());
 		Valve clearFlag = new Valve(Consts.consts[0], 1, 0, 0, changeFlag);
 		Valve r0;
 		checkRegister(
@@ -46,7 +49,7 @@ public class IOCtrlBasic extends IOCtrl {
 			new Valve(ioctrl, 8, 0, 1,
 				// Input - state into iodata 6th bit
 				new Valve(Consts.consts[1], 1, 0, IOControlSignal.IN.ordinal(),
-					new Valve(state, 1, 0, 0, new PartWriter(iodata, 1, 6)),
+					new Valve(state, 1, 0, 0, new PartWriter(iodata, 1, READYBIT)),
 					rdy
 				),
 				// Output - set IRQ
@@ -87,7 +90,6 @@ public class IOCtrlBasic extends IOCtrl {
 	@Override
 	public void setReady() {
 		changeFlag.setValue(1);
-		super.setReady();
 	}
 
 	@Override

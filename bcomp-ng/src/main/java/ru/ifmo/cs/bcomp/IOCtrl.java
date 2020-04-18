@@ -11,18 +11,17 @@ import ru.ifmo.cs.components.*;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public abstract class IOCtrl {
+	public final int READYBIT = 6;
+
 	final Bus iodata;
 	final Bus ioaddr;
 	final CtrlBus ioctrl;
-	final Register irqreg = new Register(3);
 	private final Decoder chkregister;
 	private final Control irqrqvalve;
 
-	public IOCtrl(long addr, long width, long irq, CPU cpu) {
+	public IOCtrl(long addr, long width, CPU cpu) {
 		Register devaddr = new Register(8 - width);
 		devaddr.setValue(addr >> width);
-
-		irqreg.setValue(irq);
 
 		irqrqvalve = cpu.getIRQReqValve();
 
@@ -50,7 +49,7 @@ public abstract class IOCtrl {
 		);
 	}
 
-	public void setReady() {
+	public void updateStateIRQ() {
 		irqrqvalve.setValue(1);
 	}
 
@@ -62,14 +61,7 @@ public abstract class IOCtrl {
 	public abstract DataDestination getIRQSC();
 	public abstract void addDestination(Register reg, DataDestination ... dsts);
 	public abstract boolean isReady();
+	public abstract void setReady();
 	public abstract long getData();
 	public abstract void setData(long value);
-
-	void setIRQ(long irq) {
-		irqreg.setValue(irq);
-	}
-
-	public long getIRQ() {
-		return irqreg.getValue();
-	}
 }
