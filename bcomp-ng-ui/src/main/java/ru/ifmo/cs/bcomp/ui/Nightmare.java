@@ -9,8 +9,10 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Collections;
 import java.util.EnumMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -24,6 +26,7 @@ import ru.ifmo.cs.bcomp.Reg;
 import static ru.ifmo.cs.bcomp.Reg.*;
 import static ru.ifmo.cs.bcomp.State.*;
 import ru.ifmo.cs.bcomp.IOCtrl;
+import ru.ifmo.cs.bcomp.IOCtrlAdv;
 import ru.ifmo.cs.bcomp.IOCtrlBasic;
 import ru.ifmo.cs.bcomp.SignalListener;
 import ru.ifmo.cs.bcomp.ui.io.Keyboard;
@@ -56,6 +59,7 @@ public class Nightmare {
 	private BasicIOView io1 = null;
 	private BasicIOView io2 = null;
 	private BasicIOView io3 = null;
+	private AdvIOView io4 = null;
 	private TextPrinter textPrinter = null;
 	private Ticker ticker = null;
 	private SevenSegmentDisplay ssd = null;
@@ -86,6 +90,7 @@ public class Nightmare {
 	}
 
 	private class RegisterView extends JPanel implements DataDestination {
+		private final JLabel label;
 		private final Register reg;
 		private final BitView[] bits;
 
@@ -93,7 +98,7 @@ public class Nightmare {
 			super(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 
 			this.reg = reg;
-			JLabel label = new JLabel(name);
+			label = new JLabel(name);
 			label.setFont(LABEL_FONT);
 			add(label);
 
@@ -127,9 +132,9 @@ public class Nightmare {
 			flag = new RegisterView("SR", ioctrl.getRegisters()[1]);
 			irq = new RegisterView("IRQ", ioctrl.getRegisters()[2]);
 
-			ioctrl.addDestination(ioctrl.getRegisters()[0], data);
-			ioctrl.addDestination(ioctrl.getRegisters()[1], flag);
-			ioctrl.addDestination(ioctrl.getRegisters()[2], irq);
+			ioctrl.addDestination(0, data);
+			ioctrl.addDestination(1, flag);
+			ioctrl.addDestination(2, irq);
 
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 			panel.add(irq);
@@ -190,6 +195,91 @@ public class Nightmare {
 
 		private void invertBit(int startbit) {
 			data.invertBit(startbit);
+		}
+
+		private void activate() {
+			frame.setVisible(true);
+			frame.requestFocus();
+		}
+	}
+
+	private class AdvIOView {
+		private final String REGNAMES[] = {"DR#0", "DR#1", "State", "Mgmt"};
+		private final IOCtrlAdv ioctrl;
+		private final JFrame frame;
+		private final RegisterView regview[];
+		private final int COUNT;
+		private volatile int active = 0;
+
+		private AdvIOView(IOCtrl ioctrls[], int number) {
+			ioctrl = (IOCtrlAdv)ioctrls[number];
+
+			Register registers[] = ioctrl.getRegisters();
+			regview = new RegisterView[COUNT = registers.length];
+
+			JPanel panel = new JPanel(new GridLayout(COUNT, 1));
+
+			for (int i = 0; i < COUNT; i++) {
+				regview[i] = new RegisterView(REGNAMES[i], registers[i]);
+				regview[i].label.setForeground(i == active ? LED_ON : LED_OFF);
+				panel.add(regview[i]);
+				ioctrl.addDestination(i, regview[i]);
+			}
+
+			frame = new JFrame("Контроллер ВУ" + number);
+			frame.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+			frame.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+			frame.add(panel);
+			frame.pack();
+
+			frame.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+					switch (e.getKeyCode()) {
+					case KeyEvent.VK_TAB:
+						regview[active].label.setForeground(LED_OFF);
+						regview[active = (active + (e.isShiftDown() ? COUNT - 1 : 1)) % COUNT].label.setForeground(LED_ON);
+						break;
+
+					case KeyEvent.VK_0:
+						invertBit(0);
+						break;
+
+					case KeyEvent.VK_1:
+						invertBit(1);
+						break;
+
+					case KeyEvent.VK_2:
+						invertBit(2);
+						break;
+
+					case KeyEvent.VK_3:
+						invertBit(3);
+						break;
+
+					case KeyEvent.VK_4:
+						invertBit(4);
+						break;
+
+					case KeyEvent.VK_5:
+						invertBit(5);
+						break;
+
+					case KeyEvent.VK_6:
+						invertBit(6);
+						break;
+
+					case KeyEvent.VK_7:
+						invertBit(7);
+						break;
+					}
+				}
+			});
+		}
+
+		private void invertBit(int startbit) {
+			regview[active].invertBit(startbit);
+			ioctrl.updateStateIRQ();
 		}
 
 		private void activate() {
@@ -276,6 +366,13 @@ public class Nightmare {
 						if (io3 == null)
 							io3 = new BasicIOView(ioctrls, 3);
 						io3.activate();
+						break;
+
+					case KeyEvent.VK_4:
+					case KeyEvent.VK_F4:
+						if (io4 == null)
+							io4 = new AdvIOView(ioctrls, 4);
+						io4.activate();
 						break;
 
 					case KeyEvent.VK_5:
