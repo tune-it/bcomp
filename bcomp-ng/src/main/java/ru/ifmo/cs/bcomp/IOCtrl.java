@@ -59,9 +59,24 @@ public abstract class IOCtrl {
 
 	public abstract Register[] getRegisters();
 	public abstract DataDestination getIRQSC();
-	public abstract void addDestination(Register reg, DataDestination ... dsts);
+	public abstract void addDestination(int reg, DataDestination ... dsts);
 	public abstract boolean isReady();
 	public abstract void setReady();
 	public abstract long getData();
 	public abstract void setData(long value);
+
+	/**
+	 *
+	 * @deprecated
+	 */
+	public void addDestination(Register reg, DataDestination ... dsts) {
+		Register registers[] = getRegisters();
+
+		for (int i = 0; i < registers.length; i++)
+			if (registers[i] == reg) {
+				addDestination(i, dsts);
+				return;
+			}
+
+	}
 }

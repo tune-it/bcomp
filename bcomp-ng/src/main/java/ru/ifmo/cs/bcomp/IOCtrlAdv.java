@@ -78,12 +78,8 @@ public class IOCtrlAdv extends IOCtrl {
 	}
 
 	@Override
-	public void addDestination(Register reg, DataDestination ... dsts) {
-		for (int i = 0; i < registers.length; i++)
-			if (registers[i] == reg) {
-				writeToRegister[i].addDestination(dsts);
-				return;
-			}
+	public void addDestination(int reg, DataDestination ... dsts) {
+		writeToRegister[reg].addDestination(dsts);
 	}
 
 	@Override
