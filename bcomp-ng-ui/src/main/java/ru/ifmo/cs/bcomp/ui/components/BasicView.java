@@ -175,7 +175,7 @@ public class BasicView extends BCompPanel {
 									gridwidth = 1;
 									gridheight = 1;
 									anchor = GridBagConstraints.NORTHWEST;
-									insets = new Insets(156, 20, 0, 0);
+									insets = new Insets(156, 0, 0, 0);
 								}}),
 						new RegisterProperties(Reg.DR, REG_ACCUM_X_BV, REG_DATA_Y_BV, false, false,
 
@@ -574,7 +574,7 @@ public class BasicView extends BCompPanel {
 					});
 					break;
 				case MEM_R:
-					bus.calcBounds(cmanager.getMem().getY() < 35 ?
+					bus.calcBounds(cmanager.getMem().getY() < 45 ?
 							new int[][]{
 									{regPanelX + cmanager.getMem().getX() - 5, cmanager.getMem().getY() + 10},
 									{regPanelX + data.getX() + 3 * REG_16_WIDTH / 4 - 10, cmanager.getMem().getY() + 10},
@@ -589,7 +589,7 @@ public class BasicView extends BCompPanel {
 					break;
 				case MEM_W:
 					bus.calcBounds(
-							cmanager.getMem().getY() < 35 ?
+							cmanager.getMem().getY() < 45 ?
 									new int[][]{{regPanelX + data.getX() + 3 * REG_16_WIDTH / 4 + 10, data.getY() - 5},
 											{regPanelX + data.getX() + 3 * REG_16_WIDTH / 4 + 10, cmanager.getMem().getY() + 25},
 											{regPanelX + cmanager.getMem().getX() - 13, cmanager.getMem().getY() + 25},

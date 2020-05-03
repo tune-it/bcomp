@@ -1,11 +1,8 @@
 package ru.ifmo.cs.bcomp.ui.io;
 import ru.ifmo.cs.bcomp.IOCtrl;
 import ru.ifmo.cs.bcomp.ui.components.RegisterView;
-import ru.ifmo.cs.components.DataDestination;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 
@@ -19,7 +16,6 @@ public class ThirdIO extends IODevice {
     @Override
     protected Component getContent() {
         JPanel panel = new JPanel(new GridBagLayout());
-        JPanel input = new JPanel(new GridBagLayout());
         panel.setPreferredSize(new Dimension(500, 150));
         panel.setBackground(COLOR_BACKGROUND);
         output = new RegisterView(ioctrl.getRegisters()[0]);
@@ -27,37 +23,11 @@ public class ThirdIO extends IODevice {
         output.setPreferredSize(output.getSize());
         output.setMinimumSize(output.getSize());
         output.setTitle("ВУ");
-        JButton buttonReady = new JButton(getRes().getString("ready"));
-        buttonReady.setFont(FONT_COURIER_PLAIN_12);
-        buttonReady.setFocusable(false);
-        GridBagConstraints constraints = new GridBagConstraints() {{
-            gridy = 0;
-            gridx = 1;
-        }};
-
-        for (int i = 7; i >= 0; i--) {
-            JButton button = new JButton();
-            addListener(button, i);
-            button.setPreferredSize(new Dimension(14, 14));
-            button.setBackground(COLOR_VALUE);
-            input.add(button, constraints);
-            constraints.gridx++;
-        }
-
-        buttonReady.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ioctrl.setReady();
-            }
-        });
-        ioctrl.addDestination(ioctrl.getRegisters()[1], new DataDestination() {
-            @Override
-            public void setValue(long value) {
-                buttonReady.setForeground(value == 1 ? COLOR_ACTIVE : COLOR_TEXT);
-            }
-        });
-        ioctrl.addDestination(ioctrl.getRegisters()[0], output);
-        constraints = new GridBagConstraints() {{
+        ButtonPanel input = new ButtonPanel(output);
+        ButtonReady buttonReady = new ButtonReady(ioctrl,getRes().getString("ready"));
+        ioctrl.addDestination(1,buttonReady);
+        ioctrl.addDestination(0, output);
+       GridBagConstraints constraints = new GridBagConstraints() {{
             gridy = 0;
             gridx = 3;
             gridwidth = GridBagConstraints.REMAINDER;
@@ -72,16 +42,5 @@ public class ThirdIO extends IODevice {
         constraints.insets.left = 0;
         panel.add(buttonReady, constraints);
         return panel;
-    }
-
-    private void addListener(JButton button, int i) {
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ioctrl.getRegisters()[0].invertBit(i);
-                output.setValue();
-            }
-        });
-
     }
 }

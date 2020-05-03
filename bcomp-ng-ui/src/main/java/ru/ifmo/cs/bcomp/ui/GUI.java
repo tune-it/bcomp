@@ -13,14 +13,10 @@ import javax.swing.event.ChangeListener;
 import ru.ifmo.cs.bcomp.BasicComp;
 import ru.ifmo.cs.bcomp.CPU;
 import ru.ifmo.cs.bcomp.IOCtrl;
-
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.PANE_SIZE;
 import ru.ifmo.cs.bcomp.ui.components.*;
-
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 /**
  *
@@ -61,16 +57,6 @@ public class GUI extends JApplet {
 
 				activePanel = (ActivateblePanel)tabs.getSelectedComponent();
 				activePanel.panelActivate();
-			}
-		});
-
-		tabs.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				super.focusGained(e);
-				for (ActivateblePanel panel : panels) {
-					panel.redrawArrows();
-				}
 			}
 		});
 

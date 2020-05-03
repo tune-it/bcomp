@@ -1,12 +1,8 @@
 package ru.ifmo.cs.bcomp.ui.io;
 import ru.ifmo.cs.bcomp.IOCtrl;
 import ru.ifmo.cs.bcomp.ui.components.RegisterView;
-import ru.ifmo.cs.components.DataDestination;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 
@@ -32,23 +28,9 @@ public class FirstIO extends IODevice {
             gridx = 3;
             gridwidth = GridBagConstraints.REMAINDER;
         }};
-        JButton button = new JButton(getRes().getString("ready"));
-        button.setFont(FONT_COURIER_PLAIN_12);
-        button.setFocusable(false);
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ioctrl.setReady();
-            }
-        });
-        ioctrl.addDestination(ioctrl.getRegisters()[1], new DataDestination() {
-            @Override
-            public void setValue(long value) {
-                button.setForeground(value == 1 ? COLOR_ACTIVE : COLOR_TEXT);
-            }
-
-        });
-        ioctrl.addDestination(ioctrl.getRegisters()[0], output);
+        ButtonReady button = new ButtonReady(ioctrl,getRes().getString("ready"));
+        ioctrl.addDestination(1, button);
+        ioctrl.addDestination(0, output);
         panel.add(output, constraints);
         constraints.gridy++;
         constraints.insets.top += 30;
