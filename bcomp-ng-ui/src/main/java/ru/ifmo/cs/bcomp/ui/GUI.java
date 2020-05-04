@@ -40,7 +40,6 @@ public class GUI extends JApplet {
 	public void init() {
 		cmanager = new ComponentManager(this);
 
-
 		final ActivateblePanel[] panels = {
 			new BasicView(this),
                         new AssemblerView(this),
@@ -50,7 +49,7 @@ public class GUI extends JApplet {
 		tabs.addKeyListener(cmanager.getKeyListener());
 
 		tabs.addChangeListener(new ChangeListener() {
-
+			@Override
 			public void stateChanged(ChangeEvent e) {
 				if (activePanel != null)
 					activePanel.panelDeactivate();
@@ -86,6 +85,8 @@ public class GUI extends JApplet {
 	}
 
 	public void gui() throws Exception {
+		bcomp.startTimer();
+
 		JFrame frame = new JFrame("БЭВМ");
 
 			frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
