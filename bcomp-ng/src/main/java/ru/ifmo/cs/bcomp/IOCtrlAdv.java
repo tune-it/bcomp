@@ -23,13 +23,13 @@ public class IOCtrlAdv extends IOCtrl {
 	private final Control writeToRegister[] = new Control[registers.length];
 	private final DataDestination irqsc;
 
-	public IOCtrlAdv(long addr, long irq, CPU cpu, DataDestination ... chainctrl) {
+	public IOCtrlAdv(long addr, CPU cpu, DataDestination ... chainctrl) {
 		super(addr, 2, cpu);
-		cpu.addIRQReqInput(new InputBus(1, READYBIT, registers[STATE]));
 
-		registers[CONTROL].setValue(irq);
+		And reqirq = new And(registers[STATE], READYBIT, registers[CONTROL], 3);
+		cpu.addIRQReqInput(reqirq);
 
-		irqsc = new Valve(registers[STATE], 1, READYBIT, 0,
+		irqsc = new Valve(reqirq, 1, 0, 0,
 			new Valve(registers[CONTROL], 3, 0, 0, ioaddr),
 			new Valve(Consts.consts[1], 1, 0, 0, new PartWriter(ioctrl, 1, IOControlSignal.IRQ.ordinal())),
 			new Not(0, chainctrl)
@@ -54,6 +54,7 @@ public class IOCtrlAdv extends IOCtrl {
 			);
 
 		writeToRegister[STATE].addDestination(cpu.getIRQReqValve());
+		writeToRegister[CONTROL].addDestination(cpu.getIRQReqValve());
 	}
 
 	@Override

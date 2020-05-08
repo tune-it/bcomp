@@ -18,16 +18,16 @@ public class BasicComp {
 		cpu.startCPU();
 
 		cpu.addDestination(ControlSignal.IRQS,
-			(ioctrls[0] = new IOCtrlBasic(0x00, 0, cpu, IOCtrlBasic.TYPE.INPUTOUTPUT,
-				(ioctrls[1] = new IOCtrlBasic(0x02, 1, cpu, IOCtrlBasic.TYPE.OUTPUT,
-					(ioctrls[2] = new IOCtrlBasic(0x04, 2, cpu, IOCtrlBasic.TYPE.INPUT,
-						(ioctrls[3] = new IOCtrlBasic(0x06, 3, cpu, IOCtrlBasic.TYPE.INPUTOUTPUT,
-							(ioctrls[4] = new IOCtrlAdv(0x08, 4, cpu,
-								(ioctrls[5] = new IOCtrlBasic(0x0C, 1, cpu, IOCtrlBasic.TYPE.OUTPUT,
-									(ioctrls[6] = new IOCtrlBasic(0x10, 2, cpu, IOCtrlBasic.TYPE.OUTPUT,
-										(ioctrls[7] = new IOCtrlBasic(0x14, 3, cpu, IOCtrlBasic.TYPE.OUTPUT,
-											(ioctrls[8] = new IOCtrlBasic(0x18, 4, cpu, IOCtrlBasic.TYPE.INPUT,
-												(ioctrls[9] = new IOCtrlBasic(0x1C, 5, cpu, IOCtrlBasic.TYPE.INPUT)).getIRQSC()
+			(ioctrls[0] = new IOCtrlBasic(0x00, cpu, IOCtrlBasic.TYPE.INPUTOUTPUT,
+				(ioctrls[1] = new IOCtrlBasic(0x02, cpu, IOCtrlBasic.TYPE.OUTPUT,
+					(ioctrls[2] = new IOCtrlBasic(0x04, cpu, IOCtrlBasic.TYPE.INPUT,
+						(ioctrls[3] = new IOCtrlBasic(0x06, cpu, IOCtrlBasic.TYPE.INPUTOUTPUT,
+							(ioctrls[4] = new IOCtrlAdv(0x08, cpu,
+								(ioctrls[5] = new IOCtrlBasic(0x0C, cpu, IOCtrlBasic.TYPE.OUTPUT,
+									(ioctrls[6] = new IOCtrlBasic(0x10, cpu, IOCtrlBasic.TYPE.OUTPUT,
+										(ioctrls[7] = new IOCtrlBasic(0x14, cpu, IOCtrlBasic.TYPE.OUTPUT,
+											(ioctrls[8] = new IOCtrlBasic(0x18, cpu, IOCtrlBasic.TYPE.INPUT,
+												(ioctrls[9] = new IOCtrlBasic(0x1C, cpu, IOCtrlBasic.TYPE.INPUT)).getIRQSC()
 											)).getIRQSC()
 										)).getIRQSC()
 									)).getIRQSC()
