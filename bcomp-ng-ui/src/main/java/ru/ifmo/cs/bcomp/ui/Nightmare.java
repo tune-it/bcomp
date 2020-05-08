@@ -292,6 +292,7 @@ public class Nightmare {
 		this.bcomp = bcomp;
 		this.cpu = bcomp.getCPU();
 		this.ioctrls = bcomp.getIOCtrls();
+		bcomp.startTimer();
 
 		for (Reg reg : Reg.values())
 			if ((reg != MP) && (reg != MR))
