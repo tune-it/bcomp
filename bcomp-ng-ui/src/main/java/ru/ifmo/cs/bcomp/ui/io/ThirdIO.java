@@ -22,7 +22,7 @@ public class ThirdIO extends IODevice {
         output.setProperties(0, 0, false, false);
         output.setPreferredSize(output.getSize());
         output.setMinimumSize(output.getSize());
-        output.setTitle("ВУ");
+        output.setTitle("DR");
         ButtonPanel input = new ButtonPanel(output);
         ButtonReady buttonReady = new ButtonReady(ioctrl,getRes().getString("ready"));
         ioctrl.addDestination(1,buttonReady);
