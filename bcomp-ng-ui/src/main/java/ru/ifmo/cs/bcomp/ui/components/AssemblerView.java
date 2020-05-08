@@ -4,9 +4,7 @@
 
 package ru.ifmo.cs.bcomp.ui.components;
 
-import java.awt.BorderLayout;
-import java.awt.ComponentOrientation;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
@@ -125,10 +123,6 @@ public class AssemblerView extends BCompPanel implements ActionListener {
         cmanager.restoreDelay();
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-
-    }
 }
 
 
