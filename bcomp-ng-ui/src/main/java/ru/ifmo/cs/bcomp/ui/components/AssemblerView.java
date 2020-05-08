@@ -124,6 +124,11 @@ public class AssemblerView extends BCompPanel implements ActionListener {
         cmanager.clearActiveSignals();
         cmanager.restoreDelay();
     }
+
+    @Override
+    public void paintComponent(Graphics g) {
+
+    }
 }
 
 

@@ -22,7 +22,7 @@ public class FirstIO extends IODevice {
         output.setProperties(0, 0, false, false);
         output.setPreferredSize(output.getSize());
         output.setMinimumSize(output.getSize());
-        output.setTitle("ВУ");
+        output.setTitle("DR");
         GridBagConstraints constraints = new GridBagConstraints() {{
             gridy = 0;
             gridx = 3;

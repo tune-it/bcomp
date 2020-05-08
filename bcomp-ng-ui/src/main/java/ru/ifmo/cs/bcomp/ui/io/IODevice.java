@@ -33,7 +33,7 @@ public abstract class IODevice {
 			frame = new JFrame(title);
 			frame.add(getContent());
 			frame.pack();
-			frame.setMinimumSize(new Dimension(520,170));
+			frame.setMinimumSize(new Dimension(560,170));
 		}
 
 		frame.setVisible(true);

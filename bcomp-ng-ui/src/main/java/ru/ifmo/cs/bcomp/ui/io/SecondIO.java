@@ -24,7 +24,7 @@ public class SecondIO extends IODevice {
         input.setProperties(0, 0, false, false);
         input.setPreferredSize(input.getSize());
         input.setMinimumSize(input.getSize());
-        input.setTitle("ВУ");
+        input.setTitle("DR");
         ButtonReady button = new ButtonReady(ioctrl,getRes().getString("ready"));
         ioctrl.addDestination(1,button);
         GridBagConstraints constraints = new GridBagConstraints() {{
