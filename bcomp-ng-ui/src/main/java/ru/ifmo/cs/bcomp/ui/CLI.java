@@ -166,6 +166,7 @@ public class CLI {
                 + "mw[rite] value\t- Запись микрокоманды\n"
                 + "mr[ead]\t\t- Чтение микрокоманды\n"
                 + "md[ecode]\t- Декодировать текущую микрокоманду\n"
+                + "mdecodea[ll]\t- Декодировать всю микропрограмму\n"
 				+ "stat[e]\t\t- Вывести регистр состояния БЭВМ\n"
                 + "io\t\t- Вывод состояния всех ВУ\n"
                 + "io addr\t\t- Вывод состояния указанного ВУ\n"
@@ -301,8 +302,16 @@ public class CLI {
                     printMicroMemory(addr);
                     continue;
                 }
-                if (checkCmd(cmd, "mdecode")) {
+
+				if (checkCmd(cmd, "mdecode")) {
                     printMicroMemory(cpu.getRegValue(Reg.MP));
+                    continue;
+                }
+
+				if (checkCmd(cmd, "mdecodeall")) {
+			        for (i = 0; i < (1L << cpu.getMicroCode().getAddrWidth()); i++)
+						if (cpu.getMicroCode().getValue(i) != 0)
+							printMicroMemory(i);
                     continue;
                 }
 
