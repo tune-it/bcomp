@@ -262,7 +262,7 @@ BMI: ( B M I ) | ( B N S );
 BPL: ( B P L ) | ( B N C );
 BCS: ( B C S ) | ( B L O );
 BCC: ( B C C ) | ( B H I S );
-BVS: ( B V C ) ;
+BVS: ( B V S ) ;
 BVC: ( B V C ) ;
 BLT: ( B L T ) ;
 BGE: ( B G E ) ;

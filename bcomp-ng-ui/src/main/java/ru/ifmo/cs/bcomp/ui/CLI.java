@@ -185,7 +185,7 @@ public class CLI {
     public void cli() {
 		bcomp.startTimer();
 
-        println("Эмулятор Базовой ЭВМ. Версия r" + CLI.class.getPackage().getImplementationVersion() + "\n"
+        println("Эмулятор Базовой ЭВМ. Версия v1.45.05 r" + CLI.class.getPackage().getImplementationVersion() + "\n"
                 + "БЭВМ готова к работе.\n"
                 + "Используйте ? или help для получения справки");
 

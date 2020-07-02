@@ -31,7 +31,9 @@ public class AsmNg {
 
     public static void main(String[] args) throws Exception {
         AsmNg asmng = new AsmNg(
-                "ORG 020h\n"
+                "ORG FF\n"
+                + "START: LOOP START\n"
+                + "LD   #FF\n"
                 + "IN \n"
                 + "ad: and ad\n"
                 + "ORG 030h\n"
@@ -53,10 +55,14 @@ public class AsmNg {
         Program prog = asmng.compile();
         System.out.println("-------errors--------");
         System.out.println(asmng.getErrors());
-        System.out.println("-------words--------");
-        System.out.println(prog.toCompiledWords());
-        System.out.println("-------binary--------");
-        System.out.println(prog.toBinaryRepresentation());
+        if (prog != null) {
+            System.out.println("-------words--------");
+            System.out.println(prog.toCompiledWords());
+            System.out.println("-------binary--------");
+            System.out.println(prog.toBinaryRepresentation());
+        } else {
+            System.out.println("Program is not compiled");
+        }
     }
 
     private CodePointCharStream program;
@@ -119,7 +125,7 @@ public class AsmNg {
         RuleContext tree = getParser().prog();
         ParseTreeWalker walker = new ParseTreeWalker();
         BCompNGListener fp = new BCompNGBaseListener() {
-            private Integer address = BASE_ADDRESS;
+            private int address = BASE_ADDRESS;
 
             @Override
             public void enterLine(LineContext ctx) {
@@ -174,7 +180,7 @@ public class AsmNg {
                         if (nc == null) {
                             reportAndRecoverFromError(ae);return;
                         }
-                        Integer devnum = parseIntFromNumberContext(nc);
+                        Integer devnum = parseIntFromNumberContext(nc,parser);
                         if (devnum == null) {
                             reportAndRecoverFromError(ae);return;
                         }
@@ -192,7 +198,7 @@ public class AsmNg {
                 //parse direct numbers
                 NumberContext nc = ctx.number();
                 if (nc != null) {
-                    Integer i = parseIntFromNumberContext(nc);
+                    Integer i = parseIntFromNumberContext(nc,parser);
                     m.value = i;
                 }
                 //undefined number will assume to 0
@@ -220,7 +226,7 @@ public class AsmNg {
                 }
                 DupArgumentContext dactx = ctx.dupArgument();
                 if (dactx != null) {
-                    Integer count = parseIntFromNumberContext(dactx.count().number());
+                    Integer count = parseIntFromNumberContext(dactx.count().number(),parser);
                     if (count <= 1) {
                         //throw new RuntimeException("Internal error: count should be greater than 1");
                         reportError(new AssemblerException("DUP count should be greater than 1", parser, dactx));
@@ -229,7 +235,7 @@ public class AsmNg {
                     WordArgumentContext what = dactx.wordArgument();
                     int whatnum = 0;
                     if (!"?".equals(what.getText())) {
-                        whatnum = parseIntFromNumberContext(what.number());
+                        whatnum = parseIntFromNumberContext(what.number(),parser);
                     }
                     //System.out.println("DUP="+count+" of "+whatnum);
                     for (int mm = 1; mm < count; mm++) {
@@ -270,9 +276,8 @@ public class AsmNg {
             @Override
             public void exitOrgAddress(OrgAddressContext ctx) {
                 NumberContext n = ctx.address().number();
-                Integer i = parseIntFromNumberContext(n);
+                Integer i = parseIntFromNumberContext(n,parser);
                 address = i;
-                //System.out.println("ORG to address "+i);
             }
 
         };
@@ -350,7 +355,7 @@ public class AsmNg {
         return prog;
     }
 
-    private static Integer parseIntFromNumberContext(NumberContext nc) {
+    private static Integer parseIntFromNumberContext(NumberContext nc,Parser parser) {
         Integer number = null;
         String text = null;
         if (nc.DECIMAL() != null) {
@@ -358,6 +363,7 @@ public class AsmNg {
             text = text.replaceAll("0[dD]", "");
             //System.out.println(text);
             number = Integer.parseInt(text);
+            return number;
         }
         if (nc.HEX() != null) {
             text = nc.HEX().getText();
@@ -365,6 +371,10 @@ public class AsmNg {
             text = text.replaceAll("(0[xX])|[hH]", "");
             //System.out.println(text);
             number = Integer.parseInt(text, 16);
+            return number;
+        }
+        if (number==null) {
+            throw new AssemblerException("Could not recognize valid number while parsing "+nc.getText()+" operand",parser);
         }
         return number;
     }
@@ -560,7 +570,7 @@ public class AsmNg {
                 am.addressation = AddressingMode.AddressingType.DIRECT_ABSOLUTE;
                 DirectAbsoluteContext dactx = octx.directAbsolute();
                 if (dactx.address() != null) {
-                    am.number = parseIntFromNumberContext(dactx.address().number());
+                    am.number = parseIntFromNumberContext(dactx.address().number(),parser);
                 }
                 if (dactx.label() != null) {
                     am.reference = referenceByLabelContext(dactx.label());
@@ -580,7 +590,8 @@ public class AsmNg {
                 break;
             case BCompNGParser.RULE_displacementSP:
                 am.addressation = AddressingMode.AddressingType.DISPLACEMENT_SP;
-                am.number = parseIntFromNumberContext(octx.displacementSP().number());
+                Integer number_sp = parseIntFromNumberContext(octx.displacementSP().number(),parser);
+                am.number = number_sp;
                 break;
             case BCompNGParser.RULE_directRelative:
                 am.addressation = AddressingMode.AddressingType.DIRECT_RELATIVE;
@@ -588,8 +599,8 @@ public class AsmNg {
                 break;
             case BCompNGParser.RULE_directLoad:
                 am.addressation = AddressingMode.AddressingType.DIRECT_LOAD;
-                //TODO 
-                am.number = parseIntFromNumberContext(octx.directLoad().number());
+                Integer number_dl = parseIntFromNumberContext(octx.directLoad().number(),parser);
+                am.number = number_dl;
                 break;
             default:
                 throw new AssemblerException("Internal error: Wrong OperandContext while parsing addressing mode",parser);
