@@ -85,8 +85,6 @@ public class GUI extends JApplet {
 	}
 
 	public void gui() throws Exception {
-		bcomp.startTimer();
-
 		JFrame frame = new JFrame("БЭВМ v1.45.05");
 
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

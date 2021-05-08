@@ -58,6 +58,14 @@ public class BCompApp {
 			bcomp.getCPU().setDebugLevel(Long.parseLong(debuglevel));
 		} catch (Exception e) { }
 
+		if (app.equals("decoder")) {
+			MicroCodeDecoder mpdecoder = new MicroCodeDecoder(bcomp);
+			mpdecoder.decode();
+			return;
+		}
+
+		bcomp.startTimer();
+
 		if (app.equals("gui")) {
 			GUI gui = new GUI(bcomp);
 			gui.gui();
@@ -70,9 +78,11 @@ public class BCompApp {
 			return;
 		}
 
-		if (app.equals("decoder")) {
-			MicroCodeDecoder mpdecoder = new MicroCodeDecoder(bcomp);
-			mpdecoder.decode();
+		if (app.equals("dual")) {
+			CLI cli = new CLI(bcomp);
+			GUI gui = new GUI(bcomp);
+			gui.gui();
+			cli.cli();
 			return;
 		}
 
