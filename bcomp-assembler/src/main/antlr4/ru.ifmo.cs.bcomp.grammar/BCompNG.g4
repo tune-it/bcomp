@@ -220,18 +220,18 @@ DUP: ( D U P ) | ( D U P L I C A T E );
 * opcodes
 */
 
-AND: ( A N D ) | ( RI );
-OR: ( O R ) | ( RI RL RI );
+AND: ( A N D ) | ( RI );      //И
+OR: ( O R ) | ( RI RL RI );   //ИЛИ
 ADD: ( A D D ) | ( RP RL RYU RS );
 ADC: ( A D C ) | ( RP RL RYU RS RS );
 SUB: ( S U B ) | ( RM RI RN RU RS );
 CMP: ( C M P ) | ( RS RR RA RV );
-LOOP: ( L O O P ) | ( RK RR RU RG );
-LD: ( L D ) | ( RN RYA RM );
+LOOP: ( L O O P ) | ( RV RZ RA RD );     //ВЗАД
+LD: ( L D ) | ( RN RYA RM );             //НЯМ
 SWAM: ( S W A M ) | ( RO RB RM RE RN );  // ОБМЕН
-JUMP: ( J U M P ) | ( RP RR RII RG );
-CALL: ( C A L L ) | ( RV RZH RU RKH );
-ST: ( S T ) | ( RT RSSIGN RF RU );
+JUMP: ( J U M P ) | ( RP RR RII RG );    //ПРЫГ
+CALL: ( C A L L ) | ( RV RZH RU RKH );   // ВЖУХ
+ST: ( S T ) | ( RT RSSIGN RF RU );       //ТЬФУ
 
 NOP: ( N O P ) | ( RP RR RO RP ); // ПРОП
 HLT: ( H L T ) | ( RS RT RO RP ); // СТОП
@@ -260,8 +260,8 @@ BEQ: ( B E Q ) | ( B Z S ) | ( RB RYA RK RA ); // БЯКА
 BNE: ( B N E ) | ( B Z C );
 BMI: ( B M I ) | ( B N S ); 
 BPL: ( B P L ) | ( B N C );
-BCS: ( B C S ) | ( B L O );
-BCC: ( B C C ) | ( B H I S );
+BCS: ( B C S ) | ( B H I S );
+BCC: ( B C C ) | ( B L O );
 BVS: ( B V S ) ;
 BVC: ( B V C ) ;
 BLT: ( B L T ) ;
