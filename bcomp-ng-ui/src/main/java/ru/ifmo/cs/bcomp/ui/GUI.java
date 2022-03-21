@@ -85,7 +85,7 @@ public class GUI extends JApplet {
 	}
 
 	public void gui() throws Exception {
-		JFrame frame = new JFrame("БЭВМ v1.45.06");
+		JFrame frame = new JFrame("БЭВМ v1.45.07");
 
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.getContentPane().add(this);

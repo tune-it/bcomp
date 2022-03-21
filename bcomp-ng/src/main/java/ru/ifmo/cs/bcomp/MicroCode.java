@@ -210,10 +210,10 @@ public class MicroCode {
         new CMC("AL000X",   cs(RDCR, HTOL), 0, 0,                           "INT"),     // if CR(8) = 0 then GOTO INT (NOP)
         new CMC("HLT",      cs(RDPS, LTOL), PS0.ordinal(), 0,               "STOP"),    // GOTO STOP
         new CMC("AL001X",   cs(RDCR, HTOL), 0, 1,                           "AL0011"),  // if CR(8) = 1 then GOTO AL0011
-        new CMC("AL0010",   cs(RDCR, LTOL), 7, 1,                           "CMA"),     // if CR(7) = 1 then GOTO CMA
+        new CMC("AL0010",   cs(RDCR, LTOL), 7, 1,                           "NOT"),     // if CR(7) = 1 then GOTO NOT
         new omc("CLA",      cs(STNZ, SETV, WRAC)),                                      // 0 -> AC, N, V, Z
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
-        new omc("CMA",      cs(RDAC, COML, HTOH, LTOL, STNZ, SETV, WRAC)),              // ~AC + 0 -> BR, N, Z, V
+        new omc("NOT",      cs(RDAC, COML, HTOH, LTOL, STNZ, SETV, WRAC)),              // ~AC + 0 -> BR, N, Z, V
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         new CMC("AL0011",   cs(RDCR, LTOL), 7, 1,                           "CMC"),     // if (CR7) = 1 then GOTO CMC
         new omc("CLC",      cs(SETC)),                                                  // 0 -> C
@@ -279,13 +279,13 @@ public class MicroCode {
         new omc(            cs(RDBR, HTOH, LTOL, STNZ, SETV, WRAC, STOR)),              // BR -> AC, N, Z, V; DR -> MEM(AR)
         new CMC(            cs(RDPS, LTOL), PS0.ordinal(), 0,               "INT"),     // GOTO INT
         // IO
-        new CMC("IO",       cs(RDCR, HTOL), 3, 1,                           "IRQ"),     // if CR(11) = 1 then GOTO IRQ
+        new CMC("IO",       cs(RDCR, HTOL), 3, 1,                           "IRQ"),     // if CR(11) = 1 then GOTO INT
         new omc("DOIO",     cs(IO)),                                                    // IO
 
         // Цикл прерывания
         new CMC("INT",      cs(RDPS, LTOL), W.ordinal(), 0,                 "STOP"),    // if RUN = 0 then GOTO STOP
-        new CMC(            cs(RDPS, LTOL), IRQ.ordinal(), 0,               "INFETCH"), // if INTR = 0 then GOTO INFETCH
-        new omc(            cs(IRQS)),                                                  // IRQ Sc
+        new CMC(            cs(RDPS, LTOL), State.INT.ordinal(), 0,         "INFETCH"), // if INTR = 0 then GOTO INFETCH
+        new omc(            cs(INTS)),                                                  // INT Sc
         new omc("IRQ",      cs(RDSP, COML, HTOH, LTOL, WRSP, WRAR)),                    // SP + ~0 -> SP, AR
         new omc(            cs(RDIP, HTOH, LTOL, WRDR)),                                // IP -> DR
         new omc(            cs(STOR)),                                                  // DR -> MEM(AR)

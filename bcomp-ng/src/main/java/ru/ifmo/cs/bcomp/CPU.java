@@ -171,8 +171,8 @@ public class CPU {
 		iobuses.put(IOBuses.IOAddr, ioaddr);
 		CtrlBus ioctrl = new CtrlBus(IO_WIDTH);
 		iobuses.put(IOBuses.IOCtrl, ioctrl);
-		// Update IRQ flag
-		ValveAnd irqrq = new ValveAnd(ps, EI.ordinal(), irqreq, new PartWriter(ps, 1, IRQ.ordinal()));
+		// Update INT flag
+		ValveAnd irqrq = new ValveAnd(ps, EI.ordinal(), irqreq, new PartWriter(ps, 1, State.INT.ordinal()));
 
 		// Execute microcommand
 		Control clock1 = new Valve(mr, MR_WIDTH, 0, 0,
@@ -273,7 +273,7 @@ public class CPU {
 					new Valve(cr, IO_WIDTH, 0, 0, ioaddr),
 					new Decoder(cr, IO_WIDTH, IOCMD_WIDTH, 0, ioctrl)
 				),
-				newValveH(Consts.consts[1], 1, 0, IRQS),
+				newValveH(Consts.consts[1], 1, 0, INTS),
 				newValveH(Consts.consts[0], 1, 0, HALT, stateProgram)
 			)
 		));
@@ -314,7 +314,7 @@ public class CPU {
 			new Valve(Consts.consts[0], 1, 0, IOControlSignal.DI.ordinal(), ei),
 			// Enable interrupts
 			new Valve(Consts.consts[1], 1, 0, IOControlSignal.EI.ordinal(), ei),
-			// IRQ SC
+			// INT SC
 			new Valve(ioaddr, 3, 0, IOControlSignal.IRQ.ordinal(), new PartWriter(cr, 8, 0))
 		);
 	}

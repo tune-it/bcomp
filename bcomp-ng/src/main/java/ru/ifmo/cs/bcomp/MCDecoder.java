@@ -98,8 +98,8 @@ public class MCDecoder {
 		if (cs.contains(IO))
 			operations.add("IO");
 
-		if (cs.contains(IRQS))
-			operations.add("IRQSC");
+		if (cs.contains(INTS))
+			operations.add("INTS");
 
 		if (cs.contains(HALT))
 			operations.add("Halt");

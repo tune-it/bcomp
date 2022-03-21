@@ -300,7 +300,7 @@ public class ComponentManager {
 		listeners = new SignalListener[]{
 				new SignalListener(regs.get(Reg.AR), WRAR),
 				new SignalListener(regs.get(Reg.DR), WRDR, LOAD),
-				new SignalListener(regs.get(Reg.CR), WRCR, IRQS),
+				new SignalListener(regs.get(Reg.CR), WRCR, INTS),
 				new SignalListener(regs.get(Reg.IP), WRIP),
 				new SignalListener(regs.get(Reg.AC), WRAC, IO),
 				new SignalListener(regs.get(Reg.PS), RDPS, WRPS, SETC, SETV, STNZ, SET_EI, HALT, SET_PROGRAM),

@@ -299,7 +299,7 @@ public class Nightmare {
 
 		listeners = new SignalListener[] {
 			new SignalListener(regs.get(DR), WRDR, LOAD),
-			new SignalListener(regs.get(CR), WRCR, IRQS),
+			new SignalListener(regs.get(CR), WRCR, INTS),
 			new SignalListener(regs.get(IP), WRIP),
 			new SignalListener(regs.get(SP), WRSP),
 			new SignalListener(regs.get(AC), WRAC, IO),

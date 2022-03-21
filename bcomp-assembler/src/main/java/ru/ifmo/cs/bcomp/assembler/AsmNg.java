@@ -144,6 +144,10 @@ public class AsmNg {
                 InstructionContext ICtx = ctx.instruction();
                 if (ICtx != null) {
                     TerminalNode t = getTerminalNode(ICtx);
+                    if (t == null) {
+                        reportAndRecoverFromError(new AssemblerException("Internal error: TerminalNode occasionally is null", parser, ICtx));
+                        return;
+                    }
                     InstructionWord i = new InstructionWord();
                     Instruction instr = instructionByParserType(t.getSymbol().getType());
                     if (instr == null) {
@@ -257,7 +261,7 @@ public class AsmNg {
             public void exitLbl(LblContext ctx) {
                 Label lab = new Label();
                 //make String copy. Do not remove new String(..)
-                lab.name = new String(ctx.label().getText());
+                lab.name = new String(ctx.label().getText().trim());
                 lab.address = address;
                 if (labels.containsKey(lab.name)) {
                     //TODO FIX IT with common error message
@@ -270,7 +274,6 @@ public class AsmNg {
                     lab.name = "START";
                 }
                 labels.put(lab.name, lab);
-                //System.out.println(lab);
             }
 
             @Override
@@ -332,11 +335,11 @@ public class AsmNg {
                 }
             }
             if (w.value_addr_reference != null) {
-                if (!labels.containsKey(w.value_addr_reference)) {
+                Label l = labels.get(w.value_addr_reference);
+                if (l == null) {
                     //TODO error
                     reportError(new AssemblerException("Second pass: Label " + w.value_addr_reference + " not found", parser));
                 } else {
-                    Label l = labels.get(w.value_addr_reference);
                     w.value = l.address;
                 }
             }
@@ -628,10 +631,13 @@ public class AsmNg {
                     num = iw.operand.number;
                 }
                 if (iw.operand.reference != null) {
-                    if (!labels.containsKey(iw.operand.reference)) {
+                    Label l = labels.get(iw.operand.reference);
+                    if (l == null) {
                         reportError(new AssemblerException("Second pass: label refference "+iw.operand.reference+" not found",parser));
                     }
-                    num = labels.get(iw.operand.reference).address;
+                    else { 
+                        num = l.address;
+                    }
                 }
                 if ((num > MemoryWord.MAX_ADDRESS) || (num < 0)) {
                     //TODO error number exceed limit values
@@ -687,13 +693,12 @@ public class AsmNg {
         if (iw.operand.reference != null) {
             reference = iw.operand.reference;
         }
-        if (!labels.containsKey(reference)) {
-            //TODO error
+        Label l = labels.get(reference);
+        if (l == null) {
             AssemblerException ae = new AssemblerException("Second pass: label refference "+reference+" not found",parser);
             reportError(ae);
             return 0;
         }
-        Label l = labels.get(reference);
         l.referenced = true;
         num = l.address - iw.address - 1; //-1 to fix impact of fetch cycle
         //TODO FIX

@@ -43,7 +43,7 @@ public enum State {
 	 * Flag 6:
 	 * Interrupt
 	 */
-	IRQ,
+	INT,
 	/**
 	 * Flag 7:
 	 * Run state

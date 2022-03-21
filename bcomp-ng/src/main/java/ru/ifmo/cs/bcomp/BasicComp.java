@@ -17,7 +17,7 @@ public class BasicComp {
 		cpu = new CPU();
 		cpu.startCPU();
 
-		cpu.addDestination(ControlSignal.IRQS,
+		cpu.addDestination(ControlSignal.INTS,
 			(ioctrls[0] = new IOCtrlBasic(0x00, cpu, IOCtrlBasic.TYPE.INPUTOUTPUT,
 				(ioctrls[1] = new IOCtrlBasic(0x02, cpu, IOCtrlBasic.TYPE.OUTPUT,
 					(ioctrls[2] = new IOCtrlBasic(0x04, cpu, IOCtrlBasic.TYPE.INPUT,

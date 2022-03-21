@@ -188,7 +188,7 @@ public enum ControlSignal {
 	 * Control signal 35:
 	 * 
 	 */
-	IRQS,
+	INTS,
 	/**
 	 * Control signal 36:
 	 * Reserved
