@@ -676,7 +676,8 @@ public class AsmNg {
                 }
                 if (num > 255 || num < -128) {
                     //TODO error number exceed limit values
-                    throw new AssemblerException(parser);
+                    //throw new AssemblerException(parser);
+                    reportError(new AssemblerException("Second pass: number exceed limits in direct load",parser));
                     //throw new RuntimeException("Internal error: ");
                 }
                 iw.value = iw.instruction.opcode | 0x0F00 | (num & 0xFF);
