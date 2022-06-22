@@ -101,6 +101,7 @@ displacementSP
 
 directRelative
    : label
+   | '(' ip '+' number ')'
    ;
 
 directLoad

@@ -598,7 +598,7 @@ public class AsmNg {
                 break;
             case BCompNGParser.RULE_directRelative:
                 am.addressation = AddressingMode.AddressingType.DIRECT_RELATIVE;
-                am.reference = referenceByLabelContext(octx.directRelative().label());
+                setNumberOrReferenceTo(am, octx.directRelative().number(), octx.directRelative().label());
                 break;
             case BCompNGParser.RULE_directLoad:
                 am.addressation = AddressingMode.AddressingType.DIRECT_LOAD;
@@ -609,6 +609,15 @@ public class AsmNg {
                 throw new AssemblerException("Internal error: Wrong OperandContext while parsing addressing mode",parser);
         }
         return am;
+    }
+
+    private void setNumberOrReferenceTo(AddressingMode am, NumberContext number, LabelContext label) {
+        if (number != null) {
+            am.number = parseIntFromNumberContext(number, parser);
+        }
+        if (label != null) {
+            am.reference = referenceByLabelContext(label);
+        }
     }
 
     private String referenceByLabelContext(LabelContext lctx) {
@@ -633,7 +642,7 @@ public class AsmNg {
                 if (iw.operand.reference != null) {
                     Label l = labels.get(iw.operand.reference);
                     if (l == null) {
-                        reportError(new AssemblerException("Second pass: label refference "+iw.operand.reference+" not found",parser));
+                        reportError(new AssemblerException("Second pass: label reference "+iw.operand.reference+" not found", parser));
                     }
                     else { 
                         num = l.address;
@@ -655,25 +664,16 @@ public class AsmNg {
                 iw.value = iw.instruction.opcode | 0x0B00 | convertReferenceToDisplacement(iw);
                 break;
             case DISPLACEMENT_SP:
-                if (iw.operand.number != MemoryWord.UNDEFINED) {
-                    num = iw.operand.number;
-                } else {
-                    reportError(new AssemblerException("Second pass: number shoud present in command",parser));
-                }
-                if (num > 127 || num < -128) {
-                    reportError(new AssemblerException("Second pass: number exceed limits [-127..128]",parser));
-                }
+                num = getOperandNumber(iw);
+                checkLimits(num, -128, 127);
                 iw.value = iw.instruction.opcode | 0x0C00 | (num & 0xFF);
                 break;
             case DIRECT_RELATIVE:
-                iw.value = iw.instruction.opcode | 0x0E00 | convertReferenceToDisplacement(iw);
+                num = getDisplacement(iw);
+                iw.value = iw.instruction.opcode | 0x0E00 | (num & 0xFF);
                 break;
             case DIRECT_LOAD:
-                if (iw.operand.number != MemoryWord.UNDEFINED) {
-                    num = iw.operand.number;
-                } else {
-                    reportError(new AssemblerException("Second pass: number shoud present in command",parser));
-                }
+                num = getOperandNumber(iw);
                 if (num > 255 || num < -128) {
                     //TODO error number exceed limit values
                     throw new AssemblerException(parser);
@@ -684,6 +684,32 @@ public class AsmNg {
             default:
                 reportError(new AssemblerException("Second pass: addressing mode is not properly defined",parser));
         }
+    }
+
+    /**
+     * Instruction's operand can be either a reference or a numeric displacement value.
+     */
+    private int getDisplacement(InstructionWord iw) {
+        if (iw.operand.reference != null) {
+            return convertReferenceToDisplacement(iw);
+        }
+        int number = getOperandNumber(iw);
+        checkLimits(number, -128, 127);
+        return number;
+    }
+
+    private void checkLimits(int number, int lowerBound, int upperBound) {
+        if (number > upperBound || number < lowerBound) {
+            reportError(new AssemblerException("Second pass: number exceed limits [-128..127]", parser));
+        }
+    }
+
+    private int getOperandNumber(InstructionWord iw) {
+        int value = iw.operand.number;
+        if (value == MemoryWord.UNDEFINED) {
+            reportError(new AssemblerException("Second pass: number should present in command", parser));
+        }
+        return value;
     }
 
     private int convertReferenceToDisplacement(InstructionWord iw) {
