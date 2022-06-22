@@ -41,6 +41,7 @@ public class AddressingMode {
                 s="&undef"; break;
             case DIRECT_RELATIVE:
                 if (reference != null ) {s = reference; break;}
+                if (number != MemoryWord.UNDEFINED ) {s = "(ip+" + number + ")"; break;}
                 s="undef"; break;
             case DIRECT_LOAD: 
                 if (number != MemoryWord.UNDEFINED ) {s = "#"+number; break;}
