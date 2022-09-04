@@ -4,8 +4,11 @@
 
 package ru.ifmo.cs.bcomp.ui.components;
 
+import java.awt.Adjustable;
 import java.awt.Graphics;
 import javax.swing.JLabel;
+import javax.swing.JScrollBar;
+
 import ru.ifmo.cs.components.Utils;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 import ru.ifmo.cs.components.Memory;
@@ -23,6 +26,7 @@ public class MemoryView extends BCompComponent {
 	// Components
 	private JLabel[] addrs = new JLabel[16];
 	private JLabel[] values = new JLabel[16];
+    private JScrollBar scrollBar = new JScrollBar();
 
 	public MemoryView(Memory mem, int x, int y) {
 		super("RAM", 16);
@@ -32,9 +36,10 @@ public class MemoryView extends BCompComponent {
 		int addrWidth = FONT_COURIER_BOLD_21_WIDTH * (1 + Utils.getHexWidth(addrBitWidth));
 		valueBitWidth =(int) mem.width;
 		int valueWidth = FONT_COURIER_BOLD_21_WIDTH * (1 + Utils.getHexWidth(valueBitWidth));
+        int scrollBarWidth = 15;
 		lineX = 1 + addrWidth;
 
-		setBounds(x, y, 3 + addrWidth + valueWidth);
+        setBounds(x, y, 3 + addrWidth + valueWidth + scrollBarWidth);
 
 		for (int i = 0; i < 16; i++) {
 			addrs[i] = addValueLabel(COLOR_TITLE);
@@ -43,7 +48,28 @@ public class MemoryView extends BCompComponent {
 			values[i] = addValueLabel(COLOR_VALUE);
 			values[i].setBounds(lineX + 1, getValueY(i), valueWidth, CELL_HEIGHT);
 		}
-	}
+
+        initScrollBar();
+        add(scrollBar);
+        scrollBar.addAdjustmentListener(adjustmentEvent -> updatePage(adjustmentEvent.getValue()));
+        scrollBar.setBounds(lineX + valueWidth + 2, getValueY(0), scrollBarWidth, super.getHeight() - CELL_HEIGHT);
+    }
+
+    private void initScrollBar() {
+        int pageSize = 0x10;
+        int memSize = (1 << mem.getAddrWidth());
+        scrollBar.setOrientation(Adjustable.VERTICAL);
+        scrollBar.setValue(0);
+        scrollBar.setVisibleAmount(pageSize);
+        scrollBar.setMinimum(0);
+        // Note: scrollBar's maximum value is memSize - extent, where extent (aka visible amount) = pageSize. See JavaDoc
+        scrollBar.setMaximum(memSize);
+    }
+
+    private void updatePage(int newPage) {
+        lastPage = newPage;
+        updateMemory();
+    }
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -61,6 +87,7 @@ public class MemoryView extends BCompComponent {
 	}
 
 	public void updateMemory() {
+        scrollBar.setValue(lastPage);
 		for (int i = 0; i < 16; i++) {
 			addrs[i].setText(Utils.toHex(lastPage + i, addrBitWidth));
 			updateValue(i);
