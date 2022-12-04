@@ -211,10 +211,10 @@ fragment P0D : '0' D ;
 /*
 * Assembler Instruction
 */
-ORG: O R G;
-WORD: W O R D;
-END: E N D;
-DUP: ( D U P ) | ( D U P L I C A T E );
+ORG: ( O R G ) | ( RN RA RCH ); // НАЧ
+WORD: ( W O R D ) | ( RS RL RO RV RO ); // СЛОВО
+END: ( E N D ) | ( RK RO RN ); // КОН
+DUP: ( D U P ) | ( D U P L I C A T E ) | ( RP RO RV RT ); // ПОВТ
 
 /*
 * opcodes
@@ -222,10 +222,10 @@ DUP: ( D U P ) | ( D U P L I C A T E );
 
 AND: ( A N D ) | ( RI );      //И
 OR: ( O R ) | ( RI RL RI );   //ИЛИ
-ADD: ( A D D ) | ( RP RL RYU RS );
-ADC: ( A D C ) | ( RP RL RYU RS RS );
-SUB: ( S U B ) | ( RM RI RN RU RS );
-CMP: ( C M P ) | ( RS RR RA RV );
+ADD: ( A D D ) | ( RP RL RYU RS );       // ПЛЮС
+ADC: ( A D C ) | ( RP RL RYU RS RS );    // ПЛЮСС
+SUB: ( S U B ) | ( RM RI RN RU RS );     // МИНУС
+CMP: ( C M P ) | ( RS RR RA RV );        // СРАВ
 LOOP: ( L O O P ) | ( RV RZ RA RD );     //ВЗАД
 LD: ( L D ) | ( RN RYA RM );             //НЯМ
 SWAM: ( S W A M ) | ( RO RB RM RE RN );  // ОБМЕН
@@ -257,15 +257,15 @@ PUSHF: ( P U S H F ) | ( RS RU RN RSSIGN RF); // СУНЬФ
 SWAP: ( S W A P ) | ( RM RE RN RSSIGN ); // МЕНЬ
 
 BEQ: ( B E Q ) | ( B Z S ) | ( RB RYA RK RA ); // БЯКА
-BNE: ( B N E ) | ( B Z C );
-BMI: ( B M I ) | ( B N S ); 
-BPL: ( B P L ) | ( B N C );
-BCS: ( B C S ) | ( B H I S );
-BCC: ( B C C ) | ( B L O );
-BVS: ( B V S ) ;
-BVC: ( B V C ) ;
-BLT: ( B L T ) ;
-BGE: ( B G E ) ;
+BNE: ( B N E ) | ( B Z C ) | ( RB RN RE RK RA ); // БНЕКА
+BMI: ( B M I ) | ( B N S ) | ( RB RM RI RN RU RS ); // БМИНУС 
+BPL: ( B P L ) | ( B N C ) | ( RB RP RL RU RS ); // БПЛЮС
+BCS: ( B C S ) | ( B H I S ) | ( RB RE RTSC ); // БЕЦ
+BCC: ( B C C ) | ( B L O ) | ( RB RN RE RTSC ); // БНЕЦ
+BVS: ( B V S ) | ( RB RO RV RE RR ); // БОВЕР
+BVC: ( B V C ) | ( RB RN RE RO RV RE RR ); // БНЕОВЕР
+BLT: ( B L T ) | ( RB RM RE RN RSSIGN ); // БМЕНЬ
+BGE: ( B G E ) | ( RB RN RE RM RE RN RSSIGN ); // БНЕМЕНЬ
 BR: ( B R ) ;    //syntetic insturction, jump with direct relative addressing mode
 
 
@@ -275,8 +275,8 @@ IN: ( I N ) | ( RV RV RO RD ); // ВВОД
 OUT: ( O U T ) | ( RV RII RV RO RD ); // ВЫВОД
 INT: ( I N T ) | ( RP RR RE RR ); // ПРЕР
 
-SP: ( S P ) ;
-IP: ( I P ) ;
+SP: ( S P ) | ( RS RU ); // СУ
+IP: ( I P ) | ( RI RU ); // ИУ
 
 NAME
    : [a-zA-Zа-яА-Я_] [a-zA-Zа-яА-Я_0-9."]*
