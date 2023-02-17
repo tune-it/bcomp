@@ -269,7 +269,7 @@ public class AsmNg {
                     return;
                 }
                 //TODO fix this special case for start label
-                if ("START".equalsIgnoreCase(lab.name)) {
+                if ("START".equalsIgnoreCase(lab.name) || "НАЧАЛО".equalsIgnoreCase(lab.name)) {
                     labels.put(lab.name, lab);
                     lab.name = "START";
                 }
