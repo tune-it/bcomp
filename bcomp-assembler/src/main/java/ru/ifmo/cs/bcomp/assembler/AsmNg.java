@@ -5,11 +5,8 @@
  */
 package ru.ifmo.cs.bcomp.assembler;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -71,6 +68,7 @@ public class AsmNg {
     private BCompNGParser parser;
     private AssemblerAntlrErrorStrategy errHandler;
     private HashMap<String, Label> labels;
+    private TreeMap<Integer, Label> globalLabelsByAddress;
     private HashMap<Integer, MemoryWord> memory;
     private List<String> errors;
 
@@ -78,6 +76,7 @@ public class AsmNg {
         this.program = program;
         labels = new HashMap<String, Label>();
         memory = new HashMap<Integer, MemoryWord>();
+        globalLabelsByAddress = new TreeMap<Integer, Label>();
         //
         lexer = new BCompNGLexer(program);
         tokens = new CommonTokenStream(lexer);
@@ -109,11 +108,11 @@ public class AsmNg {
         Program prog = null;
         try {
             //decode commands and collect all labels
-            //System.out.println("first pass");        
+//            System.out.println("first pass");
             firstPass();
             //debug output
-            //System.out.println(labels);     
-            //System.out.println("second pass");
+//            System.out.println(labels);
+//            System.out.println("second pass");
             prog = secondPass();
         } catch (AssemblerException e) {
             reportAndRecoverFromError(e);
@@ -127,6 +126,8 @@ public class AsmNg {
         BCompNGListener fp = new BCompNGBaseListener() {
             private int address = BASE_ADDRESS;
 
+            private Label curLbl = null;
+
             @Override
             public void enterLine(LineContext ctx) {
                 //verbose output for debug only
@@ -139,6 +140,8 @@ public class AsmNg {
                 Label label = null;
                 if (LCtx != null) {
                     String labelname = LCtx.label().getText();
+                    if (labelname.startsWith("."))
+                        labelname = curLbl.name + labelname;
                     label = labels.get(labelname);
                 }
                 InstructionContext ICtx = ctx.instruction();
@@ -173,7 +176,11 @@ public class AsmNg {
                         AddressingMode am = new AddressingMode();
                         i.operand = am;
                         //make String copy. Do not remove new String(..)
-                        i.operand.reference = new String(ICtx.label().getText());
+                        String ref = new String(ICtx.label().getText());
+                        if (ref.startsWith("."))
+                             ref = curLbl.name + ref;
+                        i.operand.reference = ref;
+                        //i.operand.reference = new String(ICtx.label().getText());
                     }
                     if (instr.type == Instruction.Type.IO) {
                         AssemblerException ae = new AssemblerException("Device or vector shall be valid number", parser, ICtx);
@@ -211,7 +218,10 @@ public class AsmNg {
                 }
                 LabelContext lc = ctx.label();
                 if (lc != null) {
-                    m.value_addr_reference = new String(lc.getText());
+                    String labelname = new String(lc.getText());
+                    if (labelname.startsWith("."))
+                        labelname = curLbl.name + labelname;
+                    m.value_addr_reference = labelname;
                 }
                 //find out label if one and set it up to the first WORD
                 if (ctx.getParent().getParent() instanceof WordDirectiveContext) {
@@ -219,7 +229,10 @@ public class AsmNg {
                     //if label exsist in line
                     if (wdctx.lbl() != null) {
                         //look for this label address
-                        Label l = labels.get(wdctx.lbl().label().getText());
+                        String labelname = wdctx.lbl().label().getText();
+                        if (labelname.startsWith("."))
+                            labelname = curLbl.name + labelname;
+                        Label l = labels.get(labelname);
                         if (l != null) {
                             // if label points to this first word instruction
                             if (l.address == address) {
@@ -262,18 +275,38 @@ public class AsmNg {
                 Label lab = new Label();
                 //make String copy. Do not remove new String(..)
                 lab.name = new String(ctx.label().getText().trim());
+
+                if (lab.name.startsWith(".")) {
+                    if (curLbl == null) {
+                        reportAndRecoverFromError(
+                                new AssemblerException("Error: defining local label " + lab.name + " without global label",
+                                        parser, ctx));
+                        return;
+                    }
+                    lab.parent = curLbl;
+                }
+
                 lab.address = address;
-                if (labels.containsKey(lab.name)) {
+                if (labels.containsKey(lab.getFullName())) {
                     //TODO FIX IT with common error message
-                    reportAndRecoverFromError(new AssemblerException("Error: already defined label " + lab.name, parser, ctx));
+                    reportAndRecoverFromError(
+                            new AssemblerException("Error: already defined label " + lab.getFullName(),
+                                parser, ctx));
                     return;
                 }
+
+                if (!lab.name.startsWith(".")) {
+                    curLbl = lab;
+                    globalLabelsByAddress.put(address, curLbl);
+                }
+
                 //TODO fix this special case for start label
                 if ("START".equalsIgnoreCase(lab.name) || "НАЧАЛО".equalsIgnoreCase(lab.name)) {
                     labels.put(lab.name, lab);
                     lab.name = "START";
                 }
-                labels.put(lab.name, lab);
+
+                labels.put(lab.getFullName(), lab);
             }
 
             @Override
@@ -631,9 +664,19 @@ public class AsmNg {
                     num = iw.operand.number;
                 }
                 if (iw.operand.reference != null) {
-                    Label l = labels.get(iw.operand.reference);
+                    Label l = null;
+                    if (iw.operand.reference.startsWith(".")) {
+                        Integer key = globalLabelsByAddress.floorKey(iw.address);
+                        if (key != null) {
+                            Label globalLabel = globalLabelsByAddress.get(key);
+                            l = labels.get(globalLabel.name + iw.operand.reference);
+                        }
+                    } else {
+                        l = labels.get(iw.operand.reference);
+                    }
+//                    l = labels.get(iw.operand.reference);
                     if (l == null) {
-                        reportError(new AssemblerException("Second pass: label refference "+iw.operand.reference+" not found",parser));
+                        reportError(new AssemblerException("Second pass: label reference "+iw.operand.reference+" not found",parser));
                     }
                     else { 
                         num = l.address;
@@ -693,6 +736,15 @@ public class AsmNg {
         if (iw.operand.reference != null) {
             reference = iw.operand.reference;
         }
+
+        if (reference.startsWith(".")) {
+            Integer key = globalLabelsByAddress.floorKey(iw.address);
+            if (key != null) {
+                Label global = globalLabelsByAddress.get(key);
+                reference = global.name + reference;
+            }
+        }
+
         Label l = labels.get(reference);
         if (l == null) {
             AssemblerException ae = new AssemblerException("Second pass: label refference "+reference+" not found",parser);
