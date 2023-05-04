@@ -180,6 +180,7 @@ fragment RYO : ('ё' | 'Ё');
 fragment RZH : ('ж' | 'Ж');
 fragment RZ : ('з' | 'З');
 fragment RI : ('и' | 'И');
+fragment RIY : ('й' | 'Й');
 fragment RK : ('к' | 'К');
 fragment RL : ('л' | 'Л');
 fragment RM : ('м' | 'М');
