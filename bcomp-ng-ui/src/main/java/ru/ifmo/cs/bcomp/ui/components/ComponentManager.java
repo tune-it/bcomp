@@ -303,7 +303,7 @@ public class ComponentManager {
 				new SignalListener(regs.get(Reg.CR), WRCR, INTS),
 				new SignalListener(regs.get(Reg.IP), WRIP),
 				new SignalListener(regs.get(Reg.AC), WRAC, IO),
-				new SignalListener(regs.get(Reg.PS), RDPS, WRPS, SETC, SETV, STNZ, SET_EI, HALT, SET_PROGRAM),
+				new SignalListener(regs.get(Reg.PS), RDPS, WRPS, SETC, SETV, STNZ, SET_EI, HALT, SET_PROGRAM, SET_REQUEST_INTERRUPT),
 				new SignalListener(regs.get(Reg.SP), WRSP),
 				new SignalListener(regs.get(Reg.BR), WRBR)
 
