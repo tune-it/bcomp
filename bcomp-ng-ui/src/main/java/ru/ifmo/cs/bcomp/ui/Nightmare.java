@@ -14,6 +14,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -47,6 +49,7 @@ public class Nightmare {
 	private static final int BIT_RADIUS = 16;
 	private static final Font LABEL_FONT = new Font("Courier New", Font.BOLD, 24);
 	private static final Font HINTS_FONT = new Font("Courier New", Font.BOLD, 14);
+	private final ResourceBundle res = ResourceBundle.getBundle("ru.ifmo.cs.bcomp.ui.components.loc", Locale.getDefault());
 	private final long[] delayPeriods = { 0, 1, 5, 10, 25, 50, 100, 1000 };
 	private volatile int currentDelay = 3;
 
@@ -141,7 +144,7 @@ public class Nightmare {
 			panel.add(flag);
 			panel.add(data);
 
-			frame = new JFrame("Контроллер ВУ" + number);
+			frame = new JFrame(res.getString("cdev") + number);
 			frame.add(panel);
 			frame.pack();
 
@@ -226,7 +229,7 @@ public class Nightmare {
 				ioctrl.addDestination(i, regview[i]);
 			}
 
-			frame = new JFrame("Контроллер ВУ" + number);
+			frame = new JFrame(res.getString("cdev") + number);
 			frame.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 			frame.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 			frame.add(panel);
@@ -319,7 +322,7 @@ public class Nightmare {
 			}
 		});
 
-		JFrame frame = new JFrame("БЭВМ");
+		JFrame frame = new JFrame(res.getString("basename"));
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		JPanel panel = new JPanel(new GridLayout(10, 1));
@@ -332,8 +335,17 @@ public class Nightmare {
 		panel.add(regs.get(BR));
 		panel.add(regs.get(PS));
 		panel.add(regs.get(IR));
-		JLabel hints = new JLabel(
-			"F4 Ввод адреса F5 Запись F6 Чтение F7 Пуск F8 Продолжение F9 Работа/Останов Shift-F9 Такт");
+
+		String buttons = res.getString("setip") + " "
+				+ res.getString("write") + " "
+				+ res.getString("read") + " "
+				+ res.getString("start") + " "
+				+ res.getString("continue") + " "
+				+ res.getString("runstop") + " "
+				+ res.getString("tick");
+
+
+		JLabel hints = new JLabel(buttons);
 		hints.setFont(HINTS_FONT);
 		panel.add(hints);
 		frame.add(panel);

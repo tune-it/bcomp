@@ -40,6 +40,8 @@ public class loc extends ListResourceBundle {
             {"numpad", "Numpad (0x1C-0x1F)"},
             {"error", "Error"},
             {"stopRunning", "To compile, stop the running program"},
-            {"compile", "Compile"}
+            {"compile", "Compile"},
+            {"cdev", "CDEV"},
+            {"runstop", "F9 Run/Stop"}
     };
 }

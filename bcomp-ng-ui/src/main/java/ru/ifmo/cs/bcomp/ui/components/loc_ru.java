@@ -39,6 +39,8 @@ public class loc_ru extends ListResourceBundle {
             {"numpad", "Цифровая клавиатура (0x1C-0x1F)"},
             {"error", "Ошибка"},
             {"stopRunning", "Для компиляции остановите выполняющуюся программу"},
-            {"compile", "Компилировать"}
+            {"compile", "Компилировать"},
+            {"cdev", "Контроллер ВУ"},
+            {"runstop", "F9 Работа/Останов"}
     };
 }
