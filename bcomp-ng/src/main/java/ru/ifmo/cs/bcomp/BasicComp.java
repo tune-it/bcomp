@@ -1,7 +1,6 @@
 /*
  * $Id$
  */
-
 package ru.ifmo.cs.bcomp;
 
 /**
@@ -9,90 +8,99 @@ package ru.ifmo.cs.bcomp;
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
  */
 public class BasicComp {
-	private final CPU cpu;
-	private final IOCtrl[] ioctrls = new IOCtrl[10];
-	private final IODevTimer timer;
 
-	public BasicComp() throws Exception {
-		cpu = new CPU();
-		cpu.startCPU();
+    private final CPU cpu;
+    private final IOCtrl[] ioctrls = new IOCtrl[10];
+    private final IODevTimer timer;
 
-		cpu.addDestination(ControlSignal.INTS,
-			(ioctrls[0] = new IOCtrlBasic(0x00, cpu, IOCtrlBasic.TYPE.INPUTOUTPUT,
-				(ioctrls[1] = new IOCtrlBasic(0x02, cpu, IOCtrlBasic.TYPE.OUTPUT,
-					(ioctrls[2] = new IOCtrlBasic(0x04, cpu, IOCtrlBasic.TYPE.INPUT,
-						(ioctrls[3] = new IOCtrlBasic(0x06, cpu, IOCtrlBasic.TYPE.INPUTOUTPUT,
-							(ioctrls[4] = new IOCtrlAdv(0x08, cpu,
-								(ioctrls[5] = new IOCtrlBasic(0x0C, cpu, IOCtrlBasic.TYPE.OUTPUT,
-									(ioctrls[6] = new IOCtrlBasic(0x10, cpu, IOCtrlBasic.TYPE.OUTPUT,
-										(ioctrls[7] = new IOCtrlBasic(0x14, cpu, IOCtrlBasic.TYPE.OUTPUT,
-											(ioctrls[8] = new IOCtrlBasic(0x18, cpu, IOCtrlBasic.TYPE.INPUT,
-												(ioctrls[9] = new IOCtrlBasic(0x1C, cpu, IOCtrlBasic.TYPE.INPUT)).getIRQSC()
-											)).getIRQSC()
-										)).getIRQSC()
-									)).getIRQSC()
-								)).getIRQSC()
-							)).getIRQSC()
-						)).getIRQSC()
-					)).getIRQSC()
-				)).getIRQSC()
-			)).getIRQSC()
-		);
-		timer = new IODevTimer(ioctrls[0]);
-	}
+    public BasicComp() throws Exception {
+        cpu = new CPU();
+        cpu.startCPU();
 
-	public CPU getCPU() {
-		return cpu;
-	}
+        cpu.addDestination(ControlSignal.INTS,
+                (ioctrls[0] = new IOCtrlBasic(0x00, cpu, IOCtrlBasic.TYPE.INPUTOUTPUT,
+                        (ioctrls[1] = new IOCtrlBasic(0x02, cpu, IOCtrlBasic.TYPE.OUTPUT,
+                                (ioctrls[2] = new IOCtrlBasic(0x04, cpu, IOCtrlBasic.TYPE.INPUT,
+                                        (ioctrls[3] = new IOCtrlBasic(0x06, cpu, IOCtrlBasic.TYPE.INPUTOUTPUT,
+                                                (ioctrls[4] = new IOCtrlAdv(0x08, cpu,
+                                                        (ioctrls[5] = new IOCtrlBasic(0x0C, cpu, IOCtrlBasic.TYPE.OUTPUT,
+                                                                (ioctrls[6] = new IOCtrlBasic(0x10, cpu, IOCtrlBasic.TYPE.OUTPUT,
+                                                                        (ioctrls[7] = new IOCtrlBasic(0x14, cpu, IOCtrlBasic.TYPE.OUTPUT,
+                                                                                (ioctrls[8] = new IOCtrlBasic(0x18, cpu, IOCtrlBasic.TYPE.INPUT,
+                                                                                        (ioctrls[9] = new IOCtrlBasic(0x1C, cpu, IOCtrlBasic.TYPE.INPUT)).getIRQSC()
+                                                                                )).getIRQSC()
+                                                                        )).getIRQSC()
+                                                                )).getIRQSC()
+                                                        )).getIRQSC()
+                                                )).getIRQSC()
+                                        )).getIRQSC()
+                                )).getIRQSC()
+                        )).getIRQSC()
+                )).getIRQSC()
+        );
+        timer = new IODevTimer(ioctrls[0]);
+    }
 
-	public void addDestination(SignalListener[] listeners) {
-		cpu.tickLock();
-		try {
-			for (SignalListener listener : listeners)
-				for (ControlSignal signal : listener.signals)
-					cpu.addDestination(signal, listener.dest);
-		} finally {
-			cpu.tickUnlock();
-		}
-	}
+    public CPU getCPU() {
+        return cpu;
+    }
 
-	public void removeDestination(SignalListener[] listeners) {
-		cpu.tickLock();
-		try {
-			for (SignalListener listener : listeners)
-				for (ControlSignal signal : listener.signals)
-					cpu.removeDestination(signal, listener.dest);
-		} finally {
-			cpu.tickUnlock();
-		}
-	}
-        
-	public void loadProgram(ProgramBinary prog) throws RuntimeException {
-		if (cpu.isLocked())
-				throw new RuntimeException("Операция невозможна: выполняется программа");
-		if (!cpu.executeSetAddr(prog.load_address))
-				throw new RuntimeException("Операция прервана: выполняется программа");
-		for (Integer cmd : prog.binary) {
-			if (!cpu.executeWrite(cmd))
-					throw new RuntimeException("Операция прервана: выполняется программа");
-		}
-		if (!cpu.executeSetAddr(prog.start_address))
-				throw new RuntimeException("Операция прервана: выполняется программа");
-	}
+    public void addDestination(SignalListener[] listeners) {
+        cpu.tickLock();
+        try {
+            for (SignalListener listener : listeners) {
+                for (ControlSignal signal : listener.signals) {
+                    cpu.addDestination(signal, listener.dest);
+                }
+            }
+        } finally {
+            cpu.tickUnlock();
+        }
+    }
 
-	public IOCtrl[] getIOCtrls() {
-		return ioctrls;
-	}
+    public void removeDestination(SignalListener[] listeners) {
+        cpu.tickLock();
+        try {
+            for (SignalListener listener : listeners) {
+                for (ControlSignal signal : listener.signals) {
+                    cpu.removeDestination(signal, listener.dest);
+                }
+            }
+        } finally {
+            cpu.tickUnlock();
+        }
+    }
 
-	public void startTimer() {
-		timer.start("IO0");
-	}
+    public void loadProgram(ProgramBinary prog) throws RuntimeException {
+        if (cpu.isLocked()) {
+            throw new RuntimeException("Операция невозможна: выполняется программа");
+        }
+        if (!cpu.executeSetAddr(prog.load_address)) {
+            throw new RuntimeException("Операция прервана: выполняется программа");
+        }
+        for (Integer cmd : prog.binary) {
+            if (!cpu.executeWrite(cmd)) {
+                throw new RuntimeException("Операция прервана: выполняется программа");
+            }
+        }
+        if (!cpu.executeSetAddr(prog.start_address)) {
+            throw new RuntimeException("Операция прервана: выполняется программа");
+        }
+    }
 
-	public void stopTimer() {
-		timer.done();
-	}
+    public IOCtrl[] getIOCtrls() {
+        return ioctrls;
+    }
 
-/*
+    public void startTimer() {
+        timer.start("IO0");
+    }
+
+    public void stopTimer() {
+        timer.done();
+    }
+
+    /*
 	private void ctrlDestination(ControlSignal cs, DataDestination dest, boolean remove) {
 		int iodev;
 		IOCtrl.ControlSignal iocs;
@@ -224,5 +232,5 @@ public class BasicComp {
 	public void removeDestination(ControlSignal cs, DataDestination dest) {
 		ctrlDestination(cs, dest, true);
 	}
-*/
+     */
 }

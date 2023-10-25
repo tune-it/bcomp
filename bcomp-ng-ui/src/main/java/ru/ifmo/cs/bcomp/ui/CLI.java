@@ -183,7 +183,7 @@ public class CLI {
     private Scanner input = new Scanner(System.in);
 
     public void cli() {
-        println("Эмулятор Базовой ЭВМ. Версия v1.45.07 r" + CLI.class.getPackage().getImplementationVersion() + "\n"
+        println("Эмулятор Базовой ЭВМ. Версия v1.45.10 " + CLI.class.getPackage().getImplementationVersion() + "\n"
                 + "БЭВМ готова к работе.\n"
                 + "Используйте ? или help для получения справки");
 

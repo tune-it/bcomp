@@ -269,7 +269,7 @@ public class AsmNg {
                     return;
                 }
                 //TODO fix this special case for start label
-                if ("START".equalsIgnoreCase(lab.name)) {
+                if ("START".equalsIgnoreCase(lab.name) || "НАЧАЛО".equalsIgnoreCase(lab.name)) {
                     labels.put(lab.name, lab);
                     lab.name = "START";
                 }
@@ -661,7 +661,7 @@ public class AsmNg {
                     reportError(new AssemblerException("Second pass: number shoud present in command",parser));
                 }
                 if (num > 127 || num < -128) {
-                    reportError(new AssemblerException("Second pass: number exceed limits [-127..128]",parser));
+                    reportError(new AssemblerException("Second pass: stack displasment exceed limits [-127..128]",parser));
                 }
                 iw.value = iw.instruction.opcode | 0x0C00 | (num & 0xFF);
                 break;
@@ -675,7 +675,6 @@ public class AsmNg {
                     reportError(new AssemblerException("Second pass: number shoud present in command",parser));
                 }
                 if (num > 255 || num < -128) {
-                    //TODO error number exceed limit values
                     //throw new AssemblerException(parser);
                     reportError(new AssemblerException("Second pass: number exceed limits in direct load",parser));
                     //throw new RuntimeException("Internal error: ");

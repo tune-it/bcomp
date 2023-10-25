@@ -260,6 +260,8 @@ public class Keyboard extends IODevice {
 			int c = ((int)s.getBytes(charset)[0]) & 0xff;
 			ioctrl.setData(c);
 			ioctrl.setReady();
-		} catch (Exception e) { }
+		} catch (Exception e) {
+                    System.out.println(e);
+                }
 	}
 }
