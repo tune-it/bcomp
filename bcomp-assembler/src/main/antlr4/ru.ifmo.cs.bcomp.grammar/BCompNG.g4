@@ -226,8 +226,8 @@ OR: ( O R ) | ( RI RL RI );   //ИЛИ
 ADD: ( A D D ) | ( RP RL RYU RS );       // ПЛЮС
 ADC: ( A D C ) | ( RP RL RYU RS RS );    // ПЛЮСС
 SUB: ( S U B ) | ( RM RI RN RU RS );     // МИНУС
-CMP: ( C M P ) | ( RS RR RA RV );        // СРАВ
-LOOP: ( L O O P ) | ( RV RZ RA RD );     //ВЗАД
+CMP: ( C M P ) | ( RS RR RA RV ) | ( RCH RYO );        // СРАВ | ЧЁ
+LOOP: ( L O O P ) | (RK RR RU RG);       //КРУГ
 LD: ( L D ) | ( RN RYA RM );             //НЯМ
 SWAM: ( S W A M ) | ( RO RB RM RE RN );  // ОБМЕН
 JUMP: ( J U M P ) | ( RP RR RII RG );    //ПРЫГ
@@ -244,15 +244,15 @@ ROL: ( R O L ) | ( RTSC RL RE RV );  // ЦЛЕВ
 ROR: ( R O R ) | ( RTSC RP RR RA RV ); // ЦПРАВ
 ASL: ( A S L ) | ( RA RL RE RV ); // АЛЕВ
 ASR: ( A S R ) | ( RA RP RR RA RV );  // АПРАВ
-SXTB: ( S X T B ) | ( RR RA RS RSH );  // РАСШ
+SXTB: ( S X T B ) | ( RSH RII RR RSSIGN );  // ШЫРЬ
 SWAB: ( S W A B ) | ( RN RA RO RB RO RR RO RT );  // НАОБОРОТ
 INC: ( I N C ) | ( RU RV RE RL );  // УВЕЛ
 DEC: ( D E C ) | ( RU RM RE RN );  // УМЕН
 NEG: ( N E G ) | ( RO RT RR RI RTSC );  // ОТРИЦ
 POP: ( P O P ) | ( RV RII RN RSSIGN ); // ВЫНЬ
 POPF: ( P O P F ) | ( RV RII RN RSSIGN RF );  // ВЫНЬФ
-RET: ( R E T )  | ( RV RO RZ RV RR ); // ВОЗВР
-IRET: ( I R E T ) | ( RV RO RZ RV RR RP);  // ВОЗВРП
+RET: ( R E T )  | ( RV RO RZ RV RR ) | (RV RZ RA RD); // ВОЗВР | ВЗАД
+IRET: ( I R E T ) | ( RV RO RZ RV RR RP) | (RV RZ RA RD RP);  // ВОЗВРП | ВЗАДП
 PUSH: ( P U S H ) | ( RS RU RN RSSIGN ); // СУНЬ
 PUSHF: ( P U S H F ) | ( RS RU RN RSSIGN RF); // СУНЬФ
 SWAP: ( S W A P ) | ( RM RE RN RSSIGN ); // МЕНЬ
@@ -267,17 +267,17 @@ BVS: ( B V S ) | ( RB RO RV RE RR ); // БОВЕР
 BVC: ( B V C ) | ( RB RN RE RO RV RE RR ); // БНЕОВЕР
 BLT: ( B L T ) | ( RB RM RE RN RSSIGN ); // БМЕНЬ
 BGE: ( B G E ) | ( RB RN RE RM RE RN RSSIGN ); // БНЕМЕНЬ
-BR: ( B R ) ;    //syntetic insturction, jump with direct relative addressing mode
+BR: ( B R ) | ( RB RR) | ( RB RR RR RR );    // БР | БРРР syntetic insturction, jump with direct relative addressing mode
 
 
 DI: ( D I ) | ( RN RI RZ RYA ); // НИЗЯ
 EI: ( E I ) | ( RL RSSIGN RZ RYA ); // ЛЬЗЯ
-IN: ( I N ) | ( RV RV RO RD ); // ВВОД
-OUT: ( O U T ) | ( RV RII RV RO RD ); // ВЫВОД
+IN: ( I N ) | ( RV RV RO RD ) | (RS RYU RD RA); // ВВОД | СЮДА
+OUT: ( O U T ) | ( RV RII RV RO RD ) | (RT RU RD RA); // ВЫВОД | ТУДА
 INT: ( I N T ) | ( RP RR RE RR ); // ПРЕР
 
-SP: ( S P ) | ( RS RU ); // СУ
-IP: ( I P ) | ( RI RU ); // ИУ
+SP: ( S P ) | ( RU RS ); // УС
+IP: ( I P ) | ( RS RK ); // СК
 
 NAME
    : [a-zA-Zа-яА-Я_] [a-zA-Zа-яА-Я_0-9."]*
