@@ -4,8 +4,10 @@
 
 package ru.ifmo.cs.bcomp.ui;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.nio.charset.Charset;
 import ru.ifmo.cs.bcomp.BasicComp;
 import ru.ifmo.cs.bcomp.ProgramBinary;
@@ -31,13 +33,13 @@ public class BCompApp {
 		try {
 			String code = System.getProperty("code", null);
 			File file = new File(code);
-			FileInputStream fin = null;
 
-			try {
-				fin = new FileInputStream(file);
-				byte content[] = new byte[(int)file.length()];
-				fin.read(content);
-				code = new String(content, Charset.forName("UTF-8"));
+			try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+				StringBuilder sb = new StringBuilder();
+				while (reader.ready()) {
+					sb.append(reader.readLine()).append("\n");
+				}
+				code = sb.toString();
 				AsmNg asm = new AsmNg(code);
 				Program pobj = asm.compile();
 				if (asm.getErrors().isEmpty()) {
@@ -47,9 +49,6 @@ public class BCompApp {
 					for (String err : asm.getErrors())
 						System.out.println(err);
 				}
-			} finally {
-				if (fin != null)
-					fin.close();
 			}
 		} catch (Exception e) { }
 
