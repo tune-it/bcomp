@@ -19,8 +19,7 @@ import ru.ifmo.cs.bcomp.assembler.Program;
 public class BCompApp {
 	public static void main(String[] args) throws Exception {
 		BasicComp bcomp = new BasicComp();
-		String mpname;
-		String app;
+        String app;
 
 		try {
 			app = System.getProperty("mode", "gui");
@@ -84,8 +83,8 @@ public class BCompApp {
 		}
 
 		if (app.equals("nightmare")) {
-			Nightmare nightmare = new Nightmare(bcomp);
-			return;
+            new Nightmare(bcomp);
+            return;
 		}
 
 		System.err.println("Invalid mode selected");
