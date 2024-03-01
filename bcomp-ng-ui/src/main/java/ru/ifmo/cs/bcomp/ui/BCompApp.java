@@ -19,13 +19,11 @@ import ru.ifmo.cs.bcomp.assembler.Program;
 public class BCompApp {
 	public static void main(String[] args) throws Exception {
 		BasicComp bcomp = new BasicComp();
-        String app;
+        String app = "gui";
 
 		try {
 			app = System.getProperty("mode", "gui");
-		} catch (Exception e) {
-			app = "gui";
-		}
+		} catch (Exception ignored) { }
 
 		try {
 			String code = System.getProperty("code", null);
@@ -47,12 +45,12 @@ public class BCompApp {
 						System.out.println(err);
 				}
 			}
-		} catch (Exception e) { }
+		} catch (Exception ignored) { }
 
 		try {
 			String debuglevel = System.getProperty("debuglevel", "0");
 			bcomp.getCPU().setDebugLevel(Long.parseLong(debuglevel));
-		} catch (Exception e) { }
+		} catch (Exception ignored) { }
 
 		if (app.equals("decoder")) {
 			MicroCodeDecoder mpdecoder = new MicroCodeDecoder(bcomp);
