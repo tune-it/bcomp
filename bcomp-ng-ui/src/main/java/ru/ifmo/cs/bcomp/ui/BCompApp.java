@@ -6,9 +6,7 @@ package ru.ifmo.cs.bcomp.ui;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
-import java.nio.charset.Charset;
 import ru.ifmo.cs.bcomp.BasicComp;
 import ru.ifmo.cs.bcomp.ProgramBinary;
 import ru.ifmo.cs.bcomp.assembler.AsmNg;
