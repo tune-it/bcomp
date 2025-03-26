@@ -46,4 +46,8 @@ public class Memory extends BasicComponent implements DataSource, DataDestinatio
 	public long getLastAccessedAddress() {
 		return lastaccessed;
 	}
+        
+        public long[] getRawMemory() {
+            return memory;
+        }
 }
