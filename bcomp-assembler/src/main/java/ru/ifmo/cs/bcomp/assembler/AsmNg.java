@@ -28,26 +28,26 @@ public class AsmNg {
 
     public static void main(String[] args) throws Exception {
         AsmNg asmng = new AsmNg(
-                "ORG FF\n"
-                + "START: LOOP START\n"
-                + "LD   #FF\n"
-                + "IN \n"
-                + "ad: and ad\n"
-                + "ORG 030h\n"
-                + "    OR $ad\n"
-                + "bc:\n"
-                + "    WORD бяка\n"
-                + "    LD #0xFF\n"
-                + "    LD #-0x10\n"
-                + "    LD #0x-10\n"
-                + "    ST &0\n"
-                + "    ВЖУХ бяка\n"
-                + "eb:    WORD 44H,33,49,50\n"
-                + "бяка: WORD 22H\n"
-                + "    BR бяка\n"
-                + "    ПРЫГ (bc)\n"
-                + "    WORD 1 dup(-0x10)\n"
-                + "    WORD 0x12,?,0x13 ; komment\n"
+                "НАЧ 0x10 ; Начоло\n" +
+                //"       WORD 0x1,0x2,0x3\n" +
+                "ЕДУ:   НЯМ #4\n" +
+                "       СУНЬ\n" +
+                "       ВЖУХ ВРОТ\n" +
+                "       ВЫНЬ\n" +
+                "       ТЬФУ ТУТ\n" +
+                "       СТОП\n" +
+                "ТУТ:   СЛОВО 0xDEDA\n" +
+                "ВРОТ:  НЯМ  &1\n" +
+                "       СРАВ #1\n" +
+                "       БЯКА ВЫ\n" +
+                "       УМЕН\n" +
+                "       СУНЬ\n" +
+                "       ВЖУХ ВРОТ\n" +
+                "       ВЫНЬ\n" +
+                "       ПЛЮС &1\n" +
+                "       ТЬФУ  &1\n" +
+                "ВЫ:    ВОЗВР\n" +
+                "       КОН\n"
                 + "");
         Program prog = asmng.compile();
         System.out.println("-------errors--------");
@@ -57,6 +57,8 @@ public class AsmNg {
             System.out.println(prog.toCompiledWords());
             System.out.println("-------binary--------");
             System.out.println(prog.toBinaryRepresentation());
+            System.out.println("-----debug info------");
+            System.out.println(prog.lineInfo);
         } else {
             System.out.println("Program is not compiled");
         }
@@ -71,11 +73,14 @@ public class AsmNg {
     private TreeMap<Integer, Label> globalLabelsByAddress;
     private HashMap<Integer, MemoryWord> memory;
     private List<String> errors;
+    private int sourceLine=0; //for generation debug information
+    private HashMap<Integer, Integer> lineInfo; // address-> sourceline information
 
     protected AsmNg(CodePointCharStream program) {
         this.program = program;
         labels = new HashMap<String, Label>();
         memory = new HashMap<Integer, MemoryWord>();
+        lineInfo = new HashMap<Integer, Integer>();
         globalLabelsByAddress = new TreeMap<Integer, Label>();
         //
         lexer = new BCompNGLexer(program);
@@ -130,8 +135,9 @@ public class AsmNg {
 
             @Override
             public void enterLine(LineContext ctx) {
+                sourceLine++;
                 //verbose output for debug only
-                //System.out.println("sourceline = "+ctx.getText());
+                //System.out.println("sourceline["+sourceLine+"] = "+ctx.getText());
             }
 
             @Override
@@ -198,6 +204,7 @@ public class AsmNg {
                         i.device = devnum;
                     }
                     memory.put(i.address, i);
+                    lineInfo.put(i.address, sourceLine);
                     address++;
                 }
             }
@@ -260,12 +267,13 @@ public class AsmNg {
                         dupm.address = address++;
                         dupm.value = whatnum;
                         memory.put(dupm.address, dupm);
+                        lineInfo.put(dupm.address, sourceLine);
                     }
                     return;
                 }
 
                 memory.put(m.address, m);
-
+                lineInfo.put(m.address, sourceLine);
                 //System.out.println("WORD value = "+i);
                 address++;
             }
@@ -388,6 +396,7 @@ public class AsmNg {
         prog.binary = binary;
         prog.labels = labels;
         prog.content = memory;
+        prog.lineInfo = lineInfo;
         return prog;
     }
 
@@ -784,7 +793,10 @@ class AsmNGErrorListener extends BaseErrorListener {
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
         StringBuilder sb = new StringBuilder();
-        String symbol = offendingSymbol.toString();
+        String symbol = "none";
+        if (offendingSymbol != null) {
+            symbol = offendingSymbol.toString();
+        }
         if (offendingSymbol instanceof org.antlr.v4.runtime.Token) {
             symbol = ((org.antlr.v4.runtime.Token) offendingSymbol).getText();
         }

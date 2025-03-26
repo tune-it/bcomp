@@ -23,6 +23,8 @@ public class Program {
     public List<Integer> binary = null;
     public HashMap<String, Label> labels = null;
     public HashMap<Integer, MemoryWord> content = null;
+    public HashMap<Integer, Integer> lineInfo = null; // address-> sourceline information
+
     
     public List<Integer> getBinaryFormat() {
         if (start_address == UNDEFINED || load_address == UNDEFINED ||
