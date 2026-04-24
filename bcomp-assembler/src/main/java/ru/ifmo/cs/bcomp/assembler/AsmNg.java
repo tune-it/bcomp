@@ -40,6 +40,7 @@ public class AsmNg {
                 "ВРОТ:  НЯМ  &1\n" +
                 "       СРАВ #1\n" +
                 "       БЯКА ВЫ\n" +
+                ";jjjj\n" +        
                 "       УМЕН\n" +
                 "       СУНЬ\n" +
                 "       ВЖУХ ВРОТ\n" +
@@ -136,8 +137,13 @@ public class AsmNg {
             @Override
             public void enterLine(LineContext ctx) {
                 sourceLine++;
+                // make sure that we do not omit empty line
+                if (ctx!=null) if (ctx.start!=null) {
+                        sourceLine = ctx.start.getLine();
+                }
                 //verbose output for debug only
-                //System.out.println("sourceline["+sourceLine+"] = "+ctx.getText());
+                //String info = ctx.start.getLine()+"->"+ctx.getText();
+                //System.out.println("sourceline["+sourceLine+"] = "+info);
             }
 
             @Override
