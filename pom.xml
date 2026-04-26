@@ -1,34 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>ru.ifmo.cs</groupId>
-	<artifactId>BasicComputer</artifactId>
-	<version>2</version>
-	<packaging>pom</packaging>
-	<name>BasicComputer NextGen</name>
-	<modules>
-		<module>components</module>
-		<module>bcomp-assembler</module>
-                <module>bcomp-ng</module>
-                <module>bcomp-ng-ui</module>
-	</modules>
-	<properties>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<maven.compiler.source>1.8</maven.compiler.source>
-	</properties>
-	<scm>
-		<url>https://github.com/tune-it/bcomp</url>
-		<connection>scm:git:git://github.com/tune-it/bcomp.git</connection>
-		<developerConnection>scm:git:git@github.com/tune-it/bcomp.git</developerConnection>
-	</scm>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>ru.ifmo.cs</groupId>
+    <artifactId>BasicComputer</artifactId>
+    <version>2.45</version>
+    <packaging>pom</packaging>
+    <name>BasicComputer NextGen</name>
+    <modules>
+        <module>components</module>
+        <module>bcomp-assembler</module>
+        <module>bcomp-ng</module>
+        <module>bcomp-ng-ui</module>
+    </modules>
+    <properties>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+    </properties>
+    <url>https://se.ifmo.ru/courses/csbasics</url>
+    <scm>
+        <url>https://github.com/tune-it/bcomp</url>
+        <connection>scm:git:git://github.com/tune-it/bcomp.git</connection>
+        <developerConnection>scm:git:git@github.com/tune-it/bcomp.git</developerConnection>
+    </scm>
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>4.9.10</version>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                    </execution>
+                </executions>
                 <configuration>
-                    <showDeprecation>true</showDeprecation>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+                    <commitIdGenerationMode>full</commitIdGenerationMode>
+                    <includeOnlyProperties>
+                        <includeOnlyProperty>^git.branch$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.build.version$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.build.time$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.id.describe$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.id.full$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.time$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.total.commit.count$</includeOnlyProperty>
+                    </includeOnlyProperties>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.5.0</version> <!-- Use the latest version -->
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${basedir}</directory>
+                            <includes>
+                                <include>**/bcomp-ng-app*.jar</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
                 </configuration>
             </plugin>
         </plugins>

@@ -19,7 +19,7 @@ public class CLI {
 
     private final BasicComp bcomp;
     private final CPU cpu;
-	private final IOCtrl[] ioctrls;
+    private final IOCtrl[] ioctrls;
     private final ArrayList<Long> writelist = new ArrayList<Long>();
 
     private int sleeptime = 1;
@@ -87,11 +87,11 @@ public class CLI {
                     Thread.sleep(sleep);
                 } catch (InterruptedException e) {
                     /*totally not empty*/
-				}
+                }
             }
         });
 
-		ioctrls = bcomp.getIOCtrls();
+        ioctrls = bcomp.getIOCtrls();
     }
 
     private String getReg(Reg reg) {
@@ -167,7 +167,7 @@ public class CLI {
                 + "mr[ead]\t\t- Чтение микрокоманды\n"
                 + "md[ecode]\t- Декодировать текущую микрокоманду\n"
                 + "mdecodea[ll]\t- Декодировать всю микропрограмму\n"
-				+ "stat[e]\t\t- Вывести регистр состояния БЭВМ\n"
+                + "stat[e]\t\t- Вывести регистр состояния БЭВМ\n"
                 + "io\t\t- Вывод состояния всех ВУ\n"
                 + "io addr\t\t- Вывод состояния указанного ВУ\n"
                 + "io addr value\t- Запись value в указанное ВУ\n"
@@ -183,7 +183,7 @@ public class CLI {
     private Scanner input = new Scanner(System.in);
 
     public void cli() {
-        println("Эмулятор Базовой ЭВМ. Версия v1.45.10 " + CLI.class.getPackage().getImplementationVersion() + "\n"
+        println("Эмулятор Базовой ЭВМ. Версия " + bcomp.getVersionBrief() + "\n"
                 + "БЭВМ готова к работе.\n"
                 + "Используйте ? или help для получения справки");
 
@@ -301,27 +301,30 @@ public class CLI {
                     continue;
                 }
 
-				if (checkCmd(cmd, "mdecode")) {
+                if (checkCmd(cmd, "mdecode")) {
                     printMicroMemory(cpu.getRegValue(Reg.MP));
                     continue;
                 }
 
-				if (checkCmd(cmd, "mdecodeall")) {
-			        for (i = 0; i < (1L << cpu.getMicroCode().getAddrWidth()); i++)
-						if (cpu.getMicroCode().getValue(i) != 0)
-							printMicroMemory(i);
+                if (checkCmd(cmd, "mdecodeall")) {
+                    for (i = 0; i < (1L << cpu.getMicroCode().getAddrWidth()); i++) {
+                        if (cpu.getMicroCode().getValue(i) != 0) {
+                            printMicroMemory(i);
+                        }
+                    }
                     continue;
                 }
 
-				if (checkCmd(cmd, "state")) {
-					for (State state : State.values())
-						print(state.name() + ": " + cpu.getProgramState(state) + " ");
+                if (checkCmd(cmd, "state")) {
+                    for (State state : State.values()) {
+                        print(state.name() + ": " + cpu.getProgramState(state) + " ");
+                    }
 
-					println("");
-					continue;
-				}
+                    println("");
+                    continue;
+                }
 
-				if (checkCmd(cmd, "io")) {
+                if (checkCmd(cmd, "io")) {
                     if (i == cmds.length - 1) {
                         for (int ioaddr = 0; ioaddr < 4; ioaddr++) {
                             printIO(ioaddr);
@@ -333,7 +336,7 @@ public class CLI {
 
                     if (i < cmds.length - 1) {
                         value = Integer.parseInt(cmds[++i], 16);
-							ioctrls[ioaddr].setData(value);
+                        ioctrls[ioaddr].setData(value);
                     }
 
                     printIO(ioaddr);
@@ -346,7 +349,7 @@ public class CLI {
                     }
 
                     int ioaddr = Integer.parseInt(cmds[++i], 16);
-						ioctrls[ioaddr].setReady();
+                    ioctrls[ioaddr].setReady();
                     printIO(ioaddr);
                     continue;
                 }

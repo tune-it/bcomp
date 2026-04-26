@@ -99,7 +99,23 @@ public class BasicComp {
     public void stopTimer() {
         timer.done();
     }
+    
+    public String getVersionBrief() {
+        return 
+        new StringBuilder()
+            .append(Version.BUILD_VERSION).append(" #").append(Version.COMMIT_COUNT)
+            .toString();
+    }
 
+    public String getVersionFull() {
+        return 
+        new StringBuilder()
+            .append(Version.BUILD_VERSION).append(" #").append(Version.COMMIT_COUNT)
+            .append(" (").append(Version.BRANCH).append(" ")
+            .append(Version.BUILD_TIME).append(" ")
+            .append(Version.COMMIT_ID_DESCRIBE).append(")")
+            .toString();
+    }
     /*
 	private void ctrlDestination(ControlSignal cs, DataDestination dest, boolean remove) {
 		int iodev;
