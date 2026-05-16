@@ -6,6 +6,7 @@ package ru.ifmo.cs.bcomp.ui;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.charset.Charset;
+import java.util.Locale;
 import ru.ifmo.cs.bcomp.BasicComp;
 import ru.ifmo.cs.bcomp.ProgramBinary;
 import ru.ifmo.cs.bcomp.assembler.AsmNg;
@@ -18,6 +19,7 @@ import ru.ifmo.cs.bcomp.assembler.Program;
 public class BCompApp {
 
     public static void main(String[] args) throws Exception {
+        applyLocale();
         BasicComp bcomp = new BasicComp();
         String mpname;
         String app;
@@ -97,5 +99,13 @@ public class BCompApp {
         }
 
         System.err.println("Invalid mode selected");
+    }
+
+    private static void applyLocale() {
+        String lang = System.getProperty("locale");
+        if (lang == null || lang.isEmpty()) {
+            return;
+        }
+        Locale.setDefault(Locale.forLanguageTag(lang.replace('_', '-')));
     }
 }
