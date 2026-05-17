@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import ru.ifmo.cs.bcomp.*;
 import ru.ifmo.cs.components.DataDestination;
+import ru.ifmo.cs.components.Messages;
 import ru.ifmo.cs.bcomp.assembler.AsmNg;
 import ru.ifmo.cs.bcomp.assembler.Program;
 
@@ -104,7 +105,7 @@ public class CLI {
 
     private void printMicroMemory(long addr) {
         if (printMicroTitle) {
-            println("Адр    МК       Метка           Расшифровка");
+            println(Messages.get("cli.micro.header"));
             printMicroTitle = false;
         }
         println(MCDecoder.getFormattedMC(cpu, addr));
@@ -117,13 +118,15 @@ public class CLI {
             return;
         }
 
-        print("Адр " + (cpu.getClockState() ? "Знчн" : "   МК    "));
+        print(Messages.get("cli.regs.header.addr")
+                + (cpu.getClockState() ? Messages.get("cli.regs.header.value") : Messages.get("cli.regs.header.mc")));
         for (Reg reg : printRegs) {
             int width = (int) Math.ceil(cpu.getRegWidth(reg) / 4.0);
             int l = (int) Math.ceil((width - reg.name().length()) / 2.0);
             print(String.format(" %" + (l > 0 ? l : "") + "s%-" + (width - l) + "s", "", reg.name()));
         }
-        println(" NZVC " + (cpu.getClockState() ? "Адр Знчн" : "СчМК"));
+        println(Messages.get("cli.regs.header.nzvc")
+                + (cpu.getClockState() ? Messages.get("cli.regs.header.addr_value") : Messages.get("cli.regs.header.mp_counter")));
 
         printRegsTitle = false;
     }
@@ -139,7 +142,7 @@ public class CLI {
     }
 
     private void printIO(int ioaddr) {
-        println("ВУ" + ioaddr + " " + ioctrls[ioaddr]);
+        println(Messages.format("cli.io.entry", ioaddr, ioctrls[ioaddr]));
     }
 
     private boolean checkCmd(String cmd, String check) {
@@ -148,44 +151,21 @@ public class CLI {
 
     private void checkResult(boolean result) throws Exception {
         if (!result) {
-            throw new Exception("операция не выполнена: выполняется программа");
+            throw new Exception(Messages.get("cli.op_failed"));
         }
     }
 
     @SuppressWarnings("WeakerAccess")
     protected void printHelp() {
-        println("Доступные команды:\n"
-                + "a[ddress]\t- Пультовая операция \"Ввод адреса\"\n"
-                + "w[rite]\t\t- Пультовая операция \"Запись\"\n"
-                + "r[ead]\t\t- Пультовая операция \"Чтение\"\n"
-                + "s[tart]\t\t- Пультовая операция \"Пуск\"\n"
-                + "c[continue]\t- Пультовая операция \"Продолжить\"\n"
-                + "ru[n]\t\t- Переключение режима Работа/Останов\n"
-                + "cl[ock]\t\t- Переключение режима потактового выполнения\n"
-                + "ma[ddress]\t- Переход на микрокоманду\n"
-                + "mw[rite] value\t- Запись микрокоманды\n"
-                + "mr[ead]\t\t- Чтение микрокоманды\n"
-                + "md[ecode]\t- Декодировать текущую микрокоманду\n"
-                + "mdecodea[ll]\t- Декодировать всю микропрограмму\n"
-                + "stat[e]\t\t- Вывести регистр состояния БЭВМ\n"
-                + "io\t\t- Вывод состояния всех ВУ\n"
-                + "io addr\t\t- Вывод состояния указанного ВУ\n"
-                + "io addr value\t- Запись value в указанное ВУ\n"
-                + "flag addr\t- Установка флага готовности указанного ВУ\n"
-                + "asm\t\t- Ввод программы на ассемблере\n"
-                + "sleep value\t- Задержка между тактами при фоновом выполнении\n"
-                + "{exit|quit}\t- Выход из эмулятора\n"
-                + "(0000-FFFF)\t- Ввод шестнадцатеричного значения в клавишный регистр\n"
-                + "labelname\t- Ввод адреса метки в клавишный регистр"
-        );
+        println(Messages.get("cli.help"));
     }
 
     private Scanner input = new Scanner(System.in);
 
     public void cli() {
-        println("Эмулятор Базовой ЭВМ. Версия " + bcomp.getVersionBrief() + "\n"
-                + "БЭВМ готова к работе.\n"
-                + "Используйте ? или help для получения справки");
+        println(Messages.format("cli.banner.title", bcomp.getVersionBrief()) + "\n"
+                + Messages.get("cli.banner.ready") + "\n"
+                + Messages.get("cli.banner.help_hint"));
 
         String line;
         for (;;) {
@@ -266,13 +246,17 @@ public class CLI {
                 }
 
                 if (checkCmd(cmd, "clock")) {
-                    println("Такт: " + (cpu.invertClockState() ? "Нет" : "Да"));
+                    println(Messages.format("cli.clock.label",
+                            cpu.invertClockState() ? Messages.get("cli.no") : Messages.get("cli.yes")));
                     continue;
                 }
 
                 if (checkCmd(cmd, "run")) {
                     cpu.invertRunState();
-                    println("Режим работы: " + (cpu.getProgramState(State.W) == 1 ? "Работа" : "Останов"));
+                    println(Messages.format("cli.run_mode.label",
+                            cpu.getProgramState(State.W) == 1
+                                    ? Messages.get("cli.run_mode.running")
+                                    : Messages.get("cli.run_mode.stopped")));
                     continue;
                 }
 
@@ -284,7 +268,7 @@ public class CLI {
 
                 if (checkCmd(cmd, "mwrite")) {
                     if (i == cmds.length - 1) {
-                        throw new Exception("команда mwrite требует аргумент");
+                        throw new Exception(Messages.get("cli.cmd.mwrite_needs_arg"));
                     }
 
                     long mc = Long.parseLong(cmds[++i], 16);
@@ -345,7 +329,7 @@ public class CLI {
 
                 if (checkCmd(cmd, "flag")) {
                     if (i == cmds.length - 1) {
-                        throw new Exception("команда flag требует аргумент");
+                        throw new Exception(Messages.get("cli.cmd.flag_needs_arg"));
                     }
 
                     int ioaddr = Integer.parseInt(cmds[++i], 16);
@@ -357,7 +341,7 @@ public class CLI {
                 if (checkCmd(cmd, "asm") || checkCmd(cmd, "assembler")) {
                     String code = "";
 
-                    println("Введите текст программы. Для окончания введите END");
+                    println(Messages.get("cli.asm.prompt"));
 
                     for (;;) {
                         line = fetchLine();
@@ -375,12 +359,12 @@ public class CLI {
                     if (asm.getErrors().isEmpty()) {
                         ProgramBinary prog = new ProgramBinary(pobj.getBinaryFormat());
                         bcomp.loadProgram(prog);
-                        println("Программа начинается с адреса " + Utils.toHex(prog.start_address, 11));
+                        println(Messages.format("cli.asm.start_address", Utils.toHex(prog.start_address, 11)));
                     } else {
                         for (String err : asm.getErrors()) {
                             println(err);
                         }
-                        println("Программа содержит ошибки");
+                        println(Messages.get("cli.asm.has_errors"));
                     }
                     printOnStop = true;
                     continue;
@@ -388,7 +372,7 @@ public class CLI {
 
                 if (checkCmd(cmd, "sleep")) {
                     if (i == cmds.length - 1) {
-                        throw new Exception("команда sleep требует аргумент");
+                        throw new Exception(Messages.get("cli.cmd.sleep_needs_arg"));
                     }
 
                     sleeptime = Integer.parseInt(cmds[++i], 16);
@@ -396,7 +380,7 @@ public class CLI {
                 }
             } catch (Exception e) {
                 printOnStop = true;
-                println("Ошибка: " + e.getMessage());
+                println(Messages.format("cli.error", e.getMessage()));
                 continue;
             }
 
@@ -405,12 +389,12 @@ public class CLI {
                     value = Integer.parseInt(cmd, 16);
                     cpu.getRegister(Reg.IR).setValue(value);
                 } else {
-                    println("Неизвестная команда " + cmd);
+                    println(Messages.format("cli.unknown_cmd", cmd));
                 }
 //					else
 //						value = asm.getLabelAddr(cmd.toUpperCase());
             } catch (Exception e) {
-                println("Неизвестная команда " + cmd);
+                println(Messages.format("cli.unknown_cmd", cmd));
             }
         }
     }
