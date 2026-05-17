@@ -8,6 +8,7 @@ package ru.ifmo.cs.bcomp;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import ru.ifmo.cs.components.Messages;
 
 /**
  * This class is only used as container for binary
@@ -30,21 +31,21 @@ public class ProgramBinary {
     
     public final List<Integer> getBinaryFormat() {
         if (start_address == UNDEFINED || load_address == UNDEFINED ||
-                binary == null || binary.isEmpty()) 
-            throw new RuntimeException("BcompNG: Program data is corrupted");
+                binary == null || binary.isEmpty())
+            throw new RuntimeException(Messages.get("binary.corrupted"));
         LinkedList<Integer> prog = new LinkedList<Integer>(binary);
         prog.add(0,start_address);
         prog.add(0,load_address);
         return prog;
     }
-    
+
     public final void loadBinaryFormat(List<Integer> prog) {
         Iterator<Integer> i = prog.iterator();
-        if (!i.hasNext()) throw new IndexOutOfBoundsException("BcompNG: Программа пуста: load_address");
+        if (!i.hasNext()) throw new IndexOutOfBoundsException(Messages.get("binary.empty.load"));
         load_address = i.next();
-        if (!i.hasNext()) throw new IndexOutOfBoundsException("BcompNG: Программа пуста: start_address");
+        if (!i.hasNext()) throw new IndexOutOfBoundsException(Messages.get("binary.empty.start"));
         start_address = i.next();
-        if (prog.size()<3) throw new IndexOutOfBoundsException("BcompNG: Программа пуста: binary body");
+        if (prog.size()<3) throw new IndexOutOfBoundsException(Messages.get("binary.empty.body"));
         binary = new LinkedList<Integer>();
         while (i.hasNext()) binary.add(i.next());
     }

@@ -3,6 +3,8 @@
  */
 package ru.ifmo.cs.bcomp;
 
+import ru.ifmo.cs.components.Messages;
+
 /**
  *
  * @author Dmitry Afanasiev <KOT@MATPOCKuH.Ru>
@@ -73,18 +75,18 @@ public class BasicComp {
 
     public void loadProgram(ProgramBinary prog) throws RuntimeException {
         if (cpu.isLocked()) {
-            throw new RuntimeException("Операция невозможна: выполняется программа");
+            throw new RuntimeException(Messages.get("engine.busy"));
         }
         if (!cpu.executeSetAddr(prog.load_address)) {
-            throw new RuntimeException("Операция прервана: выполняется программа");
+            throw new RuntimeException(Messages.get("engine.aborted"));
         }
         for (Integer cmd : prog.binary) {
             if (!cpu.executeWrite(cmd)) {
-                throw new RuntimeException("Операция прервана: выполняется программа");
+                throw new RuntimeException(Messages.get("engine.aborted"));
             }
         }
         if (!cpu.executeSetAddr(prog.start_address)) {
-            throw new RuntimeException("Операция прервана: выполняется программа");
+            throw new RuntimeException(Messages.get("engine.aborted"));
         }
     }
 
