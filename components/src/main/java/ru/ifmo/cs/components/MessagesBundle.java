@@ -3,7 +3,7 @@ package ru.ifmo.cs.components;
 import java.util.ListResourceBundle;
 
 // Key naming: engine.* (simulator core), cli.* (CLI output),
-// binary.* (program loader), asm.* (assembler).
+// binary.* (program loader), asm.* (assembler), gui.* (Swing UI).
 public class MessagesBundle extends ListResourceBundle {
     @Override
     protected Object[][] getContents() {
@@ -93,5 +93,46 @@ public class MessagesBundle extends ListResourceBundle {
                 + "(0000-FFFF)\t- Enter hexadecimal value into key register\n"
                 + "labelname\t- Enter label address into key register"
             },
+
+            // GUI: console buttons
+            {"gui.btn.read",     " F6 Read"},
+            {"gui.btn.write",    "F5 Write"},
+            {"gui.btn.setip",    "F4 Enter Address"},
+            {"gui.btn.start",    "F7 Start"},
+            {"gui.btn.continue", "F8 Continue"},
+            {"gui.btn.tick",     "Shift+F9 Tick"},
+            {"gui.btn.run",      "F9  Run"},
+            {"gui.btn.stop",     "F9 Stop  "},
+            {"gui.btn.runstop",  "F9 Run/Stop"},
+
+            // GUI: app-level labels
+            {"gui.app.basename",     "Basic computer"},
+            {"gui.app.assembler",    "Assembler"},
+            {"gui.app.error",        "Error"},
+            {"gui.app.stop_running", "To compile, stop the running program"},
+            {"gui.app.compile",      "Compile"},
+            {"gui.app.cdev",         "CDEV"},
+
+            // GUI: IO controllers
+            {"gui.dev.output",  "CDev-1 (0x2-0x3) Controller of output device"},
+            {"gui.dev.input",   "CDev-2 (0x4-0x5) Controller of input device"},
+            {"gui.dev.io",      "CDev-3 (0x6-0x7) Controller of IO device"},
+            {"gui.dev.ready",   "Ready"},
+            {"gui.dev.label.1", "CDev 1"},
+            {"gui.dev.label.2", "CDev 2"},
+            {"gui.dev.label.3", "CDev 3"},
+            {"gui.dev.label.4", "CDev 4"},
+            {"gui.dev.label.5", "Dev 5"},
+            {"gui.dev.label.6", "Dev 6"},
+            {"gui.dev.label.7", "Dev 7"},
+            {"gui.dev.label.8", "Dev 8"},
+            {"gui.dev.label.9", "Dev 9"},
+
+            // GUI: peripheral devices
+            {"gui.io.printer", "Text printer (0xC-0xF)"},
+            {"gui.io.ticker",  "Ticker (0x10-0x13)"},
+            {"gui.io.ssd",     "Seven segment display (0x14-0x17)"},
+            {"gui.io.kbd",     "Keyboard (0x18-0x1B)"},
+            {"gui.io.numpad",  "Numpad (0x1C-0x1F)"},
     };
 }

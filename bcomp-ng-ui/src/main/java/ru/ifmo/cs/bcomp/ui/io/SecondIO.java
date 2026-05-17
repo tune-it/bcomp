@@ -2,6 +2,7 @@ package ru.ifmo.cs.bcomp.ui.io;
 import ru.ifmo.cs.bcomp.IOCtrl;
 import ru.ifmo.cs.bcomp.ui.components.ComponentManager;
 import ru.ifmo.cs.bcomp.ui.components.InputRegisterView;
+import ru.ifmo.cs.components.Messages;
 import javax.swing.*;
 import java.awt.*;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
@@ -11,7 +12,7 @@ public class SecondIO extends IODevice {
     private InputRegisterView input;
 
     public SecondIO(IOCtrl ioCtrl, ComponentManager componentManager) {
-        super(ioCtrl, "input");
+        super(ioCtrl, "gui.dev.input");
         this.componentManager = componentManager;
     }
 
@@ -25,7 +26,7 @@ public class SecondIO extends IODevice {
         input.setPreferredSize(input.getSize());
         input.setMinimumSize(input.getSize());
         input.setTitle("DR");
-        ButtonReady button = new ButtonReady(ioctrl,getRes().getString("ready"));
+        ButtonReady button = new ButtonReady(ioctrl, Messages.get("gui.dev.ready"));
         ioctrl.addDestination(1,button);
         GridBagConstraints constraints = new GridBagConstraints() {{
             gridy = 0;

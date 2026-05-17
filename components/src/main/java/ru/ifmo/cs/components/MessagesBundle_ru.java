@@ -91,5 +91,46 @@ public class MessagesBundle_ru extends ListResourceBundle {
                 + "(0000-FFFF)\t- Ввод шестнадцатеричного значения в клавишный регистр\n"
                 + "labelname\t- Ввод адреса метки в клавишный регистр"
             },
+
+            // GUI: console buttons
+            {"gui.btn.read",     "F6 Чтение"},
+            {"gui.btn.write",    "F5 Запись"},
+            {"gui.btn.setip",    "F4 Ввод адреса"},
+            {"gui.btn.start",    "F7 Пуск"},
+            {"gui.btn.continue", "F8 Продолжение"},
+            {"gui.btn.tick",     "Shift+F9 Такт"},
+            {"gui.btn.run",      "F9   Работа"},
+            {"gui.btn.stop",     "F9 Останов"},
+            {"gui.btn.runstop",  "F9 Работа/Останов"},
+
+            // GUI: app-level labels
+            {"gui.app.basename",     "Базовая ЭВМ"},
+            {"gui.app.assembler",    "Ассемблер"},
+            {"gui.app.error",        "Ошибка"},
+            {"gui.app.stop_running", "Для компиляции остановите выполняющуюся программу"},
+            {"gui.app.compile",      "Компилировать"},
+            {"gui.app.cdev",         "Контроллер ВУ"},
+
+            // GUI: IO controllers
+            {"gui.dev.output",  "КВУ-1 (0x2-0x3) Контроллер уст-ва вывода"},
+            {"gui.dev.input",   "КВУ-2 (0x4-0x5) Контроллер уст-ва ввода"},
+            {"gui.dev.io",      "КВУ-3 (0x6-0x7) Контроллер уст-ва ввода-вывода"},
+            {"gui.dev.ready",   "Готов"},
+            {"gui.dev.label.1", "КВУ 1"},
+            {"gui.dev.label.2", "КВУ 2"},
+            {"gui.dev.label.3", "КВУ 3"},
+            {"gui.dev.label.4", "КВУ 4"},
+            {"gui.dev.label.5", "ВУ 5"},
+            {"gui.dev.label.6", "ВУ 6"},
+            {"gui.dev.label.7", "ВУ 7"},
+            {"gui.dev.label.8", "ВУ 8"},
+            {"gui.dev.label.9", "ВУ 9"},
+
+            // GUI: peripheral devices
+            {"gui.io.printer", "Текстовый принтер (0xC-0xF)"},
+            {"gui.io.ticker",  "Бегущая строка (0x10-0x13)"},
+            {"gui.io.ssd",     "Семисегментный индикатор (0x14-0x17)"},
+            {"gui.io.kbd",     "Клавиатура (0x18-0x1B)"},
+            {"gui.io.numpad",  "Цифровая клавиатура (0x1C-0x1F)"},
     };
 }

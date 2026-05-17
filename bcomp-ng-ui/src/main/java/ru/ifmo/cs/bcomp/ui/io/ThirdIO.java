@@ -1,6 +1,7 @@
 package ru.ifmo.cs.bcomp.ui.io;
 import ru.ifmo.cs.bcomp.IOCtrl;
 import ru.ifmo.cs.bcomp.ui.components.RegisterView;
+import ru.ifmo.cs.components.Messages;
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,7 +11,7 @@ public class ThirdIO extends IODevice {
     private RegisterView output;
 
     public ThirdIO(IOCtrl ioCtrl) {
-        super(ioCtrl, "IO");
+        super(ioCtrl, "gui.dev.io");
     }
 
     @Override
@@ -24,7 +25,7 @@ public class ThirdIO extends IODevice {
         output.setMinimumSize(output.getSize());
         output.setTitle("DR");
         ButtonPanel input = new ButtonPanel(output);
-        ButtonReady buttonReady = new ButtonReady(ioctrl,getRes().getString("ready"));
+        ButtonReady buttonReady = new ButtonReady(ioctrl, Messages.get("gui.dev.ready"));
         ioctrl.addDestination(1,buttonReady);
         ioctrl.addDestination(0, output);
        GridBagConstraints constraints = new GridBagConstraints() {{
