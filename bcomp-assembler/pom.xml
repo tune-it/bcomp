@@ -30,6 +30,11 @@
             <artifactId>antlr4-runtime</artifactId>
             <version>4.9.3</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>components</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

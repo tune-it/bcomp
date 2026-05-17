@@ -11,6 +11,7 @@ import ru.ifmo.cs.bcomp.BasicComp;
 import ru.ifmo.cs.bcomp.ProgramBinary;
 import ru.ifmo.cs.bcomp.assembler.AsmNg;
 import ru.ifmo.cs.bcomp.assembler.Program;
+import ru.ifmo.cs.components.Messages;
 
 /**
  *
@@ -106,6 +107,8 @@ public class BCompApp {
         if (lang == null || lang.isEmpty()) {
             return;
         }
-        Locale.setDefault(Locale.forLanguageTag(lang.replace('_', '-')));
+        Locale locale = Locale.forLanguageTag(lang.replace('_', '-'));
+        Locale.setDefault(locale);
+        Messages.setLocale(locale);
     }
 }
