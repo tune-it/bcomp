@@ -3,6 +3,7 @@ package ru.ifmo.cs.bcomp.ui.components;
 import javax.swing.*;
 import java.awt.*;
 
+import ru.ifmo.cs.components.Messages;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 
 
@@ -16,7 +17,7 @@ public class CommutView extends JComponent {
 
         this.x=x;this.y=y;this.wight=width;this.height=height;
 
-        JLabel title = new JLabel("Commutator", JLabel.CENTER);
+        JLabel title = new JLabel(Messages.get("gui.label.commutator"), JLabel.CENTER);
         title.setFont(FONT_COURIER_BOLD_21);
         title.setBounds(x, y, width, height);
         add(title);

@@ -139,5 +139,9 @@ public class MessagesBundle_ru extends ListResourceBundle {
             {"gui.io.printer.charset","Кодировка"},
             {"gui.io.printer.delay",  "Задержка"},
             {"gui.io.kbd.latrus",     "Lat/Рус"},
+
+            // GUI: unit labels
+            {"gui.label.alu",        "АЛУ"},
+            {"gui.label.commutator", "Коммутатор"},
     };
 }
