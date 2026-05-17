@@ -10,6 +10,7 @@ import java.awt.Graphics;
 import javax.swing.JComponent;
 import ru.ifmo.cs.bcomp.IOCtrl;
 import ru.ifmo.cs.components.DataDestination;
+import ru.ifmo.cs.components.Messages;
 
 /**
  *
@@ -30,7 +31,7 @@ class FlagIndicator extends JComponent {
 		setMaximumSize(DIMS);
 		setPreferredSize(DIMS);
 		setSize(DIMS);
-		setToolTipText("Готовность");
+		setToolTipText(Messages.get("gui.io.flag.tooltip"));
 
 		ioctrl.addDestination(ioctrl.getRegisters()[1], new DataDestination() {
 			@Override

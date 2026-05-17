@@ -132,5 +132,12 @@ public class MessagesBundle_ru extends ListResourceBundle {
             {"gui.io.ssd",     "Семисегментный индикатор (0x14-0x17)"},
             {"gui.io.kbd",     "Клавиатура (0x18-0x1B)"},
             {"gui.io.numpad",  "Цифровая клавиатура (0x1C-0x1F)"},
+
+            // GUI: peripheral widgets
+            {"gui.io.flag.tooltip",   "Готовность"},
+            {"gui.io.power.on",       "Вкл"},
+            {"gui.io.printer.charset","Кодировка"},
+            {"gui.io.printer.delay",  "Задержка"},
+            {"gui.io.kbd.latrus",     "Lat/Рус"},
     };
 }

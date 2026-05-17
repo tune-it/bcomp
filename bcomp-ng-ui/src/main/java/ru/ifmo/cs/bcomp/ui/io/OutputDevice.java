@@ -12,6 +12,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import ru.ifmo.cs.bcomp.IOCtrl;
+import ru.ifmo.cs.components.Messages;
 
 /**
  *
@@ -42,7 +43,7 @@ public abstract class OutputDevice extends IODevice {
 	}
 
 	protected Component getPowerChkBox() {
-		JCheckBox power = new JCheckBox("Вкл", true);
+		JCheckBox power = new JCheckBox(Messages.get("gui.io.power.on"), true);
 		power.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {

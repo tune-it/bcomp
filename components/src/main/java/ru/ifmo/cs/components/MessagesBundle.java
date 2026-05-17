@@ -134,5 +134,12 @@ public class MessagesBundle extends ListResourceBundle {
             {"gui.io.ssd",     "Seven segment display (0x14-0x17)"},
             {"gui.io.kbd",     "Keyboard (0x18-0x1B)"},
             {"gui.io.numpad",  "Numpad (0x1C-0x1F)"},
+
+            // GUI: peripheral widgets
+            {"gui.io.flag.tooltip",   "Ready"},
+            {"gui.io.power.on",       "On"},
+            {"gui.io.printer.charset","Encoding"},
+            {"gui.io.printer.delay",  "Delay"},
+            {"gui.io.kbd.latrus",     "Lat/Rus"},
     };
 }

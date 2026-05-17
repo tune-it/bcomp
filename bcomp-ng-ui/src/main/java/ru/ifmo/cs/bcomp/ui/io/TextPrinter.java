@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 import ru.ifmo.cs.bcomp.IOCtrl;
+import ru.ifmo.cs.components.Messages;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.FONT_COURIER_BOLD_21;
 
 /**
@@ -52,10 +53,10 @@ public class TextPrinter extends OutputDevice {
 				charset = (String)source.getSelectedItem();
 			}
 		});
-		north.add(new JLabel("Кодировка"));
+		north.add(new JLabel(Messages.get("gui.io.printer.charset")));
 		north.add(charsetbox);
 
-		north.add(new JLabel("Задержка"));
+		north.add(new JLabel(Messages.get("gui.io.printer.delay")));
 		north.add(getSleepSlider());
 
 		north.add(getPowerChkBox());
