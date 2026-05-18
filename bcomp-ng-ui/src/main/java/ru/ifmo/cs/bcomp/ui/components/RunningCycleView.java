@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import ru.ifmo.cs.bcomp.CPU;
 import ru.ifmo.cs.bcomp.RunningCycle;
 import ru.ifmo.cs.bcomp.State;
+import ru.ifmo.cs.components.Messages;
 
 import java.awt.*;
 import java.util.EnumMap;
@@ -21,13 +22,13 @@ import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 public class RunningCycleView extends BCompComponent {
 	private CPU cpu;
 	private static final String[] cycleslabels = {
-		"Instruction fetch",
-		"Address fetch",
-		"Operand fetch",
-		"Execution",
-		"Interrupt",
-		"Operator panel",
-		"Program"
+		Messages.get("gui.cycle.infetch"),
+		Messages.get("gui.cycle.adfetch"),
+		Messages.get("gui.cycle.opfetch"),
+		Messages.get("gui.cycle.exec"),
+		Messages.get("gui.cycle.int"),
+		Messages.get("gui.cycle.panel"),
+		Messages.get("gui.cycle.program")
 	};
 	private EnumMap<RunningCycle, Integer> cycles= new EnumMap<RunningCycle, Integer>(RunningCycle.class);
 
@@ -35,7 +36,7 @@ public class RunningCycleView extends BCompComponent {
 	private RunningCycle lastcycle = RunningCycle.STOP;
 
 	public RunningCycleView(CPU cpu, int x, int y) {
-		super("Control Unit", cycleslabels.length);
+		super(Messages.get("gui.label.cu"), cycleslabels.length);
 
 		this.cpu = cpu;
 

@@ -145,5 +145,16 @@ public class MessagesBundle extends ListResourceBundle {
             // GUI: unit labels
             {"gui.label.alu",        "ALU"},
             {"gui.label.commutator", "Commutator"},
+            {"gui.label.cu",         "Control Unit"},
+            {"gui.label.ram",        "RAM"},
+
+            // GUI: CPU running cycles
+            {"gui.cycle.infetch",  "Instruction fetch"},
+            {"gui.cycle.adfetch",  "Address fetch"},
+            {"gui.cycle.opfetch",  "Operand fetch"},
+            {"gui.cycle.exec",     "Execution"},
+            {"gui.cycle.int",      "Interrupt"},
+            {"gui.cycle.panel",    "Operator panel"},
+            {"gui.cycle.program",  "Program"},
     };
 }
