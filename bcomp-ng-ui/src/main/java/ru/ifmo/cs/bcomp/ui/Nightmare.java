@@ -14,8 +14,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.Locale;
-import java.util.ResourceBundle;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,6 +35,7 @@ import ru.ifmo.cs.bcomp.ui.io.SevenSegmentDisplay;
 import ru.ifmo.cs.bcomp.ui.io.TextPrinter;
 import ru.ifmo.cs.bcomp.ui.io.Ticker;
 import ru.ifmo.cs.components.DataDestination;
+import ru.ifmo.cs.components.Messages;
 import ru.ifmo.cs.components.Register;
 
 /**
@@ -50,7 +49,6 @@ public class Nightmare {
     private static final int BIT_RADIUS = 16;
     private static final Font LABEL_FONT = new Font("Courier New", Font.BOLD, 24);
     private static final Font HINTS_FONT = new Font("Courier New", Font.BOLD, 14);
-    private final ResourceBundle res = ResourceBundle.getBundle("ru.ifmo.cs.bcomp.ui.components.loc", Locale.getDefault());
     private final long[] delayPeriods = {0, 1, 5, 10, 25, 50, 100, 1000};
     private volatile int currentDelay = 3;
 
@@ -149,7 +147,7 @@ public class Nightmare {
             panel.add(flag);
             panel.add(data);
 
-            frame = new JFrame(res.getString("cdev") + number);
+            frame = new JFrame(Messages.get("gui.app.cdev") + number);
             frame.add(panel);
             frame.pack();
 
@@ -235,7 +233,7 @@ public class Nightmare {
                 ioctrl.addDestination(i, regview[i]);
             }
 
-            frame = new JFrame(res.getString("cdev") + number);
+            frame = new JFrame(Messages.get("gui.app.cdev") + number);
             frame.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
             frame.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
             frame.add(panel);
@@ -330,7 +328,7 @@ public class Nightmare {
             }
         });
 
-        JFrame frame = new JFrame(res.getString("basename"));
+        JFrame frame = new JFrame(Messages.get("gui.app.basename"));
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel(new GridLayout(10, 1));
@@ -344,13 +342,13 @@ public class Nightmare {
         panel.add(regs.get(PS));
         panel.add(regs.get(IR));
 
-        String buttons = res.getString("setip") + " "
-                + res.getString("write") + " "
-                + res.getString("read") + " "
-                + res.getString("start") + " "
-                + res.getString("continue") + " "
-                + res.getString("runstop") + " "
-                + res.getString("tick");
+        String buttons = Messages.get("gui.btn.setip") + " "
+                + Messages.get("gui.btn.write") + " "
+                + Messages.get("gui.btn.read") + " "
+                + Messages.get("gui.btn.start") + " "
+                + Messages.get("gui.btn.continue") + " "
+                + Messages.get("gui.btn.runstop") + " "
+                + Messages.get("gui.btn.tick");
 
         JLabel hints = new JLabel(buttons);
         hints.setFont(HINTS_FONT);

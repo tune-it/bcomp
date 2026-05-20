@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import ru.ifmo.cs.bcomp.IOCtrl;
+import ru.ifmo.cs.components.Messages;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.FONT_COURIER_PLAIN_12;
 
 /**
@@ -134,7 +135,7 @@ public class Keyboard extends IODevice {
 	}
 
 	public Keyboard(final IOCtrl ioctrl) {
-		super(ioctrl, "kbd");
+		super(ioctrl, "gui.io.kbd");
 	}
 
 	@Override
@@ -218,7 +219,7 @@ public class Keyboard extends IODevice {
 		JPanel jrow = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		jrow.add(new FlagIndicator(ioctrl, 30));
 
-		SizedButton latrus = new SizedButton("Lat/Рус");
+		SizedButton latrus = new SizedButton(Messages.get("gui.io.kbd.latrus"));
 		latrus.buttonSetSize(new Dimension(120, 30));
 		latrus.addActionListener(new ActionListener() {
 			@Override

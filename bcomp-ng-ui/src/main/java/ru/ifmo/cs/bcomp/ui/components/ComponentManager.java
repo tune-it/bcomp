@@ -8,8 +8,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.Locale;
-import java.util.ResourceBundle;
 import javax.swing.*;
 
 import ru.ifmo.cs.bcomp.*;
@@ -21,6 +19,7 @@ import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 
 
 import ru.ifmo.cs.components.DataDestination;
+import ru.ifmo.cs.components.Messages;
 import ru.ifmo.cs.components.Utils;
 
 /**
@@ -110,47 +109,46 @@ public class ComponentManager {
 		}
 	}
 
-	private ResourceBundle res = ResourceBundle.getBundle("ru.ifmo.cs.bcomp.ui.components.loc", Locale.getDefault());
 	private Color[] buttonColors = new Color[]{COLOR_TEXT, COLOR_ACTIVE};
 	private ButtonProperties[] buttonProperties = {
-			new ButtonProperties(new String[]{res.getString("setip")}, new ActionListener() {
+			new ButtonProperties(new String[]{Messages.get("gui.btn.setip")}, new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					cmdEnterAddr();
 				}
 			}),
-			new ButtonProperties(new String[]{res.getString("read")}, new ActionListener() {
+			new ButtonProperties(new String[]{Messages.get("gui.btn.read")}, new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					cmdRead();
 				}
 			}),
-			new ButtonProperties(new String[]{res.getString("write")}, new ActionListener() {
+			new ButtonProperties(new String[]{Messages.get("gui.btn.write")}, new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					cmdWrite();
 				}
 			}),
 
-			new ButtonProperties(new String[]{res.getString("start")}, new ActionListener() {
+			new ButtonProperties(new String[]{Messages.get("gui.btn.start")}, new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					cmdStart();
 				}
 			}),
-			new ButtonProperties(new String[]{res.getString("continue")}, new ActionListener() {
+			new ButtonProperties(new String[]{Messages.get("gui.btn.continue")}, new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					cmdContinue();
 				}
 			}),
-			new ButtonProperties(new String[]{res.getString("stop"), res.getString("run")}, new ActionListener() {
+			new ButtonProperties(new String[]{Messages.get("gui.btn.stop"), Messages.get("gui.btn.run")}, new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					cmdInvertRunState();
 				}
 			}),
-			new ButtonProperties(new String[]{res.getString("tick")}, new ActionListener() {
+			new ButtonProperties(new String[]{Messages.get("gui.btn.tick")}, new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					cmdInvertClockState();
@@ -499,7 +497,4 @@ public class ComponentManager {
 		return mem;
 	}
 
-	public ResourceBundle getRes() {
-		return res;
-	}
 }

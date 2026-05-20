@@ -5,10 +5,9 @@
 package ru.ifmo.cs.bcomp.ui.io;
 
 import java.awt.*;
-import java.util.Locale;
-import java.util.ResourceBundle;
 import javax.swing.JFrame;
 import ru.ifmo.cs.bcomp.IOCtrl;
+import ru.ifmo.cs.components.Messages;
 
 /**
  *
@@ -18,12 +17,11 @@ public abstract class IODevice {
 	protected final IOCtrl ioctrl;
 	protected final String title;
 	private JFrame frame = null;
-	private ResourceBundle res = ResourceBundle.getBundle("ru.ifmo.cs.bcomp.ui.components.loc", Locale.getDefault());
 
 
-	public IODevice(final IOCtrl ioctrl, final String title) {
+	public IODevice(final IOCtrl ioctrl, final String titleKey) {
 		this.ioctrl = ioctrl;
-		this.title = res.getString(title);
+		this.title = Messages.get(titleKey);
 	}
 
 	protected abstract Component getContent();
@@ -42,9 +40,5 @@ public abstract class IODevice {
 
 	public JFrame getFrame() {
 		return frame;
-	}
-
-	public ResourceBundle getRes() {
-		return res;
 	}
 }

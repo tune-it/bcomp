@@ -59,7 +59,7 @@ public class Ticker extends OutputDevice {
 	}
 
 	public Ticker(IOCtrl ioctrl) {
-		super(ioctrl, "ticker");
+		super(ioctrl, "gui.io.ticker");
 
 		Arrays.fill(elements, 0);
 	}

@@ -20,6 +20,7 @@ import ru.ifmo.cs.bcomp.ProgramBinary;
 import ru.ifmo.cs.bcomp.assembler.AsmNg;
 import ru.ifmo.cs.bcomp.assembler.Program;
 import ru.ifmo.cs.bcomp.ui.GUI;
+import ru.ifmo.cs.components.Messages;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 
 /**
@@ -46,7 +47,7 @@ public class AssemblerView extends BCompPanel implements ActionListener {
 		JScrollPane scroll = new JScrollPane(text);
 		pane.add(scroll,BorderLayout.CENTER);
 
-		JButton button = new JButton(cmanager.getRes().getString("compile"));
+		JButton button = new JButton(Messages.get("gui.app.compile"));
 		button.setForeground(COLOR_TEXT);
 		button.setFont(FONT_COURIER_PLAIN_12);
 		button.setFocusable(false);
@@ -79,11 +80,11 @@ public class AssemblerView extends BCompPanel implements ActionListener {
 
 	@Override
 	public String getPanelName() {
-		return cmanager.getRes().getString("assembler");
+		return Messages.get("gui.app.assembler");
 	}
 
 	private void showError(String msg) {
-		JOptionPane.showMessageDialog(gui, msg, cmanager.getRes().getString("error"), JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(gui, msg, Messages.get("gui.app.error"), JOptionPane.ERROR_MESSAGE);
 	}
 
     @Override
@@ -94,7 +95,7 @@ public class AssemblerView extends BCompPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (cpu.isLocked()) {
-            showError(cmanager.getRes().getString("stopRunning"));
+            showError(Messages.get("gui.app.stop_running"));
             return;
         }
 

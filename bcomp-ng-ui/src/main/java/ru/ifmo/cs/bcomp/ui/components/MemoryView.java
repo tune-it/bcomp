@@ -6,6 +6,7 @@ package ru.ifmo.cs.bcomp.ui.components;
 
 import java.awt.Graphics;
 import javax.swing.JLabel;
+import ru.ifmo.cs.components.Messages;
 import ru.ifmo.cs.components.Utils;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 import ru.ifmo.cs.components.Memory;
@@ -25,7 +26,7 @@ public class MemoryView extends BCompComponent {
 	private JLabel[] values = new JLabel[16];
 
 	public MemoryView(Memory mem, int x, int y) {
-		super("RAM", 16);
+		super(Messages.get("gui.label.ram"), 16);
 		this.mem = mem;
 
 		addrBitWidth = (int)mem.getAddrWidth() ;

@@ -8,6 +8,7 @@ import ru.ifmo.cs.bcomp.*;
 import ru.ifmo.cs.bcomp.ui.GUI;
 import ru.ifmo.cs.bcomp.ui.io.*;
 import ru.ifmo.cs.components.DataDestination;
+import ru.ifmo.cs.components.Messages;
 
 import javax.swing.*;
 import java.awt.*;
@@ -415,7 +416,7 @@ public class BasicView extends BCompPanel {
         };
         RegPanel buttonsPanel = new RegPanel();
         for (int i = 1; i < 10; i++) {
-            ioButtons[i - 1] = new JToggleButton(cmanager.getRes().getString("DEV-" + i));
+            ioButtons[i - 1] = new JToggleButton(Messages.get("gui.dev.label." + i));
             ioButtons[i - 1].setFont(FONT_COURIER_PLAIN_12);
             ioButtons[i - 1].setFocusable(false);
             ioButtons[i - 1].addItemListener(actionListeners[i - 1]);
@@ -442,7 +443,7 @@ public class BasicView extends BCompPanel {
 
     @Override
     public String getPanelName() {
-        return cmanager.getRes().getString("basename");
+        return Messages.get("gui.app.basename");
     }
 
     @Override

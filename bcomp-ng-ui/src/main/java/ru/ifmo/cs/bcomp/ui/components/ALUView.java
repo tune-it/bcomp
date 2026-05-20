@@ -7,6 +7,7 @@ package ru.ifmo.cs.bcomp.ui.components;
 import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import ru.ifmo.cs.components.Messages;
 import static ru.ifmo.cs.bcomp.ui.components.DisplayStyles.*;
 
 /**
@@ -29,7 +30,7 @@ public class ALUView extends JComponent {
 			0, 0, offset, 0, 0, height - 1, height - 1
 		};
 
-		JLabel title = new JLabel("ALU", JLabel.CENTER);
+		JLabel title = new JLabel(Messages.get("gui.label.alu"), JLabel.CENTER);
 		title.setFont(FONT_COURIER_BOLD_45);
 		title.setBounds(offset, offset, width - 2 * offset, height - offset);
 		add(title);

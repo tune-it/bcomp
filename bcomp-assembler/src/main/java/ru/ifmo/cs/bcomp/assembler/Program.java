@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import ru.ifmo.cs.components.Messages;
 
 /**
  * This class is only used as container for binary
@@ -28,8 +29,8 @@ public class Program {
     
     public List<Integer> getBinaryFormat() {
         if (start_address == UNDEFINED || load_address == UNDEFINED ||
-                binary == null || binary.isEmpty()) 
-            throw new RuntimeException("AsmNG Program.getBinaryFormat: Program data is corrupted");
+                binary == null || binary.isEmpty())
+            throw new RuntimeException(Messages.get("asm.program.corrupted"));
         //actually we can regenerate programm data here if labels and content
         //are not null but we would not
         LinkedList<Integer> prog = new LinkedList<Integer>(binary);
@@ -37,23 +38,23 @@ public class Program {
         prog.add(0,load_address);
         return prog;
     }
-    
+
     public void loadBinaryFormat(List<Integer> prog) {
         Iterator<Integer> i = prog.iterator();
-        if (!i.hasNext()) throw new IndexOutOfBoundsException("AsmNG Program.loadBinaryFormat: Программа пуста: load_address");
+        if (!i.hasNext()) throw new IndexOutOfBoundsException(Messages.get("asm.program.empty.load"));
         load_address = i.next();
-        if (!i.hasNext()) throw new IndexOutOfBoundsException("AsmNG Program.loadBinaryFormat: Программа пуста: start_address");
+        if (!i.hasNext()) throw new IndexOutOfBoundsException(Messages.get("asm.program.empty.start"));
         start_address = i.next();
-        if (prog.size()<3) throw new IndexOutOfBoundsException("AsmNG Program.loadBinaryFormat: Программа пуста: binary body");
+        if (prog.size()<3) throw new IndexOutOfBoundsException(Messages.get("asm.program.empty.body"));
         binary = new LinkedList<Integer>();
         while (i.hasNext()) binary.add(i.next());
     }
-    
+
     public int getLabelAddr (String label) {
-        if (labels == null) 
-            throw new RuntimeException("AsmNG Program.getLabelAddr: Labels are not set up");
+        if (labels == null)
+            throw new RuntimeException(Messages.get("asm.program.labels.unset"));
         if (!labels.containsKey(label))
-            throw new IllegalArgumentException("AsmNG Program.getLabelAddr: Label "+label+" not found");
+            throw new IllegalArgumentException(Messages.format("asm.program.label.not_found", label));
         return labels.get(label).address;
     }
     

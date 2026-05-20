@@ -80,7 +80,7 @@ public class SevenSegmentDisplay extends OutputDevice {
 	}
 
 	public SevenSegmentDisplay(IOCtrl ioctrl) {
-		super(ioctrl, "ssd");
+		super(ioctrl, "gui.io.ssd");
 	}
 
 	private static int pos(int length, int width) {
