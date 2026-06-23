@@ -39,6 +39,7 @@
                                     <include>ru.ifmo.cs:components</include>
                                     <include>ru.ifmo.cs:bcomp-assembler</include>
                                     <include>ru.ifmo.cs:bcomp-ng</include>
+                                    <include>ru.ifmo.cs:bcomp-axl</include>
                                     <include>ru.ifmo.cs:bcomp-ng-ui</include>
                                     <include>org.antlr:antlr4-runtime</include>
                                 </includes>
@@ -70,6 +71,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>bcomp-assembler</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>bcomp-axl</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
