@@ -45,7 +45,6 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>components</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>

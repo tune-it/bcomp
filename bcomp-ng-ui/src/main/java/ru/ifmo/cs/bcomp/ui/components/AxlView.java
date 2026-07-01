@@ -5,6 +5,7 @@ import ru.ifmo.cs.bcomp.ProgramBinary;
 import ru.ifmo.cs.bcomp.axl.AxlEditorPanel;
 import ru.ifmo.cs.bcomp.axl.AxlLoadHandler;
 import ru.ifmo.cs.bcomp.ui.GUI;
+import ru.ifmo.cs.components.Messages;
 
 import javax.swing.JOptionPane;
 
@@ -36,7 +37,7 @@ public class AxlView extends ActivateblePanel {
 
     private void loadIntoMachine(List<Integer> binaryFormat) {
         if (cpu.isLocked()) {
-            JOptionPane.showMessageDialog(gui, "Машина выполняется, остановите её");
+            JOptionPane.showMessageDialog(gui, Messages.get("gui.axl.running"));
             return;
         }
         cmanager.saveDelay();
@@ -59,7 +60,7 @@ public class AxlView extends ActivateblePanel {
 
     @Override
     public String getPanelName() {
-        return "Компилятор axl";
+        return Messages.get("gui.app.axl");
     }
 
     @Override

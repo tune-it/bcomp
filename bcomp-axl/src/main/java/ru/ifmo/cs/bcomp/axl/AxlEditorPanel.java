@@ -2,6 +2,7 @@ package ru.ifmo.cs.bcomp.axl;
 
 import ru.ifmo.cs.bcomp.assembler.AsmNg;
 import ru.ifmo.cs.bcomp.assembler.Program;
+import ru.ifmo.cs.components.Messages;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -101,8 +102,8 @@ public final class AxlEditorPanel extends JPanel {
 
         JToolBar bar = new JToolBar();
         bar.setFloatable(false);
-        JButton compile = new JButton("Компилировать");
-        JButton load = new JButton("Загрузить в ЭВМ");
+        JButton compile = new JButton(Messages.get("gui.axl.btn.compile"));
+        JButton load = new JButton(Messages.get("gui.axl.btn.load"));
         compile.setFocusable(false);
         load.setFocusable(false);
         bar.add(compile);
@@ -110,9 +111,9 @@ public final class AxlEditorPanel extends JPanel {
 
         JScrollPane editorScroll = new JScrollPane(editor);
         editorScroll.setRowHeaderView(new LineNumberView(editor));
-        editorScroll.setBorder(BorderFactory.createTitledBorder("Исходный код (axl)"));
+        editorScroll.setBorder(BorderFactory.createTitledBorder(Messages.get("gui.axl.src.title")));
         JScrollPane outputScroll = new JScrollPane(output);
-        outputScroll.setBorder(BorderFactory.createTitledBorder("Результат компиляции"));
+        outputScroll.setBorder(BorderFactory.createTitledBorder(Messages.get("gui.axl.out.title")));
 
         JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, editorScroll, outputScroll);
         split.setResizeWeight(0.6);
@@ -265,9 +266,10 @@ public final class AxlEditorPanel extends JPanel {
         AxlCompiler cc = new AxlCompiler();
         String asm = cc.compile(src);
         if (asm == null) {
-            StringBuilder sb = new StringBuilder("Ошибки компилятора axl:\n");
+            StringBuilder sb = new StringBuilder();
+            appendCommented(sb, Messages.get("gui.axl.err.compiler"));
             for (String err : cc.getErrors()) {
-                sb.append(err).append('\n');
+                appendCommented(sb, err);
             }
             output.setText(sb.toString());
             return;
@@ -276,9 +278,9 @@ public final class AxlEditorPanel extends JPanel {
         Program prog = assembler.compile();
         StringBuilder sb = new StringBuilder();
         if (!assembler.getErrors().isEmpty()) {
-            sb.append("Ошибки ассемблера:\n");
+            appendCommented(sb, Messages.get("gui.axl.err.assembler"));
             for (String err : assembler.getErrors()) {
-                sb.append(err).append('\n');
+                appendCommented(sb, err);
             }
             sb.append("\n");
             sb.append(asm);
@@ -288,12 +290,21 @@ public final class AxlEditorPanel extends JPanel {
         if (load && prog != null && handler != null) {
             List<Integer> bin = prog.getBinaryFormat();
             handler.loadBinary(bin);
-            sb.append("Загружено в ЭВМ. ");
-            sb.append("start=0x").append(Integer.toHexString(prog.start_address));
-            sb.append(", слов: ").append(prog.binary.size()).append("\n\n");
+            appendCommented(sb, Messages.format("gui.axl.loaded",
+                    Integer.toHexString(prog.start_address), prog.binary.size()));
+            sb.append("\n");
         }
         sb.append(asm);
         output.setText(sb.toString());
+    }
+
+    // Service messages share the output pane with the generated assembler, so each
+    // line is prefixed with the assembler comment marker ';'. That keeps the whole
+    // pane valid assembler when copied verbatim into the Assembler tab.
+    private static void appendCommented(StringBuilder sb, String text) {
+        for (String l : text.split("\n", -1)) {
+            sb.append("; ").append(l).append('\n');
+        }
     }
 
     private void scheduleHighlight() {

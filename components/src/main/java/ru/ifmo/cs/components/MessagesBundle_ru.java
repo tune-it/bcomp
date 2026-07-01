@@ -154,5 +154,16 @@ public class MessagesBundle_ru extends ListResourceBundle {
             {"gui.cycle.int",      "Прерывание"},
             {"gui.cycle.panel",    "Пульт"},
             {"gui.cycle.program",  "Программа"},
+
+            // GUI: AXL compiler
+            {"gui.app.axl",         "Компилятор axl"},
+            {"gui.axl.btn.compile", "Компилировать"},
+            {"gui.axl.btn.load",    "Загрузить в ЭВМ"},
+            {"gui.axl.src.title",   "Исходный код (axl)"},
+            {"gui.axl.out.title",   "Результат компиляции"},
+            {"gui.axl.err.compiler","Ошибки компилятора axl:"},
+            {"gui.axl.err.assembler","Ошибки ассемблера:"},
+            {"gui.axl.loaded",      "Загружено в ЭВМ. start=0x{0}, слов: {1}"},
+            {"gui.axl.running",     "Машина выполняется, остановите её"},
     };
 }
