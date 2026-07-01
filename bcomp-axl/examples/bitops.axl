@@ -1,0 +1,12 @@
+uint bits;
+int low_nibble;
+int high_shifted;
+int inverted;
+
+void main() {
+    bits = 0xABCD;
+    low_nibble = bits & 0x000F;
+    high_shifted = bits >> 12;
+    inverted = ~bits;
+    halt();
+}

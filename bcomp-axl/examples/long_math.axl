@@ -1,0 +1,10 @@
+long population;
+long growth;
+long total;
+
+void main() {
+    population = 100000;
+    growth = 50000;
+    total = population + growth;
+    halt();
+}

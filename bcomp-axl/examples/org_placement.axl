@@ -1,0 +1,16 @@
+org 0x100;
+
+word 0x00 : &timer_handler, 0x00;
+
+int ticks;
+
+void timer_handler() {
+    ticks = ticks + 1;
+    iret();
+}
+
+void main() {
+    ticks = 0;
+    ei();
+    halt();
+}

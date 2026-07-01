@@ -1,0 +1,23 @@
+int read_number() {
+    while ((in(5) & 0x40) == 0) ;
+    return in(4);
+}
+
+void print_number(int x) {
+    while ((in(3) & 0x40) == 0) ;
+    out(2, x);
+}
+
+void main() {
+    int n;
+    int i;
+    int sum;
+    n = read_number();
+    sum = 0;
+    for (i = 1; i <= n; i = i + 1) {
+        sum = sum + i;
+        print_number(i);
+    }
+    print_number(sum);
+    halt();
+}
