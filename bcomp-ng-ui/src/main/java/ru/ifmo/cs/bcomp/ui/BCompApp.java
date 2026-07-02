@@ -74,8 +74,8 @@ public class BCompApp {
 
         bcomp.startTimer();
 
-        if (app.equals("gui")) {
-            GUI gui = new GUI(bcomp);
+        if (app.equals("gui") || app.equals("axl")) {
+            GUI gui = new GUI(bcomp, app.equals("axl"));
             gui.gui();
             return;
         }

@@ -1,0 +1,18 @@
+int a;
+int b;
+int sum;
+int diff;
+int prod;
+int quot;
+int rem;
+
+void main() {
+    a = 20;
+    b = 6;
+    sum = a + b;
+    diff = a - b;
+    prod = a * b;
+    quot = a / b;
+    rem = a % b;
+    halt();
+}

@@ -1,0 +1,9 @@
+int value;
+int doubled;
+
+void main() {
+    value = in(4);
+    doubled = asl(value);
+    out(2, doubled);
+    halt();
+}

@@ -156,5 +156,16 @@ public class MessagesBundle extends ListResourceBundle {
             {"gui.cycle.int",      "Interrupt"},
             {"gui.cycle.panel",    "Operator panel"},
             {"gui.cycle.program",  "Program"},
+
+            // GUI: AXL compiler
+            {"gui.app.axl",         "AXL Compiler"},
+            {"gui.axl.btn.compile", "Compile"},
+            {"gui.axl.btn.load",    "Load into computer"},
+            {"gui.axl.src.title",   "Source code (axl)"},
+            {"gui.axl.out.title",   "Compilation result"},
+            {"gui.axl.err.compiler","axl compiler errors:"},
+            {"gui.axl.err.assembler","Assembler errors:"},
+            {"gui.axl.loaded",      "Loaded into computer. start=0x{0}, words: {1}"},
+            {"gui.axl.running",     "The machine is running, stop it first"},
     };
 }

@@ -9,6 +9,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 import ru.ifmo.cs.bcomp.BasicComp;
 import ru.ifmo.cs.bcomp.CPU;
 import ru.ifmo.cs.bcomp.IOCtrl;
@@ -28,19 +30,29 @@ public class GUI extends JApplet {
     private ActivateblePanel activePanel = null;
     private final BasicComp bcomp;
     private final CPU cpu;
+    private final boolean axlEnabled;
 
     public GUI(BasicComp bcomp) {
+        this(bcomp, false);
+    }
+
+    public GUI(BasicComp bcomp, boolean axlEnabled) {
         this.bcomp = bcomp;
         this.cpu = bcomp.getCPU();
+        this.axlEnabled = axlEnabled;
     }
 
     @Override
     public void init() {
         cmanager = new ComponentManager(this);
 
-        final ActivateblePanel[] panels = {
-            new BasicView(this),
-            new AssemblerView(this),};
+        final List<ActivateblePanel> panelList = new ArrayList<ActivateblePanel>();
+        panelList.add(new BasicView(this));
+        panelList.add(new AssemblerView(this));
+        if (axlEnabled) {
+            panelList.add(new AxlView(this));
+        }
+        final ActivateblePanel[] panels = panelList.toArray(new ActivateblePanel[0]);
 
         tabs = new JTabbedPane();
         tabs.addKeyListener(cmanager.getKeyListener());

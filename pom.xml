@@ -10,6 +10,7 @@
         <module>components</module>
         <module>bcomp-assembler</module>
         <module>bcomp-ng</module>
+        <module>bcomp-axl</module>
         <module>bcomp-ng-ui</module>
     </modules>
     <properties>
