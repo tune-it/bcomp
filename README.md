@@ -6,4 +6,15 @@ All documentation is unfortunativelly in Russian. You can look at https://se.ifm
 There is also lectures track on https://www.youtube.com/playlist?list=PLBWafxh1dFuwbs2bc_ba_1FIm4SzFYg2p
 
 There are two branches for old model v1 (this model was studied until year 2019) and next generation model v2 (current).
-Folder "docs" is for old model and would be deleted in the future for v2. 
+Folder "docs" is for old model and would be deleted in the future for v3. 
+
+# Contributors
+Original version was created by
+- Serge V. Klimenkov github.com/serge-klimenkov
+- Dmitry Afanasiev github.com/MATPOCKuH
+
+Other contibutors can be founded on github.com/tune-it/bcomp page
+
+# License
+The project is distributed under MIT license. Feel free to use it in IT Architecture Education
+
