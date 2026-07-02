@@ -215,6 +215,16 @@ void main() {
 - There are no string literals; use character literals (`'a'`) or a `word` data block.
 - Intrinsic names are reserved and cannot be used as function names.
 
+## Not yet supported (planned)
+
+The following features are not supported yet; support is planned for future versions:
+
+- `struct` and `union` types. Today the type system consists only of the primitives listed
+  in *Types*, pointers, and one-dimensional arrays (`enum` and `typedef` are not supported
+  either).
+- Some local declaration forms listed in *Limitations*: local array initializers, and
+  `long` as a function parameter or return type.
+
 ## Examples
 
 See [`examples/`](examples):
@@ -245,3 +255,12 @@ void main() {
     halt();
 }
 ```
+
+## Contributors
+
+- Anton Kochergin ([@succubus-uwu](https://github.com/succubus-uwu))
+
+## License
+
+This module (`bcomp-axl`) is distributed under the MIT License — see [LICENSE](LICENSE).
+The license covers only this module, not the rest of the bcomp project.
