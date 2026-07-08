@@ -786,6 +786,9 @@ public final class Gen {
     private Ast.Type genAssign(Ast.Assign a) {
         if (!a.op.equals("=")) {
             String bop = a.op.substring(0, a.op.length() - 1);
+            if (isIndirectLvalue(a.target)) {
+                return genCompoundIndirect(a, bop);
+            }
             Ast.Binary syn = new Ast.Binary();
             syn.line = a.line;
             syn.op = bop;
@@ -806,6 +809,92 @@ public final class Gen {
         genExpr(a.value);
         genStoreToLvalue(a.target);
         return typeOf(a.target);
+    }
+
+    private boolean isIndirectLvalue(Ast.Expr e) {
+        return e instanceof Ast.Index
+                || (e instanceof Ast.Unary && ((Ast.Unary) e).op.equals("*"));
+    }
+
+    private void genLvalueAddr(Ast.Expr target) {
+        if (target instanceof Ast.Index) {
+            genElemAddr((Ast.Index) target);
+        } else {
+            genExpr(((Ast.Unary) target).operand);
+        }
+    }
+
+    // address computed once, reused for read and write
+    private Ast.Type genCompoundIndirect(Ast.Assign a, String bop) {
+        usesPointer = true;
+        boolean unsigned = isUnsignedType(typeOf(a.target));
+        genLvalueAddr(a.target);
+        pushAc();
+        ins("ST p_" + curFunc);
+        ins("LD (p_" + curFunc + ")");
+        applyBinOp(bop, a.value, unsigned);
+        ins("ST $g__t");
+        popAc();
+        ins("ST p_" + curFunc);
+        ins("LD $g__t");
+        ins("ST (p_" + curFunc + ")");
+        return typeOf(a.target);
+    }
+
+    private void applyBinOp(String op, Ast.Expr right, boolean unsigned) {
+        if (op.equals("*") || op.equals("/") || op.equals("%")) {
+            pushAc();
+            genExpr(right);
+            pushAc();
+            String lbl;
+            if (op.equals("*")) { usesMul = true; lbl = "f___mul"; }
+            else if (op.equals("/")) { usesDiv = true; lbl = "f___div"; }
+            else { usesDiv = true; lbl = "f___mod"; }
+            ins("CALL $" + lbl);
+            ins("ST $g__t");
+            ins("POP"); tempDepth--;
+            ins("POP"); tempDepth--;
+            ins("LD $g__t");
+            return;
+        }
+        if (op.equals("<<") || op.equals(">>")) {
+            pushAc();
+            genExpr(right);
+            pushAc();
+            String lbl;
+            if (op.equals("<<")) { usesShl = true; lbl = "f___shl"; }
+            else if (unsigned) { usesShr = true; lbl = "f___shr"; }
+            else { usesSar = true; lbl = "f___sar"; }
+            ins("CALL $" + lbl);
+            ins("ST $g__t");
+            ins("POP"); tempDepth--;
+            ins("POP"); tempDepth--;
+            ins("LD $g__t");
+            return;
+        }
+        pushAc();
+        genExpr(right);
+        ins("ST $g__t");
+        popAc();
+        if (op.equals("+")) {
+            ins("ADD $g__t");
+        } else if (op.equals("-")) {
+            ins("SUB $g__t");
+        } else if (op.equals("&")) {
+            ins("AND $g__t");
+        } else if (op.equals("|")) {
+            ins("OR $g__t");
+        } else if (op.equals("^")) {
+            ins("ST $g__t2");
+            ins("AND $g__t");
+            ins("NOT");
+            ins("ST $g__t3");
+            ins("LD $g__t2");
+            ins("OR $g__t");
+            ins("AND $g__t3");
+        } else {
+            throw new CompileException(right.line, "unsupported compound operator " + op + "=");
+        }
     }
 
     private void genLongStore(String[] t, Ast.Expr v) {
