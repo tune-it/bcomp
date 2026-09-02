@@ -248,9 +248,13 @@ public final class Gen {
                 globals.put(g.name, s);
                 globalData.add(g);
             } else if (n instanceof Ast.OrgDirective) {
-                codeOrigin = ((Ast.OrgDirective) n).address & 0x7FF;
+                Ast.OrgDirective o = (Ast.OrgDirective) n;
+                checkAddress(o.line, o.address);
+                codeOrigin = o.address;
             } else if (n instanceof Ast.WordData) {
-                wordBlocks.add((Ast.WordData) n);
+                Ast.WordData w = (Ast.WordData) n;
+                checkAddress(w.line, w.address);
+                wordBlocks.add(w);
             } else if (n instanceof Ast.FuncDecl) {
                 Ast.FuncDecl f = (Ast.FuncDecl) n;
                 if (funcs.containsKey(f.name)) {
@@ -280,6 +284,13 @@ public final class Gen {
         }
         if (!funcs.containsKey("main")) {
             throw new CompileException(0, "function main is required");
+        }
+    }
+
+    private void checkAddress(int line, int addr) {
+        if (addr < 0 || addr > 0x7FF) {
+            throw new CompileException(line,
+                    "address 0x" + Integer.toHexString(addr) + " is out of range [0..0x7FF]");
         }
     }
 
@@ -755,6 +766,9 @@ public final class Gen {
         boolean unsigned = isUnsignedType(lt);
         if (b.right instanceof Ast.IntLit) {
             int k = ((Ast.IntLit) b.right).value;
+            if (k > 16) {
+                throw new CompileException(b.line, "shift count " + k + " is out of range [0..16]");
+            }
             genExpr(b.left);
             for (int i = 0; i < k; i++) {
                 if (b.op.equals("<<")) {
@@ -1485,7 +1499,7 @@ public final class Gen {
                 }
                 vals.append(wordArgText(w.items.get(i)));
             }
-            line("        ORG 0x" + Integer.toHexString(w.address & 0x7FF));
+            line("        ORG 0x" + Integer.toHexString(w.address));
             line("        WORD " + vals);
         }
     }
@@ -1522,6 +1536,9 @@ public final class Gen {
         }
         if (g.arraySize >= 0) {
             if (g.init != null && !g.init.isEmpty()) {
+                if (g.init.size() > g.arraySize) {
+                    throw new CompileException(g.line, "too many initializers for array " + g.name);
+                }
                 StringBuilder vals = new StringBuilder();
                 for (int i = 0; i < g.init.size(); i++) {
                     if (i > 0) {
@@ -1546,8 +1563,8 @@ public final class Gen {
     }
 
     private String constText(Ast.Expr e) {
-        if (e instanceof Ast.IntLit) {
-            return String.format("0x%04X", ((Ast.IntLit) e).value & 0xFFFF);
+        if (isIntConst(e)) {
+            return String.format("0x%04X", intConst(e) & 0xFFFF);
         }
         if (e instanceof Ast.Unary && ((Ast.Unary) e).op.equals("&")
                 && ((Ast.Unary) e).operand instanceof Ast.Ident) {
@@ -1815,6 +1832,14 @@ public final class Gen {
             }
         }
         throw new CompileException(e.line, "expected a global variable");
+    }
+
+    static boolean isIntConst(Ast.Expr e) {
+        if (e instanceof Ast.IntLit) {
+            return true;
+        }
+        return e instanceof Ast.Unary && ((Ast.Unary) e).op.equals("-")
+                && ((Ast.Unary) e).operand instanceof Ast.IntLit;
     }
 
     int intConst(Ast.Expr e) {
