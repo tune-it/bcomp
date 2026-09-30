@@ -12,6 +12,7 @@
         <module>bcomp-ng</module>
         <module>bcomp-axl</module>
         <module>bcomp-ng-ui</module>
+        <module>bcomp-api</module>
     </modules>
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
