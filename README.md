@@ -1,4 +1,7 @@
 # bcomp (Basic Computer)
+
+[![Maven Verification](https://github.com/e345ee/bcomp/actions/workflows/maven-tests.yml/badge.svg)](https://github.com/e345ee/bcomp/actions/workflows/maven-tests.yml)
+
 This is simple computer model studied in ITMO University since 1982 by first year students. 
 Its features are simple instructions set (inspired from PDP-8 and PDP-11), simple microprogram model and logic scheme to easy learn basics of computer architecture.
 
