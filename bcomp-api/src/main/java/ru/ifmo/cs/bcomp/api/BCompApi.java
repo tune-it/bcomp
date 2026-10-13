@@ -16,6 +16,9 @@ import ru.ifmo.cs.bcomp.assembler.Instruction;
 import ru.ifmo.cs.bcomp.assembler.InstructionWord;
 import ru.ifmo.cs.bcomp.assembler.Program;
 
+import static ru.ifmo.cs.bcomp.api.Utils.hexa;
+import static ru.ifmo.cs.bcomp.api.Utils.hexv;
+
 /**
  *
  * @author serge
@@ -23,14 +26,14 @@ import ru.ifmo.cs.bcomp.assembler.Program;
 public class BCompApi {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        System.out.println("BCompApi is never should be executed in main");
     }
 
     /**
      * Trace each microcommand of single instruction until Interrupt cycle.
      * @param prog - program with single command and memories values, used with commands.
      * @param reg - initial state of registers.
-     * @return 
+     * @return Result of execuction single instruction
      */
     public static ExecutionResults traceSingleInstruction (String prog, Registers reg) {
         ExecutionResults result = new ExecutionResults();
@@ -66,8 +69,7 @@ public class BCompApi {
             do {
                 //registers after execute mircoop
                 Registers raft = new Registers();
-                long MPPRE = cpu.getRegValue(Reg.MP);
-                raft.mppre = MPPRE;
+                raft.mppre = cpu.getRegValue(Reg.MP);;
                 cpu.executeContinue();
                 long mr = cpu.getRegValue(Reg.MR);
                 //if OMC in mr1111
@@ -119,7 +121,7 @@ public class BCompApi {
             result.traceTable.addAll(regs);
         }
         CPU cpu = null;
-        Program pobj = null;
+        Program pobj;
         try {
             BasicComp bcomp = new BasicComp();
             AsmNg asm = new AsmNg(prog);
@@ -172,6 +174,25 @@ public class BCompApi {
         return result;
     }
     
+    public static String compileProgramToBinaryText(String prog) {
+        AsmNg asm = new AsmNg(prog);
+        Program pobj = asm.compile();
+        StringBuilder mem = new StringBuilder();
+        int addr = pobj.load_address; //should be same as base_addr
+        for(int i : pobj.binary) {
+            mem.append(hexa(addr));
+            if (addr++ == pobj.start_address) {
+                mem.append(": + ");
+            } else {
+                mem.append(":   ");
+            }
+            mem.append(hexv(i));
+            mem.append('\n');
+        }
+        return mem.toString();
+
+    }
+    
     private static Registers getCPURegistersState(CPU cpu, Registers reg) {
         if (cpu == null) throw new InternalRuntimeException("CPU not initialized");
         Registers raft = reg;
@@ -207,23 +228,5 @@ public class BCompApi {
         cpu.getRegister(Reg.PS).setValue(reg.bitz, 1, 2);
         cpu.getRegister(Reg.PS).setValue(reg.bitn, 1, 3);         
     }
-
-    //TODO remove? with reference ExecutionResults.getProgramObject() need only in Lab2 and Lab3
-    protected static StringBuilder object2BinaryTaskRepresentation(Program pobj) {
-        StringBuilder mem = new StringBuilder();
-        long addr = pobj.load_address; //should be same as base_addr
-        for(int i : pobj.binary) {
-            mem.append(Utils.toHex(addr,11));
-            if (addr++ == pobj.start_address) {
-                mem.append(": + ");
-            } else {
-                mem.append(":   ");
-            }
-            mem.append(Utils.toHex(i,16));
-            mem.append('\n');
-        }
-        return mem;
-    }
-
 
 }

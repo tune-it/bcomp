@@ -95,7 +95,7 @@ public class Utils {
         
         public static boolean isNullOrBlank (String s) {
             if (s==null) return true;
-            return s.isBlank();
+            return s.trim().isEmpty();
         }
 
     public static String hexa(long value) {
